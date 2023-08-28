@@ -439,7 +439,7 @@ const Home = (props) => {
             })
         })
 
-        if (lastPlayed) {
+        if (lastPlayed && lastPlayed.skill) {
             const lastAllSubCategories = skills.find(s => s.skill === lastPlayed.skill).sub_categories.length;
             const userLastSubCategories = user.score.filter(s => s.skill === lastPlayed.skill).length
             lastSkillPercent = Math.round(userLastSubCategories / lastAllSubCategories * 100);
@@ -730,7 +730,7 @@ const Home = (props) => {
                     <div className="col-md-8">
                         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-xl-3 justify-content-center">
                             {
-                                categories.length ? (
+                                (categories.length && selectedSkill) ? (
                                     categories.map((category, idx) => {
                                         const catCount = skills.find(s => s.skill === selectedSkill).sub_categories.filter(s => s.category === category).length;
                                         const userCatCount = user.score.filter(s => s.skill === selectedSkill).filter(s => s.category === category).length;
