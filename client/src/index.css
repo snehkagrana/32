@@ -1,0 +1,601 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400&display=swap');
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'Nunito',sans-serif,-apple-system, BlinkMacSystemFont;
+    margin: 0;
+    background: #fff;
+    background-attachment: fixed;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+        monospace;
+}
+
+.search-container {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border: 1px solid #ced4da;
+    overflow: hidden;
+    border-radius: 25px;
+    background-color: white;
+}
+
+.input-container:focus-within {
+    color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+input[type=search] {
+    border: none;
+    margin-right: 0 !important;
+    padding-right: 0;
+}
+
+input[type=search]:focus {
+    outline: 0;
+    box-shadow: none;
+    height: calc(1.5em + 0.75rem + 10px);
+}
+
+.search-button {
+    border-radius: 25px;
+    padding: 0.2rem 0.75rem;
+    margin: 6px 6px 12px 6px;
+}
+
+.dropdown {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid gray;
+}
+
+.dropdown:empty {
+    border: none;
+}
+
+.dropdown-row {
+    cursor: pointer;
+    text-align: start;
+    margin: 2px 0;
+}
+
+.hr-text {
+    line-height: 1em;
+    position: relative;
+    outline: 0;
+    border: 0;
+    color: black;
+    text-align: center;
+    height: 1.5em;
+    opacity: 0.8;
+}
+.hr-text:before {
+        content: "";
+        background: linear-gradient(
+            to right,
+            transparent,
+            #818078,
+            transparent
+        );
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        height: 1px;
+    }
+.hr-text:after {
+        content: attr(data-content);
+        position: relative;
+        display: inline-block;
+        color: black;
+        padding: 0 0.5em;
+        line-height: 1.5em;
+        background-color: #fcfcfa;
+    }
+
+.search-inner {
+    display: flex;
+}
+
+[type="radio"] {
+    /*display: none;*/
+    color: rgb(0, 0, 165);
+}
+
+.linkHover:hover {
+    text-decoration: underline;
+    color: rgb(40, 40, 255) !important;
+}
+
+.img-fluid{
+    transition: 0.3s ease;
+}
+
+.getStarted {
+    z-index: 9 !important;
+}
+
+.getStarted:hover {
+    background-color: #31c754!important; /* Adjust to a slightly darker green */
+}
+
+.welcome-card-button {
+    overflow: hidden;
+}
+
+.welcome-card-button:hover {
+    background-color: #28a745 !important; /* Adjust to a slightly darker green */
+}
+
+.welcome-card-button:hover::after {
+    content:'';
+    top:0;
+    transform:translateX(100%);
+    width:100%;
+    height:100%;
+    position: absolute;
+    animation: slide 1s;
+
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,0.8) 50%,rgba(128,186,232,0) 99%,rgba(125,185,232,0) 100%);
+}
+
+.haveAccount:hover {
+    background-color: #dad9d9 !important; /* Adjust to a slightly lighter white */
+    border-color: #707070 !important; /* Adjust to a slightly darker grey */
+}
+
+.googleButton:hover {
+    background-color: #3f9afa !important; /* Adjust to a slightly lighter white */
+
+}
+
+
+.logHover:hover, .regHover:hover ,.getStarted:hover ,.haveAccount:hover,.img-fluid:hover ,.googleButton:hover{
+    transform: translateY(5px);
+}
+
+
+
+.zoomImage:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+  }
+
+  .zoomText:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+    display: inline-block; /* Important for applying transform to inline elements */
+}
+
+
+.streak-body::after {
+    content: '';
+    position: absolute;
+    top: -4px; /* Adjust based on the desired border thickness */
+    left: -4px; /* Adjust based on the desired border thickness */
+    right: -4px; /* Adjust based on the desired border thickness */
+    bottom: -4px; /* Adjust based on the desired border thickness */
+    z-index: -1;
+    background: linear-gradient(43deg, orange 33%, yellow 66%, red 100%);
+    background-repeat: no-repeat;
+    background-position: top, left, bottom right;
+    filter: blur(20px);
+}
+
+.streak-body::before {
+    content: '';
+    position: absolute;
+    top: -1px; /* Adjust based on the desired border thickness */
+    left: -1px; /* Adjust based on the desired border thickness */
+    right: -1px; /* Adjust based on the desired border thickness */
+    bottom: -1px; /* Adjust based on the desired border thickness */
+    z-index: -1;
+    background: linear-gradient(43deg, red 0%, yellow 20%, orange 100%);
+    background-repeat: no-repeat;
+    background-position: top, left, bottom right;
+    border-radius: 15px;
+}
+
+.homePage-welcome-card {
+    overflow: hidden;
+}
+
+/*.homePage-welcome-card:hover::after {*/
+/*    content:'';*/
+/*    top:0;*/
+/*    transform:translateX(100%);*/
+/*    width:100%;*/
+/*    height:100%;*/
+/*    position: absolute;*/
+/*    animation: slide 1s;*/
+/*    background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,0.8) 50%,rgba(128,186,232,0) 99%,rgba(125,185,232,0) 100%);*/
+/*}*/
+
+.topic-card {
+    overflow: hidden;
+    background: #e3e3e3;
+    z-index: 1;
+}
+
+.topic-card:hover::after {
+    content:'';
+    top:0;
+    transform:translateX(100%);
+    width:100%;
+    height:100%;
+    z-index: -1;
+    position: absolute;
+    animation: slide 1s;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,0.8) 50%,rgba(128,186,232,0) 99%,rgba(125,185,232,0) 100%);
+}
+
+.confetti-container {
+    z-index: 9999;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.card-circle-xp {
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 30px auto;
+    opacity: 0;
+    animation: fadeIn 2s forwards 1s, zoomIn 1s 1s forwards, zoomInOut 1s 1s forwards;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 80px;
+    background-color: transparent;
+    width: 80px;
+    height: 80px;
+    border: 3px solid #31c754;
+}
+.user-name {
+    font-weight: 700;
+    font-size: 35px;
+}
+.divider-h {
+    background: #cccccc;
+    width: 95%;
+    margin: 0 auto;
+    height: 1px;
+}
+.divider-v {
+    background: #cccccc;
+    height: 50px;
+    margin: auto 10px;
+    width: 1px;
+}
+.xp-header {
+    font-weight: 700;
+    font-size: 12px;
+    color: #cccccc;
+    text-align: center;
+    display: flex;
+}
+.xp-name {
+    margin-right: 2px;
+}
+.xp-with-divider {
+    display: flex;
+    margin: 0 auto;
+}
+.xp-count {
+    font-weight: 700;
+    font-size: 18px;
+    text-align: center;
+}
+.xp-count-days {
+    font-weight: 700;
+    font-size: 18px;
+    margin-right: 5px;
+    text-align: center;
+}
+.xp-days {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+.calender {
+    display: flex;
+    font-size: 10px;
+}
+.day {
+    margin-right: 5px;
+    font-weight: 500;
+    width: 17px;
+    height: 17px;
+    text-align: center;
+}
+.day-circle-white {
+    border: 1px solid #000000;
+    border-radius: 50%;
+}
+.day-circle-green {
+    border: 1px solid #28a745;
+    background-color: #28a745;
+    border-radius: 50%;
+}
+.snapCarousel {
+    display: flex;
+    align-items: center;
+    /*width: 100%;*/
+}
+
+.snapCarousel > ul {
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.25rem;
+}
+
+/* Common styles for all boxes */
+.rounded-rectangle {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 800;
+    text-wrap: nowrap;
+    margin: 20px 10px;
+    cursor: pointer;
+    transition: border 0.3s;
+    border: 3px solid transparent;
+    /* Add transparent border to prevent box shift */
+}
+
+.rounded-rectangle.active {
+    border: 3px solid black;
+}
+
+.rounded-rectangle:hover {
+    transform: scale(1.1);
+    z-index: 1;
+    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.2);
+    /* On hover, the transparent box-shadow becomes colored */
+}
+
+.color1 {
+    background-color: #FFC1C1;
+    color: #7B1A1A;
+}
+
+.color1:hover {
+    border: 3px solid #7B1A1A;
+    background-color: #FF9E9E;
+}
+
+.color2 {
+    background-color: #BBDEFB;
+    color: #1A579B;
+}
+
+.color2:hover {
+    border: 3px solid #1A579B;
+    background-color: #90CAF9;
+}
+
+.color3 {
+    background-color: #C8E6C9;
+    color: #1B5E20;
+}
+
+.color3:hover {
+    border: 3px solid #1B5E20;
+    background-color: #A5D6A7;
+}
+
+.color4 {
+    background-color: #FFE0B2;
+    color: #BF5700;
+}
+
+.color4:hover {
+    border: 3px solid #BF5700;
+    background-color: #FFCC80;
+}
+
+.color5 {
+    background-color: #D1C4E9;
+    color: #45278E;
+}
+
+.color5:hover {
+    border: 3px solid #45278E;
+    background-color: #B39DDB;
+}
+
+
+.color6 {
+    background-color: #FFC1C1;
+    color: #7B1A1A;
+}
+
+.color6:hover {
+    border: 3px solid #7B1A1A;
+    background-color: #FF9E9E;
+}
+
+.color7 {
+    background-color: #BBDEFB;
+    color: #1A579B;
+}
+
+.color7:hover {
+    border: 3px solid #1A579B;
+    background-color: #90CAF9;
+}
+
+.color8 {
+    background-color: #C8E6C9;
+    color: #1B5E20;
+}
+
+.color8 :hover {
+    border: 3px solid #1B5E20;
+    background-color: #A5D6A7;
+}
+
+.category-circle-green {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.category-circle-grey {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e3e3e3;
+}
+
+.topic-percent {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;}
+
+.grey-percent {
+    width: 60%;
+    background-color: #e8e8ea;
+    height: 5px;
+    border-radius: 25px;
+    margin-right: 10px;
+}
+
+.green-percent {
+    background-color: #28a745;
+    height: 5px;
+    border-radius: 25px;
+}
+
+.congratulation-card {
+    background-color: transparent !important;
+    border: unset !important;
+}
+
+.congratulation-card-header {
+    background-color: transparent !important;
+    border: unset !important;
+    text-align: center;
+    font-weight: bold;
+}
+.badge {
+    color: #000000 !important;
+}
+
+@keyframes slide {
+    0% {transform:translateX(-100%);}
+    100% {transform:translateX(100%);}
+}
+
+@keyframes wave-animation {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-15deg);
+    }
+    50% {
+        transform: rotate(15deg);
+    }
+    75% {
+        transform: rotate(-15deg);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.2);
+    }
+}
+
+@keyframes zoomInOut {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.glassNavbar {
+    background: rgba(214, 239, 218, 0.438); /* This is a light blue color with 60% opacity */
+    border-radius: 15px; /* Rounded corners */
+    backdrop-filter: blur(20px) saturate(160%) contrast(45%) brightness(140%); /* Apply blur to the underlying content */
+    -webkit-backdrop-filter: blur(20px) saturate(160%) contrast(45%) brightness(140%);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Optional: Add a shadow for better effect */
+}
+
+
+.dottedBackground {
+    background-image: radial-gradient(circle, #d3d3d3 1px, transparent 2px);
+    background-color: #fff;
+    background-size: 40px 40px;
+    min-height: 100vh;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(10px);
+    }
+}
+.bounce {
+    animation: bounce 1s infinite;
+}
+.back-arrow {
+    background: #f5f5f5; /* Light grey background */
+    border: 2px solid #e0e0e0; /* Border for button */
+    border-radius: 8px; /* Making the button rounded */
+    padding: 5px 5px; /* Some padding around the arrow */
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.3s, background 0.3s; /* Added background to the transition */
+    outline: none;
+    color: #000;
+}
+
+.back-arrow:hover {
+    transform: translateX(-10px);
+    background: #e0e0e0; /* Slightly darker grey on hover */
+}
+
