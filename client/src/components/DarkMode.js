@@ -22,7 +22,8 @@ const prefersDark =
   window.matchMedia("(prefers-color-scheme: dark)").matches;
 
 const defaultDark =
-  storedTheme === "dark" || (storedTheme === null && prefersDark);
+  storedTheme === "dark";
+  // storedTheme === "dark" || (storedTheme === null && prefersDark);
 
 if (defaultDark) {
   setDark();
