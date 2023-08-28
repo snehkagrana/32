@@ -598,4 +598,17 @@ input[type=search]:focus {
     transform: translateX(-10px);
     background: #e0e0e0; /* Slightly darker grey on hover */
 }
+.site-down-banner {
+    background-color: #ffcccc; /* Light red */
+    color: #990000; /* Dark red */
+    text-align: center;
+    padding: 10px 0;
+    font-weight: bold;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000; /* Ensuring it's above other elements */
+}
+
 

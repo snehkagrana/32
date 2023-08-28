@@ -15,6 +15,7 @@ import arrow from "../images/down-arrow.png";
 const logo = require("../images/teach.png");
 
 
+
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
 ////to join an existing room or create a new one
@@ -23,6 +24,8 @@ const logo = require("../images/teach.png");
 ////join room is the invitation link to which user must be redirected to
 const StartPage = (props) => {
     const navigate = useNavigate();
+    const [showBanner, setShowBanner] = useState(true);
+
 
     ////to authenticate user before allowing him to enter the home page
     ////if he is not redirect him to login page
@@ -41,7 +44,14 @@ const StartPage = (props) => {
     }, []);
 
     return (
-        <>
+        <>{
+            showBanner && (
+                <div className="site-down-banner">
+                    🚧 Our site is currently experiencing technical difficulties. We apologize for the inconvenience! 🚧
+                </div>
+            )
+        }
+        
             <div className="dottedBackground">
                 <div style={{ paddingBottom: "10px" }}>
                     <Helmet>

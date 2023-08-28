@@ -153,9 +153,7 @@
 [data-theme="dark"] .dark-mode-link:hover {
     color: blue !important;
 }
-[data-theme="dark"] .divider {
-    borderTop: 1px solid #fff; /* change to desired color for dark mode */
-}
+
 
 /* 3 */
 body {
