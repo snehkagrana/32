@@ -30,7 +30,7 @@ const GeneralNavbar = ({ proprole }) => {
 
     return (
         <div className="glassBackground">
-            <MDBNavbar expand="lg" dark className="glassNavbar" style={{ maxWidth: '80%', height: '60px', margin: '5px auto', display: 'flex', alignItems: 'center' }}>
+            <MDBNavbar expand="lg" dark className="glassNavbar" style={{ maxWidth: '80%', height: '60px', margin: '15px auto', display: 'flex', alignItems: 'center' }}>
                 <MDBContainer fluid>
                     <MDBContainer onClick={() => navigate(`/`)} fluid style={{ display: 'flex', justifyContent: 'center' }}>
                         <img

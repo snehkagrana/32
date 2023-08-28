@@ -566,7 +566,7 @@ input[type=search]:focus {
 
 .dottedBackground {
     background-image: radial-gradient(circle, #d3d3d3 1px, transparent 2px);
-    background-color: #fff;
+   
     background-size: 40px 40px;
     min-height: 100vh;
 }

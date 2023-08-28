@@ -24,7 +24,7 @@
 /* 2 */
 [data-theme="light"] {
     --font-color: #333;
-    --background-color: #F7F7FC;
+    --background-color: #f7fcf7;
     --link-color: cornflowerblue;
 
     .card {
@@ -145,6 +145,16 @@
         background-color: #333;
         color: var(--font-color);
     }
+}
+[data-theme="dark"] .dark-mode-link {
+    color: var(--font-color) !important;
+}
+
+[data-theme="dark"] .dark-mode-link:hover {
+    color: blue !important;
+}
+[data-theme="dark"] .divider {
+    borderTop: 1px solid #fff; /* change to desired color for dark mode */
 }
 
 /* 3 */

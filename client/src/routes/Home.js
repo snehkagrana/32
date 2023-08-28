@@ -608,7 +608,7 @@ const Home = (props) => {
                                         <span
                                             style={{
                                                 display: 'inline-block',
-                                                animation: 'wave-animation 3s 3',
+                                                animation: 'wave-animation 3s infite',
                                                 transformOrigin: '70% 100%'
                                         }}
                                         >👋</span>

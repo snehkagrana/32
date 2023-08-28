@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import flag from "../images/flag.png";
 import { useNavigate } from "react-router-dom";
+import "../DarkMode.css";
 
 const Footer = () => {
     const navigate = useNavigate();
     const [hovered, setHovered] = useState({contact: false, terms: false, privacy: false});
 
     return (
-        <div style={{ backgroundColor: "#fff", padding: "30px", position: "relative", marginTop: "75px" }}>
+        <div style={{ padding: "30px", position: "relative", marginTop: "75px" }}>
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "5px", flexWrap: "wrap" }}>
-                <span 
+                <span
+                    className="dark-mode-link" 
                     onMouseEnter={() => setHovered({...hovered, contact: true})}
                     onMouseLeave={() => setHovered({...hovered, contact: false})}
                     onClick={() => navigate(`/contactus`)} 
@@ -18,6 +20,7 @@ const Footer = () => {
                     Contact Us
                 </span>
                 <span 
+                    className="dark-mode-link"
                     onMouseEnter={() => setHovered({...hovered, terms: true})}
                     onMouseLeave={() => setHovered({...hovered, terms: false})}
                     onClick={() => navigate(`/terms`)} 
@@ -26,6 +29,7 @@ const Footer = () => {
                     Terms
                 </span>
                 <span 
+                    className="dark-mode-link"
                     onMouseEnter={() => setHovered({...hovered, privacy: true})}
                     onMouseLeave={() => setHovered({...hovered, privacy: false})}
                     onClick={() => navigate(`/privacypolicy`)} 
