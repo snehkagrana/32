@@ -352,7 +352,7 @@ input[type=search]:focus {
     padding: 10px 20px;
     border-radius: 6px;
     font-weight: 800;
-    text-wrap: nowrap;
+    white-space: nowrap;
     margin: 20px 10px;
     cursor: pointer;
     transition: border 0.3s;
@@ -459,6 +459,7 @@ input[type=search]:focus {
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);  /* Drop shadow */
 }
 .category-circle-grey {
     width: 70px;
@@ -522,6 +523,9 @@ input[type=search]:focus {
     75% {
         transform: rotate(-15deg);
     }
+}
+.custom-label-color {
+    color: #333;
 }
 
 @keyframes zoomIn {

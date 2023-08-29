@@ -154,6 +154,9 @@
     color: blue !important;
 }
 
+.glassNavbar-dark {
+    background: rgba(128, 128, 128, 0.438); /* This is light grey */
+}
 
 /* 3 */
 body {

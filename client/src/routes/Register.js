@@ -223,7 +223,7 @@ const Register = (props) => {
                             background: '#fff'
                         }}
                     >
-                        <h1 style={{ textAlign: "center", marginBottom: "30px" }}>Create Account!</h1>
+                        <h1 style={{color: '#333', textAlign: "center", marginBottom: "30px" }}>Create Account!</h1>
 
                         {/* <Toast onClose={() => setShowAuthMsg(false)} show={showAuthMsg} delay={1500} autohide>
                             <Toast.Body>{authMsg}</Toast.Body>
@@ -287,6 +287,7 @@ const Register = (props) => {
                                     label="Show Password"
                                     onClick={handleShowPassword}
                                     style={{ marginTop: "10px", marginBottom: "10px" }}
+                                    className="custom-label-color"
                                 />
                             </Form.Group>
                         </Form.Group>
@@ -331,6 +332,7 @@ const Register = (props) => {
                         <br />
                         <div
                             style={{
+                                color: '#333',
                                 textAlign: "center",
                                 marginBottom: "10px",
                                 marginTop: "20px", // Added space above this line
