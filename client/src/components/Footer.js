@@ -38,7 +38,7 @@ const Footer = () => {
                     Privacy Policy
                 </span>
             </div>
-            <div style={{ width: "50%", margin: "0 auto", borderTop: "1px solid #000", marginBottom: "5px" }}></div>
+            <div className="dividing-line" style={{ width: "50%", margin: "0 auto", borderTop: "1px solid #000", marginBottom: "5px" }}></div>
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <span style={{ fontWeight: "bold", fontSize: "16px" }}>Made with ❤️ in <img src={flag} style={{ width: "30px" }} alt="flag" /></span>
             </div>

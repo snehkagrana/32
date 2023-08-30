@@ -334,8 +334,8 @@ const Register = (props) => {
                             style={{
                                 color: '#333',
                                 textAlign: "center",
-                                marginBottom: "10px",
-                                marginTop: "20px", // Added space above this line
+                                marginBottom: "1px",
+                                marginTop: "15px", // Added space above this line
                             }}
                         >
                             Already have an account?

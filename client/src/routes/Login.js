@@ -229,6 +229,15 @@ const Login = (props) => {
                                 onBlur={handlePasswordBlur}
                                 style={{ borderRadius: "10px", padding: "15px", marginBottom: "10px" }}
                             />
+                            <Form.Group controlId="formBasicCheckbox">
+                                <Form.Check
+                                    type="checkbox"
+                                    label="Show Password"
+                                    onClick={handleShowPassword}
+                                    style={{ marginTop: "10px", marginBottom: "10px" }}
+                                    className="custom-label-color"
+                                />
+                            </Form.Group>
                         </Form.Group>
                         <Row className="justify-content-md-center">
                             <Col md={6} sm={6}>

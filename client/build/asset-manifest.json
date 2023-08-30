@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.b5087497.css",
-    "main.js": "/static/js/main.116729ef.js",
+    "main.css": "/static/css/main.e55136f6.css",
+    "main.js": "/static/js/main.783d5875.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
     "static/media/demo2.gif": "/static/media/demo2.e8756e1d22e2bb49f7c8.gif",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
@@ -46,12 +46,12 @@
     "static/media/64944-emoticon-index-finger-the-gesture-emoji.png": "/static/media/64944-emoticon-index-finger-the-gesture-emoji.400bd3dffad316e5a3be.png",
     "static/media/seedling.png": "/static/media/seedling.d1f34df2751ebe97d20e.png",
     "index.html": "/index.html",
-    "main.b5087497.css.map": "/static/css/main.b5087497.css.map",
-    "main.116729ef.js.map": "/static/js/main.116729ef.js.map",
+    "main.e55136f6.css.map": "/static/css/main.e55136f6.css.map",
+    "main.783d5875.js.map": "/static/js/main.783d5875.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b5087497.css",
-    "static/js/main.116729ef.js"
+    "static/css/main.e55136f6.css",
+    "static/js/main.783d5875.js"
   ]
 }

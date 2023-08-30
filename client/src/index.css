@@ -560,12 +560,14 @@ input[type=search]:focus {
 }
 
 .glassNavbar {
-    background: rgba(214, 239, 218, 0.438); /* This is a light blue color with 60% opacity */
-    border-radius: 15px; /* Rounded corners */
-    backdrop-filter: blur(20px) saturate(160%) contrast(45%) brightness(140%); /* Apply blur to the underlying content */
-    -webkit-backdrop-filter: blur(20px) saturate(160%) contrast(45%) brightness(140%);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Optional: Add a shadow for better effect */
-}
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
+    border-radius: 15px;
+    backdrop-filter: blur(10px); /* Create the glass effect */
+    -webkit-backdrop-filter: blur(10px); /* For Safari */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); /* Optional: Add a light shadow for depth */
+    /* Add other necessary styling */
+  }
+  
 
 
 .dottedBackground {

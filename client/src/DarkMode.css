@@ -158,6 +158,10 @@
     background: rgba(128, 128, 128, 0.438); /* This is light grey */
 }
 
+[data-theme="dark"] .dividing-line {
+    border-top: 1px solid white !important;
+}
+
 /* 3 */
 body {
     background-color: var(--background-color);
