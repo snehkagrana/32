@@ -191,6 +191,7 @@ app.get("/server/login", (req, res) => {
                     {
                         $set: {
                             xp: doc.xp,
+                            streak: doc.streak,
                         },
                     }
                 );
