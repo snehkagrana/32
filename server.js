@@ -27,6 +27,7 @@ const fs = require("fs");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const base64url = require("base64url");
+const MongoStore = require('connect-mongo'); 
 
 aws.config.update({
     secretAccessKey: process.env.ACCESS_SECRET_KEY,
@@ -60,20 +61,24 @@ mongoose
 
 // Middleware
 app.use(flash());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
 
 app.use(
     session({
-        secret: "secretcode",
+        secret: process.env.SESSION_SECRET || "ghopqwcdzs",
         resave: true,
         saveUninitialized: true,
+        store: new MongoStore({ mongooseConnection: mongoose.connection }),
+        cookie: {
+            maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
+        }
     })
 );
 
-app.use(cookieParser("secretcode"));
+app.use(cookieParser(process.env.COOKIE_SECRET || "nW7AcGoaf"));
 
 ////Initializing local-passport for user authentication
 app.use(passport.initialize());
