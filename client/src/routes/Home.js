@@ -121,25 +121,21 @@ const Home = (props) => {
 
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
     const today = new Date();
-    const dayOfWeekUTC = (today.getUTCDay() + 6) % 7;
+    const dayOfWeek = (today.getDay() + 6) % 7;
 
     const startOfWeek = new Date(
-        Date.UTC(
-            today.getUTCFullYear(),
-            today.getUTCMonth(),
-            today.getUTCDate() - dayOfWeekUTC
-        )
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate() - dayOfWeek
     );
     const endOfWeek = new Date(
-        Date.UTC(
-            startOfWeek.getUTCFullYear(),
-            startOfWeek.getUTCMonth(),
-            startOfWeek.getUTCDate() + 6
-        )
+        startOfWeek.getFullYear(),
+        startOfWeek.getMonth(),
+        startOfWeek.getDate() + 6
     );
     const lastDate = new Date(lastCompletedDay);
     let isSameWeek = false;
-    const lastDay = (lastDate.getUTCDay() + 6) % 7;
+    const lastDay = (lastDate.getDay() + 6) % 7;
     if (lastDate >= startOfWeek && lastDate <= endOfWeek) {
         isSameWeek = true;
     }
@@ -654,7 +650,7 @@ const Home = (props) => {
                                     {
                                         days.map((day, index) => (
                                             <div key={index} className={"day "
-                                                + (index === dayOfWeekUTC ? "day-circle-white " : " ")
+                                                + (index === dayOfWeek ? "day-circle-white " : " ")
                                                 + (isSameWeek && user && user.streak && index > lastDay - user.streak && index <= lastDay ? "day-circle-green " : " ")
                                             }>
                                                 {day[0]}
