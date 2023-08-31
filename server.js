@@ -163,11 +163,11 @@ app.get("/server/login", (req, res) => {
         User.findOne({ username: req.user.username }, async (err, doc) => {
             if (err) throw err;
             if (doc) {
-                const today = new Date(Date.UTC(
-                    new Date().getUTCFullYear(),
-                    new Date().getUTCMonth(),
-                    new Date().getUTCDate()
-                )).toISOString().split("T")[0];
+                const today = new Date(
+                    new Date().getFullYear(),
+                    new Date().getMonth(),
+                    new Date().getDate()
+                ).toISOString().split("T")[0];
                 const daysDiff = daysDifference(doc.lastCompletedDay);
 
                 if (daysDiff === 1) {
@@ -1942,11 +1942,11 @@ app.post("/server/savescore", authUser, (req, res) => {
         if (err) {
             console.log("ERROR", err);
         } else {
-            const today = new Date(Date.UTC(
-                new Date().getUTCFullYear(),
-                new Date().getUTCMonth(),
-                new Date().getUTCDate()
-            )).toISOString().split("T")[0];
+            const today = new Date(
+                new Date().getFullYear(),
+                new Date().getMonth(),
+                new Date().getDate()
+            ).toISOString().split("T")[0];
             let allScoresList = doc.score;
             
             allScoresList.push({
@@ -2049,15 +2049,15 @@ const isNextDay = (lastDate) => {
 };
 
 const daysDifference = (lastDate) => {
-    const today = Date.UTC(
-        new Date().getUTCFullYear(),
-        new Date().getUTCMonth(),
-        new Date().getUTCDate()
+    const today = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        new Date().getDate()
     );
-    const lastDay = Date.UTC(
-        new Date(lastDate).getUTCFullYear(),
-        new Date(lastDate).getUTCMonth(),
-        new Date(lastDate).getUTCDate()
+    const lastDay = new Date(
+        new Date(lastDate).getFullYear(),
+        new Date(lastDate).getMonth(),
+        new Date(lastDate).getDate()
     );
     return Math.floor((today - lastDay) / (1000 * 60 * 60 * 24));
 };
