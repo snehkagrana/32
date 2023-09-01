@@ -120,9 +120,14 @@ const Home = (props) => {
     };
 
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-    const today = new Date();
+    const today = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        new Date().getDate()
+    );
     const dayOfWeek = (today.getDay() + 6) % 7;
-
+console.log("today = ", today);
+console.log("today.getTimezoneOffset() = ", today.getTimezoneOffset());
     const startOfWeek = new Date(
         today.getFullYear(),
         today.getMonth(),
@@ -134,6 +139,8 @@ const Home = (props) => {
         startOfWeek.getDate() + 6
     );
     const lastDate = new Date(lastCompletedDay);
+    console.log("lastDate = ", lastDate);
+    console.log("lastDate.getTimezoneOffset() = ", lastDate.getTimezoneOffset());
     let isSameWeek = false;
     const lastDay = (lastDate.getDay() + 6) % 7;
     if (lastDate >= startOfWeek && lastDate <= endOfWeek) {
