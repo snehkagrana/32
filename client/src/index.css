@@ -616,5 +616,47 @@ input[type=search]:focus {
     right: 0;
     z-index: 1000; /* Ensuring it's above other elements */
 }
-
-
+/* Page dots container */
+.page-dots {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  /* Page dot styling */
+  .page-dot {
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    background-color: #ccc; /* Inactive dot color */
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Active page dot */
+  .page-dot.active {
+    background-color: #28a745; /* Active dot color */
+  }
+  .page-dots {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  /* Page dot styling */
+  .dot {
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    background-color: #ccc; /* Inactive dot color */
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Active page dot */
+  .dot.active {
+    background-color: #28a745; /* Active dot color */
+  }
+  
