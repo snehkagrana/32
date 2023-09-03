@@ -11,6 +11,7 @@ import { Container } from "react-bootstrap"; // Import Container from react-boot
 import '../App.css';
 import '../index.css';
 import arrow from "../images/down-arrow.png";
+import demoGif from "../images/demo2.gif"
 
 const logo = require("../images/teach.png");
 
@@ -44,12 +45,13 @@ const StartPage = (props) => {
     }, []);
 
     return (
-        <>{
-            showBanner && (
-                <div className="site-down-banner">
-                    🚧 Our site is currently experiencing technical difficulties. We apologize for the inconvenience! 🚧
-                </div>
-            )
+        <>
+        {
+          //  showBanner && (
+           //     <div className="site-down-banner">
+           //         🚧 Our site is currently experiencing technical difficulties. We apologize for the inconvenience! 🚧
+            //    </div>
+          //  )
         }
         
             <div className="dottedBackground">
@@ -62,8 +64,17 @@ const StartPage = (props) => {
                     <br />
                     <div style={{ flex: '1' }}>
                         <Row style={{ margin: "auto", width: "80%" }}>
-                            <Col xs={12} md={6} style={{ marginTop: "" }}>
-                                <img src={logo} className="img-fluid zoomImage" alt="Learn Finance" />
+                            <Col xs={12} md={6} style={{ marginTop: "90px"}}>
+                            <img 
+                                src={demoGif} 
+                                style={{
+                                    width: "90%", // or whatever percentage or fixed width you want
+                                    borderRadius: "10px", // or the amount of border-radius you prefer
+                                    border: "2px solid #2cb74c"
+                                }} 
+                                className="img-fluid zoomImage" 
+                                alt="Learn Finance" 
+                            />
                             </Col>
 
                             <Col xs={12} md={6} style={{ marginTop: "5%" }}>

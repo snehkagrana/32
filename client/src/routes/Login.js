@@ -7,6 +7,7 @@ import { Helmet } from "react-helmet";
 import GeneralNavbar from "../components/GeneralNavbar";
 import GoogleButton from "react-google-button";
 import Footer from "../components/Footer";
+import "../DarkMode.css"
 
 /////Login page of our website
 //// loginUsername is the entered username by the user
@@ -207,7 +208,7 @@ const Login = (props) => {
                             background: '#fff'
                         }}
                     >
-                        <h1 style={{ textAlign: "center", marginBottom: "30px" }}>Login</h1>
+                        <h1 style={{color: '#333', textAlign: "center", marginBottom: "30px" }}>Login</h1>
                         <Form.Text style={{ color: "red", textAlign: "center", marginBottom: "15px" }}>{authMsg}</Form.Text>
                         <Form.Group>
                             <Form.Text style={{ color: "red" }}>{usernameTooltipMessage}</Form.Text>
@@ -228,6 +229,15 @@ const Login = (props) => {
                                 onBlur={handlePasswordBlur}
                                 style={{ borderRadius: "10px", padding: "15px", marginBottom: "10px" }}
                             />
+                            <Form.Group controlId="formBasicCheckbox">
+                                <Form.Check
+                                    type="checkbox"
+                                    label="Show Password"
+                                    onClick={handleShowPassword}
+                                    style={{ marginTop: "10px", marginBottom: "10px" }}
+                                    className="custom-label-color"
+                                />
+                            </Form.Group>
                         </Form.Group>
                         <Row className="justify-content-md-center">
                             <Col md={6} sm={6}>
@@ -274,7 +284,7 @@ const Login = (props) => {
                             className="googleButton"
                         />
                         <br />
-                        <div style={{ textAlign: "center", marginBottom: "20px" }}>
+                        <div style={{color: '#333', textAlign: "center", marginBottom: "20px" }}>
                             Don't have an account?
                         </div>
                         <Link to="/auth/register">
