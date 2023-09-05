@@ -361,7 +361,7 @@ input[type=search]:focus {
     padding: 10px 20px;
     border-radius: 6px;
     font-weight: 800;
-    text-wrap: nowrap;
+    white-space: nowrap;
     margin: 20px 10px;
     cursor: pointer;
     transition: border 0.3s;
@@ -468,6 +468,7 @@ input[type=search]:focus {
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);  /* Drop shadow */
 }
 .category-circle-grey {
     width: 70px;
@@ -532,6 +533,9 @@ input[type=search]:focus {
         transform: rotate(-15deg);
     }
 }
+.custom-label-color {
+    color: #333;
+}
 
 @keyframes zoomIn {
     from {
@@ -565,12 +569,14 @@ input[type=search]:focus {
 }
 
 .glassNavbar {
-    background: rgba(214, 239, 218, 0.438); /* This is a light blue color with 60% opacity */
-    border-radius: 15px; /* Rounded corners */
-    backdrop-filter: blur(20px) saturate(160%) contrast(45%) brightness(140%); /* Apply blur to the underlying content */
-    -webkit-backdrop-filter: blur(20px) saturate(160%) contrast(45%) brightness(140%);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Optional: Add a shadow for better effect */
-}
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
+    border-radius: 15px;
+    backdrop-filter: blur(10px); /* Create the glass effect */
+    -webkit-backdrop-filter: blur(10px); /* For Safari */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); /* Optional: Add a light shadow for depth */
+    /* Add other necessary styling */
+  }
+
 
 
 .dottedBackground {
@@ -623,7 +629,7 @@ input[type=search]:focus {
 .input-group {
     position: relative;
     height: 48px;
-    margin: 0.5rem 0 1.5rem 0;
+    margin: 0.5rem 0 0.5rem 0;
 }
 
 .input-field {
@@ -669,4 +675,48 @@ input[type=search]:focus {
 /* Border color change on input focus */
 .input-field:focus {
     border: 1.5px solid var(--first-color);
+}
+
+/* Page dots container */
+.page-dots {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Page dot styling */
+.page-dot {
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    background-color: #ccc; /* Inactive dot color */
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Active page dot */
+.page-dot.active {
+    background-color: #28a745; /* Active dot color */
+}
+.page-dots {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Page dot styling */
+.dot {
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    background-color: #ccc; /* Inactive dot color */
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Active page dot */
+.dot.active {
+    background-color: #28a745; /* Active dot color */
 }

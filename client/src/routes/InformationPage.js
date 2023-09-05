@@ -8,6 +8,7 @@ import Navbar from "../components/Navbar";
 import Card from "react-bootstrap/Card";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import "../index.css"
 
 const InformationPage = () => {
     const [imageURL, setImageURL] = useState("");
@@ -84,6 +85,20 @@ const InformationPage = () => {
             });
         });
     };
+
+    const renderPageDots = () => {
+        const dots = [];
+        for (let i = 0; i < maxInfoPages; i++) {
+          dots.push(
+            <span
+              key={i}
+              className={`page-dot ${i === pageNumber ? "active" : ""}`}
+              onClick={() => navigate(`/skills/${skillName}/${category}/${subcategory}/information/${i}`)}
+            ></span>
+          );
+        }
+        return dots;
+      };
 
     ////to authenticate user before allowing him to enter the home page
     ////if he is not redirect him to login page
@@ -255,6 +270,7 @@ const InformationPage = () => {
                     )}
                 </Card.Body>
             </Card>
+            <div className="page-dots">{renderPageDots()}</div>
         </>
     );
 };

@@ -60,8 +60,8 @@ mongoose
 
 // Middleware
 app.use(flash());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
 
@@ -1929,11 +1929,7 @@ app.post("/server/savescore", authUser, (req, res) => {
         if (err) {
             console.log("ERROR", err);
         } else {
-            const today = new Date(
-                new Date().getFullYear(),
-                new Date().getMonth(),
-                new Date().getDate()
-            ).toString().split("T")[0];
+            const today = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toISOString().split("T")[0];
             let allScoresList = doc.score;
             
             allScoresList.push({

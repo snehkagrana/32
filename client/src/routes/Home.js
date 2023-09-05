@@ -572,7 +572,7 @@ const Home = (props) => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-4 order-md-2 order-1 mb-4 px-md-0">
+                    <div className="col-md-3 order-md-2 order-1 mb-4 px-md-0">
                         <Card className="profile-info">
                             <Card.Body className="d-flex align-items-center p-3">
                                 <div className="profile-picture">
@@ -609,7 +609,7 @@ const Home = (props) => {
                                         <span
                                             style={{
                                                 display: 'inline-block',
-                                                animation: 'wave-animation 3s infite',
+                                                animation: 'wave-animation 3s infinite',
                                                 transformOrigin: '70% 100%'
                                         }}
                                         >👋</span>
@@ -704,7 +704,8 @@ const Home = (props) => {
                                             overflowY: 'hidden',
                                             scrollSnapType: 'x mandatory',
                                             padding: "0",
-                                            width: "98%"
+                                            width: "96%",
+                                            marginLeft: '15px'
                                         }}
                                     >
                                         {
