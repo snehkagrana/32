@@ -10,7 +10,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
 const ForgotPassword = (props) => {
-    const { username, token } = useParams();
+    const { email, token } = useParams();
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [authMsg, setAuthMsg] = useState("");
@@ -26,7 +26,7 @@ const ForgotPassword = (props) => {
         Axios({
             method: "POST",
             data: {
-                username: username,
+                email: email,
                 token: token,
                 password: password,
             },

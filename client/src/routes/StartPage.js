@@ -21,7 +21,7 @@ const logo = require("../images/teach.png");
 ////after he has been authenticated, where he is given 2 options whether
 ////to join an existing room or create a new one
 
-////data represents username of the logged in username
+////data represents email of the logged in email
 ////join room is the invitation link to which user must be redirected to
 const StartPage = (props) => {
     const navigate = useNavigate();

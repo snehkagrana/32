@@ -68,7 +68,7 @@ import {useSnapCarousel} from "react-snap-carousel";
 ////after he has been authenticated, where he is given 2 options whether
 ////to join an existing room or create a new one
 
-////data represents username of the logged in username
+////data represents email of the logged in email
 ////join room is the invitation link to which user must be redirected to
 const Home = (props) => {
     const [searchValue, setSearchValue] = useState("");
@@ -126,8 +126,7 @@ const Home = (props) => {
         new Date().getDate()
     );
     const dayOfWeek = (today.getDay() + 6) % 7;
-console.log("today = ", today);
-console.log("today.getTimezoneOffset() = ", today.getTimezoneOffset());
+
     const startOfWeek = new Date(
         today.getFullYear(),
         today.getMonth(),
@@ -139,8 +138,7 @@ console.log("today.getTimezoneOffset() = ", today.getTimezoneOffset());
         startOfWeek.getDate() + 6
     );
     const lastDate = new Date(lastCompletedDay);
-    console.log("lastDate = ", lastDate);
-    console.log("lastDate.getTimezoneOffset() = ", lastDate.getTimezoneOffset());
+
     let isSameWeek = false;
     const lastDay = (lastDate.getDay() + 6) % 7;
     if (lastDate >= startOfWeek && lastDate <= endOfWeek) {
@@ -399,7 +397,7 @@ console.log("today.getTimezoneOffset() = ", today.getTimezoneOffset());
                 setUserName(
                     response.data.user.displayName
                         ? response.data.user.displayName?.split(" ")[0]
-                        : response.data.user.username
+                        : response.data.user.email
                 );
 
                 setXP({dailyXP: response.data.user.xp.daily, totalXP: response.data.user.xp.total});

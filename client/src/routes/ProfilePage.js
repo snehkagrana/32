@@ -91,7 +91,7 @@ const ProfilePage = (props) => {
                 setUserName(
                     response.data.user.displayName
                         ? response.data.user.displayName
-                        : response.data.user.username
+                        : response.data.user.email
                 );
                 setUser(response.data.user);
                 setProfilePicture(response.data.user.imgPath);
