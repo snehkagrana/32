@@ -163,11 +163,6 @@ app.get("/server/login", (req, res) => {
         User.findOne({ username: req.user.username }, async (err, doc) => {
             if (err) throw err;
             if (doc) {
-                const today = new Date(
-                    new Date().getFullYear(),
-                    new Date().getMonth(),
-                    new Date().getDate()
-                ).toISOString().split("T")[0];
                 const daysDiff = daysDifference(doc.lastCompletedDay);
 
                 if (daysDiff === 1) {
@@ -1946,7 +1941,7 @@ app.post("/server/savescore", authUser, (req, res) => {
                 new Date().getFullYear(),
                 new Date().getMonth(),
                 new Date().getDate()
-            ).toISOString().split("T")[0];
+            ).toString().split("T")[0];
             let allScoresList = doc.score;
             
             allScoresList.push({
