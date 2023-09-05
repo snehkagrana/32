@@ -9,22 +9,22 @@ import GoogleButton from "react-google-button";
 import Footer from "../components/Footer";
 
 /////Login page of our website
-//// loginUsername is the entered username by the user
+//// loginEmail is the entered email by the user
 //// loginPassword is the entered password by the user
 
 //// authMsg is the flash message which may be show if
-//// user enters wrong user name or password
+//// user enters wrong email or password
 
 const Login = (props) => {
-    const [loginUsername, setLoginUsername] = useState("");
+    const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
     const [authMsg, setAuthMsg] = useState("");
     const [showAuthMsg, setShowAuthMsg] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [validUsername, setValidUsername] = useState(false);
-    const [hasInteractedWithUsername, setHasInteractedWithUsername] = useState(false);
+    const [validEmail, setValidEmail] = useState(false);
+    const [hasInteractedWithEmail, setHasInteractedWithEmail] = useState(false);
     const [hasInteractedWithPassword, setHasInteractedWithPassword] = useState(false);
-    const [usernameTooltipMessage, setUsernameTooltipMessage] = useState("");
+    const [emailTooltipMessage, setEmailTooltipMessage] = useState("");
     const [passwordTooltipMessage, setPasswordTooltipMessage] = useState("");
 
     const [hasInteracted, setHasInteracted] = useState(false); // Moved the closing parenthesis to the end of this line
@@ -43,14 +43,14 @@ const Login = (props) => {
         Axios({
             method: "POST",
             data: {
-                username: loginUsername,
+                email: loginEmail,
                 password: loginPassword,
             },
             withCredentials: true,
             url: "/server/login",
         }).then(function (response) {
             // Check the server response message and act accordingly
-            if (response.data.message === "Incorrect Username or Wrong Password") {
+            if (response.data.message === "Incorrect Email or Wrong Password") {
                 setAuthMsg(response.data.message);
                 setShowAuthMsg(true);
             } else if (response.data.message === "Login Successfully") {
@@ -74,10 +74,10 @@ const Login = (props) => {
 
 
 
-    const handleUsernameBlur = () => {
+    const handleEmailBlur = () => {
         setHasInteracted(true);
-        if (loginUsername === "") {
-            setUsernameTooltipMessage("Username can't be empty");
+        if (loginEmail === "") {
+            setEmailTooltipMessage("Email can't be empty");
         }};
 
     const handlePasswordBlur = () => {
@@ -85,25 +85,22 @@ const Login = (props) => {
         if (loginPassword === "") {
             setPasswordTooltipMessage("Password can't be empty");
         }
-        checkValidCredentials(loginUsername, loginPassword);
+        checkValidCredentials(loginEmail, loginPassword);
     };
 
 
-    const handleUsernameChange = (e) => {
-        const username = e.target.value;
-        var spaceRegex = /\s/; // Regular expression to check for spaces
+    const handleEmailChange = (e) => {
+        const email = e.target.value;
 
-        setLoginUsername(username);
+        setLoginEmail(email);
 
-        if (username === "" && hasInteractedWithUsername) {
-            setUsernameTooltipMessage("Username can't be empty");
-        } else if (spaceRegex.test(username)) { // Check if username contains spaces
-            setUsernameTooltipMessage("Spaces not allowed");
+        if (email === "" && hasInteractedWithEmail) {
+            setEmailTooltipMessage("Email can't be empty");
         } else {
-            setUsernameTooltipMessage("");
+            setEmailTooltipMessage("");
         }
 
-        checkValidCredentials(username, loginPassword);
+        checkValidCredentials(email, loginPassword);
     };
 
 
@@ -120,15 +117,15 @@ const Login = (props) => {
         }
 
         setLoginPassword(password);
-        checkValidCredentials(loginUsername, password);
+        checkValidCredentials(loginEmail, password);
     };
 
-    const checkValidCredentials = (username, password) => {
+    const checkValidCredentials = (email, password) => {
         var spaceRegex = /\s/; // Regular expression to check for spaces
-        if (username === "" || password === "" || spaceRegex.test(password)) {
-            setValidUsername(false);
+        if (email === "" || password === "" || spaceRegex.test(password)) {
+            setValidEmail(false);
         } else {
-            setValidUsername(true);
+            setValidEmail(true);
         }
     };
 
@@ -144,7 +141,7 @@ const Login = (props) => {
         Axios({
             method: "POST",
             data: {
-                username: loginUsername,
+                email: loginEmail,
                 link: link,
             },
             withCredentials: true,
@@ -210,24 +207,34 @@ const Login = (props) => {
                         <h1 style={{ textAlign: "center", marginBottom: "30px" }}>Login</h1>
                         <Form.Text style={{ color: "red", textAlign: "center", marginBottom: "15px" }}>{authMsg}</Form.Text>
                         <Form.Group>
-                            <Form.Text style={{ color: "red" }}>{usernameTooltipMessage}</Form.Text>
-                            <Form.Control
-                                type="username"
-                                placeholder="Username"
-                                onChange={handleUsernameChange}
-                                onBlur={handleUsernameBlur}
-                                style={{ borderRadius: "10px", padding: "15px", marginBottom: "10px" }}
-                            />
+                            <Form.Text style={{ color: "red" }}>{emailTooltipMessage}</Form.Text>
+                            <div className="input-group">
+                                <input
+                                    type="email"
+                                    onChange={handleEmailChange}
+                                    onBlur={handleEmailBlur}
+                                    style={{ borderRadius: "10px", padding: "15px", marginBottom: "10px" }}
+                                    id="email"
+                                    className="input-field"
+                                    placeholder=" "
+                                />
+                                <label htmlFor="email" className="input-label">Email</label>
+                            </div>
                         </Form.Group>
                         <Form.Group>
                             <Form.Text style={{ color: "red" }}>{passwordTooltipMessage}</Form.Text>
-                            <Form.Control
-                                type={showPassword ? "text" : "password"}
-                                placeholder="Password"
-                                onChange={handlePasswordChange}
-                                onBlur={handlePasswordBlur}
-                                style={{ borderRadius: "10px", padding: "15px", marginBottom: "10px" }}
-                            />
+                            <div className="input-group">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    onChange={handlePasswordChange}
+                                    onBlur={handlePasswordBlur}
+                                    style={{ borderRadius: "10px", padding: "15px", marginBottom: "10px" }}
+                                    id="password"
+                                    className="input-field"
+                                    placeholder=" "
+                                />
+                                <label htmlFor="password" className="input-label">Password</label>
+                            </div>
                         </Form.Group>
                         <Row className="justify-content-md-center">
                             <Col md={6} sm={6}>
@@ -237,10 +244,10 @@ const Login = (props) => {
                                         padding: "13px",
                                         width: "100%",
                                         marginBottom: "10px",
-                                        boxShadow: `0px 7px ${validUsername ? "#1a5928" : "#ab2a2a"}`,
+                                        boxShadow: `0px 7px ${validEmail ? "#1a5928" : "#ab2a2a"}`,
                                     }}
-                                    variant={validUsername ? "success" : "danger"}
-                                    disabled={!validUsername}
+                                    variant={validEmail ? "success" : "danger"}
+                                    disabled={!validEmail}
                                     onClick={login}
                                 >
                                     Submit
@@ -254,7 +261,7 @@ const Login = (props) => {
                                         width: "100%",
                                         boxShadow: "0px 7px #ab2a2a",
                                     }}
-                                    disabled={!validUsername}
+                                    disabled={!validEmail}
                                     variant="danger"
                                     onClick={forgotPassword}
                                 >

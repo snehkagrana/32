@@ -9,22 +9,18 @@ import GoogleButton from "react-google-button";
 import Footer from "../components/Footer";
 
 const Register = (props) => {
-    const [registerUsername, setRegisterUsername] = useState("");
     const [registerFirstName, setRegisterFirstName] = useState("");
     const [registerLastName, setRegisterLastName] = useState("");
     const [registerPassword, setRegisterPassword] = useState("");
     const [registerEmail, setRegisterEmail] = useState("");
-    const [usernameTooltipMessage, setUsernameTooltipMessage] = useState("");
     const [emailTooltipMessage, setEmailTooltipMessage] = useState("");
     const [lastNameTooltipMessage, setLastNameTooltipMessage] = useState("");
     const [firstNameTooltipMessage, setFirstNameTooltipMessage] = useState("");
-    const [hasInteractedWithUsername, setHasInteractedWithUsername] = useState(false);
     const [hasInteractedWithFirstName, setHasInteractedWithFirstName] = useState(false);
     const [hasInteractedWithLastName, setHasInteractedWithLastName] = useState(false);
     const [hasInteractedWithEmail, setHasInteractedWithEmail] = useState(false);
     const [hasInteractedWithPassword, setHasInteractedWithPassword] = useState(false);
     const [authMsg, setAuthMsg] = useState("");
-    const [validUsername, setValidUsername] = useState(false);
     const [validEmail, setValidEmail] = useState(false);
     const [validFirstName, setValidFirstName] = useState(false);
     const [validLastName, setValidLastName] = useState(false);
@@ -47,7 +43,6 @@ const Register = (props) => {
         Axios({
             method: "POST",
             data: {
-                username: registerUsername,
                 displayName: `${registerFirstName} ${registerLastName}`,
                 email: registerEmail,
                 password: registerPassword,
@@ -87,28 +82,6 @@ const Register = (props) => {
             }
         });
     }, []);
-
-    const handleUsernameChange = (e) => {
-        setRegisterUsername(e.target.value);
-        var emailRegex = /\s/;
-        if (e.target.value === "" && hasInteractedWithUsername) {
-            setUsernameTooltipMessage("Username can't be empty");
-            setValidUsername(false);
-        } else if (!emailRegex.test(e.target.value)) {
-            setUsernameTooltipMessage("");
-            setValidUsername(true);
-        } else {
-            setUsernameTooltipMessage("Spaces not allowed");
-            setValidUsername(false);
-        }
-    };
-
-    const handleUsernameBlur = () => {
-        setHasInteractedWithUsername(true);
-        if (registerUsername === "") {
-            setUsernameTooltipMessage("Username can't be empty");
-        }
-    };
 
     const handleFirstNameChange = (e) => {
         setRegisterFirstName(e.target.value);
@@ -228,16 +201,6 @@ const Register = (props) => {
                         {/* <Toast onClose={() => setShowAuthMsg(false)} show={showAuthMsg} delay={1500} autohide>
                             <Toast.Body>{authMsg}</Toast.Body>
                         </Toast> */}
-                        <Form.Group>
-                            <Form.Text style={{ color: "red" }}>{usernameTooltipMessage}</Form.Text>
-                            <Form.Control
-                                type="username"
-                                placeholder="Enter a unique username"
-                                onChange={handleUsernameChange}
-                                onBlur={handleUsernameBlur}
-                                style={{ borderRadius: "10px", padding: "15px", marginBottom: "10px" }}
-                            />
-                        </Form.Group>
                         {/* First Name Form Group */}
                         <Form.Group>
                             <Form.Text style={{ color: "red" }}>{firstNameTooltipMessage}</Form.Text>
@@ -297,17 +260,17 @@ const Register = (props) => {
                                 padding: "10px",
                                 width: "100%",
                                 boxShadow: `0px 7px ${
-                                    validUsername && validEmail && validFirstName && validLastName && validPassword
+                                    validEmail && validFirstName && validLastName && validPassword
                                         ? "#1a5928"
                                         : "#ab2a2a"
                                 }`,
                             }}
                             variant={
-                                validUsername && validEmail && validFirstName && validLastName && validPassword
+                                validEmail && validFirstName && validLastName && validPassword
                                     ? "success"
                                     : "danger"
                             }
-                            disabled={!(validUsername && validEmail && validFirstName && validLastName && validPassword)}
+                            disabled={!(validEmail && validFirstName && validLastName && validPassword)}
                             onClick={register}
                         >
                             Create New Fingo ID

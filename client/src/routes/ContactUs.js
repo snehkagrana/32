@@ -9,11 +9,11 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 ////Register page of our website
-//// registerUsername is the entered username by the user
+//// registerEmail is the entered email by the user
 //// registerPassword is the entered password by the user
 
 //// authMsg is the flash message which may be show if
-//// user enters a used username or empty username or empty password
+//// user enters a used email or empty email or empty password
 
 const ContactUs = (props) => {
     const [name, setName] = useState("");

@@ -6,12 +6,12 @@ require("dotenv").config();
 
 module.exports = function (passport) {
     passport.use(
-        new localStrategy((username, password, done) => {
-            User.findOne({ username: username }, (err, user) => {
+        new localStrategy({ usernameField: 'email' }, (email, password, done) => {
+            User.findOne({ email: email }, (err, user) => {
                 if (err) throw err;
                 if (!user)
                     return done(null, false, {
-                        message: "No user with that username",
+                        message: "No user with that email",
                     });
                 bcrypt.compare(password, user.password, (err, result) => {
                     if (err) throw err;
@@ -43,11 +43,9 @@ module.exports = function (passport) {
                 // console.log("profile", profile);
                 const email = profile.emails[0].value;
                 const displayName = profile.displayName;
-                const username = email;
-                // console.log('username', username);
 
-                ////checking if another user with same username already exists
-                User.findOne({ username: username }, async (err, doc) => {
+                ////checking if another user with same email already exists
+                User.findOne({ email: email }, async (err, doc) => {
                     if (err) throw err;
                     if (doc) {
                         return done(null, doc);
@@ -60,7 +58,6 @@ module.exports = function (passport) {
                                 return done(null, doc);
                             } else {
                                 const newUser = new User({
-                                    username: username,
                                     displayName: displayName,
                                     email: email,
                                     role: "basic",
@@ -85,7 +82,6 @@ module.exports = function (passport) {
         // takes the cookie and return the user
         User.findOne({ _id: id }, (err, user) => {
             const userInformation = {
-                username: user.username,
                 displayName: user.displayName,
                 email: user.email,
                 imgPath: user.imgPath,

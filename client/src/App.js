@@ -135,7 +135,7 @@ const App = () => {
                 <Route exact path="/editskill/:skill" element={<EditSkill />} />
                 <Route
                     exact
-                    path="/forgotpassword/:username/:token"
+                    path="/forgotpassword/:email/:token"
                     element={<ForgotPassword />}
                 />
                 <Route

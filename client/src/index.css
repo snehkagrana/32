@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400&display=swap');
 
+:root {
+    --first-color: #4caf50;
+    --input-color: #6b6b6b;
+    --border-color: #b0bec5;
+
+    --normal-font-size: 1rem;
+    --small-font-size: 0.75rem;
+}
+
 body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -611,4 +620,53 @@ input[type=search]:focus {
     z-index: 1000; /* Ensuring it's above other elements */
 }
 
+.input-group {
+    position: relative;
+    height: 48px;
+    margin: 0.5rem 0 1.5rem 0;
+}
 
+.input-field {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: var(--normal-font-size);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    outline: none;
+    padding: 1rem;
+    background: none;
+    z-index: 1;
+}
+
+.input-label {
+    position: absolute;
+    left: 1rem;
+    top: 0.8rem;
+    padding: 0 0.25rem;
+    background-color: #fff;
+    color: var(--input-color);
+    font-size: var(--normal-font-size);
+    transition: 0.3s;
+}
+
+/* Move label up on input focus */
+
+.input-field:focus + .input-label,
+.input-field:not(:placeholder-shown).input-field:not(:focus) + .input-label {
+    top: -0.5rem;
+    left: 0.8rem;
+    color: var(--first-color);
+    font-size: var(--small-font-size);
+    font-weight: 500;
+    z-index: 10;
+    outline: none;
+
+}
+
+/* Border color change on input focus */
+.input-field:focus {
+    border: 1.5px solid var(--first-color);
+}

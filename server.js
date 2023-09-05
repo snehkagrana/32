@@ -116,7 +116,7 @@ app.get(
         var redir = {
             redirect: "/home",
             message: "Login Successfully",
-            userName: req?.user?.username,
+            email: req?.user?.email,
         };
         return res.redirect("/home");
         // return res.json(redir);
@@ -128,7 +128,7 @@ app.post("/server/login", (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
         if (err) throw err;
         if (!user) {
-            var redir = { message: "Incorrect Username or Wrong Password" };
+            var redir = { message: "Incorrect Email or Wrong Password" };
             return res.json(redir);
         } else {
             req.logIn(user, (err) => {
@@ -137,7 +137,7 @@ app.post("/server/login", (req, res, next) => {
                 var redir = {
                     redirect: "/home",
                     message: "Login Successfully",
-                    userName: req.user.username,
+                    email: req.user.email,
                 };
                 ///// redir is the redirect information passed to front end react app.
                 return res.json(redir);
@@ -160,7 +160,7 @@ app.get("/server/login", (req, res) => {
             return res.json(redir);
         }
 
-        User.findOne({ username: req.user.username }, async (err, doc) => {
+        User.findOne({ email: req.user.email }, async (err, doc) => {
             if (err) throw err;
             if (doc) {
                 const daysDiff = daysDifference(doc.lastCompletedDay);
@@ -182,7 +182,7 @@ app.get("/server/login", (req, res) => {
                 }
 
                 await User.updateOne(
-                    { username: req.user.username },
+                    { email: req.user.email },
                     {
                         $set: {
                             xp: doc.xp,
@@ -210,8 +210,8 @@ app.get("/server/login", (req, res) => {
 
 
 app.post("/server/register", (req, res) => {
-    ////checking if another user with same username already exists
-    User.findOne({ username: req.body.username }, async (err, doc) => {
+    ////checking if another user with same email already exists
+    User.findOne({ email: req.body.email }, async (err, doc) => {
         if (err) throw err;
         if (doc) {
             var redir = {
@@ -230,15 +230,8 @@ app.post("/server/register", (req, res) => {
                     };
                     return res.json(redir);
                 } else {
-                    ////username and password is required during creation of an account
+                    ////email and password is required during creation of an account
 
-                    if (req.body.username.length == 0) {
-                        var redir = {
-                            redirect: "/register",
-                            message: "Username cannot be empty",
-                        };
-                        return res.json(redir);
-                    }
                     if (req.body.email.length == 0) {
                         var redir = {
                             redirect: "/register",
@@ -269,7 +262,6 @@ app.post("/server/register", (req, res) => {
                         10
                     );
                     const newUser = new User({
-                        username: req.body.username,
                         displayName: req.body.displayName,
                         email: req.body.email,
                         password: hashedPassword,
@@ -290,13 +282,13 @@ app.post("/server/updateProfilePhoto",
     authUser,
     upload.single("photo"),
     async (req, res) => {
-        User.findOne({ username: req.user.username }, async (err, doc) => {
+        User.findOne({ email: req.user.email }, async (err, doc) => {
             if (err) {
                 console.log("ERROR", err);
             } else {
                 if (req.file && req.file.location) {
                     const res = await User.updateOne(
-                        { username: req.user.username },
+                        { email: req.user.email },
                         { $set: { imgPath: req.file.location } }
                     );
                 } else {
@@ -326,12 +318,12 @@ app.post(
     }
 );
 app.post("/server/updatefullname",authUser, async (req, res) => {
-    User.findOne({ username: req.user.username }, async (err, doc) => {
+    User.findOne({ email: req.user.email }, async (err, doc) => {
         if (err) {
             console.log("ERROR", err);
         } else {
             await User.updateOne(
-                { username: req.user.username },
+                { email: req.user.email },
                 { $set: { displayName: req.body.displayName } }
             );
         }
@@ -342,12 +334,12 @@ app.post("/server/updatefullname",authUser, async (req, res) => {
 });
 
 app.post("/server/updateemail", authUser, async (req, res) => {
-    User.findOne({ username: req.user.username }, async (err, doc) => {
+    User.findOne({ email: req.user.email }, async (err, doc) => {
         if (err) {
             console.log("ERROR", err);
         } else {
             await User.updateOne(
-                { username: req.user.username },
+                { email: req.user.email },
                 { $set: { email: req.body.email } }
             );
         }
@@ -375,12 +367,12 @@ const mailTransporter = nodemailer.createTransport({
 
 app.post("/server/forgotpasswordform", (req, res) => {
     // console.log('fp',req.body);
-    if (req.body.username === undefined || req.body.username.length == 0) {
-        var redir = { message: "Username cannot be empty" };
+    if (req.body.email === undefined || req.body.email.length == 0) {
+        var redir = { message: "Email cannot be empty" };
         return res.json(redir);
     }
 
-    User.findOne({ username: req.body.username }, async (err, doc) => {
+    User.findOne({ email: req.body.email }, async (err, doc) => {
         if (err) throw err;
         if (!doc) {
             var redir = { message: "No such user exists" };
@@ -388,11 +380,11 @@ app.post("/server/forgotpasswordform", (req, res) => {
         } else {
             const token = base64url(crypto.randomBytes(20));
             await User.updateOne(
-                { username: req.body.username },
+                { email: req.body.email },
                 { $set: { password_reset_token: token } }
             );
 
-            const link = `${req.body.link}/forgotpassword/${doc.username}/${token}`;
+            const link = `${req.body.link}/forgotpassword/${doc.email}/${token}`;
 
             let details = {
                 from: process.env.MAIL,
@@ -440,7 +432,7 @@ app.post("/server/contactus", (req, res) => {
 });
 
 app.post("/server/forgotpassword", (req, res) => {
-    if (req.body.username === undefined || req.body.username.length == 0) {
+    if (req.body.email === undefined || req.body.email.length == 0) {
         var redir = { message: "Invalid link" };
         return res.json(redir);
     }
@@ -450,7 +442,7 @@ app.post("/server/forgotpassword", (req, res) => {
         return res.json(redir);
     }
 
-    User.findOne({ username: req.body.username }, async (err, doc) => {
+    User.findOne({ email: req.body.email }, async (err, doc) => {
         if (err) console.log(err);
         if (!doc) {
             var redir = {
@@ -467,7 +459,7 @@ app.post("/server/forgotpassword", (req, res) => {
             const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
             await User.updateOne(
-                { username: req.body.username },
+                { email: req.body.email },
                 { $set: { password: hashedPassword, password_reset_token: "" } }
             );
 
@@ -491,7 +483,7 @@ app.get("/server/register", (req, res) => {
     }
 });
 
-////To get username of the logged in user
+////To get email of the logged in user
 app.get("/server/user", authUser, (req, res) => {
     res.send(req.user); // The req.user stores the entire user that has been authenticated inside of it.
 });
@@ -900,7 +892,7 @@ app.post(
                         return score.sub_category !== subcategory;
                     });
                     await User.updateOne(
-                        { username: user.username },
+                        { email: user.email },
                         { $set: { score: scoreList } }
                     );
                 });
@@ -1010,7 +1002,7 @@ app.post("/server/deletecategory/:skill/:category", authUser, (req, res) => {
                     return score.category !== category;
                 });
                 await User.updateOne(
-                    { username: user.username },
+                    { email: user.email },
                     { $set: { score: scoreList } }
                 );
             });
@@ -1143,7 +1135,7 @@ app.post(
                 console.log("ERROR", err);
             } else {
                 usersList.forEach(async (user) => {
-                    // console.log('username', user.username);
+                    // console.log('email', user.email);
                     // console.log('score before', user.score);
                     var scoreList = user.score;
                     scoreList.forEach((score) => {
@@ -1156,7 +1148,7 @@ app.post(
                     });
                     // console.log('score after', scoreList);
                     await User.updateOne(
-                        { username: user.username },
+                        { email: user.email },
                         { $set: { score: scoreList } }
                     );
                 });
@@ -1304,7 +1296,7 @@ app.post("/server/editcategory/:skill/:category", authUser, (req, res) => {
                     return score;
                 });
                 await User.updateOne(
-                    { username: user.username },
+                    { email: user.email },
                     { $set: { score: scoreList } }
                 );
             });
@@ -1442,7 +1434,7 @@ app.post("/server/editskill/:skill", authUser, (req, res) => {
                     return score;
                 });
                 await User.updateOne(
-                    { username: user.username },
+                    { email: user.email },
                     { $set: { score: scoreList } }
                 );
             });
@@ -1496,7 +1488,7 @@ app.post("/server/deleteskill/:skill", authUser, async (req, res) => {
                     return score.skill !== skill;
                 });
                 await User.updateOne(
-                    { username: user.username },
+                    { email: user.email },
                     { $set: { score: scoreList } }
                 );
             });
@@ -1658,7 +1650,7 @@ app.post(
     authRole(["admin"]),
     upload.single("photo"),
     async (req, res) => {
-        ////checking if another user with same username already exists
+        ////checking if another user with same email already exists
         var filename = "";
         if (req.file != undefined) {
             filename = req.file.key;
@@ -1767,7 +1759,7 @@ app.post(
     authRole(["admin"]),
     upload.single("photo"),
     async (req, res) => {
-        ////checking if another user with same username already exists
+        ////checking if another user with same email already exists
         // console.log('info req', req);
 
         var filename = "";
@@ -1868,7 +1860,7 @@ app.post(
     authUser,
     authRole(["admin"]),
     (req, res) => {
-        ////checking if another user with same username already exists
+        ////checking if another user with same email already exists
         // console.log('sub req.body', req.body);
         Skill.findOne({ skill: req.body.skill }, async (err, doc) => {
             if (err) console.log("ERROR", err);
@@ -1895,7 +1887,7 @@ app.post(
 );
 
 app.post("/server/addcategories", authUser, authRole(["admin"]), (req, res) => {
-    ////checking if another user with same username already exists
+    ////checking if another user with same email already exists
     Skill.findOne({ skill: req.body.skill }, async (err, doc) => {
         if (err) console.log("ERROR", err);
         else {
@@ -1933,7 +1925,7 @@ app.post("/server/addskill", authUser, authRole(["admin"]), (req, res) => {
 });
 
 app.post("/server/savescore", authUser, (req, res) => {
-    User.findOne({ username: req.user.username }, async (err, doc) => {
+    User.findOne({ email: req.user.email }, async (err, doc) => {
         if (err) {
             console.log("ERROR", err);
         } else {
@@ -1963,7 +1955,7 @@ app.post("/server/savescore", authUser, (req, res) => {
             doc.lastCompletedDay = today;
 
             await User.updateOne(
-                { username: req.user.username },
+                { email: req.user.email },
                 {
                     $set: {
                         score: allScoresList,
@@ -1989,12 +1981,12 @@ app.post("/server/savescore", authUser, (req, res) => {
 });
 app.post("/server/savexp", authUser, (req, res) => {
     const {xp} = req.body;
-    User.findOne({ username: req.user.username }, async (err, doc) => {
+    User.findOne({ email: req.user.email }, async (err, doc) => {
         if (err) {
             console.log("ERROR", err);
         } else {
             await User.updateOne(
-                { username: req.user.username },
+                { email: req.user.email },
                 {
                     $set: {
                         xp: {
