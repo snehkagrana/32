@@ -110,7 +110,7 @@ const Quiz = () => {
     let xp = 0;
     if (points.current > 0) {
       xp = points.current * 20;
-      if (points.current === maxQuestions) {
+      if (points.current === maxQuestions.current) {
         xp += 20;
       }
     } else {
