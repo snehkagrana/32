@@ -92,11 +92,14 @@ const Login = (props) => {
 
     const handleEmailChange = (e) => {
         const email = e.target.value;
+        var spaceRegex = /\s/; // Regular expression to check for spaces
 
         setLoginEmail(email);
 
         if (email === "" && hasInteractedWithEmail) {
             setEmailTooltipMessage("Email can't be empty");
+        } else if (spaceRegex.test(email)) {
+            setEmailTooltipMessage("Spaces not allowed");
         } else {
             setEmailTooltipMessage("");
         }
@@ -123,7 +126,8 @@ const Login = (props) => {
 
     const checkValidCredentials = (email, password) => {
         var spaceRegex = /\s/; // Regular expression to check for spaces
-        if (email === "" || password === "" || spaceRegex.test(password)) {
+        var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        if (email === "" || password === "" || spaceRegex.test(password) || !emailRegex.test(email)) {
             setValidEmail(false);
         } else {
             setValidEmail(true);

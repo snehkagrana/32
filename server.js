@@ -1941,7 +1941,9 @@ app.post("/server/savescore", authUser, (req, res) => {
 
             const daysDiff = daysDifference(doc.lastCompletedDay);
 
-            if (daysDiff === 1) {
+            if (daysDiff === 0) {
+
+            } else if (daysDiff === 1) {
                 doc.streak++;
             } else {
                 // If more than one day is missed, reset streak to 1 since user played today
