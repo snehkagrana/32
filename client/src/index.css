@@ -273,8 +273,8 @@ input[type=search]:focus {
     text-align: center;
     line-height: 80px;
     background-color: transparent;
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     border: 3px solid #31c754;
 }
 .user-name {
