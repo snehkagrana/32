@@ -76,10 +76,16 @@ const Login = (props) => {
 
 
     const handleEmailBlur = () => {
-        setHasInteracted(true);
+        setHasInteractedWithEmail(true);
         if (loginEmail === "") {
             setEmailTooltipMessage("Email can't be empty");
-        }};
+            setValidEmail(false);
+        } else if (!validEmail) {
+            setEmailTooltipMessage("Invalid email format");
+        } else {
+            setEmailTooltipMessage(""); // Clear the tooltip message
+        }
+    };
 
     const handlePasswordBlur = () => {
         setHasInteractedWithPassword(true);
@@ -91,21 +97,31 @@ const Login = (props) => {
 
 
     const handleEmailChange = (e) => {
-        const email = e.target.value;
-        var spaceRegex = /\s/; // Regular expression to check for spaces
+        const email = e.target.value.trim(); // Trim spaces at the beginning and end of the input
+        const spaceRegex = /\s/; // Regular expression to check for spaces
+        const emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/; // Email regex for validation
 
         setLoginEmail(email);
 
-        if (email === "" && hasInteractedWithEmail) {
-            setEmailTooltipMessage("Email can't be empty");
-        } else if (spaceRegex.test(email)) {
-            setEmailTooltipMessage("Spaces not allowed");
-        } else {
-            setEmailTooltipMessage("");
+        if (hasInteractedWithEmail) {
+            if (email === "") {
+                setEmailTooltipMessage("Email can't be empty");
+                setValidEmail(false);
+            } else if (spaceRegex.test(email)) {
+                setEmailTooltipMessage("Spaces not allowed");
+                setValidEmail(false);
+            } else if (!emailRegex.test(email)) {
+                setEmailTooltipMessage("Invalid email format");
+                setValidEmail(false);
+            } else {
+                setEmailTooltipMessage(""); // Clear the tooltip message
+                setValidEmail(true);
+            }
         }
 
         checkValidCredentials(email, loginPassword);
     };
+
 
 
     const handlePasswordChange = (e) => {
