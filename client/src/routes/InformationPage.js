@@ -214,7 +214,7 @@ const InformationPage = () => {
                     )}
                     {pageNumber + 1 < maxInfoPages && (
                         <>
-                            <Button variant="success" onClick={next}>
+                            <Button style={{width: '20%'}} variant="success" onClick={next}>
                                 Next
                             </Button>
                             {"  "}
@@ -261,6 +261,7 @@ const InformationPage = () => {
                         )}
                     {!isQuiz && pageNumber + 1 === maxInfoPages && (
                         <Button
+                            
                             variant="success"
                             onClick={() =>
                                 navigate(`/skills/${skillName}/${category}`)

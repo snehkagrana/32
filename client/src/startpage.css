@@ -1,0 +1,42 @@
+    /* Media query for smaller screens (e.g., max-width: 768px) */
+  @media (max-width: 768px) {
+    /* Adjust font sizes for headings and paragraphs */
+    h1 {
+      font-size: 24px;
+      margin-top: 10px;
+    }
+
+    h2 {
+      font-size: 20px;
+    }
+    h3 {
+      font-size: 18px;
+    }
+    h4 {
+      font-size: 17px;
+    }
+    h5 {
+      font-size: 16px;
+      
+    }
+    h6 {
+      font-size: 14px;
+    }
+    p {
+      font-size: 14px;
+    }
+    /* Adjust font size for buttons */
+    .button {
+      font-size: 12px;
+    }
+  }
+  @media (max-width: 768px) {
+    .box {
+      width: 50%; /* Adjust the width as needed for smaller screens */
+    }
+  }
+  
+  
+
+  
+  

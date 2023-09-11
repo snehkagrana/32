@@ -263,8 +263,8 @@ const Login = (props) => {
                             <Col md={6} sm={6}>
                                 <Button
                                     style={{
-                                        borderRadius: "10px",
-                                        padding: "13px",
+                                        borderRadius: "7px",
+                                        padding: "10px",
                                         width: "100%",
                                         marginBottom: "10px",
                                         boxShadow: `0px 7px ${validEmail ? "#1a5928" : "#ab2a2a"}`,
@@ -279,8 +279,8 @@ const Login = (props) => {
                             <Col md={6} sm={6}>
                                 <Button
                                     style={{
-                                        borderRadius: "10px",
-                                        padding: "13px",
+                                        borderRadius: "7px",
+                                        padding: "10px",
                                         width: "100%",
                                         boxShadow: "0px 7px #ab2a2a",
                                     }}
@@ -297,25 +297,26 @@ const Login = (props) => {
                             style={{
                                 width: "100%",
                                 boxShadow: "0px 7px #056fdf",
-                                borderRadius: "10px",
+                                borderRadius: "7px",
                                 transition: "0.2s ease",
                             }}
                             onClick={loginWithGoogle}
                             className="googleButton"
                         />
                         <br />
-                        <div style={{color: '#333', textAlign: "center", marginBottom: "20px" }}>
+                        <div style={{color: '#333', textAlign: "center", marginBottom: "10px" }}>
                             Don't have an account?
                         </div>
+                        <div style={{ textAlign: "center" }}>
                         <Link to="/auth/register">
                             <Button
                                 variant="success"
                                 style={{
                                     textAlign: "center",
-                                    width: "100%",
-                                    padding: "10px",
+                                    width: "50%",
+                                    
                                     transition: "0.2s ease",
-                                    borderRadius: "10px",
+                                    borderRadius: "7px",
                                     boxShadow: "0px 7px #1a5928",
                                 }}
                                 className="regHover"   //index.css
@@ -323,6 +324,7 @@ const Login = (props) => {
                                 Register Now...
                             </Button>
                         </Link>
+                        </div>
                     </Form>
                 </Col>
             </Row>

@@ -10,38 +10,31 @@ import Footer from "../components/Footer";
 import { Container } from "react-bootstrap"; // Import Container from react-bootstrap
 import '../App.css';
 import '../index.css';
+import '../startpage.css';
 import arrow from "../images/down-arrow.png";
 import demoGif from "../images/demo2.gif"
+import StartPageQuiz from "./StartPageQuiz";
 
 const logo = require("../images/teach.png");
 
+const words = ['finance', 'investing', 'economics', 'crypto', 'insurance'];
+const intervalDuration = 2000;
 
-
-////This is the home page of the website, which is user directed to the
-////after he has been authenticated, where he is given 2 options whether
-////to join an existing room or create a new one
-
-////data represents email of the logged in email
-////join room is the invitation link to which user must be redirected to
 const StartPage = (props) => {
     const navigate = useNavigate();
     const [showBanner, setShowBanner] = useState(true);
+    const [currentWordIndex, setCurrentWordIndex] = useState(0);
 
+    const updateCurrentWord = () => {
+        setCurrentWordIndex((prevIndex) => (prevIndex + 1) % words.length);
+    };
 
-    ////to authenticate user before allowing him to enter the home page
-    ////if he is not redirect him to login page
     useEffect(() => {
-        // console.log("in use effect");
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            if (response.data.redirect != "/login") {
-                // console.log("Already logged in");
-                navigate(`/home`);
-            }
-        });
+        const interval = setInterval(updateCurrentWord, intervalDuration);
+
+        return () => {
+            clearInterval(interval);
+        };
     }, []);
 
     return (
@@ -64,41 +57,62 @@ const StartPage = (props) => {
                     <br />
                     <div style={{ flex: '1' }}>
                         <Row style={{ margin: "auto", width: "80%" }}>
-                            <Col xs={12} md={6} style={{ marginTop: "90px"}}>
+                            <Col xs={12} md={6} style={{ marginTop: "6%"}}>
                             <img 
                                 src={demoGif} 
                                 style={{
-                                    width: "90%", // or whatever percentage or fixed width you want
+                                    width: "95%", // or whatever percentage or fixed width you want
                                     borderRadius: "10px", // or the amount of border-radius you prefer
-                                    border: "2px solid #2cb74c"
+                                    border: "3px solid #2cb74c",
+                                    minWidth: "95%"
                                 }} 
                                 className="img-fluid zoomImage" 
                                 alt="Learn Finance" 
                             />
+                            
                             </Col>
 
-                            <Col xs={12} md={6} style={{ marginTop: "5%" }}>
+                            <Col xs={12} md={6} style={{ marginTop: "4%" }}>
                                 <h1>
-                        <span style={{ fontWeight: "bold", color: '#2cb74c' }}>
-                            LEARN FINANCE THE FUN WAY!
-                        </span>
+                                    <span style={{ fontWeight: "bold", color: '#2cb74c' }}>
+                                        learn{' '}
+                                        <span 
+                                            className="box"
+                                            style={{
+                                                display: "inline-block",
+                                                width: "40%", // Fixed box width
+                                                borderRadius: "7px",
+                                                textAlign: "center",
+                                                
+                                                textDecorationColor: "#4285F4",
+                                                padding: "0px 1px",
+                                                border: "4px solid #4285F4",
+                                                color: "#4285F4",
+                                            }}
+                                        >
+                                            {words[currentWordIndex]}
+                                        </span>{' '}
+                                        the fun way!
+                                    </span>
                                 </h1>
                                 <br />
-                                <h4 style= {{fontWeight: 'bold'}}>
-                                    500+ Short, Jargon-Free Chapters and 2000+ engaging quizzes.
+                                <h5 style= {{fontWeight: 'bold', textAlign: "center"}}>
+                                    short jargon free chapters and engaging quizzes. put in only 4 minutes a day and get better at managing your money.
+                                </h5>
+                                <br />
+                                <h4 style={{ textAlign: "center", fontFamily: "Kalam, Nunito, sans-serif", color: '#2cb74c', fontWeight: 'bold' }}>try now. it's free!<img src={arrow} alt="Down Arrow" className="bounce" style={{ width: '45px', height: '45px' }} />
                                 </h4>
                                 <br />
-                                <h3 style={{ textAlign: "center", fontFamily: "Kalam, Nunito, sans-serif", color: '#2cb74c', fontWeight: 'bold' }}>Try Now. It's Free!<img src={arrow} alt="Down Arrow" className="bounce" style={{ width: '45px', height: '45px' }} /></h3>
-                                <br />
+                                
                                 <Button
                                     style={{
-                                        width: "60%",
+                                        width: "55%",
                                         backgroundColor: "#28a745",
                                         borderColor: "#28a745",
                                         margin: "0 auto",
                                         display: "block",
-                                        padding: "15px",
-                                        borderRadius: "15px",
+                                        padding: "12px",
+                                        borderRadius: "10px",
                                         boxShadow: "0px 7px #1a5928",
                                         transition: "0.2s ease",
                                         fontWeight: "800",
@@ -112,13 +126,13 @@ const StartPage = (props) => {
 
                                 <Button
                                     style={{
-                                        width: "60%",
+                                        width: "55%",
                                         backgroundColor: "#FFFFFF",
                                         borderColor: "#808080",
                                         margin: "0 auto 20px auto",
                                         display: "block",
-                                        padding: "15px",
-                                        borderRadius: "15px",
+                                        padding: "12px",
+                                        borderRadius: "10px",
                                         boxShadow: "0px 7px #818589",
                                         transition: "0.2s ease",
                                         fontWeight: "800",
@@ -130,30 +144,18 @@ const StartPage = (props) => {
                                     I ALREADY HAVE AN ACCOUNT
                                 </Button>
                             </Col>
+                            <Col xs={12} md={6} style={{ marginTop: "6%"}}>
+                            <h2 style= {{fontWeight: 'bold', textAlign: "center", color: '#2cb74c', marginTop: '10px'}}>take a quick, personal finance quiz and test yourself.
+                            </h2>
+                        </Col>
+                            <Col xs={12} md={6} style={{ marginTop: "6%", align :'center'}}>
+                            <StartPageQuiz/>
+                        </Col>
                         </Row>
-                        <div style={{ marginBottom: "10px" }}></div> {/* Added space before the footer */}
-
-                        {/* <Row style={{ margin: "auto", width: "80%"}}>
-			<Col>
-				<img
-					src={logo}
-					height={500}
-					width={600}
-					fluid
-					alt="Learn Finance Logo"
-				/>
-			</Col>
-			<Col style={{ marginTop: "10%"}}>
-				<h1><span style={{fontWeight: 'bold'}}>Learn Finance the Fun Way!</span></h1>
-				<br/>
-				<h5 > Get access to 450+ chapters on Investing, Trading, Crypto, and more. Each only 3 minutes long.</h5>
-				<br/>
-				<h5>Plus, challenge yourself with 1800+ quizzes to test your knowledge.</h5>
-				<br/>
-			<Button style={{ width: "50%", marginLeft: "25%", padding: "15px", borderRadius: "15px", boxShadow: "initial" }} onClick={() => navigate(`/auth/login`)}>Get Started</Button>
-			</Col>
-		</Row> */}
+                        <div style={{ marginBottom: "10px" }}></div>
+                        
                     </div>
+                    
                     <Footer/>
                 </div>
             </div>
