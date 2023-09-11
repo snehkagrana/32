@@ -90,6 +90,7 @@ const Home = (props) => {
 
     const [xp, setXP] = useState({dailyXP: 0, totalXP: 0});
     const [lastCompletedDay, SetLastCompletedDay] = useState(0);
+    const [completedDays, SetCompletedDays] = useState([]);
     const [profilePicture, setProfilePicture] = useState("");
 
     const [index, setIndex] = useState(0);
@@ -137,13 +138,6 @@ const Home = (props) => {
         startOfWeek.getMonth(),
         startOfWeek.getDate() + 6
     );
-    const lastDate = new Date(lastCompletedDay);
-
-    let isSameWeek = false;
-    const lastDay = (lastDate.getDay() + 6) % 7;
-    if (lastDate >= startOfWeek && lastDate <= endOfWeek) {
-        isSameWeek = true;
-    }
 
     const statistics = [
         {
@@ -402,6 +396,7 @@ const Home = (props) => {
 
                 setXP({dailyXP: response.data.user.xp.daily, totalXP: response.data.user.xp.total});
                 SetLastCompletedDay(response.data.user.lastCompletedDay);
+                SetCompletedDays(response.data.user.completedDays);
                 setProfilePicture(response.data.user.imgPath);
                 setLastPlayed(response.data.user.last_played);
                 getSkills(response.data.user.last_played);
@@ -656,7 +651,7 @@ const Home = (props) => {
                                         days.map((day, index) => (
                                             <div key={index} className={"day "
                                                 + (index === dayOfWeek ? "day-circle-white " : " ")
-                                                + (isSameWeek && user && user.streak && index > lastDay - user.streak && index <= lastDay ? "day-circle-green " : " ")
+                                                + (completedDays && completedDays[index] && new Date(completedDays[index]).getTime() >= startOfWeek && new Date(completedDays[index]).getTime() <= endOfWeek ? "day-circle-green " : " ")
                                             }>
                                                 {day[0]}
                                             </div>

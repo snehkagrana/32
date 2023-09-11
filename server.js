@@ -1953,6 +1953,15 @@ app.post("/server/savescore", authUser, (req, res) => {
             
             doc.lastCompletedDay = today;
 
+            const dayOfWeek = (getToday().getDay() + 6) % 7;
+            const oldValue = doc.completedDays || {};
+
+            doc.lastCompletedDay = today;
+            const completedDays = {
+                ...oldValue,
+                [dayOfWeek]: today,
+            };
+
             await User.updateOne(
                 { email: req.user.email },
                 {
@@ -1965,6 +1974,7 @@ app.post("/server/savescore", authUser, (req, res) => {
                         },
                         streak: doc.streak,
                         lastCompletedDay: doc.lastCompletedDay,
+                        completedDays: completedDays,
                     },
                 }
             );

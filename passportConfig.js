@@ -90,6 +90,7 @@ module.exports = function (passport) {
                 role: user.role,
                 streak: user.streak,
                 lastCompletedDay: user.lastCompletedDay,
+                completedDays: user.completedDays,
                 xp: user.xp,
             };
             cb(err, userInformation);

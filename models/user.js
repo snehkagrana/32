@@ -43,6 +43,15 @@ const user = new mongoose.Schema({
     },
     streak: Number,
     lastCompletedDay: Date,
+    completedDays: {
+        0: Date,
+        1: Date,
+        2: Date,
+        3: Date,
+        4: Date,
+        5: Date,
+        6: Date,
+    },
     password_reset_token: String,
 });
 
