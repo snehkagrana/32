@@ -178,6 +178,7 @@ app.get("/server/login", (req, res) => {
                 }
 
                 if (daysDiff !== 0) {
+                    doc.xp.current = 0;
                     doc.xp.daily = 0;
                 }
 
@@ -1929,7 +1930,7 @@ app.post("/server/savescore", authUser, (req, res) => {
         if (err) {
             console.log("ERROR", err);
         } else {
-            const today = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toISOString().split("T")[0];
+            const today = getToday().toISOString().split("T")[0];
             let allScoresList = doc.score;
             
             allScoresList.push({
@@ -1952,6 +1953,15 @@ app.post("/server/savescore", authUser, (req, res) => {
             
             doc.lastCompletedDay = today;
 
+            const dayOfWeek = (getToday().getDay() + 6) % 7;
+            const oldValue = doc.completedDays || {};
+
+            doc.lastCompletedDay = today;
+            const completedDays = {
+                ...oldValue,
+                [dayOfWeek]: today,
+            };
+
             await User.updateOne(
                 { email: req.user.email },
                 {
@@ -1964,6 +1974,7 @@ app.post("/server/savescore", authUser, (req, res) => {
                         },
                         streak: doc.streak,
                         lastCompletedDay: doc.lastCompletedDay,
+                        completedDays: completedDays,
                     },
                 }
             );
@@ -2034,16 +2045,23 @@ const isNextDay = (lastDate) => {
 };
 
 const daysDifference = (lastDate) => {
-    const today = new Date(
-        new Date().getFullYear(),
-        new Date().getMonth(),
-        new Date().getDate()
-    );
-    const lastDay = new Date(
-        new Date(lastDate).getFullYear(),
-        new Date(lastDate).getMonth(),
-        new Date(lastDate).getDate()
-    );
-    return Math.floor((today - lastDay) / (1000 * 60 * 60 * 24));
+    const todayUTC = getToday();
+
+    const day = lastDate.toISOString().split("T")[0];
+    const lastCompletedDay = new Date(day);
+    const lastCompletedDayUTC = new Date(Date.UTC(lastCompletedDay.getUTCFullYear(), lastCompletedDay.getUTCMonth(), lastCompletedDay.getUTCDate()));
+
+    return Math.floor((todayUTC - lastCompletedDayUTC) / (1000 * 60 * 60 * 24));
 };
+
+const getToday = () => {
+    const now = new Date();
+    const today = new Date(now.getTime() - (now.getTimezoneOffset() * 60000));
+
+    const year = today.getUTCFullYear();
+    const month = today.getUTCMonth();
+    const day = today.getUTCDate();
+
+    return new Date(Date.UTC(year, month, day));
+}
 
