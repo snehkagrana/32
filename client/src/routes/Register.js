@@ -257,7 +257,7 @@ const Register = (props) => {
                         {/* Submit Button */}
                         <Button
                             style={{
-                                borderRadius: "10px",
+                                borderRadius: "7px",
                                 padding: "10px",
                                 width: "100%",
                                 boxShadow: `0px 7px ${
@@ -284,7 +284,7 @@ const Register = (props) => {
                         <GoogleButton
                             style={{
                                 width: "100%",
-                                borderRadius: "10px",
+                                borderRadius: "7px",
                                 boxShadow: "0px 7px #056fdf",
                                 transition: "0.2s ease",
                             }}
@@ -297,17 +297,19 @@ const Register = (props) => {
                             style={{
                                 color: '#333',
                                 textAlign: "center",
-                                marginBottom: "1px",
-                                marginTop: "15px", // Added space above this line
+                                marginBottom: "5px",
+                                marginTop: "5px", // Added space above this line
                             }}
                         >
                             Already have an account?
                             <Link to="/auth/login">
+                            <div style={{ textAlign: "center" }}>
                                 <Button
                                     variant="success" // Added success variant to match the green color
                                     style={{
-                                        marginLeft: "10px",
-                                        borderRadius: "7px",
+                                        marginTop: '5px',
+                                        borderRadius: "5px",
+                                        width: '50%',
                                         boxShadow: "0px 5px #1a5928",
                                         transition: "0.2s ease",
                                     }}
@@ -315,6 +317,7 @@ const Register = (props) => {
                                 >
                                     Login
                                 </Button>
+                                </div>
                             </Link>
                         </div>
 

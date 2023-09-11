@@ -1,0 +1,122 @@
+* {
+  font-family: Nunito, cursive, sans-serif;
+  
+}
+
+
+
+.app {
+  background-color: #f7fcf7;
+  color: #333;
+  width: 100%;
+  min-height: 200px;
+  height: min-content;
+  border-radius: 15px;
+  border: 3px solid #2cb74c;
+  padding: 20px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.score-section {
+  
+  font-size: 24px;
+  align-items: center;
+}
+.getStarted {
+  z-index: 9 !important;
+}
+
+.getStarted:hover {
+  background-color: #31c754!important;
+  transform: translateY(5px); /* Adjust to a slightly darker green */
+}
+
+/* QUESTION/TIMER/LEFT SECTION */
+.question-section {
+  width: 100%;
+  position: relative;
+}
+
+.question-count {
+  margin-bottom: 18px;
+}
+
+.question-count span {
+  font-size: 22px;
+}
+
+.question-text {
+  margin-bottom: 16px;
+  font-weight: bold;
+}
+
+.timer-text {
+  background: rgb(230, 153, 12);
+  padding: 15px;
+  margin-top: 20px;
+  margin-right: 20px;
+  border: 5px solid rgb(255, 189, 67);
+  border-radius: 15px;
+  text-align: center;
+}
+
+/* ANSWERS/RIGHT SECTION */
+.answer-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.answerButton {
+  width: 100%;
+  font-size: 16px;
+  color: #333;
+  background-color: #f7fcf7;
+  border-radius: 7px;
+  display: flex;
+  padding: 5px;
+  justify-content: flex-start;
+  align-items: center;
+  border: 3px solid #333;
+  cursor: pointer;
+  margin-bottom: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.correct {
+  background-color: #52cf52;
+}
+
+.incorrect {
+  background-color: #fe5858;
+}
+.feedback {
+  margin-top: 10px;
+  font-size: 18px; /* Adjust the font size as needed */
+  text-align: center;
+}
+
+
+.answerButton:focus {
+  outline: none;
+}
+
+.answerButton svg {
+  margin-right: 5px;
+}
+
+.answerButton:hover {
+  transform: scale(1.02); /* Scale the button slightly on hover */
+}
+
+/* Disable the hover effect on selected options */
+.correct.disabled,
+.incorrect.disabled,
+.correct:active,
+.incorrect:active {
+  transform: scale(1); /* Keep the same color for selected and disabled option */
+  cursor: not-allowed;
+}

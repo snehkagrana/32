@@ -271,7 +271,7 @@ const Quiz = () => {
           <Card.Body>
             <Button
               variant="success"
-              style={{ boxShadow: "0px 7px #1a5928" }}
+              style={{ width: '25%', boxShadow: "0px 7px #1a5928" }}
               onClick={check}
               disabled={answersList.length === 0} // Disable if no answer is selected
             >
