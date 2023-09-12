@@ -2047,7 +2047,7 @@ const isNextDay = (lastDate) => {
 const daysDifference = (lastDate) => {
     const todayUTC = getToday();
 
-    const day = lastDate.toISOString().split("T")[0];
+    const day = lastDate ? lastDate.toISOString().split("T")[0] : 0;
     const lastCompletedDay = new Date(day);
     const lastCompletedDayUTC = new Date(Date.UTC(lastCompletedDay.getUTCFullYear(), lastCompletedDay.getUTCMonth(), lastCompletedDay.getUTCDate()));
 
