@@ -121,11 +121,16 @@ const Home = (props) => {
     };
 
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-    const today = new Date(
-        new Date().getFullYear(),
-        new Date().getMonth(),
-        new Date().getDate()
-    );
+
+    const now = new Date();
+    const todayDate = new Date(now.getTime() - (now.getTimezoneOffset() * 60000));
+
+    const year = todayDate.getUTCFullYear();
+    const month = todayDate.getUTCMonth();
+    const day = todayDate.getUTCDate();
+
+    const today = new Date(Date.UTC(year, month, day));
+
     const dayOfWeek = (today.getDay() + 6) % 7;
 
     const startOfWeek = new Date(
@@ -651,7 +656,7 @@ const Home = (props) => {
                                         days.map((day, index) => (
                                             <div key={index} className={"day "
                                                 + (index === dayOfWeek ? "day-circle-white " : " ")
-                                                + (completedDays && completedDays[index] && new Date(completedDays[index]).getTime() >= startOfWeek && new Date(completedDays[index]).getTime() <= endOfWeek ? "day-circle-green " : " ")
+                                                + ((completedDays && completedDays[index] && new Date(completedDays[index]) >= startOfWeek && new Date(completedDays[index]) <= today) ? "day-circle-green " : " ")
                                             }>
                                                 {day[0]}
                                             </div>
