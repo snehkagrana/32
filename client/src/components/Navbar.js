@@ -165,7 +165,7 @@ const Navbar = ({ proprole }) => {
                                 Home
                             </MDBNavbarLink>
                         </MDBNavbarItem>
-                        <MDBNavbarItem>
+                        {/*<MDBNavbarItem>
                             <MDBNavbarLink
                                 onClick={() => navigate(`/profilepage`)}
                                 style={{
@@ -175,7 +175,7 @@ const Navbar = ({ proprole }) => {
                                 }}>
                                 View Profile
                             </MDBNavbarLink>
-                        </MDBNavbarItem>
+                            </MDBNavbarItem>*/}
                         <MDBNavbarItem>
                             <MDBNavbarLink
                                 onClick={handleLogOut}

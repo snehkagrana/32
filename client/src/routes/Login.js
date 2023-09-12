@@ -316,7 +316,7 @@ const Login = (props) => {
                                     width: "50%",
                                     
                                     transition: "0.2s ease",
-                                    borderRadius: "7px",
+                                    borderRadius: "5px",
                                     boxShadow: "0px 7px #1a5928",
                                 }}
                                 className="regHover"   //index.css

@@ -7,17 +7,17 @@ import { Row, Col, Image } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import GeneralNavbar from "../components/GeneralNavbar";
 import Footer from "../components/Footer";
-import { Container } from "react-bootstrap"; // Import Container from react-bootstrap
+import { Container } from "react-bootstrap";
 import '../App.css';
 import '../index.css';
 import '../startpage.css';
 import arrow from "../images/down-arrow.png";
-import demoGif from "../images/demo2.gif"
+import demoGif from "../images/demo2.gif";
 import StartPageQuiz from "./StartPageQuiz";
 
 const logo = require("../images/teach.png");
 
-const words = ['finance', 'investing', 'economics', 'crypto', 'insurance'];
+const words = ['finance', 'investing', 'mutual funds', 'personal finance', 'economics', 'crypto', 'insurance'];
 const intervalDuration = 2000;
 
 const StartPage = (props) => {
@@ -37,6 +37,8 @@ const StartPage = (props) => {
         };
     }, []);
 
+    const darkMode = localStorage.getItem("theme") === "dark";
+
     return (
         <>
         {
@@ -47,7 +49,7 @@ const StartPage = (props) => {
           //  )
         }
         
-            <div className="dottedBackground">
+            <div className={`dottedBackground ${darkMode ? 'dark-mode' : 'light-mode'}`}>
                 <div style={{ paddingBottom: "10px" }}>
                     <Helmet>
                         <title>Fingo - Learn Finance the Fun Way</title>
@@ -73,34 +75,33 @@ const StartPage = (props) => {
                             </Col>
 
                             <Col xs={12} md={6} style={{ marginTop: "4%" }}>
-                                <h1>
+                                <h1 className={`text-background-${darkMode ? 'dark' : 'light'}`} style ={{ textAlign: "center"}}>
                                     <span style={{ fontWeight: "bold", color: '#2cb74c' }}>
-                                        learn{' '}
-                                        <span 
-                                            className="box"
-                                            style={{
-                                                display: "inline-block",
-                                                width: "40%", // Fixed box width
-                                                borderRadius: "7px",
-                                                textAlign: "center",
-                                                
-                                                textDecorationColor: "#4285F4",
-                                                padding: "0px 1px",
-                                                border: "4px solid #4285F4",
-                                                color: "#4285F4",
-                                            }}
-                                        >
-                                            {words[currentWordIndex]}
-                                        </span>{' '}
-                                        the fun way!
+                                        learn finance the fun way!
                                     </span>
                                 </h1>
                                 <br />
-                                <h5 style= {{fontWeight: 'bold', textAlign: "center"}}>
-                                    short jargon free chapters and engaging quizzes. put in only 4 minutes a day and get better at managing your money.
-                                </h5>
+                                <h4 className={`text-background-${darkMode ? 'dark' : 'light'}`} style={{ fontWeight: 'bold', textAlign: "center" }}>
+                                    short jargon-free chapters and engaging quizzes on{' '}
+                                    <span 
+                                        className="box"
+                                        style={{
+                                            display: "inline-block",
+                                            width: "40%", // Fixed box width
+                                            borderRadius: "7px",
+                                            textAlign: "center",
+                                            textDecorationColor: "#4285F4",
+                                            padding: "0px 1px",
+                                            border: `4px solid ${darkMode ? '#4285F4' : '#4285F4'}`,
+                                            color: `${darkMode ? '#4285F4' : '#4285F4'}`,
+                                        }}
+                                    >
+                                        {words[currentWordIndex]}
+                                    </span>. put in 4 minutes a day and get better at managing your money.
+                                </h4>
                                 <br />
-                                <h4 style={{ textAlign: "center", fontFamily: "Kalam, Nunito, sans-serif", color: '#2cb74c', fontWeight: 'bold' }}>try now. it's free!<img src={arrow} alt="Down Arrow" className="bounce" style={{ width: '45px', height: '45px' }} />
+                                <h4 className={`text-background-${darkMode ? 'dark' : 'light'}`} style={{ textAlign: "center", fontFamily: "Kalam, Nunito, sans-serif", color: '#2cb74c', fontWeight: 'bold' }}>
+                                    try now. it's free!<img src={arrow} alt="Down Arrow" className="bounce" style={{ width: '45px', height: '45px' }} />
                                 </h4>
                                 <br />
                                 
@@ -145,18 +146,19 @@ const StartPage = (props) => {
                                 </Button>
                             </Col>
                             <Col xs={12} md={6} style={{ marginTop: "6%"}}>
-                            <h2 style= {{fontWeight: 'bold', textAlign: "center", color: '#2cb74c', marginTop: '10px'}}>take a quick, personal finance quiz and test yourself.
+                            <h2 className={`text-background-${darkMode ? 'dark' : 'light'}`} style={{ fontWeight: 'bold', textAlign: "center", color: '#2cb74c', marginTop: '10px' }}>
+                                take a quick, personal finance quiz and test yourself.
                             </h2>
                         </Col>
-                            <Col xs={12} md={6} style={{ marginTop: "6%", align :'center'}}>
-                            <StartPageQuiz/>
-                        </Col>
+                            <Col xs={12} md={6} style={{ marginTop: "6%", align: 'center' }}>
+                                <StartPageQuiz />
+                            </Col>
                         </Row>
                         <div style={{ marginBottom: "10px" }}></div>
                         
                     </div>
                     
-                    <Footer/>
+                    <Footer />
                 </div>
             </div>
         </>
@@ -164,3 +166,4 @@ const StartPage = (props) => {
 };
 
 export default StartPage;
+

@@ -153,9 +153,6 @@
 [data-theme="dark"] .dark-mode-link:hover {
     color: blue !important;
 }
-[data-theme="dark"] .box {
-    border-color: #f7fcf7 !important;
-}
 
 .glassNavbar-dark {
     background: rgba(128, 128, 128, 0.438); /* This is light grey */
@@ -164,7 +161,13 @@
 [data-theme="dark"] .dividing-line {
     border-top: 1px solid white !important;
 }
+[data-theme="light"] .text-background-light {
+    background-color: #f7fcf7;
+}
 
+[data-theme="dark"] .text-background-dark {
+    background-color: #000;
+}
 /* 3 */
 body {
     background-color: var(--background-color);
