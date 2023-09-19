@@ -31,7 +31,7 @@
     }
   }
   @media (max-width: 768px) {
-    .box {
+    .changeBox {
       width: 50%; /* Adjust the width as needed for smaller screens */
     }
   }

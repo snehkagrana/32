@@ -30,7 +30,6 @@ const InformationPage = () => {
             withCredentials: true,
             url: `/server/information/${skillName}/${category}/${subcategory}/${page}`,
         }).then((res) => {
-            // console.log("information data are:", res.data);
             if (res.data.url !== undefined) {
                 setImageURL(res.data.url);
             } else {
@@ -63,14 +62,11 @@ const InformationPage = () => {
             withCredentials: true,
             url: `/server/skills/${skillName}`,
         }).then((res) => {
-            // console.log("skill is ", res.data.data[0]);
             const filteredData = res.data.data[0].information.filter(
                 (information) =>
                     information.category === category &&
                     information.sub_category === subcategory
             );
-            // console.log("filtered data", filteredData);
-            // console.log("total info pages :", filteredData.length);
             setSkillDetails(res.data.data[0]);
             setMaxInfoPages(filteredData.length);
 
@@ -79,7 +75,6 @@ const InformationPage = () => {
                     question.category === category &&
                     question.sub_category === subcategory
                 ) {
-                    // console.log(question);
                     setIsQuiz(true);
                 }
             });
@@ -98,10 +93,8 @@ const InformationPage = () => {
           );
         }
         return dots;
-      };
+    };
 
-    ////to authenticate user before allowing him to enter the home page
-    ////if he is not redirect him to login page
     useEffect(() => {
         Axios({
             method: "GET",
@@ -109,10 +102,8 @@ const InformationPage = () => {
             url: "/server/login",
         }).then(function (response) {
             if (response.data.redirect == "/login") {
-                // console.log("Please log in");
                 navigate(`/auth/login`);
             } else {
-                // console.log("Already logged in");
                 getSkillBySkillName();
                 getInformation();
                 role.current = response.data.user.role;
@@ -125,7 +116,6 @@ const InformationPage = () => {
                         );
                     }
                 );
-                // console.log('checkIsCompleted', checkIsCompleted);
                 if (checkIsCompleted.length > 0) {
                     isCompleted.current = true;
                     setScore(checkIsCompleted[0].points);
@@ -146,30 +136,20 @@ const InformationPage = () => {
             <Card
                 className="d-flex flex-column mobile-card-style"
                 style={{
-                    marginLeft: "auto",   // Center the card
-                    marginRight: "auto",  // Center the card
+                    marginLeft: "auto",
+                    marginRight: "auto",
                     borderRadius: "15px",
                     width: '90%',
                     maxWidth: '450px',
                     marginTop: '20px',
                     marginBottom: '20px'
                 }}>
-                {/* <Card.Header>Let's Learn about {information.category}</Card.Header> */}
                 <Card.Body>
                     <Card.Title>
                         <span style={{ fontWeight: "bold" }}>
                             {information.heading}
                         </span>
                     </Card.Title>
-                    {/* {imageURL && <>
-					<Card.Img 
-						variant="top" 
-						style={{ width: "300px", textAlign: "center", margin: "auto" }} 
-						src={imageURL} 
-						className='mt-2' />
-						<br/><br/>
-						</>} */}
-
                     {imageURL && (
                         <div className="d-flex">
                             <Card.Img
@@ -184,7 +164,6 @@ const InformationPage = () => {
 
                     <Card.Text>
                         <p>
-                            {/* {information.information} */}
                             {informationDisplay !== " " &&
                                 informationDisplay
                                     .split("\n")
@@ -204,23 +183,37 @@ const InformationPage = () => {
                                     ))}
                         </p>
                     </Card.Text>
-                    {pageNumber > 0 && (
-                        <>
-                            <Button variant="secondary" onClick={prev}>
-                                Prev
-                            </Button>
-                            {"  "}
-                        </>
-                    )}
-                    {pageNumber + 1 < maxInfoPages && (
-                        <>
-                            <Button style={{width: '20%'}} variant="success" onClick={next}>
-                                Next
-                            </Button>
-                            {"  "}
-                        </>
-                    )}
-
+                    <div className="d-flex justify-content-between align-items-center">
+                        <div>
+                            {pageNumber > 0 && (
+                                <Button variant="secondary" onClick={prev}>
+                                    Prev
+                                </Button>
+                            )}
+                        </div>
+                        <div>
+                            {pageNumber + 1 < maxInfoPages && (
+                                <Button style={{ minWidth: '20%' }} variant="success" onClick={next}>
+                                    Next
+                                </Button>
+                            )}
+                            {isQuiz &&
+                                pageNumber + 1 === maxInfoPages &&
+                                isCompleted.current === false && (
+                                    <>
+                                        <Button
+                                            variant="success"
+                                            onClick={() =>
+                                                navigate(
+                                                    `/skills/${skillName}/${category}/${subcategory}/quiz`
+                                                )
+                                            }>
+                                            Start Quiz
+                                        </Button>
+                                    </>
+                                )}
+                        </div>
+                    </div>
                     {isQuiz &&
                         pageNumber + 1 === maxInfoPages &&
                         isCompleted.current === true && (
@@ -242,26 +235,8 @@ const InformationPage = () => {
                                 </OverlayTrigger>
                             </>
                         )}
-
-                    {isQuiz &&
-                        pageNumber + 1 === maxInfoPages &&
-                        isCompleted.current === false && (
-                            <>
-                                <Button
-                                    variant="success"
-                                    onClick={() =>
-                                        navigate(
-                                            `/skills/${skillName}/${category}/${subcategory}/quiz`
-                                        )
-                                    }>
-                                    Start Quiz
-                                </Button>
-                                {"  "}
-                            </>
-                        )}
                     {!isQuiz && pageNumber + 1 === maxInfoPages && (
                         <Button
-                            
                             variant="success"
                             onClick={() =>
                                 navigate(`/skills/${skillName}/${category}`)
@@ -277,5 +252,6 @@ const InformationPage = () => {
 };
 
 export default InformationPage;
+
 
 ///TODO: change hard coded value 5

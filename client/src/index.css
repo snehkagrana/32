@@ -720,3 +720,14 @@ input[type=search]:focus {
 .dot.active {
     background-color: #28a745; /* Active dot color */
 }
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between; /* Distribute space evenly between buttons */
+     /* Allow buttons to wrap to the next line if needed */
+}
+
+.navigation-buttons button {
+    margin-left: 0px; /* Add some spacing between the buttons */
+}
+

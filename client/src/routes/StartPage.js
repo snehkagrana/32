@@ -84,7 +84,7 @@ const StartPage = (props) => {
                                 <h4 className={`text-background-${darkMode ? 'dark' : 'light'}`} style={{ fontWeight: 'bold', textAlign: "center" }}>
                                     short jargon-free chapters and engaging quizzes on{' '}
                                     <span 
-                                        className="box"
+                                        className="changeBox"
                                         style={{
                                             display: "inline-block",
                                             width: "40%", // Fixed box width
