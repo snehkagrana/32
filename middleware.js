@@ -3,6 +3,8 @@ function authUser(req, res, next) {
         res.status(403);
         return res.send("You need to log in");
     }
+    // Add X-Frame-Options header to prevent clickjacking
+    res.header('X-Frame-Options', 'DENY');
     next();
 }
 
