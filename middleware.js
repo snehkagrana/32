@@ -24,3 +24,4 @@ module.exports = {
     authUser,
     authRole,
 };
+
