@@ -97,7 +97,7 @@ const StartPage = (props) => {
                                         }}
                                     >
                                         {words[currentWordIndex]}
-                                    </span>. put in 4 minutes a day and get better at managing your money.
+                                    </span>{/*}. put in 4 minutes a day and get better at managing your money.*/}
                                 </h4>
                                 <br />
                                 <h4 className={`text-background-${darkMode ? 'dark' : 'light'}`} style={{ textAlign: "center", fontFamily: "Kalam, Nunito, sans-serif", color: '#2cb74c', fontWeight: 'bold' }}>
@@ -142,19 +142,19 @@ const StartPage = (props) => {
                                     className="haveAccount"
                                     onClick={() => navigate("/auth/login")}
                                 >
-                                    I ALREADY HAVE AN ACCOUNT
+                                    LOGIN
                                 </Button>
                             </Col>
-                            <Col xs={12} md={6} style={{ marginTop: "6%"}}>
+                           {/*} <Col xs={12} md={6} style={{ marginTop: "6%"}}>
                             <h2 className={`text-background-${darkMode ? 'dark' : 'light'}`} style={{ fontWeight: 'bold', textAlign: "center", color: '#2cb74c', marginTop: '10px' }}>
                                 take a quick, personal finance quiz and test yourself.
                             </h2>
                         </Col>
                             <Col xs={12} md={6} style={{ marginTop: "6%", align: 'center' }}>
                                 <StartPageQuiz />
-                            </Col>
+                                </Col>*/}
                         </Row>
-                        <div style={{ marginBottom: "10px" }}></div>
+                        <div style={{ marginBottom: "20px" }}></div>
                         
                     </div>
                     

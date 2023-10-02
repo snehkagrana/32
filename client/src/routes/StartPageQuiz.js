@@ -20,7 +20,7 @@ const questions = [
         { answerText: 'Payment History', isCorrect: false },
         { answerText: 'Income', isCorrect: true },
         { answerText: 'Utilisation Rate', isCorrect: false },
-        { answerText: 'Your undergrad degree', isCorrect: false },
+        { answerText: 'Your undergrad degree', isCorrect: true },
       ],
     },
     {

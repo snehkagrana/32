@@ -8,7 +8,7 @@ const Footer = () => {
     const [hovered, setHovered] = useState({contact: false, terms: false, privacy: false});
 
     return (
-        <div style={{ padding: "30px", position: "relative", marginTop: "75px" }}>
+        <div style={{ padding: "30px", position: "relative", marginTop: "125px" }}>
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "5px", flexWrap: "wrap" }}>
                 <span
                     className="dark-mode-link" 
