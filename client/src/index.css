@@ -456,7 +456,7 @@ input[type=search]:focus {
     color: #1B5E20;
 }
 
-.color8 :hover {
+.color8:hover {
     border: 3px solid #1B5E20;
     background-color: #A5D6A7;
 }
