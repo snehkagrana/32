@@ -154,7 +154,7 @@ const StartPage = (props) => {
                                 <StartPageQuiz />
                                 </Col>*/}
                         </Row>
-                        <div style={{ marginBottom: "10px" }}></div>
+                        <div style={{ marginBottom: "20px" }}></div>
                         
                     </div>
                     
