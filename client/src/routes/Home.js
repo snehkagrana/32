@@ -723,7 +723,7 @@ const Home = (props) => {
                     }
                   </ul>
                 </div>
-              ) : <p>No skills found.</p>
+              ) : <p>Wait for it...</p>
             }
           </div>
           <div className="col-md-8">
