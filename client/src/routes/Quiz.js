@@ -258,14 +258,19 @@ const Quiz = () => {
           </Card.Body>
           <ListGroup className="list-group-flush fix">
             {optionSet.map((option, i) => (
-              <ListGroup.Item key={i}>
-                <Form.Check
-                  type={correctAnswers.current.length === 1 ? "radio" : "checkbox"}
-                  onClick={() => correctAnswers.current.length === 1 ? handleAnswerRadio(i) : handleAnswer(i)}
-                  checked={answersList.includes(i)}
-                  label={option}
-                />
-              </ListGroup.Item>
+              <ListGroup.Item key={i} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() =>
+  correctAnswers.current.length === 1
+    ? handleAnswerRadio(i)
+    : handleAnswer(i)
+}>
+  <input
+    type={correctAnswers.current.length === 1 ? "radio" : "checkbox"}
+    style={{ marginRight: '10px' }} // Add space between the radio button and text
+    checked={answersList.includes(i)}
+  />
+  <label style={{ margin: '0', cursor: 'pointer' }}>{option}</label>
+</ListGroup.Item>
+
             ))}
           </ListGroup>
           <Card.Body>
@@ -279,15 +284,14 @@ const Quiz = () => {
             </Button>
   
             <Modal show={showExplaination}>
-              <Modal.Header>
-                <Modal.Title>
-                  <>
-                    {currentIsCorrect
-                      ? "Correct Answer"
-                      : "Oops, That is Incorrect"}
-                  </>
-                </Modal.Title>
-              </Modal.Header>
+              <Modal.Header style={{ backgroundColor: currentIsCorrect ? '#3CB043' : 'lightcoral' }}>
+  <Modal.Title>
+    {currentIsCorrect
+      ? "Correct Answer"
+      : "Oops, That is Incorrect"}
+  </Modal.Title>
+</Modal.Header>
+
               <Modal.Body>
                 <div>Correct Answer: {currentCorrectOptions}</div>
                 <br />

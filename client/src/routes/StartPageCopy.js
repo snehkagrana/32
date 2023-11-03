@@ -68,7 +68,7 @@ const StartPage = (props) => {
                                     border: "3px solid #2cb74c",
                                     minWidth: "95%"
                                 }} 
-                                // className="img-fluid zoomImage" 
+                                className="img-fluid zoomImage" 
                                 alt="Learn Finance" 
                             />
                             
@@ -166,5 +166,4 @@ const StartPage = (props) => {
 };
 
 export default StartPage;
-
 
