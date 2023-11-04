@@ -193,7 +193,7 @@ const Register = (props) => {
                             padding: "40px",
                             boxShadow: "0 0 10px rgba(0,0,0,0.2)",
                             minWidth: "300px",
-                            background: '#fff'
+                            background: '#f7fcf7'
                         }}
                     >
                         <h1 style={{color: '#333', textAlign: "center", marginBottom: "30px" }}>Create Account!</h1>
