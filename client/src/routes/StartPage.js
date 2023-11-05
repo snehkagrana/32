@@ -120,7 +120,7 @@ const StartPage = (props) => {
                                         marginBottom: "20px"
                                     }}
                                     className="getStarted"
-                                    onClick={() => navigate("/auth/register")}
+                                    onClick={() => navigate("/home")}
                                 >
                                     GET STARTED
                                 </Button>

@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import {useParams, useLocation, useSearchParams} from "react-router-dom";
 import Axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { Badge, Card, Button, Col, Image } from "react-bootstrap";
@@ -29,6 +29,9 @@ const ScorePage = (props) => {
     const [xp, setXP] = useState(0);
     const [celebrate, setCelebrate] = useState(false);
 
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [newUserLimit, setNewUserLimit] = useState(false);
+
     const confettiConfig = {
         angle: 90,
         spread: 360,
@@ -43,16 +46,14 @@ const ScorePage = (props) => {
         colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"]
     };
 
-    useEffect(() => {
-        // Trigger the celebration effect upon mounting
-        setCelebrate(true);
-    }, []);
-
-    const getSkillBySkillName = () => {
+    const getSkillBySkillName = (isNewUser) => {
         Axios({
             method: "GET",
             withCredentials: true,
             url: `/server/skills/${skillName}`,
+            params: {
+                newUser: isNewUser,
+            },
         }).then((res) => {
             // console.log("skill is ", res.data.data);
             setSkillDetails(res.data.data[0]);
@@ -77,11 +78,14 @@ const ScorePage = (props) => {
         });
     };
 
-    const getAllScores = () => {
+    const getAllScores = (isNewUser) => {
         Axios({
             method: "GET",
             withCredentials: true,
             url: `/server/allscores`,
+            params: {
+                newUser: isNewUser,
+            },
         }).then((res) => {
             // console.log("all scores ", res.data);
         });
@@ -91,31 +95,61 @@ const ScorePage = (props) => {
     ////if he is not redirect him to login page
     useEffect(() => {
         // console.log("in use effect");
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            if (response.data.redirect == "/login") {
-                // console.log("Please log in");
-                navigate(`/auth/login`);
+        const newUser = searchParams.get("newUser");
+        if (newUser === "true") {
+            // Retrieve the scores array from localStorage and parse it
+            const storedScores = JSON.parse(sessionStorage.getItem("scores")) || [];
+
+            // Filter scores by skillName and category
+            const matchingScores = storedScores.filter(scoreItem =>
+                scoreItem.skill === skillName && scoreItem.category === category
+            );
+
+            // Check if there are 5 items with the same skillName and category
+            if (matchingScores.length >= 5) {
+                const score = matchingScores.reduce((acc, item) => acc + item.score, 0); // Sum of scores as an example
+                const points = matchingScores.reduce((acc, item) => acc + item.points, 0); // Sum of points as an example
+
+                setNewUserLimit(true);
             } else {
-                // console.log("Already logged in");
-                getSkillBySkillName();
-                getAllScores();
-                setPoints(data.points.current);
-                setXP(response.data.user.xp.current);
-                role.current = response.data.user.role;
+                setCelebrate(true);
+                getSkillBySkillName(newUser);
+                getAllScores(newUser);
+
+                // Retrieve XP from localStorage, if present
+                const storedXp = sessionStorage.getItem('xp');
+                if (storedXp) {
+                    setXP(parseInt(storedXp, 10));
+                }
             }
-        });
-    }, []);
+        } else {
+            Axios({
+                method: "GET",
+                withCredentials: true,
+                url: "/server/login",
+            }).then(function (response) {
+                if (response.data.redirect == "/login") {
+                    // console.log("Please log in");
+                    navigate(`/auth/login`);
+                } else {
+                    // console.log("Already logged in");
+                    setCelebrate(true);
+                    getSkillBySkillName();
+                    getAllScores();
+                    setPoints(data.points.current);
+                    setXP(response.data.user.xp.current);
+                    role.current = response.data.user.role;
+                }
+            });
+        }
+    }, [searchParams]);
 
     return (
         <>
             <Helmet>
                 <title>Score page</title>
             </Helmet>
-            <Navbar proprole={role} />
+            <Navbar proprole={role} newUser={!!searchParams.get("newUser")}/>
             <div>
                 <h2 className="text-center">
                     <Badge pill bg="light">
@@ -133,61 +167,88 @@ const ScorePage = (props) => {
                             margin: "0 auto",
                             borderRadius: "15px",
                         }}>
-                        <Card.Header className="congratulation-card-header">Congratulations! You earned:</Card.Header>
-                        <Card.Body>
-                            <div className="confetti-container">
-                                <Confetti active={celebrate} config={confettiConfig} />
-                            </div>
-                            <div className="card-circle-xp">
-                                <Card.Text className="text-center">{xp} XP</Card.Text>
-                            </div>
-                            <div
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                }}>
-                                {subCategoryIndex.current + 1 <
-                                    totalSubCategories.current && (
-                                    <>
-                                        <Button
-                                            variant="success"
-                                            onClick={() => {
-                                                navigate(
-                                                    `/skills/${skillName}/${category}/${
-                                                        allSubCategories
-                                                            .current[
-                                                            subCategoryIndex.current +
-                                                                1
-                                                        ].sub_category
-                                                    }/information/${0}`
-                                                );
+                        {
+                            newUserLimit ? (
+                                <>
+                                    <Card.Header className="congratulation-card-header">If you want to continue please Register</Card.Header>
+                                    <Card.Body>
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                alignItems: "center",
                                             }}>
-                                            Next: Start with{" "}
-                                            {allSubCategories.current[
-                                                subCategoryIndex.current + 1
-                                            ].sub_category
-                                                .split("_")
-                                                .join(" ")}
-                                        </Button>{" "}
-                                    </>
-                                )}
-                                {subCategoryIndex.current + 1 ===
-                                    totalSubCategories.current && (
-                                    <>
-                                        <Button
-                                            variant="success"
-                                            onClick={() => {
-                                                navigate(
-                                                    `/skills/${skillName}/${category}`
-                                                );
+                                            <Link to="/auth/register">
+                                                <Button
+                                                    variant="success"
+                                                >
+                                                    Register
+                                                </Button>
+                                            </Link>
+                                        </div>
+                                    </Card.Body>
+                                </>
+                            ) : (
+                                <>
+                                    <Card.Header className="congratulation-card-header">Congratulations! You earned:</Card.Header>
+                                    <Card.Body>
+                                        <div className="confetti-container">
+                                            <Confetti active={celebrate} config={confettiConfig} />
+                                        </div>
+                                        <div className="card-circle-xp">
+                                            <Card.Text className="text-center">{xp} XP</Card.Text>
+                                        </div>
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                alignItems: "center",
                                             }}>
-                                            Go Back!!
-                                        </Button>{" "}
-                                    </>
-                                )}
-                            </div>
-                        </Card.Body>
+                                            {subCategoryIndex.current + 1 <
+                                                totalSubCategories.current && (
+                                                    <>
+                                                        <Button
+                                                            variant="success"
+                                                            onClick={() => {
+                                                                const newUserQueryParam = searchParams.get('newUser') ? '?newUser=true' : '';
+                                                                navigate(
+                                                                    `/skills/${skillName}/${category}/${
+                                                                        allSubCategories
+                                                                            .current[
+                                                                        subCategoryIndex.current +
+                                                                        1
+                                                                            ].sub_category
+                                                                    }/information/${0}${newUserQueryParam}`
+                                                                );
+                                                            }}>
+                                                            Next: Start with{" "}
+                                                            {allSubCategories.current[
+                                                            subCategoryIndex.current + 1
+                                                                ].sub_category
+                                                                .split("_")
+                                                                .join(" ")}
+                                                        </Button>{" "}
+                                                    </>
+                                                )}
+                                            {subCategoryIndex.current + 1 ===
+                                                totalSubCategories.current && (
+                                                    <>
+                                                        <Button
+                                                            variant="success"
+                                                            onClick={() => {
+                                                                navigate(
+                                                                    `/skills/${skillName}/${category}`
+                                                                );
+                                                            }}>
+                                                            Go Back!!
+                                                        </Button>{" "}
+                                                    </>
+                                                )}
+                                        </div>
+                                    </Card.Body>
+                                </>
+                            )
+                        }
                     </Card>
                 ) : (
                     "Loading"

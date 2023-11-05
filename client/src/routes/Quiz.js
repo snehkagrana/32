@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import {useParams, useNavigate, useSearchParams} from "react-router-dom";
 import Axios from "axios";
 import { Form, Badge, Button, Card, ListGroup } from "react-bootstrap";
 import { Helmet } from "react-helmet";
@@ -30,6 +30,8 @@ const Quiz = () => {
   const [currentImageName, setCurrentImageName] = useState("");
 
   const [showExplaination, setShowExplaination] = useState(false);
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const check = () => {
     if (JSON.stringify(answersList) === JSON.stringify(correctAnswers.current)) {
@@ -89,21 +91,44 @@ const Quiz = () => {
   };
 
   const saveScore = () => {
-    Axios({
-      method: "POST",
-      data: {
+    if (searchParams.get("newUser") === "true") {
+      // If newUser is true, save the score in localStorage
+      let scores = JSON.parse(sessionStorage.getItem('scores')) || [];
+      // Add the new score to the array
+      scores.push({
         skill: skillName,
         category: category,
         sub_category: subcategory,
-        points: points.current,
-      },
-      withCredentials: true,
-      url: "/server/savescore",
-    }).then(function (response) {
-      navigate(`/skills/${skillName}/${category}/${subcategory}/score`, {
+        points: points, // Assuming `points` is already the updated value you want to store
+      });
+      // Save the updated array back to localStorage
+      sessionStorage.setItem('scores', JSON.stringify(scores));
+      sessionStorage.setItem('lastPlayed', JSON.stringify({
+        skill: skillName,
+        category: category,
+        sub_category: subcategory,
+      }));
+      // Directly navigate to score page without waiting for server response
+      navigate(`/skills/${skillName}/${category}/${subcategory}/score?newUser=true`, {
         state: { data: { score: score, points: points } },
       });
-    });
+    } else {
+      Axios({
+        method: "POST",
+        data: {
+          skill: skillName,
+          category: category,
+          sub_category: subcategory,
+          points: points.current,
+        },
+        withCredentials: true,
+        url: "/server/savescore",
+      }).then(function (response) {
+        navigate(`/skills/${skillName}/${category}/${subcategory}/score`, {
+          state: { data: { score: score, points: points } },
+        });
+      });
+    }
   };
 
   const saveXP = () => {
@@ -117,16 +142,26 @@ const Quiz = () => {
       xp = 15;
     }
 
-    Axios({
-      method: "POST",
-      data: {
-        xp: xp,
-      },
-      withCredentials: true,
-      url: "/server/savexp",
-    }).then(function (response) {
+    if (searchParams.get("newUser") === "true") {
+      // If newUser is true, save the XP in localStorage
+      const currentXP = parseInt(sessionStorage.getItem('xp'), 10) || 0;
+      const updatedXP = currentXP + xp;
+      sessionStorage.setItem('xp', updatedXP);
+      sessionStorage.setItem('streak', '1');
+      // Then call saveScore which will handle localStorage or Axios based on newUser status
       saveScore();
-    });
+    } else {
+      Axios({
+        method: "POST",
+        data: {
+          xp: xp,
+        },
+        withCredentials: true,
+        url: "/server/savexp",
+      }).then(function (response) {
+        saveScore();
+      });
+    }
   };
 
   const handleAnswer = (i) => {
@@ -143,11 +178,14 @@ const Quiz = () => {
     }
   };
 
-  const getAllQuestions = () => {
+  const getAllQuestions = (isNewUser) => {
     Axios({
       method: "GET",
       withCredentials: true,
       url: `/server/questions/${skillName}/${category}/${subcategory}`,
+      params: {
+        newUser: isNewUser,
+      },
     }).then((res) => {
         questionSet.current = res.data.data;
         maxQuestions.current = res.data.data.length;
@@ -161,6 +199,9 @@ const Quiz = () => {
             method: "GET",
             withCredentials: true,
             url: `/server/getImage/${key}`,
+            params: {
+              newUser: isNewUser,
+            },
           }).then((res) => {
             setImageURL(res.data.url);
           });
@@ -191,11 +232,14 @@ const Quiz = () => {
       });
     };
   
-    const getSkillBySkillName = () => {
+    const getSkillBySkillName = (isNewUser) => {
       Axios({
         method: "GET",
         withCredentials: true,
         url: `/server/skills/${skillName}`,
+        params: {
+          newUser: isNewUser,
+        },
       }).then((res) => {
         skillDetails.current = res.data.data;
       });
@@ -203,27 +247,53 @@ const Quiz = () => {
   
     ////to authenticate user before allowing him to enter the home page
     useEffect(() => {
-      Axios({
-        method: "GET",
-        withCredentials: true,
-        url: "/server/login",
-      }).then(function (response) {
-        if (response.data.redirect == "/login") {
-          navigate(`/auth/login`);
+      const newUser = searchParams.get("newUser");
+      if (newUser === "true") {
+        // Retrieve the scores array from localStorage and parse it
+        const storedScores = JSON.parse(sessionStorage.getItem("scores")) || [];
+
+        // Filter scores by skillName and category
+        const matchingScores = storedScores.filter(scoreItem =>
+            scoreItem.skill === skillName && scoreItem.category === category
+        );
+
+        // Check if there are 5 items with the same skillName and category
+        if (matchingScores.length >= 5) {
+          const score = matchingScores.reduce((acc, item) => acc + item.score, 0); // Sum of scores as an example
+          const points = matchingScores.reduce((acc, item) => acc + item.points, 0); // Sum of points as an example
+
+          // Navigate with the state data
+          navigate(`/skills/${skillName}/${category}/${subcategory}/score?newUser=true`, {
+            state: {data: {score: score, points: points}},
+          });
         } else {
-          getSkillBySkillName();
-          getAllQuestions();
-          role.current = response.data.user.role;
+          // Call the functions as before
+          getSkillBySkillName(newUser);
+          getAllQuestions(newUser);
         }
-      });
-    }, []);
+      }else {
+        Axios({
+          method: "GET",
+          withCredentials: true,
+          url: "/server/login",
+        }).then(function (response) {
+          if (response.data.redirect == "/login") {
+            navigate(`/auth/login`);
+          } else {
+            getSkillBySkillName();
+            getAllQuestions();
+            role.current = response.data.user.role;
+          }
+        });
+      }
+    }, [searchParams]);
   
     return (
       <>
         <Helmet>
           <title>Quiz</title>
         </Helmet>
-        <Navbar proprole={role} />
+        <Navbar proprole={role} newUser={!!searchParams.get("newUser")}/>
         <br />
         <Card
           className="d-flex flex-column"

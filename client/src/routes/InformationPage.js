@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import {useParams, useSearchParams} from "react-router-dom";
 import Axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { Row, Form, Button, Col, Image } from "react-bootstrap";
@@ -23,12 +23,16 @@ const InformationPage = () => {
     const isCompleted = useRef(false);
     const [score, setScore] = useState(-1);
     const [isQuiz, setIsQuiz] = useState(false);
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    const getInformation = () => {
+    const getInformation = (isNewUser) => {
         Axios({
             method: "GET",
             withCredentials: true,
             url: `/server/information/${skillName}/${category}/${subcategory}/${page}`,
+            params: {
+                newUser: isNewUser,
+            },
         }).then((res) => {
             if (res.data.url !== undefined) {
                 setImageURL(res.data.url);
@@ -43,24 +47,29 @@ const InformationPage = () => {
     const prev = () => {
         var newPageNumber = Math.max(pageNumber - 1, 0);
         setPageNumber(newPageNumber);
+        const newUserQueryParam = searchParams.get('newUser') ? '?newUser=true' : '';
         navigate(
-            `/skills/${skillName}/${category}/${subcategory}/information/${newPageNumber}`
+            `/skills/${skillName}/${category}/${subcategory}/information/${newPageNumber}${newUserQueryParam}`
         );
     };
 
     const next = () => {
         var newPageNumber = Math.min(pageNumber + 1, maxInfoPages - 1);
         setPageNumber(newPageNumber);
+        const newUserQueryParam = searchParams.get('newUser') ? '?newUser=true' : '';
         navigate(
-            `/skills/${skillName}/${category}/${subcategory}/information/${newPageNumber}`
+            `/skills/${skillName}/${category}/${subcategory}/information/${newPageNumber}${newUserQueryParam}`
         );
     };
 
-    const getSkillBySkillName = () => {
+    const getSkillBySkillName = (isNewUser) => {
         Axios({
             method: "GET",
             withCredentials: true,
             url: `/server/skills/${skillName}`,
+            params: {
+                newUser: isNewUser,
+            },
         }).then((res) => {
             const filteredData = res.data.data[0].information.filter(
                 (information) =>
@@ -96,42 +105,63 @@ const InformationPage = () => {
     };
 
     useEffect(() => {
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            if (response.data.redirect == "/login") {
-                navigate(`/auth/login`);
-            } else {
-                getSkillBySkillName();
-                getInformation();
-                role.current = response.data.user.role;
-                var checkIsCompleted = response.data.user.score.filter(
-                    function (score) {
-                        return (
-                            score.skill === skillName &&
-                            score.category === category &&
-                            score.sub_category === subcategory
-                        );
-                    }
-                );
-                if (checkIsCompleted.length > 0) {
-                    isCompleted.current = true;
-                    setScore(checkIsCompleted[0].points);
-                } else {
-                    isCompleted.current = false;
+        const newUser = searchParams.get("newUser");
+        if (newUser === "true") {
+            getSkillBySkillName(newUser);
+            getInformation(newUser);
+            var checkIsCompleted = (JSON.parse(sessionStorage.getItem('scores')) || []).filter(
+                function (score) {
+                    return (
+                        score.skill === skillName &&
+                        score.category === category &&
+                        score.sub_category === subcategory
+                    );
                 }
+            );
+            if (checkIsCompleted.length > 0) {
+                isCompleted.current = true;
+                setScore(checkIsCompleted[0].points);
+            } else {
+                isCompleted.current = false;
             }
-        });
-    }, [pageNumber]);
+        } else {
+            Axios({
+                method: "GET",
+                withCredentials: true,
+                url: "/server/login",
+            }).then(function (response) {
+                if (response.data.redirect == "/login") {
+                    navigate(`/auth/login`);
+                } else {
+                    getSkillBySkillName();
+                    getInformation();
+                    role.current = response.data.user.role;
+                    var checkIsCompleted = response.data.user.score.filter(
+                        function (score) {
+                            return (
+                                score.skill === skillName &&
+                                score.category === category &&
+                                score.sub_category === subcategory
+                            );
+                        }
+                    );
+                    if (checkIsCompleted.length > 0) {
+                        isCompleted.current = true;
+                        setScore(checkIsCompleted[0].points);
+                    } else {
+                        isCompleted.current = false;
+                    }
+                }
+            });
+        }
+    }, [pageNumber, searchParams]);
 
     return (
         <>
             <Helmet>
                 <title>Let's Learn</title>
             </Helmet>
-            <Navbar proprole={role} />
+            <Navbar proprole={role} newUser={!!searchParams.get("newUser")}/>
             <br />
             <Card
                 className="d-flex flex-column mobile-card-style"
@@ -203,11 +233,12 @@ const InformationPage = () => {
                                     <>
                                         <Button
                                             variant="success"
-                                            onClick={() =>
+                                            onClick={() => {
+                                                const newUserQueryParam = searchParams.get('newUser') ? '?newUser=true' : '';
                                                 navigate(
-                                                    `/skills/${skillName}/${category}/${subcategory}/quiz`
+                                                    `/skills/${skillName}/${category}/${subcategory}/quiz${newUserQueryParam}`
                                                 )
-                                            }>
+                                            }}>
                                             Start Quiz
                                         </Button>
                                     </>

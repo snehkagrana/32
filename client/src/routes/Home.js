@@ -94,6 +94,7 @@ const Home = (props) => {
   const [profilePicture, setProfilePicture] = useState("");
 
   const [index, setIndex] = useState(0);
+  const [newUser, setNewUser] = useState(false);
 
   const { scrollRef, next, prev } = useSnapCarousel();
 
@@ -276,6 +277,9 @@ const Home = (props) => {
       method: "GET",
       withCredentials: true,
       url: "/server/skills",
+      params: {
+        newUser: newUser,
+      },
     }).then((res) => {
       // console.log('res.data skills', res.data.data);
       setSkills(res.data.data);
@@ -356,6 +360,9 @@ const Home = (props) => {
       method: "GET",
       withCredentials: true,
       url: `/server/categories/${forSkill}`,
+      params: {
+        newUser: newUser,
+      },
     }).then((res) => {
       // console.log('categories', res.data);
       setCategories(res.data.data);
@@ -383,7 +390,8 @@ const Home = (props) => {
     }).then(function(response) {
       if (response.data.redirect == "/login") {
         // console.log("Please log in");
-        navigate(`/auth/login`);
+        setNewUser(true);
+        // navigate(`/auth/login`);
       } else if (response.data.redirect == "/updateemail") {
         navigate("/updateemail");
       } else {
@@ -407,6 +415,12 @@ const Home = (props) => {
     });
   }, []);
 
+  useEffect(() => {
+    if (newUser) {
+      getSkills({});
+    }
+  }, [newUser]);
+
   const [activeIndex, setActiveIndex] = useState(0);
 
   const slidePrev = () => setActiveIndex(0 === activeIndex ? activeIndex : activeIndex - 1);
@@ -420,12 +434,33 @@ const Home = (props) => {
     1020: { items: 3, itemsFit: 'contain' },
   };
 
-  const chapterCompleted = user ? user.score.length : 0;
+  const storedScores = newUser ? JSON.parse(sessionStorage.getItem('scores')) || [] : user ? user.score : [];
+  const chapterCompleted = storedScores.length;
+  const storedLastPlayed = newUser ? JSON.parse(sessionStorage.getItem('lastPlayed')) || null : null;
+
   let subTopicsCompleted = 0;
 
   let lastSkillPercent = 0;
 
-  if (user && skills.length) {
+
+  if (newUser && skills.length) {
+    skills.forEach(skill => {
+      skill.categories.forEach(category => {
+        const chaptersCount = skill.sub_categories.filter(s => s.category === category).length;
+        const userChaptersCount = storedScores.filter(i => (i.skill === skill.skill && i.category === category)).length;
+
+        if (chaptersCount === userChaptersCount && chaptersCount !== 0) {
+          subTopicsCompleted++;
+        }
+      })
+    })
+
+    if (storedLastPlayed && storedLastPlayed.skill) {
+      const lastAllSubCategories = skills.find(s => s.skill === storedLastPlayed.skill).sub_categories.length;
+      const userLastSubCategories = storedScores.filter(s => s.skill === storedLastPlayed.skill).length
+      lastSkillPercent = Math.round(userLastSubCategories / lastAllSubCategories * 100);
+    }
+  } else if (user && skills.length) {
     skills.forEach(skill => {
       skill.categories.forEach(category => {
         const chaptersCount = skill.sub_categories.filter(s => s.category === category).length;
@@ -444,13 +479,12 @@ const Home = (props) => {
     }
   }
 
-
   return (
     <>
       <Helmet>
         <title>Home</title>
       </Helmet>
-      <Navbar proprole={role} />
+      <Navbar proprole={role} newUser={newUser}/>
       <div className="container mt-5">
         <div className="row h-auto">
           <div className="col-md-8 order-md-1 order-2 mb-4">
@@ -460,6 +494,13 @@ const Home = (props) => {
                   <Card className="welcome-card homePage-welcome-card">
                     <Card.Body>
                       {
+                        newUser ? (
+                            <Card.Text className="welcome-card-text" style={{ display: 'flex', alignItems: 'center' }}>
+                            <span>You can start with the &nbsp;
+                              <strong style={{ textDecoration: "underline", fontWeight: "bold" }}>{skills[0]?.skill.split("_").join(" ")}</strong>
+                              &nbsp; track</span>
+                            </Card.Text>
+                        ) :
                         (continueHeader !== "Explore new Skills" && lastPlayed && lastPlayed.skill) ? (
                           <Card.Text className="welcome-card-text" style={{ display: 'flex', alignItems: 'center' }}>
                             <span>You are enrolled in the &nbsp;
@@ -508,7 +549,7 @@ const Home = (props) => {
                               }}
                               className="getStarted welcome-card-button"
                               variant="success"
-                              onClick={() => navigate("/skills/Investing/Start_Here/Stocks/information/0")}
+                              onClick={() => navigate(`/skills/Investing/Start_Here/Stocks/information/0${newUser ? "?newUser=true" : ""}`)}
                             >
                               What are Stocks?
                             </Button>
@@ -516,7 +557,7 @@ const Home = (props) => {
                         )}
                       </Card.Text>
                       {
-                        (continueHeader !== "Explore new Skills" && lastPlayed) ? (
+                        ((continueHeader !== "Explore new Skills" && lastPlayed) || newUser) ? (
                           <div className="topic-percent welcome-card-text">
                             <div className="grey-percent">
                               <div className="green-percent" style={{ width: `${lastSkillPercent}%` }}></div>
@@ -543,6 +584,7 @@ const Home = (props) => {
                           className="form-control mr-4 input-search"
                           placeholder="Search Here!"
                           aria-label="Search"
+                          disabled={newUser}
                         />
                         <MDBBtn
                           className="search-button"
@@ -598,11 +640,12 @@ const Home = (props) => {
                     onChange={
                       handleProfilePictureUpload
                     }
+                    disabled={newUser}
                   />
                 </div>
                 <div className="user-info ml-3">
                   <h1 className="user-name">
-                    Hey, {userName}!
+                    Hey, {newUser ? "Guest" : userName}!
                     <span
                       style={{
                         display: 'inline-block',
@@ -619,18 +662,34 @@ const Home = (props) => {
                   <div className="xp-header">
                     <span className="xp-name">Daily XP</span>
                   </div>
-                  <div className="xp-count">
-                    {xp.dailyXP || 0}/250
-                  </div>
+                  {
+                    newUser ? (
+                        <div className="xp-count">
+                          {parseInt(sessionStorage.getItem('xp'), 10) || 0}/250
+                        </div>
+                    ) : (
+                        <div className="xp-count">
+                          {xp.dailyXP || 0}/250
+                        </div>
+                    )
+                  }
                 </div>
                 <div className="divider-v" />
                 <div className="xp totalxp">
                   <div className="xp-header">
                     <span className="xp-name">Total XP</span>
                   </div>
-                  <div className="xp-count">
-                    {xp.totalXP || 0}
-                  </div>
+                  {
+                    newUser ? (
+                        <div className="xp-count">
+                          {parseInt(sessionStorage.getItem('xp'), 10) || 0}
+                        </div>
+                    ) : (
+                        <div className="xp-count">
+                          {xp.totalXP || 0}
+                        </div>
+                    )
+                  }
                 </div>
               </Card.Body>
               <div className="divider-h" />
@@ -639,20 +698,35 @@ const Home = (props) => {
                   <div className="xp-header">
                     <span className="xp-name">Streak</span>
                     {
-                      (user && user.streak) ? (
-                        <FaFire size="1.2em" color="#FF6347" />
-                      ) : <FaFire size="1.2em" color="#e8e8ea" />
+                      newUser ?
+                          parseInt(sessionStorage.getItem('streak'), 10) ? (
+                              <FaFire size="1.2em" color="#FF6347" />
+                          ) : (
+                              <FaFire size="1.2em" color="#e8e8ea" />
+                          ) :
+                          (user && user.streak) ? (
+                              <FaFire size="1.2em" color="#FF6347" />
+                          ) : <FaFire size="1.2em" color="#e8e8ea" />
                     }
                   </div>
-                  <div className="xp-count-days">
-                    {user && user.streak || 0} days
-                  </div>
+                  {
+                    newUser ? (
+                        <div className="xp-count-days">
+                          {parseInt(sessionStorage.getItem('streak'), 10) || 0} days
+                        </div>
+                    ) : (
+                        <div className="xp-count-days">
+                          {user && user.streak || 0} days
+                        </div>
+                    )
+                  }
                 </div>
                 <div className="calender">
                   {
                     days.map((day, index) => (
                       <div key={index} className={"day "
                         + (index === dayOfWeek ? "day-circle-white " : " ")
+                        + (index === dayOfWeek && newUser && parseInt(sessionStorage.getItem('streak'), 10) ? "day-circle-green " : " ")
                         + ((completedDays && completedDays[index] && new Date(completedDays[index]) >= startOfWeek && new Date(completedDays[index]) <= today) ? "day-circle-green " : " ")
                       }>
                         {day[0]}
@@ -732,7 +806,15 @@ const Home = (props) => {
                 (categories.length && selectedSkill) ? (
                   categories.map((category, idx) => {
                     const catCount = skills.find(s => s.skill === selectedSkill).sub_categories.filter(s => s.category === category).length;
-                    const userCatCount = user.score.filter(s => s.skill === selectedSkill).filter(s => s.category === category).length;
+                    let userCatCount;
+                    if (newUser) {
+                      // Retrieve the scores from localStorage
+                      const scores = JSON.parse(sessionStorage.getItem('scores')) || [];
+                      // Filter the scores by selectedSkill and category
+                      userCatCount = scores.filter(s => s.skill === selectedSkill && s.category === category).length;
+                    } else {
+                      userCatCount = user.score.filter(s => s.skill === selectedSkill).filter(s => s.category === category).length;
+                    }
                     const percent = catCount !== 0 ? Math.round(userCatCount / catCount * 100) : 0;
 
                     return (
@@ -776,7 +858,9 @@ const Home = (props) => {
                                   "0px 7px #1a5928",
                               }}
                               value={category}
-                              onClick={() => navigate(`/skills/${selectedSkill}/${category}`)}>
+                              onClick={() => navigate(`/skills/${selectedSkill}/${category}${newUser ? "?newUser=true" : ""}`)}
+                              disabled={newUser && idx > 2}
+                            >
                               {category ? category.split("_").join(" ") : ""}
                             </Button>
 
