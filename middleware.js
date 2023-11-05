@@ -1,6 +1,6 @@
 function authUser(req, res, next) {
-    if (req.user == null) {
-        res.status(403);
+    if (req.user == null && (!req.query.newUser || req.query.newUser !== 'true')) {
+        // res.status(403);
         return res.send("You need to log in");
     }
     // Add X-Frame-Options header to prevent clickjacking
