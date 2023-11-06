@@ -105,6 +105,12 @@ const StartPage = (props) => {
                                 </h4>
                                 <br />
                                 
+                                <h6
+                                    className={`text-background-${darkMode ? 'dark' : 'light'}`}
+                                    style={{ textAlign: 'center', color: '#6c757d' }}
+                                    >
+                                    (No signup required.)
+                                </h6>
                                 <Button
                                     style={{
                                         width: "55%",
@@ -122,7 +128,7 @@ const StartPage = (props) => {
                                     className="getStarted"
                                     onClick={() => navigate("/home")}
                                 >
-                                    GET STARTED
+                                    Try Now!
                                 </Button>
 
                                 <Button

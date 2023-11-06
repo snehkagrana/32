@@ -179,17 +179,45 @@ const Navbar = ({ proprole, newUser = false }) => {
                                 View Profile
                             </MDBNavbarLink>
                             </MDBNavbarItem>*/}
-                        <MDBNavbarItem>
-                            <MDBNavbarLink
-                                onClick={newUser ? () => navigate("/auth/login") : handleLogOut}
-                                style={{
+                            <MDBNavbarItem>
+                                <MDBNavbarLink
+                                    onClick={newUser ? () => navigate("/auth/login") : handleLogOut}
+                                    style={{
                                     fontWeight: "bold",
-                                    color: "#ffffff",
+                                    color: "#28a745", // Set the text color to black
                                     cursor: "pointer",
-                                }}>
-                                {newUser ? "Login" : "Logout"}
-                            </MDBNavbarLink>
-                        </MDBNavbarItem>
+                                    backgroundColor: "#fff", // Set the background color to white
+                                    borderRadius: "7px", // Adjust the border-radius as needed
+                                    padding: "8px 15px", // Add padding to control the button size
+                                    display: "inline-block", // Make sure it's inline-block to respect the padding
+                                    
+                                    }}
+                                >
+                                    {newUser ? "Login" : "Logout"}
+                                </MDBNavbarLink>
+                            </MDBNavbarItem>
+
+                            <MDBNavbarItem>
+                                {newUser ? (
+                                    <MDBNavbarLink
+                                    onClick={() => navigate("/auth/register")}
+                                    style={{
+                                        fontWeight: "bold",
+                                        color: "#28a745",
+                                        cursor: "pointer",
+                                        backgroundColor: "#fff",
+                                        borderRadius: "7px",
+                                        padding: "8px 15px",
+                                        display: "inline-block",
+                                        marginLeft: "10px",
+                                    }}
+                                    >
+                                    Register
+                                    </MDBNavbarLink>
+                                ) : null}
+                            </MDBNavbarItem>
+
+
 
                         {role === "admin" ? (
                             <MDBNavbarItem>

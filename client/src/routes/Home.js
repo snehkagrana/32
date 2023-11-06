@@ -657,7 +657,7 @@ const Home = (props) => {
                 </div>
                 <div className="user-info ml-3">
                   <h1 className="user-name">
-                    Hey, {newUser ? "Guest" : userName}!
+                    Hey, {newUser ? "Stranger" : userName}!
                     <span
                       style={{
                         display: 'inline-block',
@@ -772,7 +772,19 @@ const Home = (props) => {
         </div>
         <div className="row">
           <div className="col-md-8 ">
-            <h3 style={{ fontWeight: '800' }}>Explore</h3>
+          <h3 style={{ fontWeight: '800' }}>
+  {newUser ? 'Explore  ': 'Explore'}
+  <span style={{ fontSize: '65%'}}>
+    {newUser ? '(Signup for ' : ''}
+    <span style={{ color:'#28a745', textDecoration: 'underline', textDecorationColor: '#28a745'}}>{newUser?'free' : ''}</span>
+    <span>{newUser?' to get full access - ' : ''}</span>
+    <span>{newUser?<a href="auth/register" style={{color:'#28a745'}}>click here</a> : ''}</span>
+    <span>{newUser?')' : ''}</span>
+  </span>
+  
+</h3>
+
+
           </div>
         </div>
         <div className="row mt-1 ">
