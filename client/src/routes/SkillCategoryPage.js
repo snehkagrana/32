@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import {useParams, useSearchParams} from "react-router-dom";
 import Axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -24,15 +24,20 @@ const SkillCategoryPage = () => {
     const [subCategories, setSubCategories] = useState([]);
     const checkIsCompleted = useRef([]);
 
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const handleClick = () => {
         navigate('/home');  // Assuming your home route path is '/home'
     };
 
-    const getSkillBySkillName = () => {
+    const getSkillBySkillName = (isNewUser) => {
         Axios({
             method: "GET",
             withCredentials: true,
             url: `/server/skills/${skillName}`,
+            params: {
+                newUser: isNewUser,
+            },
         }).then((res) => {
             // console.log("skill name", skillName);
             // console.log("skill is ", res.data.data[0]);
@@ -51,8 +56,9 @@ const SkillCategoryPage = () => {
 
     const handleSubCategorySelection = (sub_category) => {
         // console.log("handleSubCategorySelection",sub_category);
+        const newUser = searchParams.get("newUser");
         navigate(
-            `/skills/${skillName}/${categoryName}/${sub_category}/information/${0}`
+            `/skills/${skillName}/${categoryName}/${sub_category}/information/${0}${newUser ? "?newUser=true" : ""}`
         );
     };
 
@@ -60,33 +66,55 @@ const SkillCategoryPage = () => {
     ////if he is not redirect him to login page
     useEffect(() => {
         // console.log("in use effect");
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            if (response.data.redirect == "/login") {
-                // console.log("Please log in");
-                navigate(`/auth/login`);
-            } else {
-                // console.log("Already logged in");
-                getSkillBySkillName();
-                role.current = response.data.user.role;
-                var tempCheckIsCompleted = [];
-                response.data.user.score.forEach((score) => {
-                    if (
-                        score.skill === skillName &&
-                        score.category === categoryName
-                    )
-                        tempCheckIsCompleted = tempCheckIsCompleted.concat(
-                            score.sub_category
-                        );
-                });
-                checkIsCompleted.current = tempCheckIsCompleted;
-                // console.log('checkIsCompleted', checkIsCompleted.current);
-            }
-        });
-    }, []);
+        const newUser = searchParams.get("newUser");
+        if (newUser === "true") {
+            getSkillBySkillName(newUser);
+            var tempCheckIsCompleted = [];
+
+            // Retrieve scores from localStorage instead of the response object
+            const storedScores = JSON.parse(sessionStorage.getItem('scores')) || [];
+
+            // Loop through the scores from localStorage
+            storedScores.forEach((score) => {
+                if (
+                    score.skill === skillName &&
+                    score.category === categoryName
+                )
+                    tempCheckIsCompleted = tempCheckIsCompleted.concat(
+                        score.sub_category
+                    );
+            });
+
+            checkIsCompleted.current = tempCheckIsCompleted;
+        } else {
+            Axios({
+                method: "GET",
+                withCredentials: true,
+                url: "/server/login",
+            }).then(function (response) {
+                if (response.data.redirect == "/login") {
+                    // console.log("Please log in");
+                    navigate(`/auth/login`);
+                } else {
+                    // console.log("Already logged in");
+                    getSkillBySkillName();
+                    role.current = response.data.user.role;
+                    var tempCheckIsCompleted = [];
+                    response.data.user.score.forEach((score) => {
+                        if (
+                            score.skill === skillName &&
+                            score.category === categoryName
+                        )
+                            tempCheckIsCompleted = tempCheckIsCompleted.concat(
+                                score.sub_category
+                            );
+                    });
+                    checkIsCompleted.current = tempCheckIsCompleted;
+                    // console.log('checkIsCompleted', checkIsCompleted.current);
+                }
+            });
+        }
+    }, [searchParams]);
 
     return (
         <>
@@ -96,7 +124,7 @@ const SkillCategoryPage = () => {
                     {categoryName.split("_").join(" ")}
                 </title>
             </Helmet>
-            <Navbar proprole={role} />
+            <Navbar proprole={role} newUser={!!searchParams.get("newUser")}/>
             <Container>
                 <br />
                 <button className="back-arrow" onClick={handleClick}>&larr; Back</button>
@@ -150,7 +178,9 @@ const SkillCategoryPage = () => {
                                         }
                                         style={{
                                             boxShadow: "0px 7px #1a5928",
-                                        }}>
+                                        }}
+                                        disabled={searchParams.get("newUser") === 'true' && i > 4}
+                                    >
                                         Let's Go
                                     </Button>
                                 </Card.Body>

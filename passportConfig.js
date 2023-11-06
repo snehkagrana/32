@@ -43,7 +43,7 @@ module.exports = function (passport) {
                 // console.log("profile", profile);
                 const email = profile.emails[0].value;
                 const displayName = profile.displayName;
-
+                const profileImageUrl = profile.photos[0].value;
                 ////checking if another user with same email already exists
                 User.findOne({ email: email }, async (err, doc) => {
                     if (err) throw err;
@@ -59,6 +59,7 @@ module.exports = function (passport) {
                             } else {
                                 const newUser = new User({
                                     displayName: displayName,
+                                    imgPath: profileImageUrl,
                                     email: email,
                                     role: "basic",
                                 });

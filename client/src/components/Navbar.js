@@ -23,7 +23,7 @@ import DarkMode from "./DarkMode";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
 
-const Navbar = ({ proprole }) => {
+const Navbar = ({ proprole, newUser = false }) => {
     const [showBasic, setShowBasic] = useState(false);
     const [searchValue, setSearchValue] = useState("");
     const skills = useRef([]);
@@ -127,12 +127,15 @@ const Navbar = ({ proprole }) => {
             method: "GET",
             withCredentials: true,
             url: "/server/skills",
+            params: {
+                newUser: newUser,
+            },
         }).then((res) => {
             // console.log('skills = ', res.data.data);
             skills.current = res.data.data;
             setRole(proprole.current);
         });
-    }, []);
+    }, [newUser]);
 
     return (
         <MDBNavbar expand="lg" dark style={{ backgroundColor: "#28a745" }}>
@@ -178,13 +181,13 @@ const Navbar = ({ proprole }) => {
                             </MDBNavbarItem>*/}
                         <MDBNavbarItem>
                             <MDBNavbarLink
-                                onClick={handleLogOut}
+                                onClick={newUser ? () => navigate("/auth/login") : handleLogOut}
                                 style={{
                                     fontWeight: "bold",
                                     color: "#ffffff",
                                     cursor: "pointer",
                                 }}>
-                                Logout
+                                {newUser ? "Login" : "Logout"}
                             </MDBNavbarLink>
                         </MDBNavbarItem>
 
