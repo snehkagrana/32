@@ -54,6 +54,10 @@ import emoji30 from "../images/emojis/103188-hobby-emoji-free-download-image.png
 import emoji31 from "../images/emojis/103498-party-picture-hard-emoji-free-download-image.png";
 import emoji32 from "../images/emojis/103717-blue-photos-sky-emoji-free-transparent-image-hq.png";
 
+import nonSignedUp from "../images/nonSignedUp";
+import signedUp from "../images/signedUp";
+import lock from "../images/lock.png";
+
 
 import Dropdown from "react-bootstrap/Dropdown";
 import { MDBBtn } from "mdb-react-ui-kit";
@@ -616,21 +620,29 @@ const Home = (props) => {
               <Card.Body className="d-flex align-items-center p-3">
                 <div className="profile-picture">
                   <label htmlFor="profile-picture-upload">
-                    {profilePicture ? (
-                      <img
-                        src={profilePicture}
-                        style={{ width: "50px" }}
-                        alt="Profile"
-                        className="rounded-circle"
-                      />
-                    ) : (
-                      <img
-                        src="https://via.placeholder.com/50"
-                        style={{ width: "50px" }}
-                        alt="Profile"
-                        className="rounded-circle"
-                      />
-                    )}
+                    {
+                      newUser ? (
+                          <img
+                              src={nonSignedUp}
+                              style={{ width: "50px" }}
+                              alt="Profile"
+                              className="rounded-circle"
+                          />
+                      ) : profilePicture ? (
+                          <img
+                              src={profilePicture}
+                              style={{ width: "50px" }}
+                              alt="Profile"
+                              className="rounded-circle"
+                          />
+                      ) : (
+                          <img
+                              src={signedUp}
+                              style={{ width: "50px" }}
+                              alt="Profile"
+                              className="rounded-circle"
+                          />
+                      )}
                   </label>
                   <input
                     id="profile-picture-upload"
@@ -830,41 +842,52 @@ const Home = (props) => {
                             borderRadius: '15px',  // Increased border-radius
 
                           }}>
-                          <Card.Body
-                            className="d-flex justify-content-center align-items-center"
-                          >
-                            <div
-                              className="category-circle-green"
-                              style={{
-                                background: `conic-gradient(#28a745 0% ${percent}%, #ffffff ${percent}% 100%)`
-                              }}
-                            >
-                              <div className="category-circle-grey">
-                                <Card.Img
-                                  variant="top"
-                                  src={emojis[idx] || "https://via.placeholder.com/50"}
-                                  alt={category}
-                                  style={{ width: '50px', height: '50px', borderRadius: "50%" }}
-                                  className="mx-auto"
+                          {(newUser && idx > 2) ? (
+                              <div className="card-overlay">
+                                <img
+                                    src={lock} alt="Locked"
+                                    style={{ width: "50px" }}
                                 />
                               </div>
-                            </div>
-                          </Card.Body>
-                          <Card.Body className="d-flex justify-content-center align-items-center">
-                            <Button
-                              variant="success"
-                              style={{
-                                boxShadow:
-                                  "0px 7px #1a5928",
-                              }}
-                              value={category}
-                              onClick={() => navigate(`/skills/${selectedSkill}/${category}${newUser ? "?newUser=true" : ""}`)}
-                              disabled={newUser && idx > 2}
-                            >
-                              {category ? category.split("_").join(" ") : ""}
-                            </Button>
+                          ) : (
+                              <>
+                                <Card.Body
+                                    className="d-flex justify-content-center align-items-center"
+                                >
+                                  <div
+                                      className="category-circle-green"
+                                      style={{
+                                        background: `conic-gradient(#28a745 0% ${percent}%, #ffffff ${percent}% 100%)`
+                                      }}
+                                  >
+                                    <div className="category-circle-grey">
+                                      <Card.Img
+                                          variant="top"
+                                          src={emojis[idx] || "https://via.placeholder.com/50"}
+                                          alt={category}
+                                          style={{ width: '50px', height: '50px', borderRadius: "50%" }}
+                                          className="mx-auto"
+                                      />
+                                    </div>
+                                  </div>
+                                </Card.Body>
+                                <Card.Body className="d-flex justify-content-center align-items-center">
+                                  <Button
+                                      variant="success"
+                                      style={{
+                                        boxShadow:
+                                            "0px 7px #1a5928",
+                                      }}
+                                      value={category}
+                                      onClick={() => navigate(`/skills/${selectedSkill}/${category}${newUser ? "?newUser=true" : ""}`)}
+                                      disabled={newUser && idx > 2}
+                                  >
+                                    {category ? category.split("_").join(" ") : ""}
+                                  </Button>
 
-                          </Card.Body>
+                                </Card.Body>
+                              </>
+                          )}
                         </Card>
                       </div>
                     )
