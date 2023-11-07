@@ -27,7 +27,7 @@ const SkillCategoryPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const handleClick = () => {
-        navigate('/home');  // Assuming your home route path is '/home'
+        navigate('/home');  
     };
 
     const getSkillBySkillName = (isNewUser) => {
