@@ -55,7 +55,7 @@ import emoji31 from "../images/emojis/103498-party-picture-hard-emoji-free-downl
 import emoji32 from "../images/emojis/103717-blue-photos-sky-emoji-free-transparent-image-hq.png";
 
 import nonSignedUp from "../images/nonSignedUp";
-import signedUp from "../images/signedUp";
+import signedUp from "../images/pepe.jpg";
 import lock from "../images/lock.png";
 
 
@@ -513,6 +513,7 @@ const Home = (props) => {
                           </Card.Text>
                         ) : null
                       }
+                      
                       <Card.Text className="welcome-card-text" style={{ display: 'flex', alignItems: 'center' }}>
                         {(continueHeader !== "Explore new Skills" && continueButtonHeader) ? (
                           <>
@@ -557,6 +558,7 @@ const Home = (props) => {
                             >
                               What are Stocks?
                             </Button>
+                            
                           </>
                         )}
                       </Card.Text>
