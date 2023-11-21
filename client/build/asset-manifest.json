@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.e2432700.css",
-    "main.js": "/static/js/main.97033292.js",
+    "main.js": "/static/js/main.5580aca0.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
     "static/media/demo2.gif": "/static/media/demo2.e8756e1d22e2bb49f7c8.gif",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
@@ -30,6 +30,7 @@
     "static/media/Investing.png": "/static/media/Investing.5f97fcad2df14e15e373.png",
     "static/media/64983-emoticon-sunglasses-smiley-iphone-go-emoji.png": "/static/media/64983-emoticon-sunglasses-smiley-iphone-go-emoji.731a85f6d4845012f2e8.png",
     "static/media/103498-party-picture-hard-emoji-free-download-image.png": "/static/media/103498-party-picture-hard-emoji-free-download-image.9ec8218a08d44d570034.png",
+    "static/media/success-1.mp3": "/static/media/success-1.fd2c2fea27379cbc44da.mp3",
     "static/media/103180-hobby-emoji-free-transparent-image-hd.png": "/static/media/103180-hobby-emoji-free-transparent-image-hd.3d1cfd70ac61c855df7e.png",
     "static/media/73728-emoticon-smiley-peace-emojis-laughter-emoji.png": "/static/media/73728-emoticon-smiley-peace-emojis-laughter-emoji.cd609439bc553160bdf1.png",
     "static/media/67366-hamburger-fries-cheeseburger-veggie-french-burger-emoji.png": "/static/media/67366-hamburger-fries-cheeseburger-veggie-french-burger-emoji.a0e26891f0e9de50f815.png",
@@ -49,11 +50,11 @@
     "static/media/nonSignedUp": "/static/media/nonSignedUp.d9bed86ebd119aa37490",
     "index.html": "/index.html",
     "main.e2432700.css.map": "/static/css/main.e2432700.css.map",
-    "main.97033292.js.map": "/static/js/main.97033292.js.map",
+    "main.5580aca0.js.map": "/static/js/main.5580aca0.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e2432700.css",
-    "static/js/main.97033292.js"
+    "static/js/main.5580aca0.js"
   ]
 }
