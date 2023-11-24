@@ -188,8 +188,10 @@ const Navbar = ({ proprole, newUser = false }) => {
                                     cursor: "pointer",
                                     backgroundColor: "#fff", // Set the background color to white
                                     borderRadius: "7px", // Adjust the border-radius as needed
-                                    padding: "8px 15px", // Add padding to control the button size
-                                    display: "inline-block", // Make sure it's inline-block to respect the padding
+                                    padding: "7px 13px", // Add padding to control the button size
+                                    display: "inline-block",
+                                    marginRight: "10px",
+                                    marginBottom: "3px"
                                     
                                     }}
                                 >
@@ -207,9 +209,10 @@ const Navbar = ({ proprole, newUser = false }) => {
                                         cursor: "pointer",
                                         backgroundColor: "#fff",
                                         borderRadius: "7px",
-                                        padding: "8px 15px",
+                                        padding: "7px 13px",
                                         display: "inline-block",
-                                        marginLeft: "10px",
+                                        
+                                        
                                     }}
                                     >
                                     Register

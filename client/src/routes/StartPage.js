@@ -100,9 +100,9 @@ const StartPage = (props) => {
                                     </span>{/*. put in 4 minutes a day and get better at managing your money.*/}
                                 </h4>
                                 <br />
-                                <h4 className={`text-background-${darkMode ? 'dark' : 'light'}`} style={{ textAlign: "center", fontFamily: "Kalam, Nunito, sans-serif", color: '#2cb74c', fontWeight: 'bold' }}>
+                                {/* <h4 className={`text-background-${darkMode ? 'dark' : 'light'}`} style={{ textAlign: "center", fontFamily: "Kalam, Nunito, sans-serif", color: '#2cb74c', fontWeight: 'bold' }}>
                                     try now. it's free!<img src={arrow} alt="Down Arrow" className="bounce" style={{ width: '45px', height: '45px' }} />
-                                </h4>
+                                </h4> */}
                                 <br />
                                 
                                 <h6

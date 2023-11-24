@@ -777,8 +777,8 @@ const Home = (props) => {
           <h3 style={{ fontWeight: '800' }}>
   {newUser ? 'Explore  ': 'Explore'}
   <span style={{ fontSize: '65%'}}>
-    {newUser ? '(Signup for ' : ''}
-    <span style={{ color:'#28a745', textDecoration: 'underline', textDecorationColor: '#28a745'}}>{newUser?'free' : ''}</span>
+    {newUser ? '(Signup for free ' : ''}
+    {/* <span style={{ color:'#28a745', textDecoration: 'underline', textDecorationColor: '#28a745'}}>{newUser?'free' : ''}</span> */}
     <span>{newUser?' to get full access - ' : ''}</span>
     <span>{newUser?<a href="auth/register" style={{color:'#28a745'}}>click here</a> : ''}</span>
     <span>{newUser?')' : ''}</span>
