@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.e2432700.css",
-    "main.js": "/static/js/main.d50ab547.js",
+    "main.css": "/static/css/main.e4e4c0fb.css",
+    "main.js": "/static/js/main.f5c5d86e.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
     "static/media/demo2.gif": "/static/media/demo2.e8756e1d22e2bb49f7c8.gif",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
@@ -9,7 +9,6 @@
     "static/media/5-money-bag-png-image.png": "/static/media/5-money-bag-png-image.67e6560665949337f935.png",
     "static/media/64997-emoticon-on-money-keep-bag-carving-emoji.png": "/static/media/64997-emoticon-on-money-keep-bag-carving-emoji.e6508e91da874d588355.png",
     "static/media/71577-recycling-recycle-symbol-paper-emoji-free-hq-image.png": "/static/media/71577-recycling-recycle-symbol-paper-emoji-free-hq-image.bb0c629f08aa81cdc510.png",
-    "static/media/teach.png": "/static/media/teach.2bacf433357e94cdf508.png",
     "static/media/Sector.png": "/static/media/Sector.a1f0777df16b087c5d70.png",
     "static/media/103717-blue-photos-sky-emoji-free-transparent-image-hq.png": "/static/media/103717-blue-photos-sky-emoji-free-transparent-image-hq.fb2ac5a8fec49bf25e26.png",
     "static/media/64998-money-dollar-sign-currency-android-emoji.png": "/static/media/64998-money-dollar-sign-currency-android-emoji.87721f50d5e086eb5098.png",
@@ -49,12 +48,12 @@
     "static/media/seedling.png": "/static/media/seedling.d1f34df2751ebe97d20e.png",
     "static/media/nonSignedUp": "/static/media/nonSignedUp.d9bed86ebd119aa37490",
     "index.html": "/index.html",
-    "main.e2432700.css.map": "/static/css/main.e2432700.css.map",
-    "main.d50ab547.js.map": "/static/js/main.d50ab547.js.map",
+    "main.e4e4c0fb.css.map": "/static/css/main.e4e4c0fb.css.map",
+    "main.f5c5d86e.js.map": "/static/js/main.f5c5d86e.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e2432700.css",
-    "static/js/main.d50ab547.js"
+    "static/css/main.e4e4c0fb.css",
+    "static/js/main.f5c5d86e.js"
   ]
 }

@@ -1,55 +1,51 @@
 import React, { useState, useEffect } from "react";
-import Axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import { Row, Col, Image } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import GeneralNavbar from "../components/GeneralNavbar";
 import Footer from "../components/Footer";
-import { Container } from "react-bootstrap";
-import '../App.css';
-import '../index.css';
-import '../startpage.css';
-import arrow from "../images/down-arrow.png";
+import { Row, Col, Button } from "react-bootstrap";
 import demoGif from "../images/demo2.gif";
-import StartPageQuiz from "./StartPageQuiz";
 
-const logo = require("../images/teach.png");
-
-const words = ['finance', 'investing', 'mutual funds', 'personal finance', 'economics', 'crypto', 'insurance'];
-const intervalDuration = 2000;
-
-const StartPage = (props) => {
+const StartPage = () => {
     const navigate = useNavigate();
-    const [showBanner, setShowBanner] = useState(true);
+    const [currentWord, setCurrentWord] = useState("");
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
-
-    const updateCurrentWord = () => {
-        setCurrentWordIndex((prevIndex) => (prevIndex + 1) % words.length);
-    };
+    const [isTyping, setIsTyping] = useState(true);
+    const words = ['finance', 'investing', 'mutual funds', 'personal finance', 'economics', 'crypto', 'insurance'];
 
     useEffect(() => {
-        const interval = setInterval(updateCurrentWord, intervalDuration);
+        const interval = setInterval(() => {
+            setCurrentWord((prevWord) => {
+                const currentWordToType = words[currentWordIndex];
+                const targetLength = isTyping ? currentWordToType.length : 0;
 
-        return () => {
-            clearInterval(interval);
-        };
-    }, []);
+                if (prevWord.length !== targetLength) {
+                    const delta = isTyping ? 1 : -1;
+                    return currentWordToType.substring(0, prevWord.length + delta);
+                } else {
+                    setIsTyping(!isTyping);
 
-    const darkMode = localStorage.getItem("theme") === "dark";
+                    if (!isTyping) {
+                        setCurrentWordIndex((prevIndex) => (prevIndex + 1) % words.length);
+                    }
+                    return prevWord;
+                }
+            });
+        }, 150);
+
+        return () => clearInterval(interval);
+    }, [currentWordIndex, isTyping]);
 
     return (
         <>
-        {
+        {/* {
           //  showBanner && (
            //     <div className="site-down-banner">
            //         🚧 Our site is currently experiencing technical difficulties. We apologize for the inconvenience! 🚧
             //    </div>
           //  )
-        }
-        
-            <div className={`dottedBackground ${darkMode ? 'dark-mode' : 'light-mode'}`}>
+        } */}
+            <div className="dottedBackground">
                 <div style={{ paddingBottom: "10px" }}>
                     <Helmet>
                         <title>Fingo - Learn Finance the Fun Way</title>
@@ -59,45 +55,45 @@ const StartPage = (props) => {
                     <br />
                     <div style={{ flex: '1' }}>
                         <Row style={{ margin: "auto", width: "80%" }}>
-                            <Col xs={12} md={6} style={{ marginTop: "6%"}}>
-                            <img 
-                                src={demoGif} 
-                                style={{
-                                    width: "95%", // or whatever percentage or fixed width you want
-                                    borderRadius: "10px", // or the amount of border-radius you prefer
-                                    border: "3px solid #2cb74c",
-                                    minWidth: "95%"
-                                }} 
-                                // className="img-fluid zoomImage" 
-                                alt="Learn Finance" 
-                            />
-                            
+                            <Col xs={12} md={6} style={{ marginTop: "6%" }}>
+                                <img 
+                                    src={demoGif} 
+                                    style={{
+                                        width: "95%",
+                                        borderRadius: "10px",
+                                        border: "3px solid #2cb74c",
+                                        minWidth: "95%"
+                                    }} 
+                                    alt="Learn Finance" 
+                                />
                             </Col>
 
                             <Col xs={12} md={6} style={{ marginTop: "4%" }}>
-                                <h1 className={`text-background-${darkMode ? 'dark' : 'light'}`} style ={{ textAlign: "center"}}>
+                                <h1 className="text-background-light" style={{ textAlign: "left" }}>
                                     <span style={{ fontWeight: "bold", color: '#2cb74c' }}>
                                         learn finance the fun way!
                                     </span>
                                 </h1>
                                 <br />
-                                <h4 className={`text-background-${darkMode ? 'dark' : 'light'}`} style={{ fontWeight: 'bold', textAlign: "center" }}>
+                                <h4 className="text-background-light" style={{ fontWeight: 'bold', textAlign: "left" }}>
                                     short jargon-free chapters and engaging quizzes on{' '}
                                     <span 
                                         className="changeBox"
                                         style={{
                                             display: "inline-block",
-                                            width: "40%", // Fixed box width
+                                            width: "auto",
                                             borderRadius: "7px",
                                             textAlign: "center",
                                             textDecorationColor: "#4285F4",
                                             padding: "0px 1px",
-                                            border: `4px solid ${darkMode ? '#4285F4' : '#4285F4'}`,
-                                            color: `${darkMode ? '#4285F4' : '#4285F4'}`,
+                                            border: "none",
+                                            color: "#4285F4",
+                                            fontFamily: "monospace",
+                                            fontSize: "100%",
                                         }}
                                     >
-                                        {words[currentWordIndex]}
-                                    </span>{/*. put in 4 minutes a day and get better at managing your money.*/}
+                                        {currentWord}
+                                    </span>
                                 </h4>
                                 <br />
                                 {/* <h4 className={`text-background-${darkMode ? 'dark' : 'light'}`} style={{ textAlign: "center", fontFamily: "Kalam, Nunito, sans-serif", color: '#2cb74c', fontWeight: 'bold' }}>
@@ -106,7 +102,7 @@ const StartPage = (props) => {
                                 <br />
                                 
                                 <h6
-                                    className={`text-background-${darkMode ? 'dark' : 'light'}`}
+                                    className="text-background-light"
                                     style={{ textAlign: 'center', color: '#6c757d' }}
                                     >
                                     (No signup required.)
@@ -151,17 +147,8 @@ const StartPage = (props) => {
                                     LOGIN
                                 </Button>
                             </Col>
-                            {/*<Col xs={12} md={6} style={{ marginTop: "6%"}}>
-                            <h2 className={`text-background-${darkMode ? 'dark' : 'light'}`} style={{ fontWeight: 'bold', textAlign: "center", color: '#2cb74c', marginTop: '10px' }}>
-                                take a quick, personal finance quiz and test yourself.
-                            </h2>
-                        </Col>
-                            <Col xs={12} md={6} style={{ marginTop: "6%", align: 'center' }}>
-                                <StartPageQuiz />
-                                </Col>*/}
                         </Row>
                         <div style={{ marginBottom: "20px" }}></div>
-                        
                     </div>
                     
                     <Footer />
@@ -172,5 +159,8 @@ const StartPage = (props) => {
 };
 
 export default StartPage;
+
+
+
 
 
