@@ -151,9 +151,11 @@ const StartPage = () => {
                         <div style={{ marginBottom: "20px" }}></div>
                     </div>
                     
+                    
                     <Footer />
                 </div>
             </div>
+            
         </>
     );
 };
