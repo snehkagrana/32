@@ -53,29 +53,35 @@ const skills = [
 ];
 
 
-const logo = require("../images/teach.png");
-
-const words = ['finance', 'investing', 'mutual funds', 'personal finance', 'economics', 'crypto', 'insurance'];
-const intervalDuration = 2000;
-
-const StartPage = (props) => {
+const StartPage = () => {
     const navigate = useNavigate();
-    const [showBanner, setShowBanner] = useState(true);
+    const [currentWord, setCurrentWord] = useState("");
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
-
-    const updateCurrentWord = () => {
-        setCurrentWordIndex((prevIndex) => (prevIndex + 1) % words.length);
-    };
+    const [isTyping, setIsTyping] = useState(true);
+    const words = ['finance', 'investing', 'mutual funds', 'personal finance', 'economics', 'crypto', 'insurance'];
 
     useEffect(() => {
-        const interval = setInterval(updateCurrentWord, intervalDuration);
+        const interval = setInterval(() => {
+            setCurrentWord((prevWord) => {
+                const currentWordToType = words[currentWordIndex];
+                const targetLength = isTyping ? currentWordToType.length : 0;
 
-        return () => {
-            clearInterval(interval);
-        };
-    }, []);
+                if (prevWord.length !== targetLength) {
+                    const delta = isTyping ? 1 : -1;
+                    return currentWordToType.substring(0, prevWord.length + delta);
+                } else {
+                    setIsTyping(!isTyping);
 
-    const darkMode = localStorage.getItem("theme") === "dark";
+                    if (!isTyping) {
+                        setCurrentWordIndex((prevIndex) => (prevIndex + 1) % words.length);
+                    }
+                    return prevWord;
+                }
+            });
+        }, 150);
+
+        return () => clearInterval(interval);
+    }, [currentWordIndex, isTyping]);
 
     const { scrollY } = useScroll()
     const height = useMotionValue(80)
@@ -290,5 +296,8 @@ const StartPage = (props) => {
 };
 
 export default StartPage;
+
+
+
 
 
