@@ -37,7 +37,7 @@ const GeneralNavbar = ({ proprole }) => {
                             src={logo}
                             alt="Fingo Logo"
                             style={{ height: "50px", cursor: "" }}  // Adjust the height according to your preference
-                            // className="zoomImage"
+                        // className="zoomImage"
                         />
                     </MDBContainer>
                 </MDBContainer>
