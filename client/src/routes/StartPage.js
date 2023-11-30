@@ -187,10 +187,10 @@ const StartPage = () => {
                         <Reveal motionType={'zoom'}>
 
                             <div className="flex items-center justify-center">
-                                <h1 className={`scroll-m-20 text-2xl font-extrabold tracking-tight lg:text-6xl ${darkMode ? 'text-gray-100' : 'text-gray-950'}`}>find learning finance boring?</h1>
+                                <h1 className={`scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-6xl ${darkMode ? 'text-gray-100' : 'text-gray-950'}`}>find learning finance boring?</h1>
                             </div>
 
-                            <h1 className={`text-background-${darkMode ? 'dark' : 'light'} flex justify-center items-center scroll-m-20 text-xl font-extrabold tracking-tight lg:text-5xl py-5`}>
+                            <h1 className={`text-background-${darkMode ? 'dark' : 'light'} flex justify-center items-center scroll-m-20 text-2xl font-extrabold tracking-tight lg:text-5xl py-5`}>
                                 <span className="font-bold text-[#2cb74c]">
                                     learn finance the fun way😎!!
                                 </span>
@@ -352,19 +352,16 @@ const StartPage = () => {
                     <Reveal motionType={'zoom'}>
                         <div className="flex items-center justify-center pt-20 md:pb-7">
                             <h1 className="text-2xl font-bold lg:text-4xl">
-                                <span className="text-[#BF5700] font-mono">WARNING:</span> <span className={`${darkMode ? 'text-gray-100' : 'text-gray-950'}`}>you will hate</span>  <span className="text-[#2cb74c]">fingo</span> <span className={`${darkMode ? 'text-gray-100' : 'text-gray-950'}`}>if...</span>
+                                <span className="text-[#BF5700] font-mono">WARNING:</span> <span className={`${darkMode ? 'text-gray-100' : 'text-gray-950'}`}>You will hate</span>  <span className="text-[#2cb74c]">fingo</span> <span className={`${darkMode ? 'text-gray-100' : 'text-gray-950'}`}>if...</span>
                             </h1>
                         </div>
-                        <div>
-
-                        <Slider adaptiveHeight {...settings}>
-                                <img src={fingoSectionFiveOne} alt="" className="object-cover px-4 py-5 transform aspect-auto -rotate-6" />
-                                <img src={fingoSectionFiveTwo} alt="" className="object-cover px-4 py-5 transform aspect-auto rotate-6" />
-                                <img src={fingoSectionFiveThree} alt="" className="object-cover px-4 py-5 transform aspect-auto -rotate-6" />
-                                <img src={fingoSectionFiveFour} alt="" className="object-cover px-4 py-5 transform aspect-auto rotate-6" />
-                                <img src={fingoSectionFiveFive} alt="" className="object-cover px-4 py-5 transform aspect-auto -rotate-6" />
-                            </Slider>
-                        </div>
+                        <div style={{ height: '500px', overflowX: 'scroll', overflowY: 'hidden', display: 'flex' }}>
+    <img src={fingoSectionFiveOne} alt="" className="object-cover px-4 py-5 transform aspect-auto -rotate-6" />
+    <img src={fingoSectionFiveTwo} alt="" className="object-cover px-4 py-5 transform aspect-auto rotate-6" />
+    <img src={fingoSectionFiveThree} alt="" className="object-cover px-4 py-5 transform aspect-auto -rotate-6" />
+    <img src={fingoSectionFiveFour} alt="" className="object-cover px-4 py-5 transform aspect-auto rotate-6" />
+    <img src={fingoSectionFiveFive} alt="" className="object-cover px-4 py-5 transform aspect-auto -rotate-6" />
+</div>
                     </Reveal>
 
                     <Footer />
