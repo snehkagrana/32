@@ -1,9 +1,8 @@
 {
   "files": {
-    "main.css": "/static/css/main.e4e4c0fb.css",
-    "main.js": "/static/js/main.f5c5d86e.js",
+    "main.css": "/static/css/main.8658a9fc.css",
+    "main.js": "/static/js/main.f9c5babd.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
-    "static/media/demo2.gif": "/static/media/demo2.e8756e1d22e2bb49f7c8.gif",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
     "static/media/65023-thought-thinking-emoji-free-hq-image.png": "/static/media/65023-thought-thinking-emoji-free-hq-image.b75f2f06e46d3fa8a8cb.png",
     "static/media/5-money-bag-png-image.png": "/static/media/5-money-bag-png-image.67e6560665949337f935.png",
@@ -20,14 +19,21 @@
     "static/media/Crypto.png": "/static/media/Crypto.d0d4e1d99f58a4c73a95.png",
     "static/media/64926-emoticon-domain-network-sticker-graphics-emoji-portable.png": "/static/media/64926-emoticon-domain-network-sticker-graphics-emoji-portable.a781d79f3a0b8120acdd.png",
     "static/media/Fixed.png": "/static/media/Fixed.399665b8dea08fc57602.png",
+    "static/media/fingo-landing-page-section-2.png": "/static/media/fingo-landing-page-section-2.dc5b0293218f63747cc2.png",
     "static/media/65025-emoticon-like-signal-emoji-button-thumb.png": "/static/media/65025-emoticon-like-signal-emoji-button-thumb.1e0ed28749aec5bf73b3.png",
     "static/media/102587-funny-picture-emoji-boy-free-download-png-hq.png": "/static/media/102587-funny-picture-emoji-boy-free-download-png-hq.99b9a5203d392b524466.png",
+    "static/media/fingo-landing-page-5-5.png": "/static/media/fingo-landing-page-5-5.cafa699fff7cf808ffc3.png",
+    "static/media/fingo-landing-page-section-3.png": "/static/media/fingo-landing-page-section-3.2f46889d7d71a4b283c9.png",
+    "static/media/fingo-landing-page-5-2.png": "/static/media/fingo-landing-page-5-2.a254c6ba968014119d35.png",
     "static/media/103188-hobby-emoji-free-download-image.png": "/static/media/103188-hobby-emoji-free-download-image.31b6d7d10d0c0d5d6b2e.png",
     "static/media/72527-purple-symbol-viber-circle-violet-hd-image-free-png.png": "/static/media/72527-purple-symbol-viber-circle-violet-hd-image-free-png.7cbef658b16142a92f38.png",
+    "static/media/fingo-landing-page-5-4.png": "/static/media/fingo-landing-page-5-4.fd72553a713b198da19d.png",
     "static/media/101756-career-emoji-download-hq.png": "/static/media/101756-career-emoji-download-hq.ba0d9c6bebd584561b2a.png",
     "static/media/Trading.png": "/static/media/Trading.a12c1f3b87c7bdc17df0.png",
     "static/media/Investing.png": "/static/media/Investing.5f97fcad2df14e15e373.png",
     "static/media/64983-emoticon-sunglasses-smiley-iphone-go-emoji.png": "/static/media/64983-emoticon-sunglasses-smiley-iphone-go-emoji.731a85f6d4845012f2e8.png",
+    "static/media/fingo-landing-page-5-3.png": "/static/media/fingo-landing-page-5-3.38b8cf6ca4397127ab1d.png",
+    "static/media/fingo-landing-page-5-1.png": "/static/media/fingo-landing-page-5-1.488577cc13e1636f23df.png",
     "static/media/103498-party-picture-hard-emoji-free-download-image.png": "/static/media/103498-party-picture-hard-emoji-free-download-image.9ec8218a08d44d570034.png",
     "static/media/success-1.mp3": "/static/media/success-1.fd2c2fea27379cbc44da.mp3",
     "static/media/103180-hobby-emoji-free-transparent-image-hd.png": "/static/media/103180-hobby-emoji-free-transparent-image-hd.3d1cfd70ac61c855df7e.png",
@@ -47,13 +53,19 @@
     "static/media/64944-emoticon-index-finger-the-gesture-emoji.png": "/static/media/64944-emoticon-index-finger-the-gesture-emoji.400bd3dffad316e5a3be.png",
     "static/media/seedling.png": "/static/media/seedling.d1f34df2751ebe97d20e.png",
     "static/media/nonSignedUp": "/static/media/nonSignedUp.d9bed86ebd119aa37490",
+    "static/media/arrow-2.svg": "/static/media/arrow-2.3ed5e3b2e67cbbf4da6dc3d3f6ef0a05.svg",
+    "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
+    "static/media/slick.eot": "/static/media/slick.a4e97f5a2a64f0ab1323.eot",
+    "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
     "index.html": "/index.html",
-    "main.e4e4c0fb.css.map": "/static/css/main.e4e4c0fb.css.map",
-    "main.f5c5d86e.js.map": "/static/js/main.f5c5d86e.js.map",
+    "static/media/arrow.svg": "/static/media/arrow.bf930bbf3ec41fd9c9756230ec293975.svg",
+    "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
+    "main.8658a9fc.css.map": "/static/css/main.8658a9fc.css.map",
+    "main.f9c5babd.js.map": "/static/js/main.f9c5babd.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e4e4c0fb.css",
-    "static/js/main.f5c5d86e.js"
+    "static/css/main.8658a9fc.css",
+    "static/js/main.f9c5babd.js"
   ]
 }

@@ -9,7 +9,7 @@ const Footer = () => {
     const [hovered, setHovered] = useState({ contact: false, terms: false, privacy: false });
 
     return (
-        <div className="flex justify-between">
+        <div className="flex justify-between mt-10">
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "5px", flexWrap: "wrap" }}>
 
                 <span
@@ -31,9 +31,9 @@ const Footer = () => {
                     Privacy
                 </span>
             </div>
-            <div className="flex space-x-2 justify-center items-center">
+            <div className="flex items-center justify-center space-x-2">
                 <span className="font-bold" >Made with ❤️ in</span>
-                <img src={flag} width={30} height={15} alt="flag" />
+                <img src={flag} width={20} height={20} alt="flag" />
             </div>
         </div>
     );
