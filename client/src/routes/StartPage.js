@@ -187,12 +187,12 @@ const StartPage = () => {
                         <Reveal motionType={'zoom'}>
 
                             <div className="flex items-center justify-center">
-                                <h1 className={`scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-6xl ${darkMode ? 'text-gray-100' : 'text-gray-950'}`}>find learning finance boring?</h1>
+                                <h1 className={`scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-6xl ${darkMode ? 'text-gray-100' : 'text-gray-950'}`}>bored with learning finance?</h1>
                             </div>
 
                             <h1 className={`text-background-${darkMode ? 'dark' : 'light'} flex justify-center items-center scroll-m-20 text-2xl font-extrabold tracking-tight lg:text-5xl py-5`}>
                                 <span className="font-bold text-[#2cb74c]">
-                                    learn finance the fun way😎!!
+                                    learn finance the fun way! 😎
                                 </span>
                             </h1>
                         </Reveal>
@@ -261,7 +261,7 @@ const StartPage = () => {
                             <Reveal motionType={'rightToLeft'}>
 
                                 <div className="flex flex-col py-5 overflow-hidden rounded-md lg:flex-row ">
-                                    <img src={fingoSectionTwo} alt="" className="object-cover sm:mx-auto sm:max-w-lg aspect-auto" />
+                                    <img src={fingoSectionTwo} alt="" className="object-cover sm:mx-auto sm:max-w-lg aspect-auto"  height={"450px"} />
                                     <div className="items-end justify-end hidden lg:ml-20 xl:ml-28 lg:flex ">
                                         <img
                                             src={arrow2}
@@ -286,7 +286,7 @@ const StartPage = () => {
                             </Reveal>
                             <Reveal motionType={"leftToRight"}>
                                 <div className="flex flex-col w-full py-5 rounded-md lg:flex-row-reverse">
-                                    <img src={fingoSectionThree} alt="" className="object-cover sm:mx-auto sm:max-w-lg aspect-auto" />
+                                    <img src={fingoSectionThree} alt="" className="object-cover sm:mx-auto sm:max-w-lg aspect-auto" height={"450px"} />
 
 
 
@@ -352,10 +352,10 @@ const StartPage = () => {
                     <Reveal motionType={'zoom'}>
                         <div className="flex items-center justify-center pt-20 md:pb-7">
                             <h1 className="text-2xl font-bold lg:text-4xl">
-                                <span className="text-[#BF5700] font-mono">WARNING:</span> <span className={`${darkMode ? 'text-gray-100' : 'text-gray-950'}`}>You will hate</span>  <span className="text-[#2cb74c]">fingo</span> <span className={`${darkMode ? 'text-gray-100' : 'text-gray-950'}`}>if...</span>
+                                <span className="text-[#BF5700] font-mono">WARNING:</span> <span className={`${darkMode ? 'text-gray-100' : 'text-gray-950'}`}>You will hate</span>  <span className="text-[#2cb74c]" style={{ letterSpacing: '1.5px' }}>fingo</span> <span className={`${darkMode ? 'text-gray-100' : 'text-gray-950'}`}>if...</span>
                             </h1>
                         </div>
-                        <div style={{ height: '500px', overflowX: 'scroll', overflowY: 'hidden', display: 'flex' }}>
+                        <div style={{ height: '450px', overflowX: 'scroll', overflowY: 'hidden', display: 'flex' }}>
     <img src={fingoSectionFiveOne} alt="" className="object-cover px-4 py-5 transform aspect-auto -rotate-6" />
     <img src={fingoSectionFiveTwo} alt="" className="object-cover px-4 py-5 transform aspect-auto rotate-6" />
     <img src={fingoSectionFiveThree} alt="" className="object-cover px-4 py-5 transform aspect-auto -rotate-6" />
