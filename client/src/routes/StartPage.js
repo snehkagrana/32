@@ -186,15 +186,17 @@ const StartPage = () => {
                     <div className="pt-40 mx-auto lg:pt-64 lg:pb-28 ">
                         <Reveal motionType={'zoom'}>
 
-                            <div className="flex items-center justify-center">
-                                <h1 className={`scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-6xl ${darkMode ? 'text-gray-100' : 'text-gray-950'}`}>bored with learning finance?</h1>
-                            </div>
-
-                            <h1 className={`text-background-${darkMode ? 'dark' : 'light'} flex justify-center items-center scroll-m-20 text-2xl font-extrabold tracking-tight lg:text-5xl py-5`}>
+                            <h1 className={`text-background-${darkMode ? 'dark' : 'light'} flex justify-center items-center scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-6xl py-4`}>
                                 <span className="font-bold text-[#2cb74c]">
-                                    learn finance the fun way! 😎
+                                    learn finance the fun way!😎
                                 </span>
                             </h1>
+
+                            <div className="flex items-center justify-center">
+                                <h1 className={`scroll-m-20 text-xl font-extrabold tracking-tight lg:text-4xl py-4 ${darkMode ? 'text-gray-100' : 'text-gray-950'}`}>say goodbye to boring finance lessons.</h1>
+                            </div>
+
+                            
                         </Reveal>
 
                         <Reveal motionType={'zoom'}>
@@ -336,7 +338,7 @@ const StartPage = () => {
                             <div className="flex w-3/4 p-2 mx-auto space-x-5 overflow-x-auto border border-gray-300 border-solid rounded-md">
                                 {skills.map((skill, index) => (
                                     <div key={index} className="flex items-center">
-                                        <button className="relative p-2 border rounded-md whitespace-nowrap text-gray-950">
+                                        <button className="relative p-2.5 border rounded-md whitespace-nowrap text-gray-950">
                                             <span
                                                 className={`absolute inset-0 rounded-md ${darkMode ? 'opacity-60' : 'opacity-20'}  `}
                                                 style={{ backgroundColor: skill.color }}
