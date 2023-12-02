@@ -1,66 +1,78 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Toast from "react-bootstrap/Toast";
-import { Row, Form, Button, Col, Image } from "react-bootstrap";
+import { Row, Form, Button, Col } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import GeneralNavbar from "../components/GeneralNavbar";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-////Register page of our website
-//// registerEmail is the entered email by the user
-//// registerPassword is the entered password by the user
-
-//// authMsg is the flash message which may be show if
-//// user enters a used email or empty email or empty password
-
-const ContactUs = (props) => {
+const ContactUs = () => {
     const [name, setName] = useState("");
     const [emailAddress, setEmailAddress] = useState("");
     const [emailMessage, setEmailMessage] = useState("");
     const [authMsg, setAuthMsg] = useState("");
     const [showAuthMsg, setShowAuthMsg] = useState(false);
-    const [emailTooltipMessage, setEmailTooltipMessage] = useState(
-        "Email can't be empty"
-    );
-    const [nameTooltipMessage, setNameTooltipMessage] = useState(
-        "Name can't be empty"
-    );
-    const [concernTooltipMessage, setConcernTooltipMessage] = useState(
-        "Concern can't be empty"
-    );
+    const [emailTooltipMessage, setEmailTooltipMessage] = useState("");
+    const [nameTooltipMessage, setNameTooltipMessage] = useState("");
+    const [concernTooltipMessage, setConcernTooltipMessage] = useState("");
     const [validEmail, setValidEmail] = useState(false);
     const [validName, setValidName] = useState(false);
     const [validConcern, setValidConcern] = useState(false);
-    const [role, setRole] = useState("unknown");
-
+    const [nameTouched, setNameTouched] = useState(false);
+    const [emailTouched, setEmailTouched] = useState(false);
+    const [concernTouched, setConcernTouched] = useState(false);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const contactus = () => {
-        Axios({
-            method: "POST",
-            data: {
-                name: name,
-                emailMessage: emailMessage,
-                emailAddress: emailAddress,
-            },
-            withCredentials: true,
-            url: "/server/contactus",
-        }).then(function (response) {
-            setAuthMsg(response.data.message);
-            setShowAuthMsg(true);
-        });
+        if (validEmail && validName && validConcern) {
+            setLoading(true);
+
+            Axios({
+                method: "POST",
+                data: {
+                    name: name,
+                    emailMessage: emailMessage,
+                    emailAddress: emailAddress,
+                },
+                withCredentials: true,
+                url: "/server/contactus",
+            })
+                .then(function (response) {
+                    setAuthMsg(response.data.message);
+                    setShowAuthMsg(true);
+
+                    // Clear the form fields after submission
+                    setName("");
+                    setEmailAddress("");
+                    setEmailMessage("");
+                    setValidEmail(false);
+                    setValidName(false);
+                    setValidConcern(false);
+                    setNameTouched(false);
+                    setEmailTouched(false);
+                    setConcernTouched(false);
+                })
+                .catch(function (error) {
+                    console.error("Error submitting form:", error);
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+        }
     };
 
     const handleEmailChange = (e) => {
         setEmailAddress(e.target.value);
+        setEmailTouched(true);
+
         var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
         if (e.target.value === "") {
             setEmailTooltipMessage("Email can't be empty");
             setValidEmail(false);
         } else if (emailRegex.test(e.target.value)) {
-            setEmailTooltipMessage("Email valid");
+            setEmailTooltipMessage("");
             setValidEmail(true);
         } else {
             setEmailTooltipMessage("Email invalid");
@@ -70,6 +82,7 @@ const ContactUs = (props) => {
 
     const handleNameChange = (e) => {
         setName(e.target.value);
+        setNameTouched(true);
         if (e.target.value === "") {
             setNameTooltipMessage("Name can't be empty");
             setValidName(false);
@@ -81,8 +94,9 @@ const ContactUs = (props) => {
 
     const handleConcernChange = (e) => {
         setEmailMessage(e.target.value);
+        setConcernTouched(true);
         if (e.target.value === "") {
-            setConcernTooltipMessage("Name can't be empty");
+            setConcernTooltipMessage("Concern can't be empty");
             setValidConcern(false);
         } else {
             setConcernTooltipMessage("");
@@ -90,85 +104,52 @@ const ContactUs = (props) => {
         }
     };
 
-    useEffect(() => {
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            console.log("con", response.data);
-            if (response.data.redirect === "/home") {
-                setRole(response.data.user.role);
-            } else {
-                setRole("unknown");
-            }
-        });
-    }, []);
-
     return (
         <>
             <Helmet>
                 <title>Contact Us</title>
             </Helmet>
-            {role === "unknown" ? (
-                <GeneralNavbar />
-            ) : (
-                <Navbar proprole={role} />
-            )}
+            <GeneralNavbar />
             <Row style={{ margin: "auto", width: "100%", minHeight: "85vh" }}>
-                <Col style={{ marginTop: "100px" }}>
+                <Col style={{ marginTop: "50px" }}>
                     <div>
                         <Form
                             style={{
                                 width: "40%",
                                 marginLeft: "30%",
                                 marginRight: "30%",
-                            }}>
+                            }}
+                        >
                             <h1
                                 style={{
                                     textAlign: "center",
                                     marginBottom: "20px",
-                                }}>
-                                Please fill this form
+                                }}
+                            >
+                                Contact Us
                             </h1>
                             <Toast
                                 onClose={() => setShowAuthMsg(false)}
                                 show={showAuthMsg}
                                 delay={2000}
-                                autohide>
+                                autohide
+                            >
                                 <Toast.Body>{authMsg}</Toast.Body>
                             </Toast>
 
                             <Form.Group>
-                                {/* <Form.Label>Enter your name</Form.Label> */}
+                                <Form.Label>Email</Form.Label>
                                 <Form.Text
                                     style={{
-                                        color: validName ? "green" : "red",
-                                    }}>
-                                    {nameTooltipMessage}
-                                </Form.Text>
-                                <Form.Control
-                                    type="name"
-                                    placeholder="Enter your name"
-                                    onChange={handleNameChange}
-                                    style={{
-                                        borderRadius: "10px",
-                                        padding: "25px",
+                                        color: emailTouched && !validEmail ? "red" : "",
                                     }}
-                                />
-                            </Form.Group>
-                            <br />
-                            <Form.Group>
-                                {/* <Form.Label>Enter your email</Form.Label> */}
-                                <Form.Text
-                                    style={{
-                                        color: validEmail ? "green" : "red",
-                                    }}>
+                                >
                                     {emailTooltipMessage}
                                 </Form.Text>
                                 <Form.Control
                                     type="email"
                                     placeholder="Enter your email"
+                                    value={emailAddress}
                                     onChange={handleEmailChange}
                                     style={{
                                         borderRadius: "10px",
@@ -178,17 +159,41 @@ const ContactUs = (props) => {
                             </Form.Group>
                             <br />
                             <Form.Group>
-                                {/* <Form.Label>Enter your concern</Form.Label> */}
+                                <Form.Label>Name</Form.Label>
                                 <Form.Text
                                     style={{
-                                        color: validConcern ? "green" : "red",
-                                    }}>
+                                        color: nameTouched && !validName ? "red" : "green",
+                                    }}
+                                >
+                                    {nameTooltipMessage}
+                                </Form.Text>
+                                <Form.Control
+                                    type="name"
+                                    placeholder="Enter your name"
+                                    value={name}
+                                    onChange={handleNameChange}
+                                    style={{
+                                        borderRadius: "10px",
+                                        padding: "25px",
+                                    }}
+                                />
+                            </Form.Group>
+                            <br />
+                            <Form.Group>
+                                <Form.Label>Concern</Form.Label>
+                                <Form.Text
+                                    style={{
+                                        color: concernTouched && !validConcern ? "red" : "",
+                                    }}
+                                >
                                     {concernTooltipMessage}
                                 </Form.Text>
                                 <Form.Control
                                     as="textarea"
                                     placeholder="Enter your concern"
+                                    value={emailMessage}
                                     onChange={handleConcernChange}
+                                    onFocus={() => setConcernTooltipMessage("Concern can't be empty")}
                                     style={{
                                         borderRadius: "10px",
                                         padding: "25px",
@@ -211,8 +216,9 @@ const ContactUs = (props) => {
                                 disabled={
                                     !(validEmail && validName && validConcern)
                                 }
-                                onClick={contactus}>
-                                Submit
+                                onClick={contactus}
+                            >
+                                {loading ? "Submitting..." : "Submit"}
                             </Button>
                         </Form>
                     </div>
@@ -224,3 +230,5 @@ const ContactUs = (props) => {
 };
 
 export default ContactUs;
+
+

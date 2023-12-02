@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Footer from "../components/Footer";
@@ -72,6 +72,7 @@ const StartPage = () => {
     const [isTyping, setIsTyping] = useState(true);
     const words = ['finance', 'investing', 'mutual funds', 'personal finance', 'economics', 'crypto', 'insurance'];
     const darkMode = localStorage.getItem("theme") === "dark";
+    const scrollTargetRef = useRef(null);
 
     const CustomArrow = ({ className, onClick, icon }) => (
         <div className={className} onClick={onClick}>
@@ -134,6 +135,12 @@ const StartPage = () => {
             height.set(Math.min(Math.max(newHeight, 50), 80))
         })
     }, [height, scrollY])
+
+    const scrollToTarget = () => {
+        if (scrollTargetRef.current) {
+            scrollTargetRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    };
 
     return (
         <div className={`flex justify-center px-3 dottedBackground ${darkMode ? 'dark-mode' : 'light-mode'} overflow-hidden`}>
@@ -249,9 +256,10 @@ const StartPage = () => {
                             <div className="flex items-center justify-center">
                                 <FontAwesomeIcon
                                     icon={faAngleDown}
-                                    size="3x"  // Adjust the size as needed
+                                    size="3x"  
                                     style={{ color: "#28a745" }}
                                     className="mt-2 cursor-pointer bounce"
+                                    onClick={scrollToTarget}
                                 />
                             </div>
                         </Reveal>
@@ -259,7 +267,7 @@ const StartPage = () => {
 
                     <section className="lg:py-0">
 
-                        <div className="flex flex-col justify-between space-y-0 ">
+                        <div className="flex flex-col justify-between space-y-0 " ref={scrollTargetRef}>
                             <Reveal motionType={'rightToLeft'}>
 
                                 <div className="flex flex-col py-5 overflow-hidden rounded-md lg:flex-row ">
@@ -358,12 +366,12 @@ const StartPage = () => {
                             </h1>
                         </div>
                         <div style={{ height: '450px', overflowX: 'scroll', overflowY: 'hidden', display: 'flex' }}>
-    <img src={fingoSectionFiveOne} alt="" className="object-cover px-4 py-5 transform aspect-auto -rotate-6" />
-    <img src={fingoSectionFiveTwo} alt="" className="object-cover px-4 py-5 transform aspect-auto rotate-6" />
-    <img src={fingoSectionFiveThree} alt="" className="object-cover px-4 py-5 transform aspect-auto -rotate-6" />
-    <img src={fingoSectionFiveFour} alt="" className="object-cover px-4 py-5 transform aspect-auto rotate-6" />
-    <img src={fingoSectionFiveFive} alt="" className="object-cover px-4 py-5 transform aspect-auto -rotate-6" />
-</div>
+                            <img src={fingoSectionFiveOne} alt="" className="object-cover px-4 py-5 transform aspect-auto -rotate-6" />
+                            <img src={fingoSectionFiveTwo} alt="" className="object-cover px-4 py-5 transform aspect-auto rotate-6" />
+                            <img src={fingoSectionFiveThree} alt="" className="object-cover px-4 py-5 transform aspect-auto -rotate-6" />
+                            <img src={fingoSectionFiveFour} alt="" className="object-cover px-4 py-5 transform aspect-auto rotate-6" />
+                            <img src={fingoSectionFiveFive} alt="" className="object-cover px-4 py-5 transform aspect-auto -rotate-6" />
+                        </div>
                     </Reveal>
 
                     <Footer />

@@ -79,7 +79,7 @@
 
 [data-theme="dark"] {
   --font-color: #fff;
-  --background-color: #000;
+  --background-color: #212122;
   --link-color: lightblue;
 
   .card {

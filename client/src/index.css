@@ -749,5 +749,16 @@ input[type=search]:focus {
     margin-left: 0px; /* Add some spacing between the buttons */
 }
 
-
+.sqs-block-button-element  {
+    box-shadow: 10px 10px #000;
+    border: 2px solid #000 !important;
+    transition: all ease-in 0.2s !important;
+  }
+  
+  .sqs-block-button-element:hover {
+    box-shadow: none;
+    transform: translateY(4px) !important;
+    transition: all ease-in 0.2s;
+    opacity: 1 !important;
+  }
 
