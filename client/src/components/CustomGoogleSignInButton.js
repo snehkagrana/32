@@ -15,6 +15,7 @@ const CustomGoogleSignInButton = ({ onClick }) => {
       }}
       onClick={onClick}
       className="googleButton"
+      type="button"
     >
       <img
         src="/google-icon.png"

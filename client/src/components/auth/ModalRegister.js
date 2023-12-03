@@ -75,7 +75,8 @@ export default function ModalRegister({ isOpen, onClose, showModalLogin }) {
     });
   };
 
-  const registerWithGoogle = () => {
+  const registerWithGoogle = (e) => {
+    e.stopPropagation()
     // Axios does not work with Google Auth2.0 , need to navigate to the url directly
     window.open("https://tryfingo.com/auth/login-google", "_self");
   };
