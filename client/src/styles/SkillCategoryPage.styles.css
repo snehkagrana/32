@@ -5,6 +5,7 @@
   background-color: #f9fdf3;
   border-radius: 0.65rem;
   border: 2px solid #333;
+  padding-bottom: 4rem;
 }
 
 @media screen and (max-width: 600px) {
@@ -37,6 +38,7 @@
 .sub_category_card_item_container h3 {
   font-size: 20px;
   font-weight: bold;
+  text-align: center;
 }
 
 .sub_category_chapter_icon_container {
@@ -97,4 +99,19 @@ div[class^="sub_category_chapter_icon"] svg {
 
 [data-theme="dark"] .sub_category_chapter_ic_circle {
   background-color: #ffffff;
+}
+
+.sub_category_back_to_top_btn {
+  width: 38px;
+  height: 45px;
+  background-color: rgb(255 255 255);
+  border-color: rgb(83 83 83);
+  padding: 5px;
+  border-radius: 10px;
+  box-shadow: rgb(97 97 97) 0px 5px;
+  transition: all 0.2s ease 0s;
+  font-weight: 100;
+  position: absolute;
+  bottom: 24px;
+  right: 32px;
 }

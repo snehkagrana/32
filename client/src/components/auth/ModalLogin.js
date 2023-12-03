@@ -64,7 +64,8 @@ export default function ModalLogin({ isOpen, onClose }) {
     });
   };
 
-  const loginWithGoogle = () => {
+  const loginWithGoogle = (e) => {
+    e.stopPropagation()
     window.open("https://tryfingo.com/auth/login-google", "_self");
   };
 

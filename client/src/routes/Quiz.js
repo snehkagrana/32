@@ -455,13 +455,17 @@ const Quiz = () => {
         </ListGroup>
         <Card.Body>
           <Row className="px-3 align-items-center justify-content-between">
-            <a
-              href="#"
-              className="explanation_btn"
-              onClick={onClickExplanation}
-            >
-              Explanation
-            </a>
+            {currentIsWrongIndex !== null || currentIsCorrectIndex !== null ? (
+              <a
+                href="#"
+                className="explanation_btn"
+                onClick={onClickExplanation}
+              >
+                Explanation
+              </a>
+            ) : (
+              <div />
+            )}
             {currentSelectedIndex !== null &&
             (currentIsWrongIndex !== null || currentIsCorrectIndex !== null) ? (
               <>
