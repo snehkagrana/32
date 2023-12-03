@@ -898,7 +898,6 @@ const Home = (props) => {
                                   >
                                     {category ? category.split("_").join(" ") : ""}
                                   </Button>
-
                                 </Card.Body>
                               </>
                           )}

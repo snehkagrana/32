@@ -14,6 +14,7 @@ import {
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
 import  "../index.css";
+import '../styles/SkillCategoryPage.styles.css'
 
 const SkillCategoryPage = () => {
     const { skillName } = useParams();
@@ -117,7 +118,7 @@ const SkillCategoryPage = () => {
     }, [searchParams]);
 
     return (
-        <>
+        <div className="sub_category_card_container_root">
             <Helmet>
                 <title>
                     {skillName.split("_").join(" ")} {"->"}{" "}
@@ -126,72 +127,77 @@ const SkillCategoryPage = () => {
             </Helmet>
             <Navbar proprole={role} newUser={!!searchParams.get("newUser")}/>
             <Container>
+                
                 <br />
-                <button className="back-arrow" onClick={handleClick}>&larr; Back</button>
-                <h2 className="text-center" style={{ color: "#000" }}>
-                    <Badge pill bg="light">
-                        {skillName.split("_").join(" ")} {"->"}{" "}
-                        {categoryName.split("_").join(" ")}
-                    </Badge>
-                </h2>
 
-                <Row
-                    xs={1}
-                    className="g-4 mt-5"
-                    style={{
-                        width: "60%",
-                        marginLeft: "20%",
-                        borderRadius: "15px",
-                    }}>
-                    {subCategories.map((sub_category, i) => (
-                        <Col key={i}>
-                            <Card className="mb-4">
-                                <Card.Header as="h5">
-                                    {sub_category.sub_category
-                                        .split("_")
-                                        .join(" ")}{" "}
-                                    {checkIsCompleted.current.includes(
-                                        sub_category.sub_category
-                                    ) ? (
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="16"
-                                            height="16"
-                                            fill="currentColor"
-                                            class="bi bi-check-circle-fill"
-                                            viewBox="0 0 16 16">
-                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                        </svg>
-                                    ) : null}
-                                </Card.Header>
-                                <Card.Body>
-                                    {/* <Card.Title>{category}</Card.Title> */}
-                                    {/* <Card.Text>
-					With supporting text below as a natural lead-in to additional content.
-					</Card.Text> */}
-                                    <Button
-                                        variant="success"
-                                        onClick={() =>
-                                            handleSubCategorySelection(
-                                                sub_category.sub_category
-                                            )
-                                        }
-                                        style={{
-                                            boxShadow: "0px 7px #1a5928",
-                                        }}
-                                        disabled={searchParams.get("newUser") === 'true' && i > 4}
-                                    >
-                                        Let's Go
-                                    </Button>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    ))}
+                <Row className="justify-content-md-center">
+                    <Col xs={12} md={10} lg={5}>
+                        <div className="sub_category_card_container">
+                            <button className="back-arrow" onClick={handleClick}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M5.841 5.28a.75.75 0 0 0-1.06-1.06L1.53 7.47L1 8l.53.53l3.25 3.25a.75.75 0 0 0 1.061-1.06l-1.97-1.97H14.25a.75.75 0 0 0 0-1.5H3.871l1.97-1.97Z" clip-rule="evenodd"/></svg>
+                            </button>
+                            <h2 className="text-center" style={{ color: "#000" }}>
+                                <Badge pill bg="light">
+                                    {skillName.split("_").join(" ")} {":"}{" "}
+                                    {categoryName.split("_").join(" ")}
+                                </Badge>
+                            </h2>
+                            <Row
+                                xs={1}
+                                className="g-4 mt-5"
+                                style={{
+                                    width: "60%",
+                                    marginLeft: "20%",
+                                    borderRadius: "15px",
+                                }}>
+                                {subCategories.map((sub_category, i) => (
+                                    <Col key={i}>
+
+                                        <div className="sub_category_card_item_container d-flex flex-column justify-center align-items-center">
+                                            <div className="sub_category_chapter_icon_container" onClick={() =>  handleSubCategorySelection(sub_category.sub_category)}>
+                                                <div className={`sub_category_chapter_icon-${checkIsCompleted.current.includes(
+                                                    sub_category.sub_category
+                                                ) ? "complete": "incomplete"}`}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m8.587 8.236l2.598-5.232a.911.911 0 0 1 1.63 0l2.598 5.232l5.808.844a.902.902 0 0 1 .503 1.542l-4.202 4.07l.992 5.75c.127.738-.653 1.3-1.32.952L12 18.678l-5.195 2.716c-.666.349-1.446-.214-1.319-.953l.992-5.75l-4.202-4.07a.902.902 0 0 1 .503-1.54l5.808-.845Z"/></svg>
+                                                </div>
+                                                <div className="sub_category_chapter_ic_circle" />
+                                            </div>
+                                            <h3>{sub_category.sub_category.split("_").join(" ")}{" "}</h3>
+                                        </div>
+
+                                     
+
+                                                {/* <Card.Title>{category}</Card.Title> */}
+                                                {/* <Card.Text>
+                                With supporting text below as a natural lead-in to additional content.
+                                </Card.Text> */}
+                                                {/* <Button
+                                                    variant="success"
+                                                    onClick={() =>
+                                                        handleSubCategorySelection(
+                                                            sub_category.sub_category
+                                                        )
+                                                    }
+                                                    style={{
+                                                        boxShadow: "0px 7px #1a5928",
+                                                    }}
+                                                    disabled={searchParams.get("newUser") === 'true' && i > 4}
+                                                >
+                                                    Let's Go
+                                                </Button> */}
+                                 
+                                 
+                                    </Col>
+                                ))}
+                            </Row>
+                        </div>
+                    </Col>
                 </Row>
+
 
                 <br></br>
             </Container>
-        </>
+        </div>
     );
 };
 

@@ -22,6 +22,8 @@ import logo from "../images/logo.jpeg";
 import DarkMode from "./DarkMode";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
+import ModalLogin from "./auth/ModalLogin";
+import ModalRegister from "./auth/ModalRegister";
 
 const Navbar = ({ proprole, newUser = false }) => {
     const [showBasic, setShowBasic] = useState(false);
@@ -29,6 +31,9 @@ const Navbar = ({ proprole, newUser = false }) => {
     const skills = useRef([]);
     const [filteredQueries, setFilteredQueries] = useState([]);
     const [role, setRole] = useState("");
+
+    const [showModalLogin, setShowModalLogin] = useState(false)
+    const [showModalRegister, setShowModalRegister] = useState(false)
 
     const navigate = useNavigate();
 
@@ -122,6 +127,15 @@ const Navbar = ({ proprole, newUser = false }) => {
         window.location.reload();
     };
 
+    const onClickLoginBtn = () => {
+        setShowModalLogin(true)
+        // () => navigate("/auth/login")
+    }
+
+    const onClickRegister = () => {
+        setShowModalRegister(true)
+    }
+
     useEffect(() => {
         Axios({
             method: "GET",
@@ -181,7 +195,7 @@ const Navbar = ({ proprole, newUser = false }) => {
                             </MDBNavbarItem>*/}
                             <MDBNavbarItem>
                                 <MDBNavbarLink
-                                    onClick={newUser ? () => navigate("/auth/login") : handleLogOut}
+                                    onClick={newUser ? onClickLoginBtn : handleLogOut}
                                     style={{
                                     fontWeight: "bold",
                                     color: "#28a745", // Set the text color to black
@@ -202,7 +216,8 @@ const Navbar = ({ proprole, newUser = false }) => {
                             <MDBNavbarItem>
                                 {newUser ? (
                                     <MDBNavbarLink
-                                    onClick={() => navigate("/auth/register")}
+                                    onClick={onClickRegister}
+                                    // onClick={() => navigate("/auth/register")}
                                     style={{
                                         fontWeight: "bold",
                                         color: "#28a745",
@@ -299,6 +314,9 @@ const Navbar = ({ proprole, newUser = false }) => {
           </div> */}
                 </MDBCollapse>
             </MDBContainer>
+
+            <ModalLogin isOpen={showModalLogin} onClose={() => setShowModalLogin(false)} />
+            <ModalRegister isOpen={showModalRegister} onClose={() => setShowModalRegister(false)} showModalLogin={() => setShowModalLogin(true)} />
         </MDBNavbar>
     );
 };

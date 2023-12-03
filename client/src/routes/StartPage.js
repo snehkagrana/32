@@ -27,6 +27,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { motion, useMotionValue, useScroll } from 'framer-motion';
+import ModalLogin from "../components/auth/ModalLogin";
 
 const skills = [
     { skill: 'Investment', color: 'red' },
@@ -73,6 +74,9 @@ const StartPage = () => {
     const words = ['finance', 'investing', 'mutual funds', 'personal finance', 'economics', 'crypto', 'insurance'];
     const darkMode = localStorage.getItem("theme") === "dark";
     const scrollTargetRef = useRef(null);
+
+    const [showModalLogin, setShowModalLogin] = useState(false)
+
 
     const CustomArrow = ({ className, onClick, icon }) => (
         <div className={className} onClick={onClick}>
@@ -142,8 +146,15 @@ const StartPage = () => {
         }
     };
 
+    const onClickLogin = () => {
+        setShowModalLogin(true)
+    }
+
     return (
         <div className={`flex justify-center px-3 dottedBackground ${darkMode ? 'dark-mode' : 'light-mode'} overflow-hidden`}>
+
+        <ModalLogin isOpen={showModalLogin} onClose={() => setShowModalLogin(false)} />
+
 
             <div className="w-full max-w-7xl">
                 <div className="md:pb-16 ">
@@ -247,7 +258,8 @@ const StartPage = () => {
                                             marginTop: '3px'
                                         }}
                                         className="haveAccount"
-                                        onClick={() => navigate("/auth/login")}
+                                        // onClick={() => navigate("/auth/login")}
+                                        onClick={onClickLogin}
                                     >
                                         LOGIN
                                     </Button>
@@ -302,7 +314,7 @@ const StartPage = () => {
 
 
 
-                                    <div className="flex-col items-center justify-start flex-1 hidden mx-auto lg:flex sm:py-10 lg:py-0">
+                                    <div className="flex-col justify-center items-center justify-start flex-1 hidden mx-auto lg:flex sm:py-10 lg:py-0">
                                         <div className="flex flex-col items-start justify-start">
                                             <div className="flex items-center justify-center space-x-28">
                                                 <h2 className="text-3xl font-bold text-[#2cb74c] ">fun quizzes</h2>
