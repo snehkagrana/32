@@ -22,6 +22,7 @@
   border: 2px solid #d9d9d9;
   border-radius: 0.5rem;
   position: relative;
+  padding-right: 24px;
 }
 
 [data-theme="dark"] .option_quiz_container .list-group-item .option_quiz_item {
@@ -47,7 +48,10 @@
 .option_quiz_container .list-group-item .option_quiz_item input[type="radio"] {
   display: none !important;
 }
-.option_quiz_container .list-group-item .option_quiz_item input[type="checkbox"] {
+.option_quiz_container
+  .list-group-item
+  .option_quiz_item
+  input[type="checkbox"] {
   display: none !important;
 }
 
