@@ -117,9 +117,7 @@
   }
 
   .modal {
-    background-color: #333;
     color: var(--font-color);
-    border: 1px solid white;
   }
 
   .modal-header {
