@@ -40,6 +40,9 @@ const Quiz = () => {
   const [currentIsCorrectIndex, setCurrentIsCorrectIndex] = useState(null);
   const [currentSelectedIndex, setCurrentSelectedIndex] = useState(null);
 
+  console.log("currentCorrectOptions", currentCorrectOptions);
+  console.log("correctAnswers", correctAnswers);
+
   const onClickExplanation = (e) => {
     e.preventDefault();
     setShowExplaination(true);
@@ -55,7 +58,9 @@ const Quiz = () => {
       setCurrentIsCorrectIndex(currentSelectedIndex ?? null);
     } else {
       setCurrentIsCorrect(false);
+      setCurrentIsCorrect(true);
       setCurrentIsWrongIndex(currentSelectedIndex ?? null);
+      setCurrentIsCorrectIndex(correctAnswers?.current?.[0] ?? null);
     }
     setAnswersList([]);
     setCorrectOptionsText([]);
@@ -335,6 +340,22 @@ const Quiz = () => {
     );
   }, [currentSelectedIndex, currentIsWrongIndex, currentIsCorrectIndex]);
 
+  const renderCorrectIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+    >
+      <path
+        fill="#039027"
+        fill-rule="evenodd"
+        d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18Zm-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774l.701-.84Z"
+        clip-rule="evenodd"
+      />
+    </svg>
+  );
+
   return (
     <>
       <Helmet>
@@ -412,21 +433,11 @@ const Quiz = () => {
                 {currentIsCorrectIndex !== null && (
                   <>
                     {currentSelectedIndex === currentIsCorrectIndex &&
-                      currentIsCorrectIndex === i && (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            fill="#039027"
-                            fill-rule="evenodd"
-                            d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18Zm-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774l.701-.84Z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                      )}
+                    currentIsCorrectIndex === i ? (
+                      renderCorrectIcon()
+                    ) : (
+                      <>{currentIsCorrectIndex === i && renderCorrectIcon()}</>
+                    )}
                   </>
                 )}
                 {currentIsWrongIndex !== null && (
