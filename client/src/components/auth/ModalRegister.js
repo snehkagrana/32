@@ -38,6 +38,17 @@ export default function ModalRegister({ isOpen, onClose, showModalLogin }) {
     navigate("/home");
   };
 
+
+  // clean up form validation
+  useEffect(() => {
+    if(!isOpen) {
+      setPasswordTooltipMessage('')
+      setEmailTooltipMessage('')
+      setLastNameTooltipMessage('')
+      setFirstNameTooltipMessage('')
+    }
+  }, [isOpen])
+
   ////function to register user from the server after he has entered the information
   //// if all the information is valid redirect him to login page else display the flash message
   const handleRegister = () => {
@@ -80,6 +91,7 @@ export default function ModalRegister({ isOpen, onClose, showModalLogin }) {
     // Axios does not work with Google Auth2.0 , need to navigate to the url directly
     window.open("https://tryfingo.com/auth/login-google", "_self");
   };
+
 
   ////when a user requests for the register , we check if he is already logged in
   ////If user is already logged in redirect him to home page else
@@ -182,6 +194,13 @@ export default function ModalRegister({ isOpen, onClose, showModalLogin }) {
     }
   };
 
+  const onClickLogin = () => {
+    onClose();
+    if(typeof showModalLogin === "function") {
+      showModalLogin();
+    }
+  }
+
   return (
     <Modal
       className="auth_modal"
@@ -243,7 +262,7 @@ export default function ModalRegister({ isOpen, onClose, showModalLogin }) {
         <div className="form-row">
           <div className="col">
             <Form.Group>
-              <Form.Text style={{ color: "red" }}>
+              <Form.Text className="form-text-name" style={{ color: "red" }}>
                 {firstNameTooltipMessage}
               </Form.Text>
               <Form.Control
@@ -262,7 +281,7 @@ export default function ModalRegister({ isOpen, onClose, showModalLogin }) {
 
           <div className="col">
             <Form.Group>
-              <Form.Text style={{ color: "red" }}>
+              <Form.Text className="form-text-name" style={{ color: "red" }}>
                 {lastNameTooltipMessage}
               </Form.Text>
               <Form.Control
@@ -363,23 +382,22 @@ export default function ModalRegister({ isOpen, onClose, showModalLogin }) {
           }}
         >
           Already have an account?
-          <Link to="/auth/login">
-            <div style={{ textAlign: "center" }}>
-              <Button
-                variant="success" // Added success variant to match the green color
-                style={{
-                  marginTop: "5px",
-                  borderRadius: "5px",
-                  width: "50%",
-                  boxShadow: "0px 5px #1a5928",
-                  transition: "0.2s ease",
-                }}
-                className="regHover"
-              >
-                Login
-              </Button>
-            </div>
-          </Link>
+          <div style={{ textAlign: "center" }}>
+            <Button
+              onClick={onClickLogin}
+              variant="success" // Added success variant to match the green color
+              style={{
+                marginTop: "5px",
+                borderRadius: "5px",
+                width: "50%",
+                boxShadow: "0px 5px #1a5928",
+                transition: "0.2s ease",
+              }}
+              className="regHover"
+            >
+              Login
+            </Button>
+          </div>
         </div>
       </Form>
     </Modal>
