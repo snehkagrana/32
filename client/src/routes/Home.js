@@ -67,6 +67,8 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FaCalendar, FaStar, FaTrophy, FaMedal, FaFire } from "react-icons/fa";
 import DarkMode from "../components/DarkMode";
 import { useSnapCarousel } from "react-snap-carousel";
+import ModalLogin from "../components/auth/ModalLogin";
+import ModalRegister from "../components/auth/ModalRegister";
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -99,6 +101,9 @@ const Home = (props) => {
 
   const [index, setIndex] = useState(0);
   const [newUser, setNewUser] = useState(false);
+
+  const [showModalLogin, setShowModalLogin] = useState(false)
+  const [showModalRegister, setShowModalRegister] = useState(false)
 
   const { scrollRef, next, prev } = useSnapCarousel();
 
@@ -489,6 +494,8 @@ const Home = (props) => {
         <title>Home</title>
       </Helmet>
       <Navbar proprole={role} newUser={newUser}/>
+      <ModalLogin isOpen={showModalLogin} onClose={() => setShowModalLogin(false)} showModalRegister={() => setShowModalRegister(true)}/>
+      <ModalRegister isOpen={showModalRegister} onClose={() => setShowModalRegister(false)} showModalLogin={() => setShowModalLogin(true)}/>
       <div className="container mt-5">
         <div className="row h-auto">
           <div className="col-md-8 order-md-1 order-2 mb-4">
@@ -775,16 +782,16 @@ const Home = (props) => {
         <div className="row">
           <div className="col-md-8 ">
           <h3 style={{ fontWeight: '800' }}>
-  {newUser ? 'Explore  ': 'Explore'}
-  <span style={{ fontSize: '65%'}}>
-    {newUser ? '(Signup for free ' : ''}
-    {/* <span style={{ color:'#28a745', textDecoration: 'underline', textDecorationColor: '#28a745'}}>{newUser?'free' : ''}</span> */}
-    <span>{newUser?' to get full access - ' : ''}</span>
-    <span>{newUser?<a href="auth/register" style={{color:'#28a745'}}>click here</a> : ''}</span>
-    <span>{newUser?')' : ''}</span>
-  </span>
-  
-</h3>
+            {newUser ? 'Explore  ': 'Explore'}
+            <span style={{ fontSize: '65%'}}>
+              {newUser ? '(Signup for free ' : ''}
+              {/* <span style={{ color:'#28a745', textDecoration: 'underline', textDecorationColor: '#28a745'}}>{newUser?'free' : ''}</span> */}
+              <span>{newUser?' to get full access - ' : ''}</span>
+              <span>{newUser?<a href="#" onClick={() => setShowModalRegister(true)} style={{color:'#28a745'}}>click here</a> : ''}</span>
+              <span>{newUser?')' : ''}</span>
+            </span>
+            
+          </h3>
 
 
           </div>
