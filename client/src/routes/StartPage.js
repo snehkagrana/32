@@ -8,6 +8,7 @@ import '../startpage.css';
 import '../globals.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import '../styles/StartPage.styles.css';
 import {
     MDBContainer,
 } from "mdb-react-ui-kit";
@@ -283,7 +284,7 @@ const StartPage = () => {
                             <Reveal motionType={'rightToLeft'}>
 
                                 <div className="flex flex-col py-5 overflow-hidden rounded-md lg:flex-row ">
-                                    <img src={fingoSectionTwo} alt="" className="object-cover sm:mx-auto sm:max-w-lg aspect-auto"  height={"450px"} />
+                                    <img src={fingoSectionTwo} alt="" className="start_page_img start_page_img_1 object-cover sm:mx-auto sm:max-w-lg aspect-auto"  height={"450px"} />
                                     <div className="items-end justify-end hidden lg:ml-20 xl:ml-28 lg:flex ">
                                         <img
                                             src={arrow2}
@@ -308,13 +309,13 @@ const StartPage = () => {
                             </Reveal>
                             <Reveal motionType={"leftToRight"}>
                                 <div className="flex flex-col w-full py-5 rounded-md lg:flex-row-reverse">
-                                    <img src={fingoSectionThree} alt="" className="object-cover sm:mx-auto sm:max-w-lg aspect-auto" height={"450px"} />
+                                    <img src={fingoSectionThree} alt="" className="start_page_img start_page_img_2 object-cover sm:max-w-lg aspect-auto" height={"450px"} />
 
 
 
 
 
-                                    <div className="flex-col justify-center items-center flex-1 hidden mx-auto lg:flex sm:py-10 lg:py-0">
+                                    <div className="flex-col justify-center items-center hidden lg:flex sm:py-10 lg:py-0">
                                         <div className="flex flex-col items-start justify-start">
                                             <div className="flex items-center justify-center space-x-28">
                                                 <h2 className="text-3xl font-bold text-[#2cb74c] ">fun quizzes</h2>
@@ -355,7 +356,7 @@ const StartPage = () => {
                                 <h1 className="font-bold lg:text-4xl text-xl text-[#2cb74c]">choose from a wide range of topics</h1>
                             </div>
 
-                            <div className="flex w-3/4 p-2 mx-auto space-x-5 overflow-x-auto border border-gray-300 border-solid rounded-md">
+                            <div className="start_page_topic_container flex w-3/4 p-2 mx-auto space-x-5 overflow-x-auto border border-gray-300 border-solid rounded-md">
                                 {skills.map((skill, index) => (
                                     <div key={index} className="flex items-center">
                                         <button className="relative p-2.5 border rounded-md whitespace-nowrap text-gray-950">

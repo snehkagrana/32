@@ -16,3 +16,13 @@
   margin-top: -2px;
   height: auto;
 }
+
+@media (min-width: 576px) {
+  .modal-dialog {
+    max-width: 400px;
+  }
+}
+
+.form-text-name {
+  height: 22px;
+}

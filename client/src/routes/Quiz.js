@@ -42,12 +42,15 @@ const Quiz = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const [isSubmittedAnswer, setIsSubmittedAnswer] = useState(false);
   const [currentIsCorrect, setCurrentIsCorrect] = useState(false);
   const [currentIsCorrectIndex, setCurrentIsCorrectIndex] = useState(null);
   const [currentSelectedIndex, setCurrentSelectedIndex] = useState(null);
 
-  console.log("currentCorrectOptions", currentCorrectOptions);
-  console.log("correctAnswers", correctAnswers);
+  const isMultipleChoice = useMemo(() => {
+    return correctAnswers?.current?.length > 1;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [correctAnswers?.current]);
 
   const onClickExplanation = (e) => {
     e.preventDefault();
@@ -55,26 +58,43 @@ const Quiz = () => {
   };
 
   const handleCheck = () => {
-    if (
-      JSON.stringify(answersList) === JSON.stringify(correctAnswers.current)
-    ) {
-      score.current[currentQuestionIndex.current] = 1;
-      points.current = points.current + 1;
-      setCurrentIsCorrect(true);
-      setCurrentIsCorrectIndex(currentSelectedIndex ?? null);
-      correctAudio.play()
+    if (isMultipleChoice) {
+      if (
+        JSON.stringify(answersList) === JSON.stringify(correctAnswers.current)
+      ) {
+        score.current[currentQuestionIndex.current] = 1;
+        points.current = points.current + 1;
+        setCurrentIsCorrect(true);
+        correctAudio.play()
+      } else {
+        wrongAudio.play()
+        setCurrentIsCorrect(false);
+      }
     } else {
-      setCurrentIsCorrect(false);
-      setCurrentIsCorrect(true);
-      setCurrentIsWrongIndex(currentSelectedIndex ?? null);
-      setCurrentIsCorrectIndex(correctAnswers?.current?.[0] ?? null);
-      wrongAudio.play()
+      if (
+        JSON.stringify(answersList) === JSON.stringify(correctAnswers.current)
+      ) {
+        score.current[currentQuestionIndex.current] = 1;
+        points.current = points.current + 1;
+        setCurrentIsCorrect(true);
+        setCurrentIsCorrectIndex(currentSelectedIndex ?? null);
+        correctAudio.play()
+      } else {
+        wrongAudio.play()
+        setCurrentIsCorrect(false);
+        setCurrentIsCorrect(true);
+        setCurrentIsWrongIndex(currentSelectedIndex ?? null);
+        setCurrentIsCorrectIndex(correctAnswers?.current?.[0] ?? null);
+      }
     }
+
+    setIsSubmittedAnswer(true);
     setAnswersList([]);
     setCorrectOptionsText([]);
   };
 
   const next = () => {
+    setIsSubmittedAnswer(false);
     setCurrentIsCorrectIndex(null);
     setCurrentIsWrongIndex(null);
     setCurrentSelectedIndex(null);
@@ -208,7 +228,6 @@ const Quiz = () => {
   };
 
   const handleAnswer = (i) => {
-    setCurrentSelectedIndex(i);
     var tempAnswersList = answersList;
     if (answersList.includes(i))
       tempAnswersList = tempAnswersList.filter((j) => j != i);
@@ -364,6 +383,22 @@ const Quiz = () => {
     </svg>
   );
 
+  const renderIncorrectIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+    >
+      <path
+        fill="#e00000"
+        fill-rule="evenodd"
+        d="M21 12a9 9 0 1 1-18 0a9 9 0 0 1 18 0ZM7.293 16.707a1 1 0 0 1 0-1.414L10.586 12L7.293 8.707a1 1 0 0 1 1.414-1.414L12 10.586l3.293-3.293a1 1 0 1 1 1.414 1.414L13.414 12l3.293 3.293a1 1 0 0 1-1.414 1.414L12 13.414l-3.293 3.293a1 1 0 0 1-1.414 0Z"
+        clip-rule="evenodd"
+      />
+    </svg>
+  );
+
   useEffect(() => {
     return () => {
       // Clean up audio elements
@@ -432,60 +467,81 @@ const Quiz = () => {
                 }
               }}
             >
-              <div
-                className={`option_quiz_item ${
-                  answersList.includes(i) ? "selected" : ""
-                } ${currentIsWrongIndex === i ? "incorrect" : ""} ${
-                  currentIsCorrectIndex === i ? "correct" : ""
-                }`}
-              >
-                <input
-                  type={
-                    correctAnswers.current.length === 1 ? "radio" : "checkbox"
-                  }
-                  style={{ marginRight: "10px" }} // Add space between the radio button and text
-                  checked={answersList.includes(i)}
-                />
-                <label style={{ margin: "0", cursor: "pointer" }}>
-                  {option}
-                </label>
-                {currentIsCorrectIndex !== null && (
-                  <>
-                    {currentSelectedIndex === currentIsCorrectIndex &&
-                    currentIsCorrectIndex === i ? (
-                      renderCorrectIcon()
-                    ) : (
-                      <>{currentIsCorrectIndex === i && renderCorrectIcon()}</>
-                    )}
-                  </>
-                )}
-                {currentIsWrongIndex !== null && (
-                  <>
-                    {currentSelectedIndex === currentIsWrongIndex &&
-                      currentIsWrongIndex === i && (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            fill="#e00000"
-                            fill-rule="evenodd"
-                            d="M21 12a9 9 0 1 1-18 0a9 9 0 0 1 18 0ZM7.293 16.707a1 1 0 0 1 0-1.414L10.586 12L7.293 8.707a1 1 0 0 1 1.414-1.414L12 10.586l3.293-3.293a1 1 0 1 1 1.414 1.414L13.414 12l3.293 3.293a1 1 0 0 1-1.414 1.414L12 13.414l-3.293 3.293a1 1 0 0 1-1.414 0Z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
+              {isMultipleChoice ? (
+                <div
+                  className={`option_quiz_item ${
+                    answersList.includes(i) ? "selected" : ""
+                  } ${
+                    isSubmittedAnswer
+                      ? correctAnswers?.current?.includes(i)
+                        ? "correct"
+                        : currentIsCorrect
+                        ? ""
+                        : "incorrect"
+                      : ""
+                  }`}
+                >
+                  <input
+                    type={
+                      correctAnswers.current.length === 1 ? "radio" : "checkbox"
+                    }
+                    style={{ marginRight: "10px" }} // Add space between the radio button and text
+                    checked={answersList.includes(i)}
+                  />
+                  <label style={{ margin: "0", cursor: "pointer" }}>
+                    {option}
+                  </label>
+                  {isSubmittedAnswer
+                    ? correctAnswers?.current?.includes(i)
+                      ? renderCorrectIcon()
+                      : currentIsCorrect ? null : renderIncorrectIcon()
+                    : null}
+                </div>
+              ) : (
+                <div
+                  className={`option_quiz_item ${
+                    answersList.includes(i) ? "selected" : ""
+                  } ${currentIsWrongIndex === i ? "incorrect" : ""} ${
+                    currentIsCorrectIndex === i ? "correct" : ""
+                  }`}
+                >
+                  <input
+                    type={
+                      correctAnswers.current.length === 1 ? "radio" : "checkbox"
+                    }
+                    style={{ marginRight: "10px" }} // Add space between the radio button and text
+                    checked={answersList.includes(i)}
+                  />
+                  <label style={{ margin: "0", cursor: "pointer" }}>
+                    {option}
+                  </label>
+                  {currentIsCorrectIndex !== null && (
+                    <>
+                      {currentSelectedIndex === currentIsCorrectIndex &&
+                      currentIsCorrectIndex === i ? (
+                        renderCorrectIcon()
+                      ) : (
+                        <>
+                          {currentIsCorrectIndex === i && renderCorrectIcon()}
+                        </>
                       )}
-                  </>
-                )}
-              </div>
+                    </>
+                  )}
+                  {currentIsWrongIndex !== null && (
+                    <>
+                      {currentSelectedIndex === currentIsWrongIndex &&
+                        currentIsWrongIndex === i &&
+                        renderIncorrectIcon()}
+                    </>
+                  )}
+                </div>
+              )}
             </ListGroup.Item>
           ))}
         </ListGroup>
         <Card.Body>
           <Row className="px-3 align-items-center justify-content-between">
-            {currentIsWrongIndex !== null || currentIsCorrectIndex !== null ? (
+            {isSubmittedAnswer ? (
               <a
                 href="#"
                 className="explanation_btn"
@@ -496,8 +552,7 @@ const Quiz = () => {
             ) : (
               <div />
             )}
-            {currentSelectedIndex !== null &&
-            (currentIsWrongIndex !== null || currentIsCorrectIndex !== null) ? (
+            {isSubmittedAnswer ? (
               <>
                 {currentQuestionIndex.current + 1 < maxQuestions.current && (
                   <>
@@ -521,9 +576,7 @@ const Quiz = () => {
                 Submit
               </Button>
             )}
-            {currentQuestionIndex.current + 1 === maxQuestions.current &&
-              (currentIsWrongIndex !== null ||
-                currentIsCorrectIndex !== null) && (
+            {currentQuestionIndex.current + 1 === maxQuestions.current && isSubmittedAnswer && (
                 <>
                   <Button
                     onClick={() => {

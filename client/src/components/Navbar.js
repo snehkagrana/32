@@ -315,7 +315,7 @@ const Navbar = ({ proprole, newUser = false }) => {
                 </MDBCollapse>
             </MDBContainer>
 
-            <ModalLogin isOpen={showModalLogin} onClose={() => setShowModalLogin(false)} />
+            <ModalLogin isOpen={showModalLogin} onClose={() => setShowModalLogin(false)} showModalRegister={() => setShowModalRegister(true)} />
             <ModalRegister isOpen={showModalRegister} onClose={() => setShowModalRegister(false)} showModalLogin={() => setShowModalLogin(true)} />
         </MDBNavbar>
     );

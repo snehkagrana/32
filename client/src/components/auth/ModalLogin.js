@@ -6,7 +6,7 @@ import { Row, Form, Button, Col, Modal } from "react-bootstrap";
 import CustomGoogleSignInButton from "../CustomGoogleSignInButton";
 import "../../styles/auth.styles.css";
 
-export default function ModalLogin({ isOpen, onClose }) {
+export default function ModalLogin({ isOpen, onClose, showModalRegister }) {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [authMsg, setAuthMsg] = useState("");
@@ -163,6 +163,21 @@ export default function ModalLogin({ isOpen, onClose }) {
       setIsForgotPasswordLoading(false);
     });
   };
+  
+  const onClickRegister = () => {
+    onClose();
+    if(typeof showModalRegister === "function") {
+      showModalRegister()
+    }
+  }
+
+  // clean up form validation
+  useEffect(() => {
+    if(!isOpen) {
+      setPasswordTooltipMessage('')
+      setEmailTooltipMessage('')
+    }
+  }, [isOpen])
 
   useEffect(() => {
     Axios({
@@ -179,6 +194,7 @@ export default function ModalLogin({ isOpen, onClose }) {
 
   return (
     <Modal
+      className="auth_modal"
       show={isOpen}
       onHide={() => onClose(false)}
       aria-labelledby="contained-modal-title-vcenter"
@@ -327,21 +343,20 @@ export default function ModalLogin({ isOpen, onClose }) {
           Don't have an account?
         </div>
         <div style={{ textAlign: "center" }}>
-          <Link to="/auth/register">
-            <Button
-              variant="success"
-              style={{
-                textAlign: "center",
-                width: "50%",
-                transition: "0.2s ease",
-                borderRadius: "5px",
-                boxShadow: "0px 7px #1a5928",
-              }}
-              className="regHover"
-            >
-              Register Now...
-            </Button>
-          </Link>
+          <Button
+            variant="success"
+            onClick={onClickRegister}
+            style={{
+              textAlign: "center",
+              width: "50%",
+              transition: "0.2s ease",
+              borderRadius: "5px",
+              boxShadow: "0px 7px #1a5928",
+            }}
+            className="regHover"
+          >
+            Register Now...
+          </Button>
         </div>
       </Form>
     </Modal>
