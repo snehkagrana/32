@@ -157,7 +157,7 @@ const StartPage = () => {
 
 
             <div className="w-full max-w-7xl">
-                <div className="md:pb-16 ">
+                <div className="md:pb-12 ">
                     <div
                         className={
                             'flex flex-1 overflow-hidden text-slate-600 '
@@ -165,7 +165,7 @@ const StartPage = () => {
                         <div className='z-10 flex-1 '>
                             <motion.header
                                 style={{ height }}
-                                className='fixed inset-x-0 flex h-20 py-12 bg-white/30 backdrop-blur-lg'>
+                                className='fixed inset-x-0 flex h-10 py-10 bg-white/30 backdrop-blur-lg'>
                                 <div className='flex items-center justify-between w-full max-w-5xl px-8 mx-auto'>
                                     <MDBContainer onClick={() => navigate(`/`)} fluid >
                                         <img
@@ -175,7 +175,7 @@ const StartPage = () => {
                                         />
                                     </MDBContainer>
                                     <div className="flex justify-between w-full">
-                                        <span className={`flex items-center justify-end lg:text-lg text-sm font-bold whitespace-nowrap flex-1 mr-4 ${darkMode ? 'text-gray-500' : 'text-gray-950'} cursor-pointer`} onClick={() => navigate(`/contactus`)}>Contact Us</span>
+                                        <span className={`flex items-center justify-end lg:text-lg text-sm font-bold whitespace-nowrap flex-1 mr-4 ${darkMode ? 'text-gray-300' : 'text-gray-950'} cursor-pointer`} onClick={() => navigate(`/contactus`)}>Contact Us</span>
                                         <Button
                                             style={{
 
@@ -277,9 +277,9 @@ const StartPage = () => {
                         </Reveal>
                     </div>
 
-                    <section className="lg:py-0">
+                    <section className="lg:py-10 mt-10" ref={scrollTargetRef}>
 
-                        <div className="flex flex-col justify-between space-y-0 " ref={scrollTargetRef}>
+                        <div className="flex flex-col justify-between space-y-0 " >
                             <Reveal motionType={'rightToLeft'}>
 
                                 <div className="flex flex-col py-5 overflow-hidden rounded-md lg:flex-row ">
@@ -314,7 +314,7 @@ const StartPage = () => {
 
 
 
-                                    <div className="flex-col justify-center items-center justify-start flex-1 hidden mx-auto lg:flex sm:py-10 lg:py-0">
+                                    <div className="flex-col justify-center items-center flex-1 hidden mx-auto lg:flex sm:py-10 lg:py-0">
                                         <div className="flex flex-col items-start justify-start">
                                             <div className="flex items-center justify-center space-x-28">
                                                 <h2 className="text-3xl font-bold text-[#2cb74c] ">fun quizzes</h2>

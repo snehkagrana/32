@@ -61,3 +61,7 @@
   position: absolute;
   right: 10px;
 }
+.explanation_btn {
+  font-weight: bold;
+  color: #4285F4;
+}

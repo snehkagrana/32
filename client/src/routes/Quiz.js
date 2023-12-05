@@ -7,6 +7,8 @@ import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
 import Modal from "react-bootstrap/Modal";
 import "../styles/QuizPage.styles.css";
+import WrongAudio from "../sounds/wrong-audio.mp3"
+import CorrectAudio from "../sounds/correct-audio.mp3"
 
 const Quiz = () => {
   const [imageURL, setImageURL] = useState("");
@@ -31,6 +33,10 @@ const Quiz = () => {
 
   const [currentIsWrongIndex, setCurrentIsWrongIndex] = useState(null);
   const [currentImageName, setCurrentImageName] = useState("");
+  const [audio, setAudio] = useState(new Audio());
+  const correctAudio = new Audio(CorrectAudio);
+  const wrongAudio = new Audio(WrongAudio);
+
 
   const [showExplaination, setShowExplaination] = useState(false);
 
@@ -56,11 +62,13 @@ const Quiz = () => {
       points.current = points.current + 1;
       setCurrentIsCorrect(true);
       setCurrentIsCorrectIndex(currentSelectedIndex ?? null);
+      correctAudio.play()
     } else {
       setCurrentIsCorrect(false);
       setCurrentIsCorrect(true);
       setCurrentIsWrongIndex(currentSelectedIndex ?? null);
       setCurrentIsCorrectIndex(correctAnswers?.current?.[0] ?? null);
+      wrongAudio.play()
     }
     setAnswersList([]);
     setCorrectOptionsText([]);
@@ -356,6 +364,17 @@ const Quiz = () => {
     </svg>
   );
 
+  useEffect(() => {
+    return () => {
+      // Clean up audio elements
+      correctAudio.pause();
+      correctAudio.currentTime = 0;
+      wrongAudio.pause();
+      wrongAudio.currentTime = 0;
+    };
+  }, []);
+  
+
   return (
     <>
       <Helmet>
@@ -517,8 +536,8 @@ const Quiz = () => {
               )}
           </Row>
 
-          <Modal show={showExplaination}>
-            <Modal.Header
+          <Modal show={showExplaination} style={{marginTop:'40px'}}>
+            {/* <Modal.Header
               style={{
                 backgroundColor: currentIsCorrect ? "#3CB043" : "lightcoral",
               }}
@@ -528,7 +547,7 @@ const Quiz = () => {
                   ? "Correct Answer"
                   : "Oops, That is Incorrect"}
               </Modal.Title>
-            </Modal.Header>
+            </Modal.Header> */}
 
             <Modal.Body>
               <div>Correct Answer: {currentCorrectOptions}</div>

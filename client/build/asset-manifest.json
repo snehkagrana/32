@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.f8c542b4.css",
-    "main.js": "/static/js/main.7232fc3c.js",
+    "main.css": "/static/css/main.8cc7b4cb.css",
+    "main.js": "/static/js/main.c423a3a7.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
     "static/media/65023-thought-thinking-emoji-free-hq-image.png": "/static/media/65023-thought-thinking-emoji-free-hq-image.b75f2f06e46d3fa8a8cb.png",
@@ -50,9 +50,11 @@
     "static/media/logo.jpeg": "/static/media/logo.c36004afa72a10d2e3ba.jpeg",
     "static/media/turtle.png": "/static/media/turtle.82cd73c53ac378ceab4b.png",
     "static/media/sneh.jpg": "/static/media/sneh.f9ee79a2259e5e5a0ac8.jpg",
+    "static/media/wrong-audio.mp3": "/static/media/wrong-audio.52e80b0ac4001d1e740d.mp3",
     "static/media/64944-emoticon-index-finger-the-gesture-emoji.png": "/static/media/64944-emoticon-index-finger-the-gesture-emoji.400bd3dffad316e5a3be.png",
     "static/media/seedling.png": "/static/media/seedling.d1f34df2751ebe97d20e.png",
     "static/media/nonSignedUp": "/static/media/nonSignedUp.d9bed86ebd119aa37490",
+    "static/media/correct-audio.mp3": "/static/media/correct-audio.2944938830ac5d97fe17.mp3",
     "static/media/arrow-2.svg": "/static/media/arrow-2.98d9806fc08dd27e4453c7561d0a89ef.svg",
     "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
     "static/media/slick.eot": "/static/media/slick.a4e97f5a2a64f0ab1323.eot",
@@ -60,12 +62,12 @@
     "index.html": "/index.html",
     "static/media/arrow.svg": "/static/media/arrow.bf930bbf3ec41fd9c9756230ec293975.svg",
     "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
-    "main.f8c542b4.css.map": "/static/css/main.f8c542b4.css.map",
-    "main.7232fc3c.js.map": "/static/js/main.7232fc3c.js.map",
+    "main.8cc7b4cb.css.map": "/static/css/main.8cc7b4cb.css.map",
+    "main.c423a3a7.js.map": "/static/js/main.c423a3a7.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f8c542b4.css",
-    "static/js/main.7232fc3c.js"
+    "static/css/main.8cc7b4cb.css",
+    "static/js/main.c423a3a7.js"
   ]
 }
