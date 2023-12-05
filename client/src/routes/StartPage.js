@@ -29,6 +29,7 @@ import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { motion, useMotionValue, useScroll } from 'framer-motion';
 import ModalLogin from "../components/auth/ModalLogin";
+import ModalRegister from "../components/auth/ModalRegister";
 
 const skills = [
     { skill: 'Investment', color: 'red' },
@@ -77,6 +78,7 @@ const StartPage = () => {
     const scrollTargetRef = useRef(null);
 
     const [showModalLogin, setShowModalLogin] = useState(false)
+    const [showModalRegister, setShowModalRegister] = useState(false)
 
 
     const CustomArrow = ({ className, onClick, icon }) => (
@@ -154,8 +156,8 @@ const StartPage = () => {
     return (
         <div className={`flex justify-center px-3 dottedBackground ${darkMode ? 'dark-mode' : 'light-mode'} overflow-hidden`}>
 
-        <ModalLogin isOpen={showModalLogin} onClose={() => setShowModalLogin(false)} />
-
+        <ModalLogin isOpen={showModalLogin} onClose={() => setShowModalLogin(false)} showModalRegister={() => setShowModalRegister(true)}/>
+        <ModalRegister isOpen={showModalRegister} onClose={() => setShowModalRegister(false)} showModalLogin={() => setShowModalLogin(true)}/>
 
             <div className="w-full max-w-7xl">
                 <div className="md:pb-12 ">
