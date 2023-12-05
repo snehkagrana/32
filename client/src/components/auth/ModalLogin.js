@@ -179,6 +179,7 @@ export default function ModalLogin({ isOpen, onClose }) {
 
   return (
     <Modal
+      className="auth_modal"
       show={isOpen}
       onHide={() => onClose(false)}
       aria-labelledby="contained-modal-title-vcenter"
