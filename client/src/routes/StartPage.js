@@ -285,7 +285,7 @@ const StartPage = () => {
 
                                 <div className="flex flex-col py-5 overflow-hidden rounded-md lg:flex-row ">
                                     <img src={fingoSectionTwo} alt="" className="start_page_img start_page_img_1 object-cover sm:mx-auto sm:max-w-lg aspect-auto"  height={"450px"} />
-                                    <div className="items-end justify-end hidden lg:ml-20 xl:ml-28 lg:flex ">
+                                    <div className="items-end justify-end hidden lg:ml-16 xl:ml-18 lg:flex ">
                                         <img
                                             src={arrow2}
                                             alt=""
