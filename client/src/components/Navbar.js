@@ -198,11 +198,13 @@ const Navbar = ({ proprole, newUser = false }) => {
                                     onClick={newUser ? onClickLoginBtn : handleLogOut}
                                     style={{
                                     fontWeight: "bold",
-                                    color: "#28a745", // Set the text color to black
+                                    color: "#fff", 
                                     cursor: "pointer",
-                                    backgroundColor: "#fff", // Set the background color to white
+                                    // backgroundColor: "#fff", // Set the background color to white
                                     borderRadius: "7px", // Adjust the border-radius as needed
-                                    padding: "7px 13px", // Add padding to control the button size
+                                    borderColor: "#fff",
+                                    borderStyle: "solid",
+                                    padding: "4px 10px", // Add padding to control the button size
                                     display: "inline-block",
                                     marginRight: "10px",
                                     marginBottom: "3px"
@@ -224,7 +226,7 @@ const Navbar = ({ proprole, newUser = false }) => {
                                         cursor: "pointer",
                                         backgroundColor: "#fff",
                                         borderRadius: "7px",
-                                        padding: "7px 13px",
+                                        padding: "6px 13px",
                                         display: "inline-block",
                                         
                                         
