@@ -24,6 +24,8 @@ import { useDispatch } from 'react-redux'
 import { useAuth } from 'src/hooks'
 
 import FingoLogo from 'src/images/fingo-logo.png'
+import IcHome from 'src/assets/images/ic_home.png'
+
 
 const FingoSidebar = () => {
     const dispatch = useDispatch()
@@ -207,7 +209,7 @@ const FingoSidebar = () => {
                             onClick={e => onClickSidebarItem(e, 'home')}
                         >
                             <div className='icon'>
-                                <HomeIcon />
+                                <img src={IcHome} alt="home icon" />
                             </div>
                             <span>Learn</span>
                         </a>
