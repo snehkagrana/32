@@ -7,7 +7,7 @@ import '../../styles/auth.styles.css'
 import { useAuth } from 'src/hooks'
 import { batch, useDispatch } from 'react-redux'
 
-export default function ModalLogin({ isOpen, onClose, showModalRegister }) {
+export default function ModalLogin() {
     const dispatch = useDispatch()
     const {
         auth_openModalLogin,
@@ -62,13 +62,11 @@ export default function ModalLogin({ isOpen, onClose, showModalRegister }) {
                 setAuthMsg(response.data.message)
                 setShowAuthMsg(true)
                 if (response.data.redirect === '/home') {
-                    if (typeof onClose === 'function') {
-                        onClose()
-                        navigate(`/home`)
-                        setTimeout(() => {
-                            window.location.reload()
-                        }, 150)
-                    }
+                    handleCloseModal()
+                    navigate(`/home`)
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 150)
                 }
             } else {
                 setAuthMsg('Unknown error occurred. Please try again.')
@@ -186,11 +184,11 @@ export default function ModalLogin({ isOpen, onClose, showModalRegister }) {
 
     // clean up form validation
     useEffect(() => {
-        if (!isOpen) {
+        if (!auth_openModalLogin) {
             setPasswordTooltipMessage('')
             setEmailTooltipMessage('')
         }
-    }, [isOpen])
+    }, [auth_openModalLogin])
 
     useEffect(() => {
         Axios({

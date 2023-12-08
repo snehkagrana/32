@@ -7,7 +7,7 @@ import '../../styles/auth.styles.css'
 import { batch, useDispatch } from 'react-redux'
 import { useAuth } from 'src/hooks'
 
-export default function ModalRegister({ isOpen, onClose, showModalLogin }) {
+export default function ModalRegister() {
     const dispatch = useDispatch()
     const {
         auth_openModalRegister,
@@ -49,13 +49,13 @@ export default function ModalRegister({ isOpen, onClose, showModalLogin }) {
 
     // clean up form validation
     useEffect(() => {
-        if (!isOpen) {
+        if (!auth_openModalRegister) {
             setPasswordTooltipMessage('')
             setEmailTooltipMessage('')
             setLastNameTooltipMessage('')
             setFirstNameTooltipMessage('')
         }
-    }, [isOpen])
+    }, [auth_openModalRegister])
 
     ////function to register user from the server after he has entered the information
     //// if all the information is valid redirect him to login page else display the flash message
@@ -74,21 +74,15 @@ export default function ModalRegister({ isOpen, onClose, showModalLogin }) {
             setAuthMsg(response.data.message)
             setShowAuthMsg(true)
 
-            if (
-                typeof onClose === 'function' &&
-                typeof showModalLogin === 'function'
-            ) {
-                onClose()
-                showModalLogin()
-            }
+            batch(() => {
+                dispatch(auth_setOpenModalRegister(false))
+                dispatch(auth_setOpenModalLogin(true))
+            })
 
             if (response.data.redirect == '/') {
                 navigate(`/`)
-            } else if (
-                response.data.redirect == '/login' &&
-                typeof showModalLogin === 'function'
-            ) {
-                showModalLogin()
+            } else if (response.data.redirect == '/login') {
+                dispatch(auth_setOpenModalLogin(true))
                 // navigate(`/auth/login`);
             }
         })
