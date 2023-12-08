@@ -17,14 +17,14 @@ import storage from 'redux-persist/lib/storage'
 import { rootReducer } from './reducers'
 
 import { unauthenticatedMiddleware } from './middlewares'
-import { appSlice } from 'src/redux/app'
+// import { appSlice } from 'src/redux/app'
 
 // Config for Redux Persist
 const persistConfig = {
     key: 'root',
     version: 1,
     storage,
-    whitelist: [appSlice.name],
+    whitelist: [],
 }
 
 // Listener Middleware

@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
     auth_openModalLogin: false,
     auth_openModalRegister: false,
+    user: null,
 }
 
 // Actual Slice
@@ -16,6 +17,9 @@ export const authSlice = createSlice({
         },
         auth_setOpenModalRegister(state, action) {
             state.auth_openModalRegister = action.payload
+        },
+        auth_setUser(state, action) {
+            state.user = action.payload
         },
     },
 })

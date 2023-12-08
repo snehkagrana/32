@@ -70,7 +70,8 @@ import { useSnapCarousel } from "react-snap-carousel";
 import LoadingBox from "../components/LoadingBox";
 import { FingoHomeLayout } from "src/components/layouts";
 import { useDispatch } from "react-redux";
-import { useAuth } from "src/hooks";
+import { useAuth, useUser } from "src/hooks";
+import FingoCardDayStreak from "src/components/FingoCardDayStreak";
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -80,6 +81,8 @@ import { useAuth } from "src/hooks";
 ////join room is the invitation link to which user must be redirected to
 const Home = (props) => {
   const dispatch = useDispatch();
+  const { user_setCompletedDays } = useUser();
+  const { auth_setUser } = useAuth()
   const { auth_setOpenModalRegister } = useAuth()
   const [searchValue, setSearchValue] = useState("");
   const [userName, setUserName] = useState(null);
@@ -411,6 +414,7 @@ const Home = (props) => {
         // console.log("Already logged in");
         role.current = response.data.user.role;
         setUser(response.data.user);
+        dispatch(auth_setUser(response.data.user))
         setUserName(
           response.data.user.displayName
             ? response.data.user.displayName?.split(" ")[0]
@@ -419,11 +423,13 @@ const Home = (props) => {
 
         setXP({ dailyXP: response.data.user.xp.daily, totalXP: response.data.user.xp.total });
         SetLastCompletedDay(response.data.user.lastCompletedDay);
-        SetCompletedDays(response.data.user.completedDays);
+        // SetCompletedDays(response.data.user.completedDays);
         setProfilePicture(response.data.user.imgPath);
         setLastPlayed(response.data.user.last_played);
         getSkills(response.data.user.last_played);
         // console.log("user is", response.data.user);
+
+        dispatch(user_setCompletedDays(response?.data?.user?.completedDays ?? []))
       }
     });
   }, []);
@@ -495,6 +501,8 @@ const Home = (props) => {
   const onClickSignUp = () => {
     dispatch(auth_setOpenModalRegister(true))
   }
+
+  console.log("completedDays",completedDays)
 
   return (
     <FingoHomeLayout>
@@ -630,6 +638,7 @@ const Home = (props) => {
             </div>
           </div>
           <div className="col-lg-4 order-md-2 order-1 mb-4 px-md-0">
+            <FingoCardDayStreak />
             <Card className="profile-info">
               <Card.Body className="d-flex align-items-center p-3">
                 <div className="profile-picture">
