@@ -3,6 +3,10 @@
     background-color: #fff5d4;
 }
 
+[data-theme='dark'] .FingoCardDayStreak {
+    background-color: #484438;
+}
+
 .FingoCardDayStreakInner {
     width: 100%;
     display: flex;
@@ -92,6 +96,10 @@
     background-color: #ffff;
     border-radius: 0.4rem;
     padding: 1rem 0.8rem;
+}
+
+[data-theme='dark'] .FingoCardDayStreakCalendar {
+    background-color: #161616;
 }
 
 .FingoCardDayStreakCalendar ul {

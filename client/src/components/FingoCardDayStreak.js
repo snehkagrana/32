@@ -13,14 +13,7 @@ import FireOn from 'src/assets/images/fire-on.png'
 import 'src/styles/FingoCardDayStreak.styles.css'
 
 const FingoCardDayStreak = () => {
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const { auth_setOpenModalLogin, auth_setOpenModalRegister } = useAuth()
     const { user } = useAuth()
-    const role = useRef('')
-    const [newUser, setNewUser] = useState(false)
-    const [userName, setUserName] = useState(null)
-    const [completedDays, SetCompletedDays] = useState([])
 
     const days = [
         'Monday',
@@ -88,18 +81,20 @@ const FingoCardDayStreak = () => {
                                 href='#'
                                 onClick={onClick}
                             >
-                                <svg
-                                    xmlns='http://www.w3.org/2000/svg'
-                                    width='16'
-                                    height='16'
-                                    viewBox='0 0 16 16'
-                                    fill='#fff'
-                                >
-                                    <path
+                                {index === dayOfWeek && (
+                                    <svg
+                                        xmlns='http://www.w3.org/2000/svg'
+                                        width='16'
+                                        height='16'
+                                        viewBox='0 0 16 16'
                                         fill='#fff'
-                                        d='M7.3 14.2L.2 9l1.7-2.4l4.8 3.5l6.6-8.5l2.3 1.8z'
-                                    />
-                                </svg>
+                                    >
+                                        <path
+                                            fill='#fff'
+                                            d='M7.3 14.2L.2 9l1.7-2.4l4.8 3.5l6.6-8.5l2.3 1.8z'
+                                        />
+                                    </svg>
+                                )}
                             </a>
                         </li>
                     ))}
