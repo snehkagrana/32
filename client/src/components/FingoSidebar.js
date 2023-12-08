@@ -26,11 +26,12 @@ import { useAuth } from 'src/hooks'
 const FingoSidebar = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const { user } = useAuth()
     const { auth_setOpenModalLogin, auth_setOpenModalRegister } = useAuth()
     const role = useRef('')
     const [newUser, setNewUser] = useState(false)
     const [userName, setUserName] = useState(null)
-    const [user, setUser] = useState(null)
+    // const [user, setUser] = useState(null)
 
     const [profilePicture, setProfilePicture] = useState('')
 
@@ -87,7 +88,7 @@ const FingoSidebar = () => {
             } else {
                 // console.log("Already logged in");
                 role.current = response.data.user.role
-                setUser(response.data.user)
+                // setUser(response.data.user)
                 setUserName(
                     response.data.user.displayName
                         ? response.data.user.displayName?.split(' ')[0]
@@ -156,9 +157,9 @@ const FingoSidebar = () => {
                                         alt='Profile'
                                         className='rounded-circle'
                                     />
-                                ) : profilePicture ? (
+                                ) : user?.imgPath ? (
                                     <img
-                                        src={profilePicture}
+                                        src={user.imgPath}
                                         alt='Profile'
                                         className='rounded-circle'
                                     />
