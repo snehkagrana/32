@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import Axios from "axios";
+import React, { useState, useRef, useEffect } from 'react'
+import Axios from 'axios'
 import {
     MDBContainer,
     MDBNavbar,
@@ -15,61 +15,67 @@ import {
     MDBDropdownMenu,
     MDBDropdownItem,
     MDBCollapse,
-} from "mdb-react-ui-kit";
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "react-bootstrap";
-import logo from "../images/logo.jpeg";
-import DarkMode from "./DarkMode";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import Dropdown from "react-bootstrap/Dropdown";
-import ModalLogin from "./auth/ModalLogin";
-import ModalRegister from "./auth/ModalRegister";
+} from 'mdb-react-ui-kit'
+import { Link, useNavigate } from 'react-router-dom'
+import { Button } from 'react-bootstrap'
+import logo from '../images/logo.jpeg'
+import DarkMode from './DarkMode'
+import DropdownButton from 'react-bootstrap/DropdownButton'
+import Dropdown from 'react-bootstrap/Dropdown'
+import { useDispatch } from 'react-redux'
+import { useAuth } from 'src/hooks'
 
 const Navbar = ({ proprole, newUser = false }) => {
-    const [showBasic, setShowBasic] = useState(false);
-    const [searchValue, setSearchValue] = useState("");
-    const skills = useRef([]);
-    const [filteredQueries, setFilteredQueries] = useState([]);
-    const [role, setRole] = useState("");
+    const dispatch = useDispatch()
+    const {
+        auth_openModalLogin,
+        auth_setOpenModalLogin,
+        auth_setOpenModalRegister,
+    } = useAuth()
+    const [showBasic, setShowBasic] = useState(false)
+    const [searchValue, setSearchValue] = useState('')
+    const skills = useRef([])
+    const [filteredQueries, setFilteredQueries] = useState([])
+    const [role, setRole] = useState('')
 
     const [showModalLogin, setShowModalLogin] = useState(false)
     const [showModalRegister, setShowModalRegister] = useState(false)
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
-    const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState(false)
 
     const toggleDarkMode = () => {
-        setDarkMode(!darkMode);
+        setDarkMode(!darkMode)
         // You can store the dark mode preference in local storage or a state management system like Redux
-    };
+    }
 
     const handleLogOut = () => {
         // console.log('logging Out!!');
         Axios({
-            method: "GET",
+            method: 'GET',
             withCredentials: true,
-            url: "/server/logout",
-        }).then((res) => {
+            url: '/server/logout',
+        }).then(res => {
             // console.log("Redirect back to Home");
-            navigate(`/`);
-        });
-    };
+            navigate(`/`)
+        })
+    }
 
-    const onChangeSearchValue = (event) => {
-        setSearchValue(event.target.value);
-        var tempFilteredQueries = [];
+    const onChangeSearchValue = event => {
+        setSearchValue(event.target.value)
+        var tempFilteredQueries = []
 
-        skills.current.forEach((skill) => {
-            const searchTerm = event.target.value.toLowerCase();
-            const skillName = skill.skill.toLowerCase();
+        skills.current.forEach(skill => {
+            const searchTerm = event.target.value.toLowerCase()
+            const skillName = skill.skill.toLowerCase()
 
             if (searchTerm && skillName.includes(searchTerm)) {
                 tempFilteredQueries.push({
-                    type: "skill",
+                    type: 'skill',
                     skill: skill.skill,
                     name: skill.skill,
-                });
+                })
             }
 
             // console.log('categories', skill.categories);
@@ -80,105 +86,112 @@ const Navbar = ({ proprole, newUser = false }) => {
             // })
 
             for (var i = 0; i < skill.categories.length; i++) {
-                var category = skill.categories[i];
+                var category = skill.categories[i]
                 if (searchTerm && category.toLowerCase().includes(searchTerm)) {
                     tempFilteredQueries.push({
-                        type: "category",
+                        type: 'category',
                         skill: skill.skill,
                         category: category,
                         name: category,
-                    });
+                    })
                 }
             }
 
-            skill.sub_categories.forEach((subCategory) => {
-                const subCategoryName = subCategory.sub_category;
+            skill.sub_categories.forEach(subCategory => {
+                const subCategoryName = subCategory.sub_category
                 if (
                     searchTerm &&
                     subCategoryName.toLowerCase().includes(searchTerm)
                 ) {
                     tempFilteredQueries.push({
-                        type: "subcategory",
+                        type: 'subcategory',
                         skill: skill.skill,
                         category: subCategory.category,
                         sub_category: subCategoryName,
                         name: subCategoryName,
-                    });
+                    })
                 }
-            });
-        });
+            })
+        })
 
-        setFilteredQueries(tempFilteredQueries.slice(0, 10));
+        setFilteredQueries(tempFilteredQueries.slice(0, 10))
         // console.log('tempFilteredQueries', tempFilteredQueries);
-    };
+    }
 
-    const onSearch = (searchTerm) => {
-        setSearchValue(searchTerm);
+    const onSearch = searchTerm => {
+        setSearchValue(searchTerm)
         // our api to fetch the search result
         // console.log("search ", searchTerm);
-        if (searchTerm.type === "skill")
-            navigate(`/skills/${searchTerm.skill}`);
-        else if (searchTerm.type === "category")
-            navigate(`/skills/${searchTerm.skill}/${searchTerm.category}`);
+        if (searchTerm.type === 'skill') navigate(`/skills/${searchTerm.skill}`)
+        else if (searchTerm.type === 'category')
+            navigate(`/skills/${searchTerm.skill}/${searchTerm.category}`)
         else
             navigate(
                 `/skills/${searchTerm.skill}/${searchTerm.category}/${searchTerm.sub_category}/information/0`
-            );
-        window.location.reload();
-    };
+            )
+        window.location.reload()
+    }
 
     const onClickLoginBtn = () => {
-        setShowModalLogin(true)
+        dispatch(auth_setOpenModalLogin(true))
         // () => navigate("/auth/login")
     }
 
     const onClickRegister = () => {
-        setShowModalRegister(true)
+        dispatch(auth_setOpenModalRegister(true))
     }
 
     useEffect(() => {
         Axios({
-            method: "GET",
+            method: 'GET',
             withCredentials: true,
-            url: "/server/skills",
+            url: '/server/skills',
             params: {
                 newUser: newUser,
             },
-        }).then((res) => {
+        }).then(res => {
             // console.log('skills = ', res.data.data);
-            skills.current = res.data.data;
-            setRole(proprole.current);
-        });
-    }, [newUser]);
+            skills.current = res.data.data
+            setRole(proprole.current)
+        })
+    }, [newUser])
 
     return (
-        <MDBNavbar expand="lg" dark style={{ backgroundColor: "#28a745" }}>
+        <MDBNavbar expand='lg' dark style={{ backgroundColor: '#28a745' }}>
             <MDBContainer
                 fluid
-                bg={darkMode ? "dark" : "light"}
-                variant={darkMode ? "dark" : "light"}>
+                bg={darkMode ? 'dark' : 'light'}
+                variant={darkMode ? 'dark' : 'light'}
+            >
                 <MDBNavbarBrand onClick={() => navigate(`/home`)}>
-                    <span className = "zoomText" style={{ cursor: 'pointer',fontWeight: "bold" }}>fingo</span>
+                    <span
+                        className='zoomText'
+                        style={{ cursor: 'pointer', fontWeight: 'bold' }}
+                    >
+                        fingo
+                    </span>
                 </MDBNavbarBrand>
 
                 <MDBNavbarToggler
-                    aria-controls="navbarSupportedContent"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                    onClick={() => setShowBasic(!showBasic)}>
-                    <MDBIcon icon="bars" fas />
+                    aria-controls='navbarSupportedContent'
+                    aria-expanded='false'
+                    aria-label='Toggle navigation'
+                    onClick={() => setShowBasic(!showBasic)}
+                >
+                    <MDBIcon icon='bars' fas />
                 </MDBNavbarToggler>
 
                 <MDBCollapse navbar show={showBasic}>
-                    <MDBNavbarNav className="mr-auto mb-2 mb-lg-0">
+                    <MDBNavbarNav className='mr-auto mb-2 mb-lg-0'>
                         <MDBNavbarItem>
                             <MDBNavbarLink
-                                onClick={() => navigate("/home")}
+                                onClick={() => navigate('/home')}
                                 style={{
-                                    fontWeight: "bold",
-                                    color: "#ffffff",
-                                    cursor: "pointer",
-                                }}>
+                                    fontWeight: 'bold',
+                                    color: '#ffffff',
+                                    cursor: 'pointer',
+                                }}
+                            >
                                 Home
                             </MDBNavbarLink>
                         </MDBNavbarItem>
@@ -193,103 +206,104 @@ const Navbar = ({ proprole, newUser = false }) => {
                                 View Profile
                             </MDBNavbarLink>
                             </MDBNavbarItem>*/}
-                            <MDBNavbarItem>
-                                <MDBNavbarLink
-                                    onClick={newUser ? onClickLoginBtn : handleLogOut}
-                                    style={{
-                                    fontWeight: "bold",
-                                    color: "#fff", 
-                                    cursor: "pointer",
+                        <MDBNavbarItem>
+                            <MDBNavbarLink
+                                onClick={
+                                    newUser ? onClickLoginBtn : handleLogOut
+                                }
+                                style={{
+                                    fontWeight: 'bold',
+                                    color: '#fff',
+                                    cursor: 'pointer',
                                     // backgroundColor: "#fff", // Set the background color to white
-                                    borderRadius: "7px", // Adjust the border-radius as needed
-                                    borderColor: "#fff",
-                                    borderStyle: "solid",
-                                    padding: "4px 10px", // Add padding to control the button size
-                                    display: "inline-block",
-                                    marginRight: "10px",
-                                    marginBottom: "3px"
-                                    
-                                    }}
-                                >
-                                    {newUser ? "Login" : "Logout"}
-                                </MDBNavbarLink>
-                            </MDBNavbarItem>
+                                    borderRadius: '7px', // Adjust the border-radius as needed
+                                    borderColor: '#fff',
+                                    borderStyle: 'solid',
+                                    padding: '4px 10px', // Add padding to control the button size
+                                    display: 'inline-block',
+                                    marginRight: '10px',
+                                    marginBottom: '3px',
+                                }}
+                            >
+                                {newUser ? 'Login' : 'Logout'}
+                            </MDBNavbarLink>
+                        </MDBNavbarItem>
 
-                            <MDBNavbarItem>
-                                {newUser ? (
-                                    <MDBNavbarLink
+                        <MDBNavbarItem>
+                            {newUser ? (
+                                <MDBNavbarLink
                                     onClick={onClickRegister}
                                     // onClick={() => navigate("/auth/register")}
                                     style={{
-                                        fontWeight: "bold",
-                                        color: "#28a745",
-                                        cursor: "pointer",
-                                        backgroundColor: "#fff",
-                                        borderRadius: "7px",
-                                        padding: "6px 13px",
-                                        display: "inline-block",
-                                        
-                                        
+                                        fontWeight: 'bold',
+                                        color: '#28a745',
+                                        cursor: 'pointer',
+                                        backgroundColor: '#fff',
+                                        borderRadius: '7px',
+                                        padding: '6px 13px',
+                                        display: 'inline-block',
                                     }}
-                                    >
+                                >
                                     Register
-                                    </MDBNavbarLink>
-                                ) : null}
-                            </MDBNavbarItem>
+                                </MDBNavbarLink>
+                            ) : null}
+                        </MDBNavbarItem>
 
-
-
-                        {role === "admin" ? (
+                        {role === 'admin' ? (
                             <MDBNavbarItem>
                                 <MDBNavbarLink
                                     onClick={() => navigate(`/addchapters`)}
                                     style={{
-                                        fontWeight: "bold",
-                                        color: "#ffffff",
-                                        cursor: "pointer",
-                                    }}>
+                                        fontWeight: 'bold',
+                                        color: '#ffffff',
+                                        cursor: 'pointer',
+                                    }}
+                                >
                                     Add Chapters
                                 </MDBNavbarLink>
                             </MDBNavbarItem>
                         ) : null}
 
-                        {role === "admin" ? (
+                        {role === 'admin' ? (
                             <MDBNavbarItem>
                                 <MDBNavbarLink
                                     onClick={() => navigate(`/addinformation`)}
                                     style={{
-                                        fontWeight: "bold",
-                                        color: "#ffffff",
-                                        cursor: "pointer",
-                                    }}>
+                                        fontWeight: 'bold',
+                                        color: '#ffffff',
+                                        cursor: 'pointer',
+                                    }}
+                                >
                                     Add Information
                                 </MDBNavbarLink>
                             </MDBNavbarItem>
                         ) : null}
 
-                        {role === "admin" ? (
+                        {role === 'admin' ? (
                             <MDBNavbarItem>
                                 <MDBNavbarLink
                                     onClick={() => navigate(`/addquestions`)}
                                     style={{
-                                        fontWeight: "bold",
-                                        color: "#ffffff",
-                                        cursor: "pointer",
-                                    }}>
+                                        fontWeight: 'bold',
+                                        color: '#ffffff',
+                                        cursor: 'pointer',
+                                    }}
+                                >
                                     Add Questions
                                 </MDBNavbarLink>
                             </MDBNavbarItem>
                         ) : null}
 
-                        {role === "admin" ? (
+                        {role === 'admin' ? (
                             <MDBNavbarItem>
                                 <MDBNavbarLink
                                     onClick={() => navigate(`/allskills`)}
                                     style={{
-                                        fontWeight: "bold",
-                                        color: "#ffffff",
-                                        cursor: "pointer",
-                                    }}>
+                                        fontWeight: 'bold',
+                                        color: '#ffffff',
+                                        cursor: 'pointer',
+                                    }}
+                                >
                                     Edit/Delete
                                 </MDBNavbarLink>
                             </MDBNavbarItem>
@@ -316,11 +330,8 @@ const Navbar = ({ proprole, newUser = false }) => {
           </div> */}
                 </MDBCollapse>
             </MDBContainer>
-
-            <ModalLogin isOpen={showModalLogin} onClose={() => setShowModalLogin(false)} showModalRegister={() => setShowModalRegister(true)} />
-            <ModalRegister isOpen={showModalRegister} onClose={() => setShowModalRegister(false)} showModalLogin={() => setShowModalLogin(true)} />
         </MDBNavbar>
-    );
-};
+    )
+}
 
-export default Navbar;
+export default Navbar

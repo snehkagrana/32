@@ -3,10 +3,12 @@ import { combineReducers } from '@reduxjs/toolkit'
 
 // Slices & Apis
 import { appSlice } from 'src/redux/app'
+import { authSlice } from './auth'
 
 // plain reducers
 const plainReducers = {
     [appSlice.name]: appSlice.reducer,
+    [authSlice.name]: authSlice.reducer,
 }
 
 // root reducer

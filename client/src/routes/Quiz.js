@@ -9,6 +9,7 @@ import Modal from "react-bootstrap/Modal";
 import "../styles/QuizPage.styles.css";
 import WrongAudio from "../sounds/wrong-audio.mp3"
 import CorrectAudio from "../sounds/correct-audio.mp3"
+import { FingoHomeLayout } from "src/components/layouts";
 
 const Quiz = () => {
   const [imageURL, setImageURL] = useState("");
@@ -411,11 +412,10 @@ const Quiz = () => {
   
 
   return (
-    <>
+    <FingoHomeLayout>
       <Helmet>
         <title>Quiz</title>
       </Helmet>
-      <Navbar proprole={role} newUser={!!searchParams.get("newUser")} />
       <br />
       <Card
         className="d-flex flex-column"
@@ -644,7 +644,7 @@ const Quiz = () => {
           ></span>
         ))}
       </div>
-    </>
+    </FingoHomeLayout>
   );
 };
 

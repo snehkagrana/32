@@ -1,0 +1,44 @@
+.FingoSwitchTheme {
+    width: 100px;
+    height: 44px;
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    -webkit-box-shadow: 0px 4px 33px 0px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 4px 33px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 4px 33px 0px rgba(0, 0, 0, 0.2);
+}
+
+.FingoSwitchThemeInner {
+    height: 100%;
+    transition: all 1.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.FingoSwitchThemeInner.isDark {
+    background-color: #50d7ff;
+}
+
+.FingoSwitchThemeInner.isLight {
+    background-color: #1e1d2a;
+}
+
+.FingoSwitchThemeInner svg {
+    transition: all 0.65s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.FingoSwitchThemeInner.isDark svg {
+    position: absolute;
+    width: 158px;
+    height: auto;
+    top: -14px;
+    left: -48px;
+}
+
+.FingoSwitchThemeInner.isLight svg {
+    position: absolute;
+    width: 168px;
+    height: auto;
+    top: -10px;
+    left: 26px;
+}

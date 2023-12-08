@@ -67,9 +67,10 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FaCalendar, FaStar, FaTrophy, FaMedal, FaFire } from "react-icons/fa";
 import DarkMode from "../components/DarkMode";
 import { useSnapCarousel } from "react-snap-carousel";
-import ModalLogin from "../components/auth/ModalLogin";
-import ModalRegister from "../components/auth/ModalRegister";
 import LoadingBox from "../components/LoadingBox";
+import { FingoHomeLayout } from "src/components/layouts";
+import { useDispatch } from "react-redux";
+import { useAuth } from "src/hooks";
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -78,6 +79,8 @@ import LoadingBox from "../components/LoadingBox";
 ////data represents email of the logged in email
 ////join room is the invitation link to which user must be redirected to
 const Home = (props) => {
+  const dispatch = useDispatch();
+  const { auth_setOpenModalRegister } = useAuth()
   const [searchValue, setSearchValue] = useState("");
   const [userName, setUserName] = useState(null);
   const [skills, setSkills] = useState([]);
@@ -489,17 +492,18 @@ const Home = (props) => {
     }
   }
 
+  const onClickSignUp = () => {
+    dispatch(auth_setOpenModalRegister(true))
+  }
+
   return (
-    <>
+    <FingoHomeLayout>
       <Helmet>
         <title>Home</title>
       </Helmet>
-      <Navbar proprole={role} newUser={newUser}/>
-      <ModalLogin isOpen={showModalLogin} onClose={() => setShowModalLogin(false)} showModalRegister={() => setShowModalRegister(true)}/>
-      <ModalRegister isOpen={showModalRegister} onClose={() => setShowModalRegister(false)} showModalLogin={() => setShowModalLogin(true)}/>
-      <div className="container mt-5">
+      <div className="">
         <div className="row h-auto">
-          <div className="col-md-8 order-md-1 order-2 mb-4">
+          <div className="col-lg-8 order-md-1 order-2 mb-4">
             <div className="container">
               <div className="row h-auto">
                 <div className="col-12 px-0">
@@ -625,7 +629,7 @@ const Home = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-3 order-md-2 order-1 mb-4 px-md-0">
+          <div className="col-lg-4 order-md-2 order-1 mb-4 px-md-0">
             <Card className="profile-info">
               <Card.Body className="d-flex align-items-center p-3">
                 <div className="profile-picture">
@@ -788,7 +792,7 @@ const Home = (props) => {
               {newUser ? '(Signup for free ' : ''}
               {/* <span style={{ color:'#28a745', textDecoration: 'underline', textDecorationColor: '#28a745'}}>{newUser?'free' : ''}</span> */}
               <span>{newUser?' to get full access - ' : ''}</span>
-              <span>{newUser?<a href="#" onClick={() => setShowModalRegister(true)} style={{color:'#28a745'}}>click here</a> : ''}</span>
+              <span>{newUser?<a href="#" onClick={onClickSignUp} style={{color:'#28a745'}}>click here</a> : ''}</span>
               <span>{newUser?')' : ''}</span>
             </span>
             
@@ -919,7 +923,7 @@ const Home = (props) => {
           </div>
         </div>
       </div>
-    </>
+    </FingoHomeLayout>
   );
 };
 

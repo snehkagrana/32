@@ -1,0 +1,9 @@
+.FingoShapeRadius {
+    border-radius: 12px !important;
+}
+
+@media (min-width: 576px) {
+    .FingoShapeRadius {
+        border-radius: 16px !important;
+    }
+}

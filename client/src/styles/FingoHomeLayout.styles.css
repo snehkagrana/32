@@ -1,0 +1,19 @@
+.FingoHomeLayout {
+}
+
+.FingoHomeLayoutWrapper {
+    padding-left: 0;
+}
+
+.FingoHomeLayoutContainer {
+    padding: 1.1rem;
+}
+
+@media (min-width: 576px) {
+    .FingoHomeLayoutWrapper {
+        padding-left: 280px;
+    }
+    .FingoHomeLayoutContainer {
+        padding: 2.5rem;
+    }
+}

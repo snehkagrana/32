@@ -1,0 +1,162 @@
+.FingoSidebar {
+    left: -320px;
+    width: 280px;
+    height: 100vh;
+    overflow-y: scroll;
+    position: fixed;
+    z-index: 1;
+    background-color: #ffffff;
+    padding: 1.2rem 0;
+    -webkit-box-shadow: 0px 4px 33px 0px rgba(0, 0, 0, 0.04);
+    -moz-box-shadow: 0px 4px 33px 0px rgba(0, 0, 0, 0.04);
+    box-shadow: 0px 4px 33px 0px rgba(0, 0, 0, 0.04);
+}
+
+@media (min-width: 576px) {
+    .FingoSidebar {
+        left: 0;
+    }
+}
+
+.FingoSidebar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.FingoSidebar::-webkit-scrollbar-track,
+.FingoSidebar::-webkit-scrollbar-corner {
+    background: var(--color-background);
+    border-radius: 10px;
+}
+.FingoSidebar::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar);
+    border-radius: 10px;
+}
+.FingoSidebar::-webkit-scrollbar-track,
+.FingoSidebar::-webkit-scrollbar-corner {
+    background: var(--color-background);
+    border-radius: 10px;
+}
+
+[data-theme='dark'] .FingoSidebar {
+    background-color: #3c3c3c;
+}
+
+.FingoSidebarInner {
+    padding: 0 1.4rem;
+}
+
+.FingoSidebar .navbar-brand {
+    width: 100%;
+    margin-right: 0;
+    padding-bottom: 1rem;
+    margin-left: 1rem;
+}
+
+.FingoSidebarInnerTitle {
+    font-size: 40px;
+    font-weight: 700;
+    cursor: pointer;
+    color: #57cc00;
+}
+
+.FingoSidebarSwitchContainer {
+    margin-top: 4rem;
+}
+
+.FingoSidebar ul {
+    padding-left: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.FingoSidebar li {
+    margin-bottom: 0.5rem;
+    display: inline-block;
+    width: 100%;
+}
+
+.FingoSidebar li a {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-decoration: none;
+    border: 2px solid #eee;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    text-transform: uppercase;
+    user-select: none;
+    color: #00a7ff;
+}
+
+[data-theme='dark'] .FingoSidebar li a {
+    border: 2px solid #676767;
+}
+
+.FingoSidebar li a:hover,
+.FingoSidebar li a.active {
+    background-color: #ddf4ff;
+    border: 2px solid #8bdaff;
+    color: #00a7ff;
+}
+
+[data-theme='dark'] .FingoSidebar li a:hover,
+[data-theme='dark'] .FingoSidebar li a.active {
+    background-color: #487286;
+    border: 2px solid #5c99b6;
+    color: #ffffff;
+}
+
+.FingoSidebar li a .icon {
+    margin-right: 1.2rem;
+}
+
+.FingoSidebar li a .icon svg {
+    width: 34px;
+    height: auto;
+}
+
+.FingoSidebar li a .icon {
+    margin-right: 1.2rem;
+}
+
+.FingoSidebar li a span {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.FingoSidebarUserInfo {
+    border-radius: 10px;
+    background-color: #f7fcf7;
+    border: 2px solid #ececec;
+    margin-bottom: 1rem;
+}
+
+.FingoSidebarUserInfo .user-name {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.FingoSidebarUserInfo .profile-picture {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.FingoSidebarUserInfo label {
+    width: 44px;
+    height: 44px;
+    overflow: hidden;
+    margin-bottom: 0;
+    display: inline-block;
+}
+
+.FingoSidebarUserInfo label img {
+    width: 44px;
+    height: auto;
+}
+
+[data-theme='dark'] .FingoSidebarUserInfo {
+    background-color: #000;
+    border: 2px solid #333;
+}

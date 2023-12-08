@@ -41,6 +41,7 @@ import ForgotPassword from "./routes/ForgotPassword";
 import ForgotPasswordMailSent from "./routes/ForgotPasswordMailSent";
 import Terms from "./routes/Terms";
 import PrivacyPolicy from "./routes/PrivacyPolicy";
+import 'src/styles/FingoGlobal.styles.css'
 
 const App = () => {
     return (

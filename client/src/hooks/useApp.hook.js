@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { app_selectState, app_reducerActions } from 'src/redux/app'
 import { useSelector } from 'react-redux'
 
-const useApp = () => {
+export const useApp = () => {
     const state = useSelector(app_selectState)
 
     const app_isDarkTheme = useMemo(() => {
@@ -15,5 +15,3 @@ const useApp = () => {
         ...app_reducerActions,
     }
 }
-
-export { useApp }

@@ -4,13 +4,13 @@ import Axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { Row, Form, Button, Col, Image } from "react-bootstrap";
 import { Helmet } from "react-helmet";
-import Navbar from "../components/Navbar";
 import Card from "react-bootstrap/Card";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import "../index.css"
 import SubCategorySidebar from "../components/SubCategorySidebar";
 import LoadingBox from "../components/LoadingBox";
+import { FingoHomeLayout } from "src/components/layouts";
 
 const InformationPage = () => {
     const [imageURL, setImageURL] = useState("");
@@ -170,17 +170,14 @@ const InformationPage = () => {
     }, [pageNumber, searchParams, subcategory]);
 
     return (
-        <>
+        <FingoHomeLayout>
             <Helmet>
                 <title>Let's Learn</title>
             </Helmet>
-            <Navbar proprole={role} newUser={!!searchParams.get("newUser")}/>
-            <br />
             <Row style={{
                 marginLeft: "auto",
                 marginRight: "auto",
                 maxWidth: '1100px',
-                marginTop: '20px',
                 marginBottom: '20px'
             }}>
                 <Col xs={12} md={7}>
@@ -303,7 +300,7 @@ const InformationPage = () => {
                     <SubCategorySidebar data={subCategories} />
                 </Col>
             </Row>
-        </>
+        </FingoHomeLayout>
     );
 };
 

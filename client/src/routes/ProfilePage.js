@@ -108,7 +108,7 @@ const ProfilePage = (props) => {
             </Helmet>
             <Navbar proprole={role}/>
 
-            <div className="container mt-5">
+            <div className="">
                 <div className="row">
                     <div className="col-md-12 mb-6">
                         {userName ? (
