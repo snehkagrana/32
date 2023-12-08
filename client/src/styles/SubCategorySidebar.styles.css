@@ -1,6 +1,25 @@
 .SubCategorySidebar {
 }
 
+.SubCategorySidebar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.SubCategorySidebar ::-webkit-scrollbar-track,
+.SubCategorySidebar ::-webkit-scrollbar-corner {
+  background: var(--color-background);
+  border-radius: 10px;
+}
+.SubCategorySidebar ::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar);
+  border-radius: 10px;
+}
+.SubCategorySidebar ::-webkit-scrollbar-track,
+.SubCategorySidebar ::-webkit-scrollbar-corner {
+  background: var(--color-background);
+  border-radius: 10px;
+}
+
 .SubCategorySidebar .alert svg {
   margin-top: -4px;
   width: 18px;
