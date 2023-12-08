@@ -23,6 +23,8 @@ import FingoSwitchTheme from './FingoSwitchTheme'
 import { useDispatch } from 'react-redux'
 import { useAuth } from 'src/hooks'
 
+import FingoLogo from 'src/images/fingo-logo.png'
+
 const FingoSidebar = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -144,7 +146,7 @@ const FingoSidebar = () => {
         <div className='FingoSidebar'>
             <div className='FingoSidebarInner'>
                 <MDBNavbarBrand onClick={() => navigate(`/home`)}>
-                    <h1 className='FingoSidebarInnerTitle zoomText'>fingo</h1>
+                    <img className="FingoSidebarLogo" src={FingoLogo} alt="fingo logo" />
                 </MDBNavbarBrand>
 
                 <div className='FingoSidebarUserInfo'>

@@ -48,15 +48,14 @@
 .FingoSidebar .navbar-brand {
     width: 100%;
     margin-right: 0;
-    padding-bottom: 1rem;
+    padding-bottom: 2rem;
     margin-left: 1rem;
+    cursor: pointer;
 }
 
-.FingoSidebarInnerTitle {
-    font-size: 40px;
-    font-weight: 700;
-    cursor: pointer;
-    color: #57cc00;
+.FingoSidebarLogo {
+    height: 48px;
+    width: auto;
 }
 
 .FingoSidebarSwitchContainer {
