@@ -1,3 +1,4 @@
+import FingoFooter from '../FingoFooter'
 import FingoSidebar from '../FingoSidebar'
 import ModalLogin from '../auth/ModalLogin'
 import ModalRegister from '../auth/ModalRegister'
@@ -10,6 +11,7 @@ const FingoHomeLayout = ({ children }) => {
             <div className='FingoHomeLayoutWrapper'>
                 <div className='FingoHomeLayoutContainer'>{children}</div>
             </div>
+            <FingoFooter />
             <ModalLogin />
             <ModalRegister />
         </div>

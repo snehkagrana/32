@@ -1,0 +1,103 @@
+.FingoFooter::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.FingoFooter::-webkit-scrollbar-track,
+.FingoFooter::-webkit-scrollbar-corner {
+    background: var(--color-background);
+    border-radius: 10px;
+}
+.FingoFooter::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar);
+    border-radius: 10px;
+}
+.FingoFooter::-webkit-scrollbar-track,
+.FingoFooter::-webkit-scrollbar-corner {
+    background: var(--color-background);
+    border-radius: 10px;
+}
+
+[data-theme='dark'] .FingoFooter {
+    background-color: #3c3c3c;
+}
+
+.FingoFooterInner {
+    padding: 0 1rem;
+    height: 100%;
+}
+
+.FingoFooter {
+    display: block;
+    width: 100%;
+    height: 78px;
+    position: fixed;
+    z-index: 3;
+    background-color: #ffffff;
+    bottom: 0;
+    left: 0;
+    -webkit-box-shadow: 0px 4px 33px 0px rgba(0, 0, 0, 0.04);
+    -moz-box-shadow: 0px 4px 33px 0px rgba(0, 0, 0, 0.04);
+    box-shadow: 0px 4px 33px 0px rgba(0, 0, 0, 0.04);
+}
+
+@media (min-width: 576px) {
+    .FingoFooter {
+        display: none;
+    }
+}
+
+.FingoFooter ul {
+    height: 100%;
+    padding-left: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.FingoFooter li {
+    display: flex;
+    width: 16.6%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.FingoFooter li a {
+    text-decoration: none;
+    user-select: none;
+    color: #00a7ff;
+    height: 48px;
+    width: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (min-width: 360px) {
+    .FingoFooter li a {
+        height: 60px;
+        width: 60px;
+    }
+}
+
+.FingoFooter li a img {
+    height: 28px;
+    width: 28px;
+}
+
+@media (min-width: 360px) {
+    .FingoFooter li a img {
+        height: 42px;
+        width: 42px;
+    }
+}
+
+.FingoFooter li a:hover,
+.FingoFooter li a.active {
+    background-color: #ddf4ff;
+    border: 2px solid #8bdaff;
+    color: #00a7ff;
+}
