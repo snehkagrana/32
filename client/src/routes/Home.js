@@ -69,6 +69,7 @@ import DarkMode from "../components/DarkMode";
 import { useSnapCarousel } from "react-snap-carousel";
 import ModalLogin from "../components/auth/ModalLogin";
 import ModalRegister from "../components/auth/ModalRegister";
+import LoadingBox from "../components/LoadingBox";
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -830,7 +831,7 @@ const Home = (props) => {
                     }
                   </ul>
                 </div>
-              ) : <p>Wait for it...</p>
+              ) :  <LoadingBox spinnerSize={32} height={120} title="Wait for it..." />
             }
           </div>
           <div className="col-md-8">
