@@ -1,5 +1,5 @@
 .FingoHomeLayout {
-    padding-bottom: 78px; 
+    padding-bottom: 78px;
 }
 
 .FingoHomeLayoutWrapper {
@@ -12,7 +12,7 @@
 
 @media (min-width: 576px) {
     .FingoHomeLayoutWrapper {
-        padding-left: 280px;
+        padding-left: 320px;
     }
     .FingoHomeLayoutContainer {
         padding: 2.5rem;

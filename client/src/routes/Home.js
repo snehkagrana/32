@@ -70,8 +70,9 @@ import { useSnapCarousel } from "react-snap-carousel";
 import LoadingBox from "../components/LoadingBox";
 import { FingoHomeLayout } from "src/components/layouts";
 import { useDispatch } from "react-redux";
-import { useAuth, useUser } from "src/hooks";
+import { useApp, useAuth, useUser } from "src/hooks";
 import FingoCardDayStreak from "src/components/FingoCardDayStreak";
+import FingoCardCompleteTopic from "src/components/FingoCardCompleteTopic";
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -82,6 +83,7 @@ import FingoCardDayStreak from "src/components/FingoCardDayStreak";
 const Home = (props) => {
   const dispatch = useDispatch();
   const { user_setCompletedDays } = useUser();
+  const { app_setSkills } = useApp()
   const { auth_setUser } = useAuth()
   const { auth_setOpenModalRegister } = useAuth()
   const [searchValue, setSearchValue] = useState("");
@@ -298,7 +300,8 @@ const Home = (props) => {
       },
     }).then((res) => {
       // console.log('res.data skills', res.data.data);
-      setSkills(res.data.data);
+      dispatch(app_setSkills(res.data.data))
+      setSkills(res.data.data)
       // setSelectedSkill(res.data.data[0].skill);
       // console.log('last_played', last_played);
       if (Object.entries(last_played).length > 0) {
@@ -639,6 +642,7 @@ const Home = (props) => {
           </div>
           <div className="col-lg-4 order-md-2 order-1 mb-4 px-md-0">
             <FingoCardDayStreak />
+            <FingoCardCompleteTopic />
             <Card className="profile-info">
               <Card.Body className="d-flex align-items-center p-3">
                 <div className="profile-picture">

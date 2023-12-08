@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 
 // Initial state
 const initialState = {
-    app_paletteMode: 'light',
+    app_paletteMode: localStorage.getItem('theme') ?? 'light',
+    skills: [],
 }
 
 // Actual Slice
@@ -16,6 +17,9 @@ export const appSlice = createSlice({
         app_togglePaletteMode(state) {
             state.app_paletteMode =
                 state.app_paletteMode === 'dark' ? 'light' : 'dark'
+        },
+        app_setSkills(state, action) {
+            state.skills = action.payload
         },
     },
 })

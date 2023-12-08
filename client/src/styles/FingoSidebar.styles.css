@@ -1,6 +1,6 @@
 .FingoSidebar {
-    left: -320px;
-    width: 280px;
+    left: -380px;
+    width: 320px;
     height: 100vh;
     overflow-y: scroll;
     position: fixed;
@@ -88,7 +88,7 @@
 }
 
 [data-theme='dark'] .FingoSidebar li a {
-    border: 2px solid #676767;
+    border: 2px solid transparent;
 }
 
 .FingoSidebar li a:hover,
