@@ -1,21 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 // eslint-disable-next-line jsx-a11y/anchor-is-valid
 import Axios from 'axios'
-import {
-    useNavigate,
-    useParams,
-    useRouteError,
-    useSearchParams,
-} from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
-import { motion } from 'framer-motion'
 import 'src/styles/FingoSidebar.styles.css'
 import { MDBNavbarBrand } from 'mdb-react-ui-kit'
 
 import nonSignedUp from 'src/images/nonSignedUp'
 import signedUp from 'src/images/pepe.jpg'
 
-import { ReactComponent as HomeIcon } from 'src/assets/svg/home2.svg'
 import { ReactComponent as LogoutIcon } from 'src/assets/svg/loudly-crying-face.svg'
 import { ReactComponent as EnterIcon } from 'src/assets/svg/enter.svg'
 import { ReactComponent as SignUpIcon } from 'src/assets/svg/user-cirlce-add.svg'
@@ -25,7 +18,6 @@ import { useAuth } from 'src/hooks'
 
 import FingoLogo from 'src/images/fingo-logo.png'
 import IcHome from 'src/assets/images/ic_home.png'
-
 
 const FingoSidebar = () => {
     const dispatch = useDispatch()
@@ -113,11 +105,6 @@ const FingoSidebar = () => {
         })
     }, [])
 
-    const [searchParams] = useSearchParams()
-    const { skillName, category, subcategory } = useParams()
-    const [currentIndex, setCurrentIndex] = useState(null)
-    const [showAlert, setShowAlert] = useState(false)
-
     const handleProfilePictureUpload = event => {
         const file = event.target.files[0]
         // Perform necessary actions with the uploaded file
@@ -148,7 +135,11 @@ const FingoSidebar = () => {
         <div className='FingoSidebar'>
             <div className='FingoSidebarInner'>
                 <MDBNavbarBrand onClick={() => navigate(`/home`)}>
-                    <img className="FingoSidebarLogo" src={FingoLogo} alt="fingo logo" />
+                    <img
+                        className='FingoSidebarLogo'
+                        src={FingoLogo}
+                        alt='fingo logo'
+                    />
                 </MDBNavbarBrand>
 
                 <div className='FingoSidebarUserInfo'>
@@ -209,7 +200,7 @@ const FingoSidebar = () => {
                             onClick={e => onClickSidebarItem(e, 'home')}
                         >
                             <div className='icon'>
-                                <img src={IcHome} alt="home icon" />
+                                <img src={IcHome} alt='home icon' />
                             </div>
                             <span>Learn</span>
                         </a>
@@ -254,51 +245,6 @@ const FingoSidebar = () => {
                 <div className='FingoSidebarSwitchContainer'>
                     <FingoSwitchTheme />
                 </div>
-
-                <motion.div
-                    animate={showAlert ? 'open' : 'closed'}
-                    variants={variants}
-                >
-                    <div
-                        style={{
-                            display: showAlert ? 'block' : 'none',
-                        }}
-                    >
-                        <div
-                            class='alert alert-warning d-flex justify-content-between'
-                            role='alert'
-                            data-mdb-color='warning'
-                        >
-                            <p class='mb-0'>
-                                <svg
-                                    xmlns='http://www.w3.org/2000/svg'
-                                    width='24'
-                                    height='24'
-                                    viewBox='0 0 24 24'
-                                >
-                                    <g
-                                        fill='none'
-                                        stroke='currentColor'
-                                        stroke-linecap='round'
-                                        stroke-linejoin='round'
-                                        stroke-width='2'
-                                    >
-                                        <rect
-                                            width='18'
-                                            height='11'
-                                            x='3'
-                                            y='11'
-                                            rx='2'
-                                            ry='2'
-                                        />
-                                        <path d='M7 11V7a5 5 0 0 1 10 0v4' />
-                                    </g>
-                                </svg>
-                                Please Login to Unlock Lesson
-                            </p>
-                        </div>
-                    </div>
-                </motion.div>
             </div>
         </div>
     )
