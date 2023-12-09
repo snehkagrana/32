@@ -642,7 +642,7 @@ const Home = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-lg-4 order-md-2 order-1 mb-4 px-md-0">
+          <div className="col-lg-4 order-1 mb-4 px-md-0">
             <FingoWidgetContainer />
             <Card className="profile-info">
               <Card.Body className="d-flex align-items-center p-3">
