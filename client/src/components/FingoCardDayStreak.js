@@ -39,13 +39,18 @@ const FingoCardDayStreak = () => {
 
     const getStreakMessage = useMemo(() => {
         if (user?.streak > 0) {
-            if (user.streak > 1) {
-                return 'You extended your streak before 50.54% of all learners yesterday!'
+            if (
+                user.streak > 1 &&
+                (!user.completedDays || !user.completedDays[dayOfWeek])
+            ) {
+                // User has a streak, but hasn't done a lesson today
+                return 'Continue your streak, complete a lesson!'
             } else {
+                // User has a streak and has done a lesson today
                 return 'Keep going. Complete one more lesson!'
             }
-        } else return 'Do a lesson today to start a new steaks!'
-    }, [user])
+        } else return 'Do a lesson today to start a new streak!'
+    }, [user, dayOfWeek])
 
     const onClick = e => {
         e.preventDefault()
@@ -95,7 +100,7 @@ const FingoCardDayStreak = () => {
                             <a
                                 className={
                                     index === dayOfWeek
-                                        ? 'active'
+                                        ? 'marked'
                                         : index === dayOfWeek &&
                                             newUser &&
                                             parseInt(
@@ -120,14 +125,14 @@ const FingoCardDayStreak = () => {
                                 href='#'
                                 onClick={onClick}
                             >
-                                {index === dayOfWeek && renderSvg()}
-                                {Boolean(index === dayOfWeek &&
-                                    newUser &&
-                                    parseInt(
-                                        sessionStorage.getItem('streak'),
-                                        10
-                                    )) &&
-                                    renderSvg()}
+                                {Boolean(
+                                    index === dayOfWeek &&
+                                        newUser &&
+                                        parseInt(
+                                            sessionStorage.getItem('streak'),
+                                            10
+                                        )
+                                ) && renderSvg()}
                                 {!newUser &&
                                 user &&
                                 user?.completedDays &&

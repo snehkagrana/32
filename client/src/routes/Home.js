@@ -769,7 +769,7 @@ const Home = (props) => {
           </div>
           <div className="col-md-5 order-md-2 order-1 mb-4">
             <FingoWidgetContainer />
-            <Card className="profile-info">
+            {/* <Card className="profile-info">
               <Card.Body className="d-flex align-items-center p-3">
                 <div className="profile-picture">
                   <label htmlFor="profile-picture-upload">
@@ -920,7 +920,7 @@ const Home = (props) => {
                   </div>
                 </div>
               </Card.Body>
-            </Card>
+            </Card> */}
           </div>
         </div>
       </div>

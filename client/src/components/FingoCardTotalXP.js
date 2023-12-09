@@ -13,6 +13,9 @@ const FingoCardTotalXP = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [newUser])
 
+    return null
+
+    /*
     return (
         <div className={`mb-3 FingoCardTotalXP FingoShapeRadius`}>
             <h2 className='title'>Total XP</h2>
@@ -35,7 +38,7 @@ const FingoCardTotalXP = () => {
                                 aria-valuenow={getTotalXP || 0}
                                 aria-valuemin='0'
                                 aria-valuemax='1000'
-                                style={{width: '50%'}}
+                                style={{ width: '50%' }}
                             ></div>
                         </div>
                     </div>
@@ -43,6 +46,7 @@ const FingoCardTotalXP = () => {
             </div>
         </div>
     )
+    */
 }
 
 export default FingoCardTotalXP
