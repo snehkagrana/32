@@ -73,6 +73,7 @@ import { useDispatch } from "react-redux";
 import { useApp, useAuth, useUser } from "src/hooks";
 import FingoCardDayStreak from "src/components/FingoCardDayStreak";
 import FingoCardCompleteTopic from "src/components/FingoCardCompleteTopic";
+import FingoCardDailyXP from "src/components/FingoCardDailyXP";
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -83,8 +84,8 @@ import FingoCardCompleteTopic from "src/components/FingoCardCompleteTopic";
 const Home = (props) => {
   const dispatch = useDispatch();
   const { user_setCompletedDays } = useUser();
-  const { app_setSkills } = useApp()
-  const { auth_setUser } = useAuth()
+  const { app_setSkills, app_setDailyXP, app_setTotalXP } = useApp()
+  const { auth_setUser, auth_setNewUser } = useAuth()
   const { auth_setOpenModalRegister } = useAuth()
   const [searchValue, setSearchValue] = useState("");
   const [userName, setUserName] = useState(null);
@@ -410,6 +411,7 @@ const Home = (props) => {
       if (response.data.redirect == "/login") {
         // console.log("Please log in");
         setNewUser(true);
+        dispatch(auth_setNewUser(true))
         // navigate(`/auth/login`);
       } else if (response.data.redirect == "/updateemail") {
         navigate("/updateemail");
@@ -425,6 +427,8 @@ const Home = (props) => {
         );
 
         setXP({ dailyXP: response.data.user.xp.daily, totalXP: response.data.user.xp.total });
+        dispatch(app_setDailyXP(response.data.user.xp.daily))
+        dispatch(app_setTotalXP(response.data.user.xp.total))
         SetLastCompletedDay(response.data.user.lastCompletedDay);
         // SetCompletedDays(response.data.user.completedDays);
         setProfilePicture(response.data.user.imgPath);
@@ -643,6 +647,7 @@ const Home = (props) => {
           <div className="col-lg-4 order-md-2 order-1 mb-4 px-md-0">
             <FingoCardDayStreak />
             <FingoCardCompleteTopic />
+            <FingoCardDailyXP />
             <Card className="profile-info">
               <Card.Body className="d-flex align-items-center p-3">
                 <div className="profile-picture">

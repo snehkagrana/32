@@ -1,0 +1,95 @@
+.FingoCardDailyXP {
+    padding: 1rem;
+    background-color: #ffffff;
+    border: 2px solid #e7e7e7;
+}
+
+[data-theme='dark'] .FingoCardDailyXP {
+    background-color: #333;
+    border: 2px solid #888888;
+}
+
+.FingoCardDailyXP .title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 1.2rem;
+}
+
+.FingoCardDailyXP .xp-header {
+    margin-bottom: 1rem;
+}
+
+.FingoCardDailyXP .xp-name {
+    color: #444;
+    font-size: 13px;
+}
+
+[data-theme='dark'] .FingoCardDailyXP .xp-name {
+    color: #e2e2e2;
+}
+
+.FingoCardDailyXPInner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.FingoCardDailyXPInner .left {
+    width: 25%;
+}
+
+.FingoCardDailyXPInner .left svg {
+    width: 60%;
+    height: auto;
+    color: #ffd900;
+}
+
+.FingoCardDailyXPInner .xp-header {
+    margin-bottom: 0.5rem;
+}
+
+.FingoCardDailyXPInner .xp-header p {
+    margin-bottom: 0;
+    font-weight: bold;
+    font-size: 17px;
+    color: #333;
+}
+
+.FingoCardDailyXPInner .right {
+    width: 75%;
+}
+
+.FingoCardDailyXPContent {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.FingoCardDailyXPContent .icImg {
+    width: 12%;
+    height: auto;
+    display: flex;
+    justify-content: flex-end;
+    z-index: 1;
+}
+
+.FingoCardDailyXPContent .icImg img {
+    width: 30px;
+    height: auto;
+}
+
+.FingoCardDailyXPContent .progress {
+    width: 88%;
+    position: relative;
+    height: 22px;
+    border-radius: 0.6rem 0 0 0.6rem;
+}
+
+.FingoCardDailyXPContent .xp-count {
+    position: absolute;
+    bottom: 9px;
+    width: 100%;
+    font-size: 13px;
+}

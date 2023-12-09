@@ -5,6 +5,7 @@ const initialState = {
     auth_openModalLogin: false,
     auth_openModalRegister: false,
     user: null,
+    newUser: false,
 }
 
 // Actual Slice
@@ -20,6 +21,9 @@ export const authSlice = createSlice({
         },
         auth_setUser(state, action) {
             state.user = action.payload
+        },
+        auth_setNewUser(state, action) {
+            state.newUser = action.payload
         },
     },
 })
