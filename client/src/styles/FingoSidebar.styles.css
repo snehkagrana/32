@@ -91,7 +91,11 @@
     border-radius: 12px;
     text-transform: uppercase;
     user-select: none;
-    color: #00a7ff;
+    color: #444;
+}
+
+[data-theme='dark'] .FingoSidebar li a {
+    color: #fbfbfb;
 }
 
 [data-theme='dark'] .FingoSidebar li a {
@@ -101,8 +105,8 @@
 .FingoSidebar li a:hover,
 .FingoSidebar li a.active {
     background-color: #ddf4ff;
-    border: 2px solid #8bdaff;
-    color: #00a7ff;
+    border: 2px solid #0084ff;
+    color: #0084ff;
 }
 
 [data-theme='dark'] .FingoSidebar li a:hover,

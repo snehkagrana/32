@@ -204,7 +204,7 @@ const FingoSidebar = () => {
                     <li>
                         <a
                             href='#'
-                            className='FingoShapeRadius active'
+                            className='FingoShapeRadius'
                             onClick={e => onClickSidebarItem(e, 'home')}
                         >
                             <div className='icon'>
