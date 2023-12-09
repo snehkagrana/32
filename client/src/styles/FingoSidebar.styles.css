@@ -2,15 +2,17 @@
     left: -380px;
     width: 320px;
     height: 100vh;
-    overflow-y: scroll;
+    overflow: auto;
     position: fixed;
     z-index: 1;
     background-color: #ffffff;
     padding: 1.2rem 0;
-    -webkit-box-shadow: 0px 4px 33px 0px rgba(0, 0, 0, 0.04);
-    -moz-box-shadow: 0px 4px 33px 0px rgba(0, 0, 0, 0.04);
-    box-shadow: 0px 4px 33px 0px rgba(0, 0, 0, 0.04);
     padding-bottom: 2rem;
+    border-right: 2px solid #e7e7e7;
+}
+
+[data-theme='dark'] .FingoSidebar {
+    border-right: 2px solid #333;
 }
 
 @media (min-width: 576px) {

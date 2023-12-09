@@ -1,7 +1,15 @@
-:root {
+body {
     --color-background: #f5f5f9;
     --color-scrollbar: rgb(224, 224, 224);
     --color-scrollbar-hover: #bbb;
+}
+
+[data-theme='dark'] {
+    body {
+        --color-background: #383838;
+        --color-scrollbar: rgb(93, 93, 93);
+        --color-scrollbar-hover: #060606;
+    }
 }
 
 .FingoShapeRadius {
