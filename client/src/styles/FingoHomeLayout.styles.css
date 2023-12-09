@@ -1,5 +1,10 @@
 .FingoHomeLayout {
     padding-bottom: 78px;
+    background-color: #ffffff;
+}
+
+[data-theme='dark'] .FingoHomeLayout {
+    background-color: #313131;
 }
 
 .FingoHomeLayoutWrapper {
