@@ -4,20 +4,32 @@ import FingoCardDailyXP from './FingoCardDailyXP'
 import FingoCardDayStreak from './FingoCardDayStreak'
 import FingoCardTotalXP from './FingoCardTotalXP'
 import FingoWidgetHeader from './FingoWidgetHeader'
+import { useMediaQuery } from 'src/hooks'
+import { useLocation } from 'react-router-dom'
 
 const FingoWidgetContainer = () => {
-    const [activeTab, setActiveTab] = useState('streak')
+    const location = useLocation()
+    const [activeTab, setActiveTab] = useState('')
+    const matchMobile = useMediaQuery('(max-width: 570px)')
 
+    console.log('location', location)
     return (
         <>
             <FingoWidgetHeader
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
             />
-            {activeTab === 'streak' && <FingoCardDayStreak />}
-            {activeTab === 'diamond' && <FingoCardTotalXP />}
-            <FingoCardCompleteTopic />
-            <FingoCardDailyXP />
+            {!matchMobile && (
+                <>
+                    <FingoCardDayStreak />
+                    <FingoCardTotalXP />
+                    <FingoCardDailyXP />
+                </>
+            )}
+
+            {!location.pathname.includes('/skills/') && (
+                <FingoCardCompleteTopic />
+            )}
         </>
     )
 }

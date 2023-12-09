@@ -19,10 +19,10 @@ const FingoSwitchTheme = () => {
         <div className='FingoSwitchTheme' onClick={onClick}>
             <div
                 className={`FingoSwitchThemeInner ${
-                    app_isDarkTheme ? 'isDark' : 'isLight'
+                    !app_isDarkTheme ? 'isDark' : 'isLight'
                 }`}
             >
-                {app_isDarkTheme ? (
+                {!app_isDarkTheme ? (
                     <svg
                         width='1386'
                         height='679'

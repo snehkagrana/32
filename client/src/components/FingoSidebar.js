@@ -22,7 +22,7 @@ import IcHome from 'src/assets/images/ic_home.png'
 import Swal from 'sweetalert2'
 import FingoUserInfo from './FingoUserInfo'
 
-const FingoSidebar = () => {
+const FingoSidebar = ({ open }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const {
@@ -31,14 +31,17 @@ const FingoSidebar = () => {
         user,
         newUser,
         auth_setNewUser,
-        auth_setUser
+        auth_setUser,
     } = useAuth()
 
-    const { app_setSkills, app_setDailyXP, app_setTotalXP } = useApp()
+    const {
+        app_setSkills,
+        app_setDailyXP,
+        app_setTotalXP,
+        app_setOpenSidebar,
+    } = useApp()
     const role = useRef('')
     const [userName, setUserName] = useState(null)
-
-    const [profilePicture, setProfilePicture] = useState('')
 
     const handleLogOut = () => {
         Swal.fire({
@@ -123,149 +126,141 @@ const FingoSidebar = () => {
         })
     }, [])
 
-    const handleProfilePictureUpload = event => {
-        const file = event.target.files[0]
-        // Perform necessary actions with the uploaded file
-        // For example, you can upload the file to a server or store it in the state
-        const formData = new FormData()
-        formData.append('photo', file)
-
-        Axios({
-            method: 'POST',
-            data: formData,
-            withCredentials: true,
-            url: '/server/updateProfilePhoto',
-        })
-            .then(function (response) {
-                setProfilePicture(response.data.imageUrl)
-            })
-            .catch(error => {
-                console.error('Error uploading file:', error)
-            })
+    const onClickBackdrop = () => {
+        dispatch(app_setOpenSidebar(false))
     }
 
     return (
-        <div className='FingoSidebar'>
-            <div className='FingoSidebarInner'>
-                <MDBNavbarBrand onClick={() => navigate(`/home`)}>
-                    <img
-                        className='FingoSidebarLogo'
-                        src={FingoLogo}
-                        alt='fingo logo'
-                    />
-                </MDBNavbarBrand>
+        <>
+            <div className={`FingoSidebar ${open ? 'visible' : ''}`}>
+                <div className='FingoSidebarInner'>
+                    <MDBNavbarBrand onClick={() => navigate(`/home`)}>
+                        <img
+                            className='FingoSidebarLogo'
+                            src={FingoLogo}
+                            alt='fingo logo'
+                        />
+                    </MDBNavbarBrand>
 
-                <FingoUserInfo />
+                    <FingoUserInfo />
 
-                <ul>
-                    <li>
-                        <a
-                            href='#'
-                            className='FingoShapeRadius'
-                            onClick={e => onClickSidebarItem(e, 'home')}
-                        >
-                            <div className='icon'>
-                                <img src={IcHome} alt='home icon' />
-                            </div>
-                            <span>Learn</span>
-                        </a>
-                    </li>
-                    {newUser && (
-                        <>
-                            <li>
-                                <a
-                                    href='#'
-                                    className='FingoShapeRadius'
-                                    onClick={e =>
-                                        onClickSidebarItem(e, 'login')
-                                    }
-                                >
-                                    <div className='icon'>
-                                        <EnterIcon />
-                                    </div>
-                                    <span>Login</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href='#'
-                                    className='FingoShapeRadius'
-                                    onClick={e =>
-                                        onClickSidebarItem(e, 'register')
-                                    }
-                                >
-                                    <div className='icon'>
-                                        <SignUpIcon />
-                                    </div>
-                                    <span>Register</span>
-                                </a>
-                            </li>
-                        </>
-                    )}
-                    {!newUser && (
+                    <ul>
                         <li>
                             <a
                                 href='#'
                                 className='FingoShapeRadius'
-                                onClick={e => onClickSidebarItem(e, 'logout')}
+                                onClick={e => onClickSidebarItem(e, 'home')}
                             >
                                 <div className='icon'>
-                                    <LogoutIcon />
+                                    <img src={IcHome} alt='home icon' />
                                 </div>
-                                <span>Logout</span>
+                                <span>Learn</span>
                             </a>
                         </li>
-                    )}
-                    {user && user?.role === 'admin' && (
-                        <>
+                        {newUser && (
+                            <>
+                                <li>
+                                    <a
+                                        href='#'
+                                        className='FingoShapeRadius'
+                                        onClick={e =>
+                                            onClickSidebarItem(e, 'login')
+                                        }
+                                    >
+                                        <div className='icon'>
+                                            <EnterIcon />
+                                        </div>
+                                        <span>Login</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href='#'
+                                        className='FingoShapeRadius'
+                                        onClick={e =>
+                                            onClickSidebarItem(e, 'register')
+                                        }
+                                    >
+                                        <div className='icon'>
+                                            <SignUpIcon />
+                                        </div>
+                                        <span>Register</span>
+                                    </a>
+                                </li>
+                            </>
+                        )}
+                        {!newUser && (
                             <li>
                                 <a
                                     href='#'
                                     className='FingoShapeRadius'
-                                    onClick={() => navigate(`/addchapters`)}
+                                    onClick={e =>
+                                        onClickSidebarItem(e, 'logout')
+                                    }
                                 >
-                                    <div className='icon'></div>
-                                    <span> Add Chapters</span>
+                                    <div className='icon'>
+                                        <LogoutIcon />
+                                    </div>
+                                    <span>Logout</span>
                                 </a>
                             </li>
-                            <li>
-                                <a
-                                    href='#'
-                                    className='FingoShapeRadius'
-                                    onClick={() => navigate(`/addinformation`)}
-                                >
-                                    <div className='icon'></div>
-                                    <span> Add Information</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href='#'
-                                    className='FingoShapeRadius'
-                                    onClick={() => navigate(`/addquestions`)}
-                                >
-                                    <div className='icon'></div>
-                                    <span> Add Questions</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href='#'
-                                    className='FingoShapeRadius'
-                                    onClick={() => navigate(`/allskills`)}
-                                >
-                                    <div className='icon'></div>
-                                    <span> Edit/Delete</span>
-                                </a>
-                            </li>
-                        </>
-                    )}
-                </ul>
-                <div className='FingoSidebarSwitchContainer'>
-                    <FingoSwitchTheme />
+                        )}
+                        {user && user?.role === 'admin' && (
+                            <>
+                                <li>
+                                    <a
+                                        href='#'
+                                        className='FingoShapeRadius'
+                                        onClick={() => navigate(`/addchapters`)}
+                                    >
+                                        <div className='icon'></div>
+                                        <span> Add Chapters</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href='#'
+                                        className='FingoShapeRadius'
+                                        onClick={() =>
+                                            navigate(`/addinformation`)
+                                        }
+                                    >
+                                        <div className='icon'></div>
+                                        <span> Add Information</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href='#'
+                                        className='FingoShapeRadius'
+                                        onClick={() =>
+                                            navigate(`/addquestions`)
+                                        }
+                                    >
+                                        <div className='icon'></div>
+                                        <span> Add Questions</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href='#'
+                                        className='FingoShapeRadius'
+                                        onClick={() => navigate(`/allskills`)}
+                                    >
+                                        <div className='icon'></div>
+                                        <span> Edit/Delete</span>
+                                    </a>
+                                </li>
+                            </>
+                        )}
+                    </ul>
+                    <div className='FingoSidebarSwitchContainer'>
+                        <FingoSwitchTheme />
+                    </div>
                 </div>
             </div>
-        </div>
+            {open && <div className='backdrop' onClick={onClickBackdrop} />}
+        </>
     )
 }
 

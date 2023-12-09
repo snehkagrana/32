@@ -25,7 +25,7 @@
 
 .FingoWidgetHeader li {
     display: flex;
-    width: 25%;
+    width: 33.3%;
     align-items: center;
     justify-content: center;
     flex-direction: column;
@@ -35,7 +35,7 @@
     text-decoration: none;
     user-select: none;
     height: 48px;
-    width: 100%;
+    width: 100px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -67,4 +67,15 @@
 .FingoWidgetHeader li a img {
     height: 26px;
     width: auto;
+}
+
+#FingoWidgetHeaderRoot .popover {
+    max-width: 100%;
+    width: 100%;
+    left: 0 !important;
+    transform: translate3d(0px, 46.5px, 0px) !important;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0 1rem;
 }

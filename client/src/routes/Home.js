@@ -72,7 +72,7 @@ import ModalRegister from "../components/auth/ModalRegister";
 import { FingoHomeLayout } from "src/components/layouts";
 import FingoWidgetContainer from "src/components/FingoWidgetContainer";
 import { useDispatch } from "react-redux";
-import { useAuth } from "src/hooks";
+import { useAuth, useMediaQuery } from "src/hooks";
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -503,9 +503,9 @@ const Home = (props) => {
         <title>Home</title>
       </Helmet>
       {/* <Navbar proprole={role} newUser={newUser}/> */}
-      <div className="container">
+      <div className="container-fluid px-2">
         <div className="row h-auto">
-          <div className="col-md-7 order-md-1 order-2 mb-4 px-md-4">
+          <div className="col-md-7 order-md-1 order-2 mb-4">
             <div className="container">
               <div className="row h-auto">
                 <div className="col-12 px-0">
@@ -767,7 +767,7 @@ const Home = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-5 order-md-2 order-1 mb-4 px-0 px-md-2">
+          <div className="col-md-5 order-md-2 order-1 mb-4">
             <FingoWidgetContainer />
             <Card className="profile-info">
               <Card.Body className="d-flex align-items-center p-3">

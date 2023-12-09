@@ -2,9 +2,9 @@
     /* background-color: #ffffff; */
 }
 .sub_category_card_container {
-    background-color: #f9fdf3;
+    /* background-color: #f9fdf3;
+    border: 2px solid #333; */
     border-radius: 0.65rem;
-    border: 2px solid #333;
     padding-bottom: 4rem;
 }
 
@@ -14,9 +14,9 @@
     }
 }
 
-[data-theme='dark'] .sub_category_card_container {
+/* [data-theme='dark'] .sub_category_card_container {
     background-color: #31332e;
-}
+} */
 
 .sub_category_card_container .back-arrow {
     border: none !important;

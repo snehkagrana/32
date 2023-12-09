@@ -62,7 +62,7 @@
 
 .FingoFooter li {
     display: flex;
-    width: 33.3%;
+    width: 25%;
     align-items: center;
     justify-content: center;
     flex-direction: column;
@@ -96,4 +96,14 @@
     background-color: #ddf4ff;
     border: 2px solid #8bdaff;
     color: #00a7ff;
+}
+
+#FingoFooterRoot .popover {
+    max-width: 100%;
+    width: 100%;
+    transform: translate3d(0px, -40px, 0px) !important;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0 1rem;
 }

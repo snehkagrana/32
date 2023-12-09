@@ -1,8 +1,6 @@
 import { useMemo } from 'react'
 import { useApp, useAuth } from 'src/hooks'
 import 'src/styles/FingoCardTotalXP.styles.css'
-import { ReactComponent as LightningIcon } from 'src/assets/svg/lightning-fill.svg'
-import TreasureImg from 'src/assets/images/ic_treasure.png'
 
 const FingoCardTotalXP = () => {
     const { totalXP } = useApp()
@@ -16,7 +14,7 @@ const FingoCardTotalXP = () => {
     }, [newUser])
 
     return (
-        <div className={`mb-6 FingoCardTotalXP FingoShapeRadius`}>
+        <div className={`mb-3 FingoCardTotalXP FingoShapeRadius`}>
             <h2 className='title'>Total XP</h2>
             <div className='FingoCardTotalXPInner'>
                 <div className='left'>

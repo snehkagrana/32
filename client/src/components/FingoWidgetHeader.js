@@ -1,18 +1,16 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import 'src/styles/FingoWidgetHeader.styles.css'
-import { useAuth } from 'src/hooks'
+import { useAuth, useMediaQuery } from 'src/hooks'
 
-import EnglishIcon from 'src/assets/images/united-kingdom.png'
 import JewelsIcon from 'src/assets/images/jewels.png'
-import HeartIcon from 'src/assets/images/heart.png'
+// import HeartIcon from 'src/assets/images/heart.png'
 import StreakIcon from 'src/assets/images/fire-on.png'
+import { Overlay, Popover } from 'react-bootstrap'
+import FingoCardDayStreak from './FingoCardDayStreak'
+import FingoCardTotalXP from './FingoCardTotalXP'
+import { useRef, useState } from 'react'
+import 'src/styles/FingoWidgetHeader.styles.css'
 
 const MENU_ITEMS = [
-    {
-        icon: EnglishIcon,
-        name: 'language',
-        color: '#ff9600',
-    },
     {
         icon: StreakIcon,
         name: 'streak',
@@ -20,32 +18,28 @@ const MENU_ITEMS = [
     },
     {
         icon: JewelsIcon,
-        name: 'diamond',
+        name: 'total_xp',
         color: '#1cb0f6',
     },
-    {
-        icon: HeartIcon,
-        name: 'heart',
-        color: '#ef5350',
-    },
+    // {
+    //     icon: HeartIcon,
+    //     name: 'heart',
+    //     color: '#ef5350',
+    // },
 ]
 
 const FingoWidgetHeader = ({ activeTab, setActiveTab }) => {
     const { user } = useAuth()
+    const [show, setShow] = useState(false)
+    const matchMobile = useMediaQuery('(max-width: 570px)')
+    const [target, setTarget] = useState(null)
+    const ref = useRef(null)
 
-    const onClickSidebarItem = (e, name) => {
+    const onClickItem = (e, name) => {
         e.preventDefault()
-        switch (name) {
-            case 'language':
-                // do something
-                break
-            case 'heart':
-                // do something
-                break
-            default:
-                setActiveTab(name)
-                break
-        }
+        setShow(name === activeTab ? false : true)
+        setTarget(e.target)
+        setActiveTab(name === activeTab ? '' : name)
     }
 
     const getTabLabel = name => {
@@ -53,7 +47,7 @@ const FingoWidgetHeader = ({ activeTab, setActiveTab }) => {
             case 'streak':
                 return user?.streak ? String(user.streak) ?? '0' : undefined
 
-            case 'diamond':
+            case 'total_xp':
                 return user?.xp?.total
                     ? String(user.xp.total) ?? '0'
                     : undefined
@@ -64,27 +58,47 @@ const FingoWidgetHeader = ({ activeTab, setActiveTab }) => {
     }
 
     return (
-        <div className='FingoWidgetHeader'>
-            <div className='FingoWidgetHeaderInner'>
-                <ul>
-                    {MENU_ITEMS.map((i, index) => (
-                        <li key={String(index)}>
-                            <a
-                                href='#'
-                                onClick={e => onClickSidebarItem(e, i.name)}
-                                className={activeTab === i.name ? 'active' : ''}
-                            >
-                                <img src={i.icon} alt='footer icon' />
-                                {getTabLabel(i.name) && (
-                                    <span style={{ color: i.color }}>
-                                        {getTabLabel(i.name)}
-                                    </span>
-                                )}
-                            </a>
-                        </li>
-                    ))}
-                </ul>
+        <div id='FingoWidgetHeaderRoot' ref={ref}>
+            <div className='FingoWidgetHeader' ref={ref}>
+                <div className='FingoWidgetHeaderInner'>
+                    <ul>
+                        {MENU_ITEMS.map((i, index) => (
+                            <li key={String(index)}>
+                                <a
+                                    href='#'
+                                    onClick={e => onClickItem(e, i.name)}
+                                    className={
+                                        activeTab === i.name ? 'active' : ''
+                                    }
+                                >
+                                    <img src={i.icon} alt='footer icon' />
+                                    {getTabLabel(i.name) && (
+                                        <span style={{ color: i.color }}>
+                                            {getTabLabel(i.name)}
+                                        </span>
+                                    )}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
+
+            {matchMobile && (
+                <Overlay
+                    show={show}
+                    target={target}
+                    placement='bottom'
+                    container={ref}
+                    containerPadding={0}
+                    className='FingoPopover'
+                >
+                    <Popover id='popover-contained'>
+                        {activeTab === 'streak' && <FingoCardDayStreak />}
+                        {activeTab === 'total_xp' && <FingoCardTotalXP />}
+                    </Popover>
+                </Overlay>
+            )}
         </div>
     )
 }

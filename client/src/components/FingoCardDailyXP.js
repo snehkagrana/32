@@ -22,7 +22,7 @@ const FingoCardDailyXP = () => {
     }, [newUser, dailyXP, user])
 
     return (
-        <div className={`mb-6 FingoCardDailyXP FingoShapeRadius`}>
+        <div className={`mb-3 FingoCardDailyXP FingoShapeRadius`}>
             <h2 className='title'>Daily Quests</h2>
             <div className='FingoCardDailyXPInner'>
                 <div className='left'>

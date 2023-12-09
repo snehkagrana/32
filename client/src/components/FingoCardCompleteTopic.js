@@ -83,7 +83,7 @@ const FingoCardCompleteTopic = () => {
     }
 
     return (
-        <div className={`mb-6 FingoCardCompleteTopic FingoShapeRadius`}>
+        <div className={`mb-3 FingoCardCompleteTopic FingoShapeRadius`}>
             <Card.Body className='d-flex flex-row align-items-center justify-content-around p-0'>
                 <div className='xp-completed completed-1'>
                     <div className='xp-header'>

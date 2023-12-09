@@ -13,37 +13,8 @@ const FingoUserInfo = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { user, newUser, auth_setNewUser } = useAuth()
-    const role = useRef('')
-    const [userName, setUserName] = useState(null)
 
     const [profilePicture, setProfilePicture] = useState('')
-
-    ////to authenticate user before allowing him to enter the home page
-    ////if he is not redirect him to login page
-    useEffect(() => {
-        Axios({
-            method: 'GET',
-            withCredentials: true,
-            url: '/server/login',
-        }).then(function (response) {
-            if (response.data.redirect == '/login') {
-                // console.log("Please log in");
-                dispatch(auth_setNewUser(true))
-                // navigate(`/auth/login`);
-            } else if (response.data.redirect == '/updateemail') {
-                navigate('/updateemail')
-            } else {
-                // console.log("Already logged in");
-                role.current = response.data.user.role
-                // setUser(response.data.user)
-                setUserName(
-                    response.data.user.displayName
-                        ? response.data.user.displayName?.split(' ')[0]
-                        : response.data.user.email
-                )
-            }
-        })
-    }, [])
 
     const handleProfilePictureUpload = event => {
         const file = event.target.files[0]
@@ -102,7 +73,7 @@ const FingoUserInfo = () => {
                 </div>
                 <div className='user-info ml-3'>
                     <h4 className='user-name'>
-                        Hey, {newUser ? 'Stranger' : userName}!
+                        Hey, {newUser ? 'Stranger' : user?.displayName ?? ''}!
                         <span
                             style={{
                                 display: 'inline-block',

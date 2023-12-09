@@ -69,7 +69,7 @@ const FingoCardDayStreak = () => {
 
     return (
         <div
-            className={`mb-6 FingoCardDayStreak FingoShapeRadius ${
+            className={`mb-3 FingoCardDayStreak FingoShapeRadius ${
                 user?.streak > 0 ? 'highlight' : ''
             }`}
         >
@@ -121,12 +121,12 @@ const FingoCardDayStreak = () => {
                                 onClick={onClick}
                             >
                                 {index === dayOfWeek && renderSvg()}
-                                {index === dayOfWeek &&
+                                {Boolean(index === dayOfWeek &&
                                     newUser &&
                                     parseInt(
                                         sessionStorage.getItem('streak'),
                                         10
-                                    ) &&
+                                    )) &&
                                     renderSvg()}
                                 {!newUser &&
                                 user &&

@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 // Initial state
 const initialState = {
+    openSidebar: false,
     app_paletteMode: localStorage.getItem('theme') ?? 'light',
     skills: [],
     dailyXP: 0,
@@ -13,6 +14,9 @@ export const appSlice = createSlice({
     name: 'app',
     initialState,
     reducers: {
+        app_setOpenSidebar(state, action) {
+            state.openSidebar = action.payload
+        },
         app_setPaletteMode(state, action) {
             state.app_paletteMode = action.payload
         },
