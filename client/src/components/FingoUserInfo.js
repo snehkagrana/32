@@ -4,9 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 
 import nonSignedUp from 'src/images/nonSignedUp'
 import signedUp from 'src/images/pepe.jpg'
-import { batch, useDispatch } from 'react-redux'
-import { useApp, useAuth } from 'src/hooks'
-import Swal from 'sweetalert2'
+import { useDispatch } from 'react-redux'
+import { useAuth } from 'src/hooks'
 
 import 'src/styles/FingoUserInfo.styles.css'
 
@@ -14,44 +13,10 @@ const FingoUserInfo = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { user, newUser, auth_setNewUser } = useAuth()
-    const { app_setSkills, app_setDailyXP, app_setTotalXP } = useApp()
     const role = useRef('')
     const [userName, setUserName] = useState(null)
 
     const [profilePicture, setProfilePicture] = useState('')
-
-    const handleLogOut = () => {
-        Swal.fire({
-            title: 'Are you sure want to logout ?',
-            text: undefined,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes',
-        }).then(result => {
-            if (result.isConfirmed) {
-                Axios({
-                    method: 'GET',
-                    withCredentials: true,
-                    url: '/server/logout',
-                })
-                    .then(res => {
-                        navigate(`/`)
-                    })
-                    .catch(e => {
-                        // whenever it's should redirect to home
-                        navigate(`/`)
-                    })
-
-                batch(() => {
-                    dispatch(app_setSkills([]))
-                    dispatch(app_setDailyXP(0))
-                    dispatch(app_setTotalXP(0))
-                })
-            }
-        })
-    }
 
     ////to authenticate user before allowing him to enter the home page
     ////if he is not redirect him to login page

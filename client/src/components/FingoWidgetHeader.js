@@ -1,9 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useNavigate } from 'react-router-dom'
-import { useMemo, useRef } from 'react'
 import 'src/styles/FingoWidgetHeader.styles.css'
-
-import { useDispatch } from 'react-redux'
 import { useAuth } from 'src/hooks'
 
 import EnglishIcon from 'src/assets/images/united-kingdom.png'
