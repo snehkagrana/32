@@ -1,10 +1,5 @@
-/* eslint-disable jsx-a11y/anchor-has-content */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-// eslint-disable-next-line jsx-a11y/anchor-is-valid
-
-import { useNavigate } from 'react-router-dom'
-import { useMemo, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useMemo } from 'react'
 import { useAuth } from 'src/hooks'
 
 import Fire from 'src/assets/images/fire.png'
@@ -13,7 +8,7 @@ import FireOn from 'src/assets/images/fire-on.png'
 import 'src/styles/FingoCardDayStreak.styles.css'
 
 const FingoCardDayStreak = () => {
-    const { user } = useAuth()
+    const { user, newUser } = useAuth()
 
     const days = [
         'Monday',
@@ -36,6 +31,12 @@ const FingoCardDayStreak = () => {
 
     const dayOfWeek = (today.getDay() + 6) % 7
 
+    const startOfWeek = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate() - dayOfWeek
+    )
+
     const getStreakMessage = useMemo(() => {
         if (user?.streak > 0) {
             if (user.streak > 1) {
@@ -50,6 +51,21 @@ const FingoCardDayStreak = () => {
         e.preventDefault()
         // do nothing
     }
+
+    const renderSvg = () => (
+        <svg
+            xmlns='http://www.w3.org/2000/svg'
+            width='16'
+            height='16'
+            viewBox='0 0 16 16'
+            fill='#fff'
+        >
+            <path
+                fill='#fff'
+                d='M7.3 14.2L.2 9l1.7-2.4l4.8 3.5l6.6-8.5l2.3 1.8z'
+            />
+        </svg>
+    )
 
     return (
         <div
@@ -77,24 +93,50 @@ const FingoCardDayStreak = () => {
                                 {day[0]}
                             </p>
                             <a
-                                className={index === dayOfWeek ? 'active' : ''}
+                                className={
+                                    index === dayOfWeek
+                                        ? 'active'
+                                        : index === dayOfWeek &&
+                                            newUser &&
+                                            parseInt(
+                                                sessionStorage.getItem(
+                                                    'streak'
+                                                ),
+                                                10
+                                            )
+                                          ? 'active'
+                                          : user &&
+                                              user?.completedDays &&
+                                              user?.completedDays?.[index] &&
+                                              new Date(
+                                                  user.completedDays[index]
+                                              ) >= startOfWeek &&
+                                              new Date(
+                                                  user.completedDays[index]
+                                              ) <= today
+                                            ? 'active'
+                                            : ' '
+                                }
                                 href='#'
                                 onClick={onClick}
                             >
-                                {index === dayOfWeek && (
-                                    <svg
-                                        xmlns='http://www.w3.org/2000/svg'
-                                        width='16'
-                                        height='16'
-                                        viewBox='0 0 16 16'
-                                        fill='#fff'
-                                    >
-                                        <path
-                                            fill='#fff'
-                                            d='M7.3 14.2L.2 9l1.7-2.4l4.8 3.5l6.6-8.5l2.3 1.8z'
-                                        />
-                                    </svg>
-                                )}
+                                {index === dayOfWeek && renderSvg()}
+                                {index === dayOfWeek &&
+                                    newUser &&
+                                    parseInt(
+                                        sessionStorage.getItem('streak'),
+                                        10
+                                    ) &&
+                                    renderSvg()}
+                                {!newUser &&
+                                user &&
+                                user?.completedDays &&
+                                user?.completedDays?.[index] &&
+                                new Date(user.completedDays[index]) >=
+                                    startOfWeek &&
+                                new Date(user.completedDays[index]) <= today
+                                    ? renderSvg()
+                                    : ' '}
                             </a>
                         </li>
                     ))}

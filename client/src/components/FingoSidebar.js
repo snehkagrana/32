@@ -31,7 +31,9 @@ const FingoSidebar = () => {
         user,
         newUser,
         auth_setNewUser,
+        auth_setUser
     } = useAuth()
+
     const { app_setSkills, app_setDailyXP, app_setTotalXP } = useApp()
     const role = useRef('')
     const [userName, setUserName] = useState(null)
@@ -66,6 +68,8 @@ const FingoSidebar = () => {
                     dispatch(app_setSkills([]))
                     dispatch(app_setDailyXP(0))
                     dispatch(app_setTotalXP(0))
+                    dispatch(auth_setUser(null))
+                    dispatch(auth_setNewUser(null))
                 })
             }
         })
@@ -211,6 +215,50 @@ const FingoSidebar = () => {
                                 <span>Logout</span>
                             </a>
                         </li>
+                    )}
+                    {user && user?.role === 'admin' && (
+                        <>
+                            <li>
+                                <a
+                                    href='#'
+                                    className='FingoShapeRadius'
+                                    onClick={() => navigate(`/addchapters`)}
+                                >
+                                    <div className='icon'></div>
+                                    <span> Add Chapters</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href='#'
+                                    className='FingoShapeRadius'
+                                    onClick={() => navigate(`/addinformation`)}
+                                >
+                                    <div className='icon'></div>
+                                    <span> Add Information</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href='#'
+                                    className='FingoShapeRadius'
+                                    onClick={() => navigate(`/addquestions`)}
+                                >
+                                    <div className='icon'></div>
+                                    <span> Add Questions</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href='#'
+                                    className='FingoShapeRadius'
+                                    onClick={() => navigate(`/allskills`)}
+                                >
+                                    <div className='icon'></div>
+                                    <span> Edit/Delete</span>
+                                </a>
+                            </li>
+                        </>
                     )}
                 </ul>
                 <div className='FingoSidebarSwitchContainer'>

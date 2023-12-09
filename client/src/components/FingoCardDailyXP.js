@@ -6,16 +6,20 @@ import TreasureImg from 'src/assets/images/ic_treasure.png'
 
 const FingoCardDailyXP = () => {
     const { dailyXP } = useApp()
-    const { newUser } = useAuth()
+    const { newUser, user } = useAuth()
 
     const getDailyXp = useMemo(() => {
-        return newUser
-            ? parseInt(sessionStorage.getItem('xp'), 10) || 0
-            : dailyXP > 60
-              ? 60
-              : dailyXP
+        if (user) {
+            return user?.xp?.daily > 60 ? 60 : user?.xp?.daily || 0
+        } else {
+            return newUser
+                ? parseInt(sessionStorage.getItem('xp'), 10) || 0
+                : dailyXP > 60
+                  ? 60
+                  : dailyXP
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [newUser, dailyXP])
+    }, [newUser, dailyXP, user])
 
     return (
         <div className={`mb-6 FingoCardDailyXP FingoShapeRadius`}>

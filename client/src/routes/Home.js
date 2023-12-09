@@ -67,11 +67,12 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FaCalendar, FaStar, FaTrophy, FaMedal, FaFire } from "react-icons/fa";
 import DarkMode from "../components/DarkMode";
 import { useSnapCarousel } from "react-snap-carousel";
-import LoadingBox from "../components/LoadingBox";
+import ModalLogin from "../components/auth/ModalLogin";
+import ModalRegister from "../components/auth/ModalRegister";
 import { FingoHomeLayout } from "src/components/layouts";
-import { useDispatch } from "react-redux";
-import { useApp, useAuth, useUser } from "src/hooks";
 import FingoWidgetContainer from "src/components/FingoWidgetContainer";
+import { useDispatch } from "react-redux";
+import { useAuth } from "src/hooks";
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -81,10 +82,7 @@ import FingoWidgetContainer from "src/components/FingoWidgetContainer";
 ////join room is the invitation link to which user must be redirected to
 const Home = (props) => {
   const dispatch = useDispatch();
-  const { user_setCompletedDays } = useUser();
-  const { app_setSkills, app_setDailyXP, app_setTotalXP } = useApp()
   const { auth_setUser, auth_setNewUser } = useAuth()
-  const { auth_setOpenModalRegister } = useAuth()
   const [searchValue, setSearchValue] = useState("");
   const [userName, setUserName] = useState(null);
   const [skills, setSkills] = useState([]);
@@ -299,8 +297,7 @@ const Home = (props) => {
       },
     }).then((res) => {
       // console.log('res.data skills', res.data.data);
-      dispatch(app_setSkills(res.data.data))
-      setSkills(res.data.data)
+      setSkills(res.data.data);
       // setSelectedSkill(res.data.data[0].skill);
       // console.log('last_played', last_played);
       if (Object.entries(last_played).length > 0) {
@@ -417,6 +414,7 @@ const Home = (props) => {
         // console.log("Already logged in");
         role.current = response.data.user.role;
         setUser(response.data.user);
+        dispatch(auth_setNewUser(false))
         dispatch(auth_setUser(response.data.user))
         setUserName(
           response.data.user.displayName
@@ -425,16 +423,12 @@ const Home = (props) => {
         );
 
         setXP({ dailyXP: response.data.user.xp.daily, totalXP: response.data.user.xp.total });
-        dispatch(app_setDailyXP(response.data.user.xp.daily))
-        dispatch(app_setTotalXP(response.data.user.xp.total))
         SetLastCompletedDay(response.data.user.lastCompletedDay);
-        // SetCompletedDays(response.data.user.completedDays);
+        SetCompletedDays(response.data.user.completedDays);
         setProfilePicture(response.data.user.imgPath);
         setLastPlayed(response.data.user.last_played);
         getSkills(response.data.user.last_played);
         // console.log("user is", response.data.user);
-
-        dispatch(user_setCompletedDays(response?.data?.user?.completedDays ?? []))
       }
     });
   }, []);
@@ -503,20 +497,15 @@ const Home = (props) => {
     }
   }
 
-  const onClickSignUp = () => {
-    dispatch(auth_setOpenModalRegister(true))
-  }
-
-  console.log("completedDays",completedDays)
-
   return (
     <FingoHomeLayout>
       <Helmet>
         <title>Home</title>
       </Helmet>
-      <div className="">
+      {/* <Navbar proprole={role} newUser={newUser}/> */}
+      <div className="container">
         <div className="row h-auto">
-          <div className="col-lg-8 order-md-1 order-2 mb-4">
+          <div className="col-md-7 order-md-1 order-2 mb-4 px-md-4">
             <div className="container">
               <div className="row h-auto">
                 <div className="col-12 px-0">
@@ -640,58 +629,60 @@ const Home = (props) => {
                   </div>
                 </div>
               </div>
-
-              <div className="row h-auto">
-                <div className="col-md-8">
-                    <h3 style={{ fontWeight: '800' }}>
-                      {newUser ? 'Explore  ': 'Explore'}
-                      <span style={{ fontSize: '65%'}}>
-                        {newUser ? '(Signup for free ' : ''}
-                        {/* <span style={{ color:'#28a745', textDecoration: 'underline', textDecorationColor: '#28a745'}}>{newUser?'free' : ''}</span> */}
-                        <span>{newUser?' to get full access - ' : ''}</span>
-                        <span>{newUser?<a href="#" onClick={onClickSignUp} style={{color:'#28a745'}}>click here</a> : ''}</span>
-                        <span>{newUser?')' : ''}</span>
-                      </span>
-                      
-                    </h3>
-                </div>
-                <div className="row mt-1 w-100">
-                  <div className="col-12 px-0">
-                    {
-                      skills.length ? (
-                        <div className="snapCarousel">
-                          <ul
-                            ref={scrollRef}
-                            style={{
-                              display: 'flex',
-                              overflowY: 'hidden',
-                              scrollSnapType: 'x mandatory',
-                              padding: "0",
-                              marginLeft: '15px'
-                            }}
-                          >
-                            {
-                              skills.map((skill, index) => (
-                                <li key={index} style={{ listStyleType: "none" }}>
-                                  <button
-                                    className={"rounded-rectangle " + (skill.skill === selectedSkill ? "active " : " ") + `color${index + 1}`}
-                                    value={skill.skill}
-                                    onClick={(e) => {
-                                      setSelectedSkill(e.target.value);
-                                      getCategories(e.target.value);
-                                    }}
-                                  >
-                                    {skill.skill ? skill.skill.split("_").join(" ") : ""}
-                                  </button>
-                                </li>
-                              ))
-                            }
-                          </ul>
-                        </div>
-                      ) :  <LoadingBox spinnerSize={32} height={120} title="Wait for it..." />
-                    }
+              <div className="row">
+                  <div className="col-md-8 px-0 mb-2">
+                  <h3 style={{ fontWeight: '800' }}>
+                    {newUser ? 'Explore  ': 'Explore'}
+                    <span style={{ fontSize: '65%'}}>
+                      {newUser ? '(Signup for free ' : ''}
+                      {/* <span style={{ color:'#28a745', textDecoration: 'underline', textDecorationColor: '#28a745'}}>{newUser?'free' : ''}</span> */}
+                      <span>{newUser?' to get full access - ' : ''}</span>
+                      <span>{newUser?<a href="#" onClick={() => setShowModalRegister(true)} style={{color:'#28a745'}}>click here</a> : ''}</span>
+                      <span>{newUser?')' : ''}</span>
+                    </span>
+                    
+                  </h3>
                   </div>
-                  <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-xl-3 justify-content-center w-100">
+              </div>
+              <div className="row">
+                <div className="col-12 px-0">
+                  {
+                    skills.length ? (
+                      <div className="snapCarousel">
+                        <ul
+                          ref={scrollRef}
+                          style={{
+                            display: 'flex',
+                            overflowY: 'hidden',
+                            scrollSnapType: 'x mandatory',
+                            padding: "0",
+                            width: "100%",
+                            // marginLeft: '15px'
+                          }}
+                        >
+                          {
+                            skills.map((skill, index) => (
+                              <li key={index} style={{ listStyleType: "none" }}>
+                                <button
+                                  className={"rounded-rectangle " + (skill.skill === selectedSkill ? "active " : " ") + `color${index + 1}`}
+                                  value={skill.skill}
+                                  onClick={(e) => {
+                                    setSelectedSkill(e.target.value);
+                                    getCategories(e.target.value);
+                                  }}
+                                >
+                                  {skill.skill ? skill.skill.split("_").join(" ") : ""}
+                                </button>
+                              </li>
+                            ))
+                          }
+                        </ul>
+                      </div>
+                    ) : <p>Wait for it...</p>
+                  }
+                </div>
+                <div className="col-md-8">
+                  <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-xl-3 justify-content-center">
                     {
                       (categories.length && selectedSkill) ? (
                         categories.map((category, idx) => {
@@ -776,7 +767,7 @@ const Home = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-lg-4 order-1 mb-4">
+          <div className="col-md-5 order-md-2 order-1 mb-4 px-0 px-md-2">
             <FingoWidgetContainer />
             <Card className="profile-info">
               <Card.Body className="d-flex align-items-center p-3">
