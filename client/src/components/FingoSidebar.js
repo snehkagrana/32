@@ -19,6 +19,8 @@ import { useApp, useAuth } from 'src/hooks'
 import FingoLogo from 'src/images/fingo-logo.png'
 import IcHome from 'src/assets/images/ic_home.png'
 
+import Swal from 'sweetalert2'
+
 const FingoSidebar = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -36,23 +38,35 @@ const FingoSidebar = () => {
     const [profilePicture, setProfilePicture] = useState('')
 
     const handleLogOut = () => {
-        Axios({
-            method: 'GET',
-            withCredentials: true,
-            url: '/server/logout',
-        })
-            .then(res => {
-                navigate(`/`)
-            })
-            .catch(e => {
-                // whenever it's should redirect to home
-                navigate(`/`)
-            })
+        Swal.fire({
+            title: 'Are you sure want to logout ?',
+            text: undefined,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes',
+        }).then(result => {
+            if (result.isConfirmed) {
+                Axios({
+                    method: 'GET',
+                    withCredentials: true,
+                    url: '/server/logout',
+                })
+                    .then(res => {
+                        navigate(`/`)
+                    })
+                    .catch(e => {
+                        // whenever it's should redirect to home
+                        navigate(`/`)
+                    })
 
-        batch(() => {
-            dispatch(app_setSkills([]))
-            dispatch(app_setDailyXP(0))
-            dispatch(app_setTotalXP(0))
+                batch(() => {
+                    dispatch(app_setSkills([]))
+                    dispatch(app_setDailyXP(0))
+                    dispatch(app_setTotalXP(0))
+                })
+            }
         })
     }
 
@@ -231,18 +245,20 @@ const FingoSidebar = () => {
                             </li>
                         </>
                     )}
-                    <li>
-                        <a
-                            href='#'
-                            className='FingoShapeRadius'
-                            onClick={e => onClickSidebarItem(e, 'logout')}
-                        >
-                            <div className='icon'>
-                                <LogoutIcon />
-                            </div>
-                            <span>Logout</span>
-                        </a>
-                    </li>
+                    {!newUser && (
+                        <li>
+                            <a
+                                href='#'
+                                className='FingoShapeRadius'
+                                onClick={e => onClickSidebarItem(e, 'logout')}
+                            >
+                                <div className='icon'>
+                                    <LogoutIcon />
+                                </div>
+                                <span>Logout</span>
+                            </a>
+                        </li>
+                    )}
                 </ul>
                 <div className='FingoSidebarSwitchContainer'>
                     <FingoSwitchTheme />
