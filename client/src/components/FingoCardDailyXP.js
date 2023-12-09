@@ -15,6 +15,8 @@ const FingoCardDailyXP = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [newUser])
 
+    console.log('newUser', newUser)
+
     return (
         <div className={`mb-6 FingoCardDailyXP FingoShapeRadius`}>
             <h2 className='title'>Daily Quests</h2>
@@ -40,9 +42,12 @@ const FingoCardDailyXP = () => {
                             <div
                                 class='progress-bar bg-warning'
                                 role='progressbar'
-                                aria-valuenow={40}
+                                aria-valuenow={getDailyXp}
                                 aria-valuemin='0'
                                 aria-valuemax='60'
+                                style={{
+                                    width: `${getDailyXp / 60 * 100}%`,
+                                }}
                             ></div>
                         </div>
                         <div className='icImg'>

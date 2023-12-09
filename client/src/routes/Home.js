@@ -71,9 +71,7 @@ import LoadingBox from "../components/LoadingBox";
 import { FingoHomeLayout } from "src/components/layouts";
 import { useDispatch } from "react-redux";
 import { useApp, useAuth, useUser } from "src/hooks";
-import FingoCardDayStreak from "src/components/FingoCardDayStreak";
-import FingoCardCompleteTopic from "src/components/FingoCardCompleteTopic";
-import FingoCardDailyXP from "src/components/FingoCardDailyXP";
+import FingoWidgetContainer from "src/components/FingoWidgetContainer";
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -645,9 +643,7 @@ const Home = (props) => {
             </div>
           </div>
           <div className="col-lg-4 order-md-2 order-1 mb-4 px-md-0">
-            <FingoCardDayStreak />
-            <FingoCardCompleteTopic />
-            <FingoCardDailyXP />
+            <FingoWidgetContainer />
             <Card className="profile-info">
               <Card.Body className="d-flex align-items-center p-3">
                 <div className="profile-picture">
