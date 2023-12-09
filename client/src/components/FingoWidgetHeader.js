@@ -43,6 +43,9 @@ const FingoWidgetHeader = ({ activeTab, setActiveTab }) => {
             case 'language':
                 // do something
                 break
+            case 'heart':
+                // do something
+                break
             default:
                 setActiveTab(name)
                 break
@@ -57,11 +60,6 @@ const FingoWidgetHeader = ({ activeTab, setActiveTab }) => {
             case 'diamond':
                 return user?.xp?.total
                     ? String(user.xp.total) ?? '0'
-                    : undefined
-
-            case 'heart':
-                return user?.xp?.daily
-                    ? String(user.xp.daily) ?? '0'
                     : undefined
 
             default:
