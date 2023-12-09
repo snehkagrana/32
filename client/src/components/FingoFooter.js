@@ -1,8 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import 'src/styles/FingoFooter.styles.css'
-
-import { useDispatch } from 'react-redux'
 
 import IcHome from 'src/assets/images/ic_home.png'
 // import IcTraining from 'src/assets/images/ic_training.png'
@@ -26,7 +24,7 @@ const FOOTER_ITEMS = [
     // },
     {
         icon: IcTreasure,
-        name: 'daily quest',
+        name: 'daily-quest',
     },
     // {
     //     icon: IcStore,
@@ -39,8 +37,8 @@ const FOOTER_ITEMS = [
 ]
 
 const FingoFooter = () => {
-    const dispatch = useDispatch()
     const navigate = useNavigate()
+    const location = useLocation()
 
     const onClickMenu = (e, name) => {
         e.preventDefault()
@@ -51,13 +49,18 @@ const FingoFooter = () => {
             case 'profile':
                 navigate('/profile')
                 break
-            case 'daily quest':
+            case 'daily-quest':
                 navigate('/daily-quest')
                 break
             default:
                 // do nothing
                 break
         }
+    }
+
+    const getActiveRouteName = name => {
+        console.log('name', name)
+        return location.pathname.includes(name)
     }
 
     return (
@@ -68,7 +71,9 @@ const FingoFooter = () => {
                         <li key={String(index)}>
                             <a
                                 href='#'
-                                className='FingoShapeRadius'
+                                className={`FingoShapeRadius ${
+                                    getActiveRouteName(i.name) ? 'active' : ''
+                                }`}
                                 onClick={e => onClickMenu(e, i.name)}
                             >
                                 <img src={i.icon} alt='footer icon' />
