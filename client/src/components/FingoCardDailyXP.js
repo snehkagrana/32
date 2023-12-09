@@ -11,7 +11,9 @@ const FingoCardDailyXP = () => {
     const getDailyXp = useMemo(() => {
         return newUser
             ? parseInt(sessionStorage.getItem('xp'), 10) || 0
-            : dailyXP
+            : dailyXP > 60
+              ? 60
+              : dailyXP
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [newUser, dailyXP])
 
