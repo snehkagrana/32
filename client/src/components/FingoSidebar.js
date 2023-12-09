@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 // eslint-disable-next-line jsx-a11y/anchor-is-valid
 import Axios from 'axios'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import 'src/styles/FingoSidebar.styles.css'
 import { MDBNavbarBrand } from 'mdb-react-ui-kit'
@@ -13,8 +13,8 @@ import { ReactComponent as LogoutIcon } from 'src/assets/svg/loudly-crying-face.
 import { ReactComponent as EnterIcon } from 'src/assets/svg/enter.svg'
 import { ReactComponent as SignUpIcon } from 'src/assets/svg/user-cirlce-add.svg'
 import FingoSwitchTheme from './FingoSwitchTheme'
-import { useDispatch } from 'react-redux'
-import { useAuth } from 'src/hooks'
+import { batch, useDispatch } from 'react-redux'
+import { useApp, useAuth } from 'src/hooks'
 
 import FingoLogo from 'src/images/fingo-logo.png'
 import IcHome from 'src/assets/images/ic_home.png'
@@ -22,12 +22,16 @@ import IcHome from 'src/assets/images/ic_home.png'
 const FingoSidebar = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { user } = useAuth()
-    const { auth_setOpenModalLogin, auth_setOpenModalRegister } = useAuth()
+    const {
+        auth_setOpenModalLogin,
+        auth_setOpenModalRegister,
+        user,
+        newUser,
+        auth_setNewUser,
+    } = useAuth()
+    const { app_setSkills, app_setDailyXP, app_setTotalXP } = useApp()
     const role = useRef('')
-    const [newUser, setNewUser] = useState(false)
     const [userName, setUserName] = useState(null)
-    // const [user, setUser] = useState(null)
 
     const [profilePicture, setProfilePicture] = useState('')
 
@@ -44,6 +48,12 @@ const FingoSidebar = () => {
                 // whenever it's should redirect to home
                 navigate(`/`)
             })
+
+        batch(() => {
+            dispatch(app_setSkills([]))
+            dispatch(app_setDailyXP(0))
+            dispatch(app_setTotalXP(0))
+        })
     }
 
     const onClickSidebarItem = (e, name) => {
@@ -77,7 +87,7 @@ const FingoSidebar = () => {
         }).then(function (response) {
             if (response.data.redirect == '/login') {
                 // console.log("Please log in");
-                setNewUser(true)
+                dispatch(auth_setNewUser(true))
                 // navigate(`/auth/login`);
             } else if (response.data.redirect == '/updateemail') {
                 navigate('/updateemail')
@@ -90,17 +100,6 @@ const FingoSidebar = () => {
                         ? response.data.user.displayName?.split(' ')[0]
                         : response.data.user.email
                 )
-
-                // setXP({
-                //     dailyXP: response.data.user.xp.daily,
-                //     totalXP: response.data.user.xp.total,
-                // })
-                // SetLastCompletedDay(response.data.user.lastCompletedDay)
-                // SetCompletedDays(response.data.user.completedDays)
-                // setProfilePicture(response.data.user.imgPath)
-                // setLastPlayed(response.data.user.last_played)
-                // getSkills(response.data.user.last_played)
-                // console.log("user is", response.data.user);
             }
         })
     }, [])
@@ -124,11 +123,6 @@ const FingoSidebar = () => {
             .catch(error => {
                 console.error('Error uploading file:', error)
             })
-    }
-
-    const variants = {
-        open: { opacity: 1, y: 0 },
-        closed: { opacity: 0, y: '-120px' },
     }
 
     return (
@@ -205,30 +199,38 @@ const FingoSidebar = () => {
                             <span>Learn</span>
                         </a>
                     </li>
-                    <li>
-                        <a
-                            href='#'
-                            className='FingoShapeRadius'
-                            onClick={e => onClickSidebarItem(e, 'login')}
-                        >
-                            <div className='icon'>
-                                <EnterIcon />
-                            </div>
-                            <span>Login</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href='#'
-                            className='FingoShapeRadius'
-                            onClick={e => onClickSidebarItem(e, 'register')}
-                        >
-                            <div className='icon'>
-                                <SignUpIcon />
-                            </div>
-                            <span>Register</span>
-                        </a>
-                    </li>
+                    {newUser && (
+                        <>
+                            <li>
+                                <a
+                                    href='#'
+                                    className='FingoShapeRadius'
+                                    onClick={e =>
+                                        onClickSidebarItem(e, 'login')
+                                    }
+                                >
+                                    <div className='icon'>
+                                        <EnterIcon />
+                                    </div>
+                                    <span>Login</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href='#'
+                                    className='FingoShapeRadius'
+                                    onClick={e =>
+                                        onClickSidebarItem(e, 'register')
+                                    }
+                                >
+                                    <div className='icon'>
+                                        <SignUpIcon />
+                                    </div>
+                                    <span>Register</span>
+                                </a>
+                            </li>
+                        </>
+                    )}
                     <li>
                         <a
                             href='#'

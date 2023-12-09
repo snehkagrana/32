@@ -13,9 +13,7 @@ const FingoCardDailyXP = () => {
             ? parseInt(sessionStorage.getItem('xp'), 10) || 0
             : dailyXP
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [newUser])
-
-    console.log('newUser', newUser)
+    }, [newUser, dailyXP])
 
     return (
         <div className={`mb-6 FingoCardDailyXP FingoShapeRadius`}>
@@ -46,7 +44,7 @@ const FingoCardDailyXP = () => {
                                 aria-valuemin='0'
                                 aria-valuemax='60'
                                 style={{
-                                    width: `${getDailyXp / 60 * 100}%`,
+                                    width: `${(getDailyXp / 60) * 100}%`,
                                 }}
                             ></div>
                         </div>
