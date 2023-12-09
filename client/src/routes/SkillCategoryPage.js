@@ -16,6 +16,8 @@ import Navbar from "../components/Navbar";
 import  "../index.css";
 import '../styles/SkillCategoryPage.styles.css'
 import { FingoHomeLayout } from "src/components/layouts";
+import CompleteIcon from 'src/assets/images/complete.png'
+import UncompleteIcon from 'src/assets/images/uncomplete.png'
 
 const SkillCategoryPage = () => {
     const { skillName } = useParams();
@@ -119,12 +121,6 @@ const SkillCategoryPage = () => {
         }
     }, [searchParams]);
 
-    function scrollToTop(e) {
-        if(rootElement?.current) {
-            rootElement.current?.scrollIntoView({ behavior: 'smooth' });
-        }
-    }
-
     return (
         <FingoHomeLayout>
             <div className="sub_category_card_container_root" ref={rootElement}>
@@ -166,9 +162,11 @@ const SkillCategoryPage = () => {
                                                     <div className={`sub_category_chapter_icon-${checkIsCompleted.current.includes(
                                                         sub_category.sub_category
                                                     ) ? "complete": "incomplete"}`}>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m8.587 8.236l2.598-5.232a.911.911 0 0 1 1.63 0l2.598 5.232l5.808.844a.902.902 0 0 1 .503 1.542l-4.202 4.07l.992 5.75c.127.738-.653 1.3-1.32.952L12 18.678l-5.195 2.716c-.666.349-1.446-.214-1.319-.953l.992-5.75l-4.202-4.07a.902.902 0 0 1 .503-1.54l5.808-.845Z"/></svg>
+                                                        <img src={checkIsCompleted.current.includes(
+                                                            sub_category.sub_category
+                                                        ) ? CompleteIcon : UncompleteIcon} alt="icon" />
                                                     </div>
-                                                    <div className="sub_category_chapter_ic_circle" />
+                                                    {/* <div className="sub_category_chapter_ic_circle" /> */}
                                                 </div>
                                                 <h3>{sub_category.sub_category.split("_").join(" ")}{" "}</h3>
                                             </div>
@@ -198,13 +196,6 @@ const SkillCategoryPage = () => {
                                         </Col>
                                     ))}
                                 </Row>
-
-                                { subCategories.length > 0 && (
-                                    <button onClick={scrollToTop} className="sub_category_back_to_top_btn">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none"><path d="M24 0v24H0V0h24ZM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018Zm.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022Zm-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01l-.184-.092Z"/><path fill="currentColor" d="M13.06 3.283a1.5 1.5 0 0 0-2.12 0L5.281 8.939a1.5 1.5 0 0 0 2.122 2.122L10.5 7.965V19.5a1.5 1.5 0 0 0 3 0V7.965l3.096 3.096a1.5 1.5 0 1 0 2.122-2.122L13.06 3.283Z"/></g></svg>
-                                    </button>
-                                )}
-
                             </div>
                         </Col>
                     </Row>
