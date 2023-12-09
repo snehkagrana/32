@@ -1,65 +1,58 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useNavigate } from 'react-router-dom'
-import { useRef } from 'react'
 import 'src/styles/FingoFooter.styles.css'
 
 import { useDispatch } from 'react-redux'
-import { useAuth } from 'src/hooks'
 
 import IcHome from 'src/assets/images/ic_home.png'
-import IcTraining from 'src/assets/images/ic_training.png'
-import IcGuard from 'src/assets/images/ic_guard.png'
+// import IcTraining from 'src/assets/images/ic_training.png'
+// import IcGuard from 'src/assets/images/ic_guard.png'
 import IcTreasure from 'src/assets/images/ic_treasure.png'
-import IcStore from 'src/assets/images/ic_store.png'
+// import IcStore from 'src/assets/images/ic_store.png'
 import IcUser from 'src/assets/images/ic_user.png'
 
 const FOOTER_ITEMS = [
     {
         icon: IcHome,
-        path: 'home',
+        name: 'home',
     },
-    {
-        icon: IcTraining,
-        path: '',
-    },
-    {
-        icon: IcGuard,
-        path: '',
-    },
+    // {
+    //     icon: IcTraining,
+    //     name: '',
+    // },
+    // {
+    //     icon: IcGuard,
+    //     name: '',
+    // },
     {
         icon: IcTreasure,
-        path: '',
+        name: 'daily quest',
     },
-    {
-        icon: IcStore,
-        path: '',
-    },
+    // {
+    //     icon: IcStore,
+    //     name: '',
+    // },
     {
         icon: IcUser,
-        path: '',
+        name: 'profile',
     },
 ]
 
 const FingoFooter = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { auth_setOpenModalLogin, auth_setOpenModalRegister } = useAuth()
-    const role = useRef('')
 
-    const onClickSidebarItem = (e, name) => {
+    const onClickMenu = (e, name) => {
         e.preventDefault()
         switch (name) {
             case 'home':
                 navigate('/home')
                 break
-            case 'login':
-                dispatch(auth_setOpenModalLogin(true))
+            case 'profile':
+                navigate('/profile')
                 break
-            case 'register':
-                dispatch(auth_setOpenModalRegister(true))
-                break
-            case 'logout':
-                // do nothing
+            case 'daily quest':
+                navigate('/daily-quest')
                 break
             default:
                 // do nothing
@@ -76,7 +69,7 @@ const FingoFooter = () => {
                             <a
                                 href='#'
                                 className='FingoShapeRadius'
-                                onClick={e => onClickSidebarItem(e, i.path)}
+                                onClick={e => onClickMenu(e, i.name)}
                             >
                                 <img src={i.icon} alt='footer icon' />
                             </a>

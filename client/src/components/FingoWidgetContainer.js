@@ -16,8 +16,8 @@ const FingoWidgetContainer = () => {
             />
             {activeTab === 'streak' && <FingoCardDayStreak />}
             {activeTab === 'diamond' && <FingoCardTotalXP />}
-            {activeTab === 'heart' && <FingoCardDailyXP />}
             <FingoCardCompleteTopic />
+            <FingoCardDailyXP />
         </>
     )
 }

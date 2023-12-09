@@ -20,6 +20,7 @@ import FingoLogo from 'src/images/fingo-logo.png'
 import IcHome from 'src/assets/images/ic_home.png'
 
 import Swal from 'sweetalert2'
+import FingoUserInfo from './FingoUserInfo'
 
 const FingoSidebar = () => {
     const dispatch = useDispatch()
@@ -150,55 +151,7 @@ const FingoSidebar = () => {
                     />
                 </MDBNavbarBrand>
 
-                <div className='FingoSidebarUserInfo'>
-                    <div className='d-flex align-items-center p-3'>
-                        <div className='profile-picture'>
-                            <label htmlFor='profile-picture-upload'>
-                                {newUser ? (
-                                    <img
-                                        src={nonSignedUp}
-                                        alt='Profile'
-                                        className='rounded-circle'
-                                    />
-                                ) : user?.imgPath ? (
-                                    <img
-                                        src={user.imgPath}
-                                        alt='Profile'
-                                        className='rounded-circle'
-                                    />
-                                ) : (
-                                    <img
-                                        src={signedUp}
-                                        alt='Profile'
-                                        className='rounded-circle'
-                                    />
-                                )}
-                            </label>
-                            <input
-                                id='profile-picture-upload'
-                                type='file'
-                                accept='image/*'
-                                style={{ display: 'none' }}
-                                onChange={handleProfilePictureUpload}
-                                disabled={newUser}
-                            />
-                        </div>
-                        <div className='user-info ml-3'>
-                            <h4 className='user-name'>
-                                Hey, {newUser ? 'Stranger' : userName}!
-                                <span
-                                    style={{
-                                        display: 'inline-block',
-                                        animation: 'wave-animation 3s infinite',
-                                        transformOrigin: '70% 100%',
-                                    }}
-                                >
-                                    👋
-                                </span>
-                            </h4>
-                        </div>
-                    </div>
-                </div>
+                <FingoUserInfo />
 
                 <ul>
                     <li>
