@@ -11,7 +11,13 @@
     font-weight: 100;
     position: absolute;
     position: fixed;
-    bottom: 24px;
+    bottom: 92px;
     right: 32px;
     z-index: 1000;
+}
+
+@media (min-width: 576px) {
+    .FingoBackToTop {
+        bottom: 24px;
+    }
 }
