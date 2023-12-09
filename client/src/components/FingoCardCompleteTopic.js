@@ -1,15 +1,10 @@
-import { useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
 import { useApp, useAuth } from 'src/hooks'
 import { Card } from 'react-bootstrap'
 import 'src/styles/FingoCardCompleteTopic.styles.css'
 
 const FingoCardCompleteTopic = () => {
-    const dispatch = useDispatch()
     const { skills } = useApp()
-    const { user } = useAuth()
-    const role = useRef('')
-    const [newUser, setNewUser] = useState(false)
+    const { user, newUser } = useAuth()
 
     const storedScores = newUser
         ? JSON.parse(sessionStorage.getItem('scores')) || []
