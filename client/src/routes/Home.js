@@ -681,7 +681,7 @@ const Home = (props) => {
                     ) : <p>Wait for it...</p>
                   }
                 </div>
-                <div className="col-md-8">
+                <div className="col-12">
                   <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-xl-3 justify-content-center">
                     {
                       (categories.length && selectedSkill) ? (
