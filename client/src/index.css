@@ -33,7 +33,7 @@ code {
     display: flex;
     align-items: center;
     width: 100%;
-    border: 1px solid #ced4da;
+    border: 2px solid rgb(109 109 109 / 10%);
     overflow: hidden;
     border-radius: 25px;
     background-color: white;
@@ -221,6 +221,7 @@ input[type=search]:focus {
 
 .homePage-welcome-card {
     overflow: hidden;
+    border: 2px solid rgb(109 109 109 / 10%) !important;
 }
 
 /*.homePage-welcome-card:hover::after {*/
@@ -351,7 +352,7 @@ input[type=search]:focus {
 }
 
 .snapCarousel > ul {
-    border: 1px solid rgba(0,0,0,.125);
+    border: 2px solid rgb(109 109 109 / 10%);
     border-radius: 0.25rem;
 }
 
