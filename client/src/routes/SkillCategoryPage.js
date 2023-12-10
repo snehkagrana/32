@@ -60,11 +60,12 @@ const SkillCategoryPage = () => {
     };
 
     const handleSubCategorySelection = (sub_category) => {
-        // console.log("handleSubCategorySelection",sub_category);
         const newUser = searchParams.get("newUser");
-        navigate(
-            `/skills/${skillName}/${categoryName}/${sub_category}/information/${0}${newUser ? "?newUser=true" : ""}`
-        );
+        setTimeout(() => {
+            navigate(
+                `/skills/${skillName}/${categoryName}/${sub_category}/information/${0}${newUser ? "?newUser=true" : ""}`
+            );
+        }, 300);
     };
 
     ////to authenticate user before allowing him to enter the home page
@@ -136,25 +137,18 @@ const SkillCategoryPage = () => {
                             <Row className="justify-content-md-center">
                                 <Col>
                                     <div className="sub_category_card_container">
-                                        <button className="back-arrow" onClick={handleClick}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M5.841 5.28a.75.75 0 0 0-1.06-1.06L1.53 7.47L1 8l.53.53l3.25 3.25a.75.75 0 0 0 1.061-1.06l-1.97-1.97H14.25a.75.75 0 0 0 0-1.5H3.871l1.97-1.97Z" clip-rule="evenodd"/></svg>
-                                        </button>
-                                        <h2 className="text-center" style={{ color: "#000" }}>
-                                            <Badge pill bg="light">
+                                        <div className="sub_category_card_header">
+                                            <button className="back-arrow" onClick={handleClick}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M5.841 5.28a.75.75 0 0 0-1.06-1.06L1.53 7.47L1 8l.53.53l3.25 3.25a.75.75 0 0 0 1.061-1.06l-1.97-1.97H14.25a.75.75 0 0 0 0-1.5H3.871l1.97-1.97Z" clip-rule="evenodd"/></svg>
+                                            </button>
+                                            <h2 className="text-center">
                                                 {skillName.split("_").join(" ")} {":"}{" "}
                                                 {categoryName.split("_").join(" ")}
-                                            </Badge>
-                                        </h2>
-                                        <Row
-                                            xs={1}
-                                            className="g-4 mt-5"
-                                            style={{
-                                                width: "60%",
-                                                marginLeft: "20%",
-                                                borderRadius: "15px",
-                                            }}>
+                                            </h2>
+                                        </div>
+                                        <Row className="sub_category_card_content_row">
                                             {subCategories.map((sub_category, i) => (
-                                                <Col key={i}>
+                                                <div className="sub_category_card_content_item" key={i}>
                                                     <div className="sub_category_card_item_container d-flex flex-column justify-center align-items-center">
                                                         <div className={`sub_category_chapter_icon_container ${checkIsCompleted.current.includes(
                                                                 sub_category.sub_category
@@ -189,7 +183,7 @@ const SkillCategoryPage = () => {
                                                             </Button> */}
                                             
                                             
-                                                </Col>
+                                                </div>
                                             ))}
                                         </Row>
                                         <FingoScrollToTop />
