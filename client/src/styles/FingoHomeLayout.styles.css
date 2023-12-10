@@ -1,0 +1,26 @@
+.FingoHomeLayout {
+    padding-bottom: 78px;
+    background-color: #ffffff;
+    min-height: 100vh;
+}
+
+[data-theme='dark'] .FingoHomeLayout {
+    background-color: #313131;
+}
+
+.FingoHomeLayoutWrapper {
+    padding-left: 0;
+}
+
+.FingoHomeLayoutContainer {
+    padding: 1.1rem 0.6rem;
+}
+
+@media (min-width: 576px) {
+    .FingoHomeLayoutWrapper {
+        padding-left: 320px;
+    }
+    .FingoHomeLayoutContainer {
+        padding: 2rem 1.2rem;
+    }
+}

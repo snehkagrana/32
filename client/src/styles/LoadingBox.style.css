@@ -1,0 +1,17 @@
+.LoadingBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100px;
+}
+
+.LoadingBox svg {
+  color: rgb(40, 167, 69);
+}
+
+.LoadingBox p {
+  margin-left: 1rem;
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}

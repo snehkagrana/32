@@ -291,7 +291,7 @@ input[type=search]:focus {
     background: #cccccc;
     height: 50px;
     margin: auto 10px;
-    width: 1px;
+    width: 2px;
 }
 .xp-header {
     font-weight: 700;

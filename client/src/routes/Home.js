@@ -69,6 +69,10 @@ import DarkMode from "../components/DarkMode";
 import { useSnapCarousel } from "react-snap-carousel";
 import ModalLogin from "../components/auth/ModalLogin";
 import ModalRegister from "../components/auth/ModalRegister";
+import { FingoHomeLayout } from "src/components/layouts";
+import FingoWidgetContainer from "src/components/FingoWidgetContainer";
+import { useDispatch } from "react-redux";
+import { useAuth, useMediaQuery } from "src/hooks";
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -77,6 +81,8 @@ import ModalRegister from "../components/auth/ModalRegister";
 ////data represents email of the logged in email
 ////join room is the invitation link to which user must be redirected to
 const Home = (props) => {
+  const dispatch = useDispatch();
+  const { auth_setUser, auth_setNewUser } = useAuth()
   const [searchValue, setSearchValue] = useState("");
   const [userName, setUserName] = useState(null);
   const [skills, setSkills] = useState([]);
@@ -400,6 +406,7 @@ const Home = (props) => {
       if (response.data.redirect == "/login") {
         // console.log("Please log in");
         setNewUser(true);
+        dispatch(auth_setNewUser(true))
         // navigate(`/auth/login`);
       } else if (response.data.redirect == "/updateemail") {
         navigate("/updateemail");
@@ -407,6 +414,8 @@ const Home = (props) => {
         // console.log("Already logged in");
         role.current = response.data.user.role;
         setUser(response.data.user);
+        dispatch(auth_setNewUser(false))
+        dispatch(auth_setUser(response.data.user))
         setUserName(
           response.data.user.displayName
             ? response.data.user.displayName?.split(" ")[0]
@@ -489,16 +498,14 @@ const Home = (props) => {
   }
 
   return (
-    <>
+    <FingoHomeLayout>
       <Helmet>
         <title>Home</title>
       </Helmet>
-      <Navbar proprole={role} newUser={newUser}/>
-      <ModalLogin isOpen={showModalLogin} onClose={() => setShowModalLogin(false)} showModalRegister={() => setShowModalRegister(true)}/>
-      <ModalRegister isOpen={showModalRegister} onClose={() => setShowModalRegister(false)} showModalLogin={() => setShowModalLogin(true)}/>
-      <div className="container mt-5">
+      {/* <Navbar proprole={role} newUser={newUser}/> */}
+      <div className="container-fluid px-2">
         <div className="row h-auto">
-          <div className="col-md-8 order-md-1 order-2 mb-4">
+          <div className="col-md-7 order-md-1 order-2 mb-4">
             <div className="container">
               <div className="row h-auto">
                 <div className="col-12 px-0">
@@ -622,10 +629,147 @@ const Home = (props) => {
                   </div>
                 </div>
               </div>
+              <div className="row">
+                  <div className="col-md-8 px-0 mb-2">
+                  <h3 style={{ fontWeight: '800' }}>
+                    {newUser ? 'Explore  ': 'Explore'}
+                    <span style={{ fontSize: '65%'}}>
+                      {newUser ? '(Signup for free ' : ''}
+                      {/* <span style={{ color:'#28a745', textDecoration: 'underline', textDecorationColor: '#28a745'}}>{newUser?'free' : ''}</span> */}
+                      <span>{newUser?' to get full access - ' : ''}</span>
+                      <span>{newUser?<a href="#" onClick={() => setShowModalRegister(true)} style={{color:'#28a745'}}>click here</a> : ''}</span>
+                      <span>{newUser?')' : ''}</span>
+                    </span>
+                    
+                  </h3>
+                  </div>
+              </div>
+              <div className="row">
+                <div className="col-12 px-0">
+                  {
+                    skills.length ? (
+                      <div className="snapCarousel">
+                        <ul
+                          ref={scrollRef}
+                          style={{
+                            display: 'flex',
+                            overflowY: 'hidden',
+                            scrollSnapType: 'x mandatory',
+                            padding: "0",
+                            width: "100%",
+                            // marginLeft: '15px'
+                          }}
+                        >
+                          {
+                            skills.map((skill, index) => (
+                              <li key={index} style={{ listStyleType: "none" }}>
+                                <button
+                                  className={"rounded-rectangle " + (skill.skill === selectedSkill ? "active " : " ") + `color${index + 1}`}
+                                  value={skill.skill}
+                                  onClick={(e) => {
+                                    setSelectedSkill(e.target.value);
+                                    getCategories(e.target.value);
+                                  }}
+                                >
+                                  {skill.skill ? skill.skill.split("_").join(" ") : ""}
+                                </button>
+                              </li>
+                            ))
+                          }
+                        </ul>
+                      </div>
+                    ) : <p>Wait for it...</p>
+                  }
+                </div>
+                <div className="col-12">
+                  <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-xl-3 justify-content-center">
+                    {
+                      (categories.length && selectedSkill) ? (
+                        categories.map((category, idx) => {
+                          const catCount = skills.find(s => s.skill === selectedSkill).sub_categories.filter(s => s.category === category).length;
+                          let userCatCount;
+                          if (newUser) {
+                            // Retrieve the scores from localStorage
+                            const scores = JSON.parse(sessionStorage.getItem('scores')) || [];
+                            // Filter the scores by selectedSkill and category
+                            userCatCount = scores.filter(s => s.skill === selectedSkill && s.category === category).length;
+                          } else {
+                            userCatCount = user.score.filter(s => s.skill === selectedSkill).filter(s => s.category === category).length;
+                          }
+                          const percent = catCount !== 0 ? Math.round(userCatCount / catCount * 100) : 0;
+
+                          return (
+                            <div className="col px-sm-0 d-flex align-items-center justify-content-center" key={idx}>
+                              <Card
+                                className={`skill-card topic-card mt-1 mb-5 d-flex justify-content-center align-items-center`}
+                                style={{
+                                  border: "",
+                                  width: '180px',
+                                  height: '210px',
+                                  margin: "10px",
+                                  padding: '10px',  // Adjust padding as needed
+                                  borderRadius: '15px',  // Increased border-radius
+
+                                }}>
+                                {(newUser && idx > 2) ? (
+                                    <div className="card-overlay">
+                                      <img
+                                          src={lock} alt="Locked"
+                                          style={{ width: "50px" }}
+                                      />
+                                    </div>
+                                ) : (
+                                    <>
+                                      <Card.Body
+                                          className="d-flex justify-content-center align-items-center"
+                                      >
+                                        <div
+                                            className="category-circle-green"
+                                            style={{
+                                              background: `conic-gradient(#28a745 0% ${percent}%, #ffffff ${percent}% 100%)`
+                                            }}
+                                        >
+                                          <div className="category-circle-grey">
+                                            <Card.Img
+                                                variant="top"
+                                                src={emojis[idx] || "https://via.placeholder.com/50"}
+                                                alt={category}
+                                                style={{ width: '50px', height: '50px', borderRadius: "50%" }}
+                                                className="mx-auto"
+                                            />
+                                          </div>
+                                        </div>
+                                      </Card.Body>
+                                      <Card.Body className="d-flex justify-content-center align-items-center">
+                                        <Button
+                                            variant="success"
+                                            style={{
+                                              boxShadow:
+                                                  "0px 7px #1a5928",
+                                            }}
+                                            value={category}
+                                            onClick={() => navigate(`/skills/${selectedSkill}/${category}${newUser ? "?newUser=true" : ""}`)}
+                                            disabled={newUser && idx > 2}
+                                        >
+                                          {category ? category.split("_").join(" ") : ""}
+                                        </Button>
+                                      </Card.Body>
+                                    </>
+                                )}
+                              </Card>
+                            </div>
+                          )
+                        })
+                      ) : null
+                    }
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="col-md-3 order-md-2 order-1 mb-4 px-md-0">
-            <Card className="profile-info">
+          <div className="col-md-5 order-md-2 order-1 mb-4">
+            <FingoWidgetContainer />
+            {/* <Card className="profile-info">
               <Card.Body className="d-flex align-items-center p-3">
                 <div className="profile-picture">
                   <label htmlFor="profile-picture-upload">
@@ -776,149 +920,11 @@ const Home = (props) => {
                   </div>
                 </div>
               </Card.Body>
-            </Card>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-8 ">
-          <h3 style={{ fontWeight: '800' }}>
-            {newUser ? 'Explore  ': 'Explore'}
-            <span style={{ fontSize: '65%'}}>
-              {newUser ? '(Signup for free ' : ''}
-              {/* <span style={{ color:'#28a745', textDecoration: 'underline', textDecorationColor: '#28a745'}}>{newUser?'free' : ''}</span> */}
-              <span>{newUser?' to get full access - ' : ''}</span>
-              <span>{newUser?<a href="#" onClick={() => setShowModalRegister(true)} style={{color:'#28a745'}}>click here</a> : ''}</span>
-              <span>{newUser?')' : ''}</span>
-            </span>
-            
-          </h3>
-
-
-          </div>
-        </div>
-        <div className="row mt-1 ">
-          <div className="col-md-8 px-0 ">
-            {
-              skills.length ? (
-                <div className="snapCarousel">
-                  <ul
-                    ref={scrollRef}
-                    style={{
-                      display: 'flex',
-                      overflowY: 'hidden',
-                      scrollSnapType: 'x mandatory',
-                      padding: "0",
-                      width: "96%",
-                      marginLeft: '15px'
-                    }}
-                  >
-                    {
-                      skills.map((skill, index) => (
-                        <li key={index} style={{ listStyleType: "none" }}>
-                          <button
-                            className={"rounded-rectangle " + (skill.skill === selectedSkill ? "active " : " ") + `color${index + 1}`}
-                            value={skill.skill}
-                            onClick={(e) => {
-                              setSelectedSkill(e.target.value);
-                              getCategories(e.target.value);
-                            }}
-                          >
-                            {skill.skill ? skill.skill.split("_").join(" ") : ""}
-                          </button>
-                        </li>
-                      ))
-                    }
-                  </ul>
-                </div>
-              ) : <p>Wait for it...</p>
-            }
-          </div>
-          <div className="col-md-8">
-            <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-xl-3 justify-content-center">
-              {
-                (categories.length && selectedSkill) ? (
-                  categories.map((category, idx) => {
-                    const catCount = skills.find(s => s.skill === selectedSkill).sub_categories.filter(s => s.category === category).length;
-                    let userCatCount;
-                    if (newUser) {
-                      // Retrieve the scores from localStorage
-                      const scores = JSON.parse(sessionStorage.getItem('scores')) || [];
-                      // Filter the scores by selectedSkill and category
-                      userCatCount = scores.filter(s => s.skill === selectedSkill && s.category === category).length;
-                    } else {
-                      userCatCount = user.score.filter(s => s.skill === selectedSkill).filter(s => s.category === category).length;
-                    }
-                    const percent = catCount !== 0 ? Math.round(userCatCount / catCount * 100) : 0;
-
-                    return (
-                      <div className="col px-sm-0 d-flex align-items-center justify-content-center" key={idx}>
-                        <Card
-                          className={`skill-card topic-card mt-1 mb-5 d-flex justify-content-center align-items-center`}
-                          style={{
-                            border: "",
-                            width: '180px',
-                            height: '210px',
-                            margin: "10px",
-                            padding: '10px',  // Adjust padding as needed
-                            borderRadius: '15px',  // Increased border-radius
-
-                          }}>
-                          {(newUser && idx > 2) ? (
-                              <div className="card-overlay">
-                                <img
-                                    src={lock} alt="Locked"
-                                    style={{ width: "50px" }}
-                                />
-                              </div>
-                          ) : (
-                              <>
-                                <Card.Body
-                                    className="d-flex justify-content-center align-items-center"
-                                >
-                                  <div
-                                      className="category-circle-green"
-                                      style={{
-                                        background: `conic-gradient(#28a745 0% ${percent}%, #ffffff ${percent}% 100%)`
-                                      }}
-                                  >
-                                    <div className="category-circle-grey">
-                                      <Card.Img
-                                          variant="top"
-                                          src={emojis[idx] || "https://via.placeholder.com/50"}
-                                          alt={category}
-                                          style={{ width: '50px', height: '50px', borderRadius: "50%" }}
-                                          className="mx-auto"
-                                      />
-                                    </div>
-                                  </div>
-                                </Card.Body>
-                                <Card.Body className="d-flex justify-content-center align-items-center">
-                                  <Button
-                                      variant="success"
-                                      style={{
-                                        boxShadow:
-                                            "0px 7px #1a5928",
-                                      }}
-                                      value={category}
-                                      onClick={() => navigate(`/skills/${selectedSkill}/${category}${newUser ? "?newUser=true" : ""}`)}
-                                      disabled={newUser && idx > 2}
-                                  >
-                                    {category ? category.split("_").join(" ") : ""}
-                                  </Button>
-                                </Card.Body>
-                              </>
-                          )}
-                        </Card>
-                      </div>
-                    )
-                  })
-                ) : null
-              }
-            </div>
+            </Card> */}
           </div>
         </div>
       </div>
-    </>
+    </FingoHomeLayout>
   );
 };
 

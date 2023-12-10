@@ -1,0 +1,159 @@
+.FingoSidebar {
+    left: -380px;
+    width: 320px;
+    height: 100vh;
+    overflow: auto;
+    position: fixed;
+    z-index: 1;
+    background-color: #ffffff;
+    padding: 1.2rem 0;
+    padding-bottom: 2rem;
+    border-right: 2px solid #e7e7e7;
+    transition: all 0.2s;
+}
+
+.FingoSidebar.visible {
+    left: 0 !important;
+    top: 0 !important;
+    z-index: 999;
+}
+
+.FingoSidebar + .backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0 0 0 / 35%);
+}
+
+[data-theme='dark'] .FingoSidebar {
+    border-right: 2px solid #333;
+}
+
+@media (min-width: 576px) {
+    .FingoSidebar {
+        left: 0;
+    }
+}
+
+.FingoSidebar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.FingoSidebar::-webkit-scrollbar-track,
+.FingoSidebar::-webkit-scrollbar-corner {
+    background: var(--color-background);
+    border-radius: 10px;
+}
+.FingoSidebar::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar);
+    border-radius: 10px;
+}
+.FingoSidebar::-webkit-scrollbar-track,
+.FingoSidebar::-webkit-scrollbar-corner {
+    background: var(--color-background);
+    border-radius: 10px;
+}
+
+[data-theme='dark'] .FingoSidebar {
+    background-color: #3c3c3c;
+}
+
+.FingoSidebarInner {
+    padding: 0 1.4rem;
+    min-height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.FingoSidebar .navbar-brand {
+    width: 100%;
+    margin-right: 0;
+    padding-bottom: 2rem;
+    margin-left: 1rem;
+    cursor: pointer;
+}
+
+.FingoSidebarLogo {
+    height: 48px;
+    width: auto;
+}
+
+.FingoSidebarSwitchContainer {
+    margin-top: auto;
+    margin-bottom: 100px;
+}
+
+@media (min-width: 576px) {
+    .FingoSidebarSwitchContainer {
+        margin-bottom: 0;
+    }
+}
+
+.FingoSidebar ul {
+    padding-left: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.FingoSidebar li {
+    margin-bottom: 0.5rem;
+    display: inline-block;
+    width: 100%;
+}
+
+.FingoSidebar li a {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-decoration: none;
+    border: 2px solid transparent;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    text-transform: uppercase;
+    user-select: none;
+    color: #444;
+}
+
+[data-theme='dark'] .FingoSidebar li a {
+    color: #fbfbfb;
+}
+
+[data-theme='dark'] .FingoSidebar li a {
+    border: 2px solid transparent;
+}
+
+.FingoSidebar li a:hover,
+.FingoSidebar li a.active {
+    background-color: rgba(221, 244, 255);
+    border: 2px solid rgba(132, 216, 255);
+    color: rgba(28, 176, 246);
+}
+
+[data-theme='dark'] .FingoSidebar li a:hover,
+[data-theme='dark'] .FingoSidebar li a.active {
+    background-color: #487286;
+    border: 2px solid #5c99b6;
+    color: #ffffff;
+}
+
+.FingoSidebar li a .icon {
+    margin-right: 1.2rem;
+}
+
+.FingoSidebar li a .icon img,
+.FingoSidebar li a .icon svg {
+    width: 34px;
+    height: auto;
+}
+
+.FingoSidebar li a .icon {
+    margin-right: 1.2rem;
+}
+
+.FingoSidebar li a span {
+    font-size: 16px;
+    font-weight: bold;
+}

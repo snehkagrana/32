@@ -8,6 +8,7 @@ import Navbar from "../components/Navbar";
 import Confetti from "react-dom-confetti";
 import { Howl } from "howler";
 import Sound from '../sounds/success-1.mp3';
+import { FingoHomeLayout } from "src/components/layouts";
 
 const ScorePage = () => {
   const { skillName, category, subcategory } = useParams();
@@ -159,11 +160,10 @@ const ScorePage = () => {
   }, [searchParams]);
 
   return (
-    <>
+    <FingoHomeLayout>
       <Helmet>
         <title>Score page</title>
       </Helmet>
-      <Navbar proprole={role} newUser={!!searchParams.get("newUser")} />
       <div>
         <h2 className="text-center">
           <Badge pill bg="light">
@@ -271,7 +271,7 @@ const ScorePage = () => {
         <br />
         <br />
       </div>
-    </>
+    </FingoHomeLayout>
   );
 };
 

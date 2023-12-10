@@ -1,0 +1,109 @@
+.FingoFooter::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.FingoFooter::-webkit-scrollbar-track,
+.FingoFooter::-webkit-scrollbar-corner {
+    background: var(--color-background);
+    border-radius: 10px;
+}
+.FingoFooter::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar);
+    border-radius: 10px;
+}
+.FingoFooter::-webkit-scrollbar-track,
+.FingoFooter::-webkit-scrollbar-corner {
+    background: var(--color-background);
+    border-radius: 10px;
+}
+
+[data-theme='dark'] .FingoFooter {
+    background-color: #3c3c3c;
+}
+
+.FingoFooterInner {
+    padding: 0 1rem;
+    height: 100%;
+}
+
+.FingoFooter {
+    display: block;
+    width: 100%;
+    height: 78px;
+    position: fixed;
+    z-index: 3;
+    background-color: #ffffff;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    border-top: 2px solid #e7e7e7;
+}
+
+[data-theme='dark'] .FingoFooter {
+    border-top: 2px solid #333;
+}
+
+@media (min-width: 576px) {
+    .FingoFooter {
+        display: none;
+    }
+}
+
+.FingoFooter ul {
+    height: 100%;
+    padding-left: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.FingoFooter li {
+    display: flex;
+    width: 25%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.FingoFooter li a {
+    text-decoration: none;
+    user-select: none;
+    color: #00a7ff;
+    height: 48px;
+    width: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (min-width: 360px) {
+    .FingoFooter li a {
+        height: 50px;
+        width: 76px;
+    }
+}
+
+.FingoFooter li a img {
+    height: 30px;
+    width: 30px;
+}
+
+.FingoFooter li a:hover,
+.FingoFooter li a.active {
+    background-color: #ddf4ff;
+    border: 2px solid #8bdaff;
+    color: #00a7ff;
+}
+
+#FingoFooterRoot .popover {
+    max-width: 100%;
+    width: 100%;
+    transform: translate3d(0px, -40px, 0px) !important;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0 1rem;
+}

@@ -13,6 +13,7 @@ import {
 } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
+import { FingoHomeLayout } from "src/components/layouts";
 
 const SkillPage = () => {
     const { skillName } = useParams();
@@ -93,11 +94,10 @@ const SkillPage = () => {
     }, []);
 
     return (
-        <>
+        <FingoHomeLayout>
             <Helmet>
                 <title>{skillName.split("_").join(" ")}</title>
             </Helmet>
-            <Navbar proprole={role} />
             <Container>
                 <br />
                 <h2 className="text-center" style={{ color: "#000" }}>
@@ -154,7 +154,7 @@ const SkillPage = () => {
 
                 <br></br>
             </Container>
-        </>
+        </FingoHomeLayout>
     );
 };
 

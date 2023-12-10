@@ -28,8 +28,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { motion, useMotionValue, useScroll } from 'framer-motion';
-import ModalLogin from "../components/auth/ModalLogin";
-import ModalRegister from "../components/auth/ModalRegister";
+import { useDispatch } from "react-redux";
+import { useAuth } from "src/hooks";
+import ModalLogin from "src/components/auth/ModalLogin";
+import ModalRegister from "src/components/auth/ModalRegister";
 
 const skills = [
     { skill: 'Investment', color: 'red' },
@@ -70,16 +72,15 @@ const PrevArrow = (props) => {
 
 const StartPage = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { auth_setOpenModalLogin } = useAuth()
+
     const [currentWord, setCurrentWord] = useState("");
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     const [isTyping, setIsTyping] = useState(true);
     const words = ['finance', 'investing', 'mutual funds', 'personal finance', 'economics', 'crypto', 'insurance'];
     const darkMode = localStorage.getItem("theme") === "dark";
     const scrollTargetRef = useRef(null);
-
-    const [showModalLogin, setShowModalLogin] = useState(false)
-    const [showModalRegister, setShowModalRegister] = useState(false)
-
 
     const CustomArrow = ({ className, onClick, icon }) => (
         <div className={className} onClick={onClick}>
@@ -150,15 +151,13 @@ const StartPage = () => {
     };
 
     const onClickLogin = () => {
-        setShowModalLogin(true)
+        dispatch(auth_setOpenModalLogin(true))
     }
 
     return (
         <div className={`flex justify-center px-3 dottedBackground ${darkMode ? 'dark-mode' : 'light-mode'} overflow-hidden`}>
-
-        <ModalLogin isOpen={showModalLogin} onClose={() => setShowModalLogin(false)} showModalRegister={() => setShowModalRegister(true)}/>
-        <ModalRegister isOpen={showModalRegister} onClose={() => setShowModalRegister(false)} showModalLogin={() => setShowModalLogin(true)}/>
-
+            <ModalLogin />
+            <ModalRegister />
             <div className="w-full max-w-7xl">
                 <div className="md:pb-12 ">
                     <div

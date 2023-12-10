@@ -1,0 +1,82 @@
+.SubCategorySidebar {
+}
+
+.SubCategorySidebar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.SubCategorySidebar ::-webkit-scrollbar-track,
+.SubCategorySidebar ::-webkit-scrollbar-corner {
+  background: var(--color-background);
+  border-radius: 10px;
+}
+.SubCategorySidebar ::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar);
+  border-radius: 10px;
+}
+.SubCategorySidebar ::-webkit-scrollbar-track,
+.SubCategorySidebar ::-webkit-scrollbar-corner {
+  background: var(--color-background);
+  border-radius: 10px;
+}
+
+.SubCategorySidebar .alert svg {
+  margin-top: -4px;
+  width: 18px;
+  height: auto;
+  margin-right: 0.5rem;
+}
+
+.SubCategorySidebarCard .card-body {
+  padding: 1.25rem 0 1.25rem 1.25rem;
+}
+
+.SubCategorySidebarCard .card-title {
+  padding-bottom: 10px;
+  border-bottom: 2px solid #eee;
+  font-weight: bold;
+  margin-right: 1.25rem;
+}
+
+[data-theme="dark"] .SubCategorySidebarCard .card-title {
+  border-bottom: 2px solid #5a5a5a;
+}
+
+.SubCategorySidebarContent {
+  max-height: 260px;
+  overflow-y: scroll;
+  padding-right: 1.25rem;
+}
+
+.SubCategorySidebarItem {
+  width: 100%;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0 0.5rem;
+  border-radius: 0.3rem;
+  color: #959595;
+}
+
+.SubCategorySidebarItem.active {
+  color: #333;
+}
+[data-theme="dark"] .SubCategorySidebarItem.active {
+  color: #ffffff;
+}
+
+.SubCategorySidebarItem p {
+  margin-bottom: 0;
+}
+
+.SubCategorySidebarItem:hover {
+  background-color: rgb(40 167 69 / 20%);
+}
+
+.SubCategorySidebarItem svg.bookIcon {
+  color: rgb(40, 167, 69);
+}
