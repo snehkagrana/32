@@ -82,7 +82,7 @@ import { useAuth, useMediaQuery } from "src/hooks";
 ////join room is the invitation link to which user must be redirected to
 const Home = (props) => {
   const dispatch = useDispatch();
-  const { auth_setUser, auth_setNewUser } = useAuth()
+  const { auth_setUser, auth_setNewUser, auth_setOpenModalRegister } = useAuth()
   const [searchValue, setSearchValue] = useState("");
   const [userName, setUserName] = useState(null);
   const [skills, setSkills] = useState([]);
@@ -109,7 +109,7 @@ const Home = (props) => {
   const [newUser, setNewUser] = useState(false);
 
   const [showModalLogin, setShowModalLogin] = useState(false)
-  const [showModalRegister, setShowModalRegister] = useState(false)
+  // const [showModalRegister, setShowModalRegister] = useState(false)
 
   const { scrollRef, next, prev } = useSnapCarousel();
 
@@ -634,10 +634,9 @@ const Home = (props) => {
                   <h3 style={{ fontWeight: '800' }}>
                     {newUser ? 'Explore  ': 'Explore'}
                     <span style={{ fontSize: '65%'}}>
-                      {newUser ? '(Signup for free ' : ''}
+                      {newUser ? '(Signup for free to get full access - ' : ''}
                       {/* <span style={{ color:'#28a745', textDecoration: 'underline', textDecorationColor: '#28a745'}}>{newUser?'free' : ''}</span> */}
-                      <span>{newUser?' to get full access - ' : ''}</span>
-                      <span>{newUser?<a href="#" onClick={() => setShowModalRegister(true)} style={{color:'#28a745'}}>click here</a> : ''}</span>
+                      <span>{newUser?<a href="#" onClick={() => dispatch(auth_setOpenModalRegister(true))} style={{color:'#28a745'}}>Signup</a> : ''}</span>
                       <span>{newUser?')' : ''}</span>
                     </span>
                     
