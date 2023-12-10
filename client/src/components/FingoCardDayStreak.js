@@ -39,7 +39,7 @@ const FingoCardDayStreak = () => {
     )
 
     const getStreakMessage = useMemo(() => {
-        const lastCompletedDay = dayjs(user?.lastCompletedDay).toISOString()
+        const lastCompletedDay = user?.lastCompletedDay ? dayjs(user?.lastCompletedDay).toISOString() : null
         if (user?.streak > 0) {
             if (
                 user?.completedDays &&
