@@ -1,7 +1,7 @@
 .FingoCardCompleteTopic {
-    padding: 1rem;
+    padding: 0.75rem;
     background-color: #f1fcf1;
-    border: 2px solid #e7e7e7;
+    border: 1px solid rgba(0, 0, 0, 0.125);
 }
 
 [data-theme='dark'] .FingoCardCompleteTopic {
@@ -10,7 +10,7 @@
 }
 
 .FingoCardCompleteTopic .xp-header {
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
 }
 
 .FingoCardCompleteTopic .xp-name {

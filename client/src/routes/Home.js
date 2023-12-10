@@ -505,7 +505,7 @@ const Home = (props) => {
       {/* <Navbar proprole={role} newUser={newUser}/> */}
       <div className="container-fluid px-2">
         <div className="row h-auto">
-          <div className="col-md-7 order-md-1 order-2 mb-4">
+          <div className="col-md-8 order-md-1 order-2 mb-4">
             <div className="container">
               <div className="row h-auto">
                 <div className="col-12 px-0">
@@ -767,7 +767,7 @@ const Home = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-5 order-md-2 order-1 mb-4">
+          <div className="col-md-4 order-md-2 order-1 mb-4">
             <FingoWidgetContainer />
             {/* <Card className="profile-info">
               <Card.Body className="d-flex align-items-center p-3">
