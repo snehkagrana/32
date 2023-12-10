@@ -9,11 +9,15 @@
     box-shadow: rgb(0, 148, 113) 0px 6px;
     transition: all 0.2s ease 0s;
     font-weight: 100;
-    position: absolute;
-    /* bottom: 92px; */
-    bottom: 38px;
+    position: sticky;
+    bottom: 98px;
     right: 32px;
     z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: flex-end;
+    margin-left: auto;
 }
 
 .FingoBackToTop.fixed {

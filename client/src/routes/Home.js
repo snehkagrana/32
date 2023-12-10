@@ -506,7 +506,7 @@ const Home = (props) => {
       {/* <Navbar proprole={role} newUser={newUser}/> */}
       <div className="container-fluid px-2">
         <div className="row h-auto">
-          <div className="FingoHomeMainContent relative col-md-8 order-md-1 order-2 mb-4 pb-10">
+          <div className="FingoHomeMainContent relative col-md-8 order-md-1 order-2">
             <div className="container">
               <div className="row h-auto">
                 <div className="col-12 px-0">

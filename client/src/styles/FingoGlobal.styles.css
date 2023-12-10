@@ -96,11 +96,11 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
 
 .FingoHomeMainContent {
     position: relative;
-    padding-bottom: 92px;
+    padding-bottom: 20px;
 }
 
 @media screen and (max-width: 600px) {
     .FingoHomeMainContent {
-        padding-bottom: 20px;
+        padding-bottom: 0;
     }
 }
