@@ -4,12 +4,10 @@
 .sub_category_card_container {
     border-radius: 0.65rem;
     position: relative;
-    padding-bottom: 120px;
 }
 
 @media screen and (max-width: 600px) {
     .sub_category_card_container {
-        padding-bottom: 40px;
         border: 2px solid transparent !important;
     }
 }
@@ -35,6 +33,11 @@
     margin-bottom: 1.5rem;
 }
 
+.sub_category_card_item_container:hover {
+    transform: translateY(4px);
+    transition: transform 0.2s;
+}
+
 .sub_category_card_item_container h3 {
     font-size: 20px;
     font-weight: bold;
@@ -44,38 +47,37 @@
 .sub_category_chapter_icon_container {
     position: relative;
     cursor: pointer;
-    transition: transform 0.2s;
-}
-
-.sub_category_chapter_icon_container:hover {
-    transform: translateY(5px);
-}
-
-div[class^='sub_category_chapter_icon'] {
+    background-color: #00cd9c;
+    border-color: #00cd9c;
+    border-radius: 7px;
+    box-shadow: #00a47d 0px 10px;
+    transition: all 0.2s ease 0s;
+    width: 92px;
+    height: 92px;
+    border-radius: 92px;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1;
-    margin: auto;
-    margin-bottom: 0.2rem;
+    margin-bottom: 1rem;
+    transform: perspective(37em) rotateX(33deg);
 }
 
-/* [data-theme='dark'] div[class^='sub_category_chapter_icon'] {
-} */
+.sub_category_chapter_icon_container.incomplete {
+    background-color: #a3a3a3;
+    box-shadow: #868686 0px 10px;
+}
 
-div[class^='sub_category_chapter_icon'] img {
-    width: 100px;
+.sub_category_chapter_icon_container:hover {
+}
+
+div[class^='sub_category_chapter_icon'] svg {
+    color: #ffffff;
+    width: 40px;
     height: auto;
+    margin-top: 6px;
 }
 
 .sub_category_chapter_icon-complete svg path {
-    color: #ffdc5c;
-    fill: #ffdc5c;
-}
-
-.sub_category_chapter_icon-incomplete svg path {
-    color: #fff7d8;
-    fill: #fff7d8;
 }
 
 .sub_category_chapter_ic_circle {

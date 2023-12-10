@@ -4,6 +4,10 @@
     border: 2px solid rgb(109 109 109 / 10%);
 }
 
+[data-theme='dark'] .FingoCardDayStreak:not(.highlight) {
+    background-color: rgb(255 150 0 / 22%);
+}
+
 /* [data-theme='dark'] .FingoCardDayStreak {
     background-color: #484438;
 } */
@@ -156,6 +160,10 @@
 
 .FingoCardDayStreakCalendar li a {
     background-color: #e5e5e5;
+}
+
+[data-theme='dark'] .FingoCardDayStreakCalendar li a {
+    background-color: #454545;
 }
 
 .FingoCardDayStreak.highlight .FingoCardDayStreakCalendar li a.active {
