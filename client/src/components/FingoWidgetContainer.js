@@ -12,7 +12,6 @@ const FingoWidgetContainer = () => {
     const [activeTab, setActiveTab] = useState('')
     const matchMobile = useMediaQuery('(max-width: 570px)')
 
-    console.log('location', location)
     return (
         <>
             <FingoWidgetHeader

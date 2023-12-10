@@ -6,6 +6,7 @@ import Fire from 'src/assets/images/fire.png'
 import FireOn from 'src/assets/images/fire-on.png'
 
 import 'src/styles/FingoCardDayStreak.styles.css'
+import dayjs from 'dayjs'
 
 const FingoCardDayStreak = () => {
     const { user, newUser } = useAuth()
@@ -38,19 +39,24 @@ const FingoCardDayStreak = () => {
     )
 
     const getStreakMessage = useMemo(() => {
+        const lastCompletedDay = dayjs(user?.lastCompletedDay).toISOString()
         if (user?.streak > 0) {
             if (
-                user.streak > 1 &&
-                (!user.completedDays || !user.completedDays[dayOfWeek])
+                user?.completedDays &&
+                dayjs(lastCompletedDay).isSame(
+                    dayjs(today).toISOString(),
+                    'day'
+                )
             ) {
-                // User has a streak, but hasn't done a lesson today
-                return 'Continue your streak, complete a lesson!'
-            } else {
                 // User has a streak and has done a lesson today
                 return 'Keep going. Complete one more lesson!'
             }
+            // User has a streak, but hasn't done a lesson today
+            else {
+                return 'Continue your streak, complete a lesson!'
+            }
         } else return 'Do a lesson today to start a new streak!'
-    }, [user, dayOfWeek])
+    }, [user])
 
     const onClick = e => {
         e.preventDefault()
@@ -99,28 +105,40 @@ const FingoCardDayStreak = () => {
                             </p>
                             <a
                                 className={
-                                    index === dayOfWeek
-                                        ? 'marked'
-                                        : index === dayOfWeek &&
-                                            newUser &&
-                                            parseInt(
-                                                sessionStorage.getItem(
-                                                    'streak'
-                                                ),
-                                                10
-                                            )
-                                          ? 'active'
-                                          : user &&
-                                              user?.completedDays &&
-                                              user?.completedDays?.[index] &&
-                                              new Date(
-                                                  user.completedDays[index]
-                                              ) >= startOfWeek &&
-                                              new Date(
-                                                  user.completedDays[index]
-                                              ) <= today
+                                    index === dayOfWeek &&
+                                    user?.completedDays &&
+                                    user?.completedDays?.[index] &&
+                                    dayjs(
+                                        dayjs(
+                                            user?.lastCompletedDay
+                                        ).toISOString()
+                                    ).isSame(dayjs(today).toISOString(), 'day')
+                                        ? 'active'
+                                        : ''
+                                          ? 'marked'
+                                          : index === dayOfWeek &&
+                                              newUser &&
+                                              parseInt(
+                                                  sessionStorage.getItem(
+                                                      'streak'
+                                                  ),
+                                                  10
+                                              )
                                             ? 'active'
-                                            : ' '
+                                            : user &&
+                                                user?.completedDays &&
+                                                user?.completedDays?.[index] &&
+                                                new Date(
+                                                    user.completedDays[index]
+                                                ) >= startOfWeek &&
+                                                dayjs(
+                                                    user.completedDays[index]
+                                                ).isBefore(
+                                                    dayjs(today).toISOString(),
+                                                    'day'
+                                                )
+                                              ? 'active'
+                                              : ''
                                 }
                                 href='#'
                                 onClick={onClick}
@@ -137,9 +155,9 @@ const FingoCardDayStreak = () => {
                                 user &&
                                 user?.completedDays &&
                                 user?.completedDays?.[index] &&
-                                new Date(user.completedDays[index]) >=
+                                new Date(user?.completedDays[index]) >=
                                     startOfWeek &&
-                                new Date(user.completedDays[index]) <= today
+                                new Date(user?.completedDays[index]) <= today
                                     ? renderSvg()
                                     : ' '}
                             </a>
