@@ -58,7 +58,7 @@
   }
 
   .snapCarousel > ul {
-    border: 1px solid rgba(0, 0, 0, 0.125);
+    border: 2px solid rgb(109 109 109 / 10%);
     border-radius: 0.25rem;
   }
 
@@ -112,7 +112,6 @@
   }
 
   .snapCarousel > ul {
-    border: 1px solid #dee2e6;
     border-radius: 0.25rem;
   }
 

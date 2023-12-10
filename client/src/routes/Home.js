@@ -73,6 +73,7 @@ import { FingoHomeLayout } from "src/components/layouts";
 import FingoWidgetContainer from "src/components/FingoWidgetContainer";
 import { useDispatch } from "react-redux";
 import { useAuth, useMediaQuery } from "src/hooks";
+import { FingoScrollToTop } from "src/components/layouts/FingoHomeLayout";
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -82,7 +83,7 @@ import { useAuth, useMediaQuery } from "src/hooks";
 ////join room is the invitation link to which user must be redirected to
 const Home = (props) => {
   const dispatch = useDispatch();
-  const { auth_setUser, auth_setNewUser } = useAuth()
+  const { auth_setUser, auth_setNewUser, auth_setOpenModalRegister } = useAuth()
   const [searchValue, setSearchValue] = useState("");
   const [userName, setUserName] = useState(null);
   const [skills, setSkills] = useState([]);
@@ -109,7 +110,7 @@ const Home = (props) => {
   const [newUser, setNewUser] = useState(false);
 
   const [showModalLogin, setShowModalLogin] = useState(false)
-  const [showModalRegister, setShowModalRegister] = useState(false)
+  // const [showModalRegister, setShowModalRegister] = useState(false)
 
   const { scrollRef, next, prev } = useSnapCarousel();
 
@@ -505,7 +506,7 @@ const Home = (props) => {
       {/* <Navbar proprole={role} newUser={newUser}/> */}
       <div className="container-fluid px-2">
         <div className="row h-auto">
-          <div className="col-md-8 order-md-1 order-2 mb-4">
+          <div className="FingoHomeMainContent relative col-md-8 order-md-1 order-2 mb-4 pb-10">
             <div className="container">
               <div className="row h-auto">
                 <div className="col-12 px-0">
@@ -634,10 +635,9 @@ const Home = (props) => {
                   <h3 style={{ fontWeight: '800' }}>
                     {newUser ? 'Explore  ': 'Explore'}
                     <span style={{ fontSize: '65%'}}>
-                      {newUser ? '(Signup for free ' : ''}
+                      {newUser ? '(Signup for free to get full access - ' : ''}
                       {/* <span style={{ color:'#28a745', textDecoration: 'underline', textDecorationColor: '#28a745'}}>{newUser?'free' : ''}</span> */}
-                      <span>{newUser?' to get full access - ' : ''}</span>
-                      <span>{newUser?<a href="#" onClick={() => setShowModalRegister(true)} style={{color:'#28a745'}}>click here</a> : ''}</span>
+                      <span>{newUser?<a href="#" onClick={() => dispatch(auth_setOpenModalRegister(true))} style={{color:'#28a745'}}>Signup</a> : ''}</span>
                       <span>{newUser?')' : ''}</span>
                     </span>
                     
@@ -766,6 +766,7 @@ const Home = (props) => {
                 </div>
               </div>
             </div>
+            <FingoScrollToTop />
           </div>
           <div className="col-md-4 order-md-2 order-1 mb-4">
             <FingoWidgetContainer />

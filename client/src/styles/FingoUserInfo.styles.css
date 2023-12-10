@@ -1,7 +1,7 @@
 .FingoUserInfo {
     border-radius: 10px;
     background-color: #f7fcf7;
-    border: 2px solid #ececec;
+    border: 2px solid rgb(109 109 109 / 10%);
     margin-bottom: 1rem;
 }
 
@@ -31,6 +31,5 @@
 }
 
 [data-theme='dark'] .FingoUserInfo {
-    background-color: #000;
-    border: 2px solid #333;
+    background-color: #2f2f2f;
 }

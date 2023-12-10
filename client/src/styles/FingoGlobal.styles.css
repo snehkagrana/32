@@ -89,3 +89,18 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
     border-color: rgb(221 51 51) !important;
     box-shadow: rgb(154 25 25) 0px 7px !important;
 }
+
+.card {
+    border: 2px solid rgb(109 109 109 / 10%) !important;
+}
+
+.FingoHomeMainContent {
+    position: relative;
+    padding-bottom: 92px;
+}
+
+@media screen and (max-width: 600px) {
+    .FingoHomeMainContent {
+        padding-bottom: 20px;
+    }
+}

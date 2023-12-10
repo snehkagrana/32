@@ -1,12 +1,12 @@
 .FingoCardTotalXP {
     padding: 1rem;
     background-color: #f1fcf1;
-    border: 2px solid #e7e7e7;
+    border: 2px solid rgb(109 109 109 / 10%);
 }
 
 [data-theme='dark'] .FingoCardTotalXP {
     background-color: #333;
-    border: 2px solid #888888;
+    /* border: 2px solid #888888; */
 }
 
 .FingoCardTotalXP .title {
