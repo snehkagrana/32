@@ -2,14 +2,14 @@
     /* background-color: #ffffff; */
 }
 .sub_category_card_container {
-    /* background-color: #f9fdf3;
-    border: 2px solid #333; */
     border-radius: 0.65rem;
-    padding-bottom: 4rem;
+    position: relative;
+    padding-bottom: 120px;
 }
 
 @media screen and (max-width: 600px) {
     .sub_category_card_container {
+        padding-bottom: 40px;
         border: 2px solid transparent !important;
     }
 }

@@ -10,14 +10,18 @@
     transition: all 0.2s ease 0s;
     font-weight: 100;
     position: absolute;
-    position: fixed;
-    bottom: 92px;
+    /* bottom: 92px; */
+    bottom: 38px;
     right: 32px;
     z-index: 1000;
 }
 
+.FingoBackToTop.fixed {
+    position: fixed;
+}
+
 @media (min-width: 576px) {
     .FingoBackToTop {
-        bottom: 24px;
+        bottom: 38px;
     }
 }

@@ -6,7 +6,7 @@ import ModalRegister from '../auth/ModalRegister'
 import 'src/styles/FingoHomeLayout.styles.css'
 import 'src/styles/FingoBackToTop.styles.css'
 
-const ScrollToTop = () => {
+export const FingoScrollToTop = ({ fixed }) => {
     const [position, setPosition] = useState({ scrollX: 0, scrollY: 0 })
 
     function scrollToTop(e) {
@@ -29,7 +29,10 @@ const ScrollToTop = () => {
 
     if (position.scrollY > 100) {
         return (
-            <button onClick={scrollToTop} className='FingoBackToTop'>
+            <button
+                onClick={scrollToTop}
+                className={`FingoBackToTop ${fixed ? 'fixed' : ''}`}
+            >
                 <svg
                     xmlns='http://www.w3.org/2000/svg'
                     width='24'
@@ -61,7 +64,6 @@ const FingoHomeLayout = ({ children }) => {
             <FingoFooter />
             <ModalLogin />
             <ModalRegister />
-            <ScrollToTop />
         </div>
     )
 }

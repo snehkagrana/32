@@ -73,6 +73,7 @@ import { FingoHomeLayout } from "src/components/layouts";
 import FingoWidgetContainer from "src/components/FingoWidgetContainer";
 import { useDispatch } from "react-redux";
 import { useAuth, useMediaQuery } from "src/hooks";
+import { FingoScrollToTop } from "src/components/layouts/FingoHomeLayout";
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -505,7 +506,7 @@ const Home = (props) => {
       {/* <Navbar proprole={role} newUser={newUser}/> */}
       <div className="container-fluid px-2">
         <div className="row h-auto">
-          <div className="col-md-8 order-md-1 order-2 mb-4">
+          <div className="FingoHomeMainContent relative col-md-8 order-md-1 order-2 mb-4 pb-10">
             <div className="container">
               <div className="row h-auto">
                 <div className="col-12 px-0">
@@ -765,6 +766,7 @@ const Home = (props) => {
                 </div>
               </div>
             </div>
+            <FingoScrollToTop />
           </div>
           <div className="col-md-4 order-md-2 order-1 mb-4">
             <FingoWidgetContainer />
