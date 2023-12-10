@@ -1,7 +1,7 @@
 .FingoCardDailyXP {
-    padding: 1rem;
+    padding: 0.75rem;
     background-color: #ffffff;
-    border: 2px solid #e7e7e7;
+    border: 1px solid rgba(0, 0, 0, 0.125);
 }
 
 [data-theme='dark'] .FingoCardDailyXP {
@@ -12,11 +12,7 @@
 .FingoCardDailyXP .title {
     font-size: 18px;
     font-weight: bold;
-    margin-bottom: 1.2rem;
-}
-
-.FingoCardDailyXP .xp-header {
-    margin-bottom: 1rem;
+    margin-bottom: 0.85rem;
 }
 
 .FingoCardDailyXP .xp-name {
@@ -36,7 +32,7 @@
 }
 
 .FingoCardDailyXPInner .left {
-    width: 25%;
+    width: 20%;
 }
 
 .FingoCardDailyXPInner .left svg {
@@ -52,12 +48,12 @@
 .FingoCardDailyXPInner .xp-header p {
     margin-bottom: 0;
     font-weight: bold;
-    font-size: 17px;
+    font-size: 16px;
     color: #333;
 }
 
 .FingoCardDailyXPInner .right {
-    width: 75%;
+    width: 80%;
 }
 
 .FingoCardDailyXPContent {
