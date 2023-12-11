@@ -81,7 +81,7 @@ const FingoCardDayStreak = () => {
     return (
         <div
             className={`mb-3 FingoCardDayStreak FingoShapeRadius ${
-                user?.streak > 0 ? 'highlight' : ''
+                user?.streak > 0 && dayOfWeek > 0 ? 'highlight' : ''
             }`}
         >
             <div className='col-12 FingoCardDayStreakInner'>
