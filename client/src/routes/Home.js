@@ -635,10 +635,12 @@ const Home = (props) => {
                   <h3 style={{ fontWeight: '800' }}>
                     {newUser ? 'Explore  ': 'Explore'}
                     <span style={{ fontSize: '65%'}}>
-                      {newUser ? '(Signup for free to get full access - ' : ''}
+                    <span>{newUser?'(' : ''}</span>
+                    <span>{newUser?<a href="#" onClick={() => dispatch(auth_setOpenModalRegister(true))} style={{color:'#28a745'}}>Signup</a> : ''}</span>
+                      {newUser ? ' for free to get full access)' : ''}
                       {/* <span style={{ color:'#28a745', textDecoration: 'underline', textDecorationColor: '#28a745'}}>{newUser?'free' : ''}</span> */}
-                      <span>{newUser?<a href="#" onClick={() => dispatch(auth_setOpenModalRegister(true))} style={{color:'#28a745'}}>Signup</a> : ''}</span>
-                      <span>{newUser?')' : ''}</span>
+                      {/* <span>{newUser?<a href="#" onClick={() => dispatch(auth_setOpenModalRegister(true))} style={{color:'#28a745'}}>Signup</a> : ''}</span> */}
+                      
                     </span>
                     
                   </h3>
