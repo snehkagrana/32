@@ -93,7 +93,7 @@ const FingoCardDayStreak = () => {
                 </div>
                 <div className='right'>
                     <h4>{user?.streak ?? 0} day streak</h4>
-                    <p>{getStreakMessage}</p>
+                    <p style={{color:'#4b4b4b', fontSize:"0.85rem"}}>{getStreakMessage}</p>
                 </div>
             </div>
             <div className='FingoCardDayStreakCalendar FingoShapeRadius'>
