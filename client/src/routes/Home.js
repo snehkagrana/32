@@ -637,7 +637,7 @@ const Home = (props) => {
                     <span style={{ fontSize: '65%'}}>
                     <span>{newUser?'(' : ''}</span>
                     <span>{newUser?<a href="#" onClick={() => dispatch(auth_setOpenModalRegister(true))} style={{color:'#28a745'}}>Signup</a> : ''}</span>
-                      {newUser ? ' for free to get full access)' : ''}
+                      {newUser ? ' for free to get full access.)' : ''}
                       {/* <span style={{ color:'#28a745', textDecoration: 'underline', textDecorationColor: '#28a745'}}>{newUser?'free' : ''}</span> */}
                       {/* <span>{newUser?<a href="#" onClick={() => dispatch(auth_setOpenModalRegister(true))} style={{color:'#28a745'}}>Signup</a> : ''}</span> */}
                       
