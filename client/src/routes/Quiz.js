@@ -569,12 +569,18 @@ const Quiz = () => {
             ) : (
               <Button
                 variant="success"
-                style={{ width: "25%", boxShadow: "0px 7px #1a5928" }}
+                style={{
+                    width: "100%", // Make the button take full width on smaller screens
+                    maxWidth: "28%", // Set a maximum width to prevent excessive stretching
+                    whiteSpace: "nowrap", // Prevent text from wrapping
+                    textAlign: "center",
+                    boxShadow: "0px 7px #1a5928",
+                }}
                 onClick={handleCheck}
-                disabled={answersList.length === 0} // Disable if no answer is selected
-              >
+                disabled={answersList.length === 0}
+            >
                 Submit
-              </Button>
+            </Button>
             )}
             {currentQuestionIndex.current + 1 === maxQuestions.current && isSubmittedAnswer && (
                 <>
