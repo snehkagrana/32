@@ -26,7 +26,7 @@ const FingoWidgetContainer = () => {
                 </>
             )}
 
-            {!location.pathname.includes('/skills/') && (
+            {!location.pathname.includes('/skills/') && !matchMobile && (
                 <FingoCardCompleteTopic />
             )}
         </>
