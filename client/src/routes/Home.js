@@ -770,7 +770,7 @@ const Home = (props) => {
             </div>
             <FingoScrollToTop />
           </div>
-          <div className="col-md-4 order-md-2 order-1 mb-4">
+          <div className="col-md-4 order-md-2 order-1 mb-2">
             <FingoWidgetContainer />
             {/* <Card className="profile-info">
               <Card.Body className="d-flex align-items-center p-3">
