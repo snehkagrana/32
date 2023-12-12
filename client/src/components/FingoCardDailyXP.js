@@ -88,18 +88,13 @@ const FingoCardDailyXP = () => {
             />
             <div className='FingoCardDailyXPHeader'>
                 <h2 className='title'>Daily Quests</h2>
-                {!newUser && Boolean(user) && (
-                    <div className='FingoCardDailyXPHeaderLevel'>
-                        <span>LEVEL {user?.xp?.level ?? 1}</span>
-                    </div>
-                )}
             </div>
             <div className='FingoCardDailyXPInner'>
                 <div className='left'>
                     <LightningIcon />
                 </div>
                 <div className='right'>
-                    <div className='xp-header'>
+                    <div>
                         <p>Earn {getDailyXp} XP</p>
                     </div>
                     <div className='FingoCardDailyXPContent'>
@@ -130,10 +125,6 @@ const FingoCardDailyXP = () => {
                     </div>
                 </div>
             </div>
-
-            <button className='FingoIconButton' onClick={onClickLevelInfo}>
-                <InfoIcon />
-            </button>
         </div>
     )
 }

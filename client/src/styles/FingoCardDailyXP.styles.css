@@ -35,17 +35,6 @@
     font-weight: bold;
 }
 
-.FingoCardDailyXPHeaderLevel {
-    background-color: rgb(40, 167, 69);
-    border-radius: 1rem;
-    color: #ffffff;
-    display: inline-block;
-    padding: 0.4rem 1rem;
-    font-weight: bold;
-    font-size: 0.8rem;
-    line-height: 1;
-}
-
 .FingoCardDailyXP .xp-name {
     color: #444;
     font-size: 13px;
@@ -73,11 +62,7 @@
     height: auto;
 }
 
-.FingoCardDailyXPInner .xp-header {
-    margin-bottom: 0.3rem;
-}
-
-.FingoCardDailyXPInner .xp-header p {
+.FingoCardDailyXPInner p {
     margin-bottom: 0;
     font-weight: bold;
     font-size: 16px;
@@ -124,15 +109,4 @@
     bottom: 9px;
     width: 100%;
     font-size: 13px;
-}
-
-.FingoCardDailyXPImg {
-    position: absolute;
-    background-position: bottom right;
-    background-size: contain;
-    background-repeat: no-repeat;
-    height: 65%;
-    width: 65%;
-    top: 10px;
-    right: 5%;
 }
