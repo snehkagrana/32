@@ -29,6 +29,7 @@ const user = new mongoose.Schema({
         current: Number,
         daily: Number,
         total: Number,
+        level: Number,
     },
     last_played: {
         skill: {
