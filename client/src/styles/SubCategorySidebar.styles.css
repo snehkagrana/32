@@ -1,4 +1,11 @@
 .SubCategorySidebar {
+  display: none;
+}
+
+@media (min-width: 576px) {
+  .SubCategorySidebar {
+      display: block;
+  }
 }
 
 .SubCategorySidebar::-webkit-scrollbar {
