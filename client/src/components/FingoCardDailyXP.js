@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useApp, useAuth } from 'src/hooks'
 import 'src/styles/FingoCardDailyXP.styles.css'
 import { ReactComponent as LightningIcon } from 'src/assets/svg/lightning-fill2.svg'
@@ -16,9 +16,11 @@ import ImageLevel9 from 'src/assets/images/levels/9.png'
 import ImageLevel10 from 'src/assets/images/levels/10.png'
 
 import { ReactComponent as InfoIcon } from 'src/assets/svg/info.svg'
+import { useDispatch } from 'react-redux'
 
 const FingoCardDailyXP = () => {
-    const { dailyXP } = useApp()
+    const dispatch = useDispatch()
+    const { dailyXP, openModalLevelUp, app_setModalLevelUp } = useApp()
     const { newUser, user } = useAuth()
 
     const getDailyXp = useMemo(() => {
@@ -63,6 +65,16 @@ const FingoCardDailyXP = () => {
         }
         return ImageLevel1
     }
+
+    const onClickLevelInfo = useCallback(() => {
+        dispatch(
+            app_setModalLevelUp({
+                open: true,
+                data: { total: user?.xp?.total, level: user?.xp?.level },
+            })
+        )
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [openModalLevelUp])
 
     return (
         <div className={`mb-3 FingoCardDailyXP FingoShapeRadius`}>
@@ -119,7 +131,7 @@ const FingoCardDailyXP = () => {
                 </div>
             </div>
 
-            <button className='FingoIconButton'>
+            <button className='FingoIconButton' onClick={onClickLevelInfo}>
                 <InfoIcon />
             </button>
         </div>

@@ -74,6 +74,7 @@ import FingoWidgetContainer from "src/components/FingoWidgetContainer";
 import { useDispatch } from "react-redux";
 import { useAuth, useMediaQuery } from "src/hooks";
 import { FingoScrollToTop } from "src/components/layouts/FingoHomeLayout";
+import FingoModalLevelUp from "src/components/FingoModalLevelUp";
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -927,6 +928,7 @@ const Home = (props) => {
           </div>
         </div>
       </div>
+      <FingoModalLevelUp />
     </FingoHomeLayout>
   );
 };
