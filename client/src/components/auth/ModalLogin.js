@@ -378,7 +378,7 @@ export default function ModalLogin() {
                             textAlign: 'center',
                             width: '50%',
                             transition: '0.2s ease',
-                            borderRadius: '5px',
+                            borderRadius: '7px',
                             boxShadow: '0px 7px #1a5928',
                         }}
                         className='regHover'

@@ -357,7 +357,7 @@ export default function ModalRegister() {
                 {/* Submit Button */}
                 <Button
                     style={{
-                        borderRadius: '7px',
+                        borderRadius: '10px',
                         padding: '10px',
                         width: '100%',
                         boxShadow: `0px 7px ${
@@ -418,7 +418,7 @@ export default function ModalRegister() {
                             variant='success' // Added success variant to match the green color
                             style={{
                                 marginTop: '5px',
-                                borderRadius: '5px',
+                                borderRadius: '7px',
                                 width: '50%',
                                 boxShadow: '0px 5px #1a5928',
                                 transition: '0.2s ease',

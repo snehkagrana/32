@@ -5,7 +5,7 @@ const CustomGoogleSignInButton = ({ onClick }) => {
         width: "100%",
         backgroundColor: "white",
         boxShadow: "0px 7px #000",
-        borderRadius: "7px",
+        borderRadius: "10px",
         transition: "0.2s ease",
         padding: "10px", // Adjust padding as needed
         display: "flex",
