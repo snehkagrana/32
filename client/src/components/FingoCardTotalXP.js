@@ -85,7 +85,7 @@ const FingoCardTotalXP = () => {
             />
             {/* <h2 className='title'>Total XP</h2> */}
             <div className='FingoCardTotalXPHeaderLevelContainer'>
-                {!newUser && Boolean(user) && (
+                {!newUser && Boolean(user) ? (
                     <div
                         className='FingoCardTotalXPHeaderLevel'
                         style={{
@@ -97,6 +97,15 @@ const FingoCardTotalXP = () => {
                     >
                         <span>LEVEL {user?.xp?.level}</span>
                     </div>
+                ) : (
+                    <div
+                        className='FingoCardTotalXPHeaderLevel'
+                        style={{
+                            backgroundColor: getLevelColor('default', 1),
+                        }}
+                    >
+                        <span>LEVEL 1</span>
+                    </div>
                 )}
             </div>
             <div className='FingoCardTotalXPInner'>
@@ -105,39 +114,58 @@ const FingoCardTotalXP = () => {
                 </div>
                 <div className='right'>
                     <div className='xp-header'>
-                        <p>
-                            {user?.xp?.total} / {getNextTargetXp}
-                        </p>
+                        {!newUser && Boolean(user) ? (
+                            <p>
+                                {user?.xp?.total} / {getNextTargetXp}{' '}
+                            </p>
+                        ) : (
+                            <p>0 / 50</p>
+                        )}
                     </div>
                     <div className='FingoCardTotalXPContent'>
                         <div class='progress'>
-                            <div
-                                class='progress-bar'
-                                role='progressbar'
-                                aria-valuenow={getTotalXP || 0}
-                                aria-valuemin='0'
-                                aria-valuemax='1000'
-                                style={{
-                                    width: `${getProgressCurrentLevel(
-                                        user?.xp?.total
-                                            ? parseInt(user.xp.total)
-                                            : 0
-                                    )}%`,
-                                    backgroundColor: getLevelColor(
-                                        'default',
-                                        user?.xp?.level
-                                    ),
-                                }}
-                            ></div>
+                            {!newUser && Boolean(user) ? (
+                                <div
+                                    class='progress-bar'
+                                    role='progressbar'
+                                    aria-valuenow={getTotalXP || 0}
+                                    aria-valuemin='0'
+                                    aria-valuemax='1000'
+                                    style={{
+                                        width: `${getProgressCurrentLevel(
+                                            user?.xp?.total
+                                                ? parseInt(user.xp.total)
+                                                : 0
+                                        )}%`,
+                                        backgroundColor: getLevelColor(
+                                            'default',
+                                            user?.xp?.level
+                                        ),
+                                    }}
+                                />
+                            ) : (
+                                <div
+                                    class='progress-bar'
+                                    role='progressbar'
+                                    aria-valuenow={getTotalXP || 0}
+                                    aria-valuemin='0'
+                                    aria-valuemax='1000'
+                                    style={{
+                                        width: '0%',
+                                        backgroundColor: getLevelColor(
+                                            'default',
+                                            1
+                                        ),
+                                    }}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>
             </div>
-            {!newUser && Boolean(user) && (
-                <button className='FingoIconButton' onClick={onClickLevelInfo}>
-                    <InfoIcon />
-                </button>
-            )}
+            <button className='FingoIconButton' onClick={onClickLevelInfo}>
+                <InfoIcon />
+            </button>
         </div>
     )
 }

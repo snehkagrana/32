@@ -1,4 +1,4 @@
-import { useApp } from 'src/hooks'
+import { useApp, useAuth } from 'src/hooks'
 import { FingoButton, FingoModal } from './core'
 import { useDispatch } from 'react-redux'
 import { useCallback, useEffect, useState } from 'react'
@@ -28,6 +28,7 @@ const FingoModalLevelUp = ({ isFormScorePage }) => {
     const dispatch = useDispatch()
     const [celebrate, setCelebrate] = useState(false)
     const { modalLevelUp, app_setModalLevelUp } = useApp()
+    const { newUser, user } = useAuth()
 
     const sound = new Howl({
         src: [Sound], // Replace with the path to your sound file
@@ -103,7 +104,7 @@ const FingoModalLevelUp = ({ isFormScorePage }) => {
                 style={{
                     background: getLevelColor(
                         'default',
-                        modalLevelUp?.data?.level
+                        modalLevelUp?.data?.level ?? 1
                     ),
                 }}
             >
@@ -115,7 +116,7 @@ const FingoModalLevelUp = ({ isFormScorePage }) => {
                 />
                 <img
                     className='relative'
-                    src={getLevelImage(modalLevelUp?.data?.level ?? 0)}
+                    src={getLevelImage(modalLevelUp?.data?.level ?? 1)}
                     alt='Level'
                 />
 
@@ -136,13 +137,13 @@ const FingoModalLevelUp = ({ isFormScorePage }) => {
                                 Level{' '}
                                 {modalLevelUp?.data?.level
                                     ? modalLevelUp.data.level
-                                    : ''}
+                                    : '1'}
                             </h2>
                             <h6>
                                 You have earned 🍌{' '}
                                 {modalLevelUp?.data?.total
                                     ? modalLevelUp.data.total
-                                    : ''}
+                                    : '0'}
                                 .
                             </h6>
                             <h6>
