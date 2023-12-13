@@ -9,8 +9,15 @@ import Confetti from "react-dom-confetti";
 import { Howl } from "howler";
 import Sound from '../sounds/success-1.mp3';
 import { FingoHomeLayout } from "src/components/layouts";
+import { AuthAPI } from "src/api";
+import { useApp, useAuth } from "src/hooks";
+import { batch, useDispatch } from "react-redux";
+import FingoModalLevelUp from "src/components/FingoModalLevelUp";
 
 const ScorePage = () => {
+  const dispatch = useDispatch();
+  const { isNewUser, user, auth_setUser } = useAuth();
+  const { app_setModalLevelUp } = useApp();
   const { skillName, category, subcategory } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -108,6 +115,26 @@ const ScorePage = () => {
     });
   };
 
+  const getUserInfo = async  () => {
+    try {
+      const response = await AuthAPI.loginWithEmailAndPassword();
+      if(response.data?.user) {
+        setXP(response.data.user.xp.current);
+        role.current = response.data.user.role;
+        // Put logic to show modal level up here
+        if((parseInt(user?.xp?.total) < parseInt(response.data.user?.xp?.total)) && (parseInt(user?.xp?.level) < parseInt(response.data.user?.xp?.level))) {
+          batch(() => {
+            dispatch(auth_setUser(response.data.user))
+            dispatch(app_setModalLevelUp({
+              open: true, 
+              data: response.data.user?.xp
+            }))
+          })
+        }
+      }
+    } catch(e) {}
+  }
+
   useEffect(() => {
     const newUser = searchParams.get("newUser");
     if (newUser === "true") {
@@ -141,21 +168,12 @@ const ScorePage = () => {
         }
       }
     } else {
-      Axios({
-        method: "GET",
-        withCredentials: true,
-        url: "/server/login",
-      }).then(function (response) {
-        if (response.data.redirect == "/login") {
-          navigate(`/auth/login`);
-        } else {
-          setCelebrate(true);
-          getSkillBySkillName();
-          getAllScores();
-          setXP(response.data.user.xp.current);
-          role.current = response.data.user.role;
-        }
-      });
+      getUserInfo();
+      if(!isNewUser && Boolean(user)) {
+        setCelebrate(true);
+        getSkillBySkillName();
+        getAllScores();
+      }
     }
   }, [searchParams]);
 
@@ -271,6 +289,7 @@ const ScorePage = () => {
         <br />
         <br />
       </div>
+      <FingoModalLevelUp isFormScorePage={true} />
     </FingoHomeLayout>
   );
 };
