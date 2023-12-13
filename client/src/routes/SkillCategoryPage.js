@@ -133,7 +133,7 @@ const SkillCategoryPage = () => {
                 </Helmet>
                 <Container>
                     <div className="row h-auto">
-                        <div className="col-lg-7 order-md-1 order-2">
+                        <div className="col-md-8 order-md-1 order-2">
                             <Row className="justify-content-md-center">
                                 <Col>
                                     <div className="sub_category_card_container">
@@ -191,7 +191,7 @@ const SkillCategoryPage = () => {
                                 </Col>
                             </Row>
                         </div>
-                        <div className="col-lg-5 order-1 mb-2">
+                        <div className="col-md-4 order-1 mb-2">
                             <FingoWidgetContainer />
                         </div>
                     </div>
