@@ -18,6 +18,7 @@ import '../styles/SkillCategoryPage.styles.css'
 import { FingoHomeLayout } from "src/components/layouts";
 import FingoWidgetContainer from "src/components/FingoWidgetContainer";
 import { FingoScrollToTop } from "src/components/layouts/FingoHomeLayout";
+import FingoModalLevelUp from "src/components/FingoModalLevelUp";
 
 const SkillCategoryPage = () => {
     const { skillName } = useParams();
@@ -197,6 +198,7 @@ const SkillCategoryPage = () => {
                     </div>
                 </Container>
             </div>
+            <FingoModalLevelUp />
         </FingoHomeLayout>
     );
 };
