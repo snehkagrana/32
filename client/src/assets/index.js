@@ -8,6 +8,8 @@ import ImageLevel7 from 'src/assets/images/levels/7.png'
 import ImageLevel8 from 'src/assets/images/levels/8.png'
 import ImageLevel9 from 'src/assets/images/levels/9.png'
 import ImageLevel10 from 'src/assets/images/levels/10.png'
+import CelebrateBadge from 'src/assets/images/celebrate-badge.png'
+import CelebrateBadge2 from 'src/assets/images/celebrate-badge-2.png'
 
 const Assets = {
     ImageLevel1,
@@ -20,6 +22,8 @@ const Assets = {
     ImageLevel8,
     ImageLevel9,
     ImageLevel10,
+    CelebrateBadge,
+    CelebrateBadge2,
 }
 
 export default Assets
