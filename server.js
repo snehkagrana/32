@@ -314,7 +314,7 @@ app.post("/server/register", (req, res) => {
                         xp: {
                             current: 0,
                             daily: 0,
-                            level: 0
+                            level: 1
                         },
                     });
                     await newUser.save();
