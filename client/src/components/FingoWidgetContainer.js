@@ -21,8 +21,8 @@ const FingoWidgetContainer = () => {
             {!matchMobile && (
                 <>
                     <FingoCardDayStreak />
-                    <FingoCardTotalXP />
                     <FingoCardDailyXP />
+                    <FingoCardTotalXP />
                 </>
             )}
 

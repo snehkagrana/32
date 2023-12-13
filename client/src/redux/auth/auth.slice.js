@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { auth_loginWithEmailAndPassword } from './auth.thunk'
 
 // Initial state
 const initialState = {
@@ -6,6 +7,9 @@ const initialState = {
     auth_openModalRegister: false,
     user: null,
     newUser: false,
+
+    loginIsLoading: false,
+    loginIsError: false,
 }
 
 // Actual Slice
@@ -25,6 +29,33 @@ export const authSlice = createSlice({
         auth_setNewUser(state, action) {
             state.newUser = action.payload
         },
+    },
+    extraReducers: builder => {
+        // Login
+        builder.addCase(auth_loginWithEmailAndPassword.pending, state => {
+            state.loginIsLoading = true
+            state.loginIsError = false
+        })
+        builder.addCase(
+            auth_loginWithEmailAndPassword.rejected,
+            (state, action) => {
+                state.loginIsLoading = false
+                state.loginIsError = true
+            }
+        )
+        builder.addCase(
+            auth_loginWithEmailAndPassword.fulfilled,
+            (state, action) => {
+                state.loginIsError = false
+                state.loginIsLoading = false
+                if (action.payload.data?.redirect == '/login') {
+                    state.newUser = true
+                    state.user = null
+                } else if (action.payload.data?.user?.email) {
+                    state.user = action.payload.data.user
+                }
+            }
+        )
     },
 })
 

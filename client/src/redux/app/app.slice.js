@@ -7,6 +7,10 @@ const initialState = {
     skills: [],
     dailyXP: 0,
     totalXP: 0,
+    modalLevelUp: {
+        open: false,
+        data: null
+    }
 }
 
 // Actual Slice
@@ -16,6 +20,9 @@ export const appSlice = createSlice({
     reducers: {
         app_setOpenSidebar(state, action) {
             state.openSidebar = action.payload
+        },
+        app_setModalLevelUp(state, action) {
+            state.modalLevelUp = action.payload
         },
         app_setPaletteMode(state, action) {
             state.app_paletteMode = action.payload

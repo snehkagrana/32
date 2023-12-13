@@ -104,3 +104,18 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
         padding-bottom: 0;
     }
 }
+
+
+/* icon button */
+.FingoIconButton {
+    border: none;
+    outline: none;
+    border-radius: 32px;
+    height: 32px;
+    width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background-color: transparent;
+}

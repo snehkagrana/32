@@ -1,8 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useAuth, useMediaQuery } from 'src/hooks'
 
-import JewelsIcon from 'src/assets/images/jewels.png'
-// import HeartIcon from 'src/assets/images/heart.png'
+import BananaIconSVG from 'src/assets/svg/banana-icon.svg'
 import StreakIcon from 'src/assets/images/fire-on.png'
 import { Overlay, Popover } from 'react-bootstrap'
 import FingoCardDayStreak from './FingoCardDayStreak'
@@ -17,15 +16,11 @@ const MENU_ITEMS = [
         color: '#ff9600',
     },
     {
-        icon: JewelsIcon,
+        icon: BananaIconSVG,
         name: 'total_xp',
-        color: '#1cb0f6',
+        color: '#c89600',
     },
-    // {
-    //     icon: HeartIcon,
-    //     name: 'heart',
-    //     color: '#ef5350',
-    // },
+    // ...another menu menu tab
 ]
 
 const FingoWidgetHeader = ({ activeTab, setActiveTab }) => {

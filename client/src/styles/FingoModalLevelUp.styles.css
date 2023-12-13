@@ -1,0 +1,52 @@
+.FingoModalLevelUp {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    border: 2px solid rgb(0 0 0 / 2%);
+    border-radius: 12px;
+    color: #ffffff;
+    padding: 2.65rem 2rem;
+    position: relative;
+}
+
+/* [data-theme='dark'] .FingoModalLevelUp {
+    color: #fcfcfc;
+} */
+
+@media (min-width: 576px) {
+    .FingoModalLevelUp {
+        border-radius: 16px !important;
+    }
+}
+
+.FingoModalLevelUp img {
+    height: 174px;
+    width: auto;
+    margin-bottom: 1.2rem;
+}
+
+.FingoModalLevelUp .btn {
+    min-width: 70%;
+}
+
+.FingoModalLevelUp h2 {
+    font-weight: 700;
+    font-size: 26px;
+}
+
+.FingoModalLevelUp h6 {
+    font-size: 17px;
+    margin-bottom: 0.3rem;
+}
+
+.FingoModalLevelCelebrate {
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 200px;
+    position: absolute;
+    top: 0;
+}

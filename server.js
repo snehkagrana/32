@@ -27,6 +27,8 @@ const fs = require("fs");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const base64url = require("base64url");
+const { getLevelByXpPoints } = require("./utils/xp.utils");
+
 
 aws.config.update({
     secretAccessKey: process.env.ACCESS_SECRET_KEY,
@@ -135,14 +137,37 @@ app.post("/server/login", (req, res, next) => {
         } else {
             req.logIn(user, (err) => {
                 if (err) throw err;
-                console.log("user", req.user);
-                var redir = {
-                    redirect: "/home",
-                    message: "Login Successfully",
-                    email: req.user.email,
-                };
-                ///// redir is the redirect information passed to front end react app.
-                return res.json(redir);
+                // console.log("user", req.user);
+                if(user) {
+                    User.findOne({ email: req.user.email }, async (err, doc) => {
+                        if (err) {
+                            console.log("ERROR", err);
+                        } else {
+                            if(doc) {
+                                await User.updateOne(
+                                    { email: req.user.email },
+                                    {
+                                        $set: {
+                                            xp: {
+                                                current: req?.user?.xp?.current ? req.user.xp.current : 0,
+                                                daily: req?.user?.xp?.daily ? req.user.xp.daily : 0,
+                                                total: req?.user?.xp?.total ? req.user.xp.total  : 0,
+                                                level: getLevelByXpPoints(req?.user?.xp?.total ? req.user.xp.total : 0)
+                                            },
+                                        },
+                                    }
+                                );
+                            }
+                        }
+                    });
+                    var redir = {
+                        redirect: "/home",
+                        message: "Login Successfully",
+                        email: req.user.email,
+                    };
+                    ///// redir is the redirect information passed to front end react app.
+                    return res.json(redir);
+                }
             });
         }
     })(req, res, next);
@@ -152,8 +177,6 @@ app.post("/server/login", (req, res, next) => {
 ////we check if user is already logged in or not
 app.get("/server/login", (req, res) => {
     if (req.isAuthenticated()) {
-        console.log("user is", req.user);
-
         if (req.user.email === undefined || req.user.email === "") {
             var redir = {
                 redirect: "/updateemail",
@@ -163,45 +186,61 @@ app.get("/server/login", (req, res) => {
         }
 
         User.findOne({ email: req.user.email }, async (err, doc) => {
-            if (err) throw err;
-            if (doc) {
-                const daysDiff = daysDifference(doc.lastCompletedDay);
-
-                if (daysDiff === 1) {
-                    // Do nothing, the streak is already up-to-date
-                } else if (daysDiff === 2) {
-                    // User missed one day, reset streak to 0
-                    doc.streak = 0;
-                } else if (daysDiff === 0) {
-                    //keep streak the same
-                } else {
-                    // User missed more than one day, keep streak at 0
-                    doc.streak = 0;
-                }
-
-                if (daysDiff !== 0) {
-                    doc.xp.current = 0;
-                    doc.xp.daily = 0;
-                }
-
-                await User.updateOne(
-                    { email: req.user.email },
-                    {
-                        $set: {
-                            xp: doc.xp,
-                            streak: doc.streak,
-                        },
+            if (err) {
+                console.log("ERROR", err);
+            } else {
+                if(doc) {
+                    const daysDiff = daysDifference(doc.lastCompletedDay);
+                    if (daysDiff === 1) {
+                        // Do nothing, the streak is already up-to-date
+                    } else if (daysDiff === 2) {
+                        // User missed one day, reset streak to 0
+                        doc.streak = 0;
+                    } else if (daysDiff === 0) {
+                        //keep streak the same
+                    } else {
+                        // User missed more than one day, keep streak at 0
+                        doc.streak = 0;
                     }
-                );
+    
+                    if (daysDiff !== 0) {
+                        doc.xp.current = 0;
+                        doc.xp.daily = 0;
+                    }
+    
+                    const user = await User.findOneAndUpdate(
+                        { email: req.user.email },
+                        {
+                            $set: {
+                                streak: doc.streak,
+                                xp: {
+                                    current: doc?.xp?.current ? doc.xp.current : 0,
+                                    daily: doc?.xp?.daily ? doc.xp.daily : 0,
+                                    total: doc?.xp?.total ? doc.xp.total  : 0,
+                                    level: getLevelByXpPoints(doc?.xp?.total ? doc.xp.total : 0)
+                                },
+                            },
+                            
+                        }
+                    );
+
+                    var redir = {
+                        redirect: "/home",
+                        message: "Already Logged In",
+                        user: user,
+                    };
+                    return res.json(redir);
+                }
             }
         });
 
-        var redir = {
-            redirect: "/home",
-            message: "Already Logged In",
-            user: req.user,
-        };
-        return res.json(redir);
+        // var redir = {
+        //     redirect: "/home",
+        //     message: "Already Logged In",
+        //     user: req.user,
+        // };
+        // return res.json(redir);
+
     } else {
         var redir = {
             redirect: "/login",
@@ -271,6 +310,12 @@ app.post("/server/register", (req, res) => {
                         role: "basic",
                         streak: 0,
                         lastCompletedDay: null,
+                        last_played: null,
+                        xp: {
+                            current: 0,
+                            daily: 0,
+                            level: 1
+                        },
                     });
                     await newUser.save();
                     var redir = { redirect: "/login", message: "User Created" };

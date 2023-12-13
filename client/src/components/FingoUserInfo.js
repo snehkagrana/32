@@ -1,6 +1,6 @@
 import Axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { useEffect, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import nonSignedUp from 'src/images/nonSignedUp'
 import signedUp from 'src/images/pepe.jpg'
@@ -8,8 +8,26 @@ import { useDispatch } from 'react-redux'
 import { useAuth } from 'src/hooks'
 
 import 'src/styles/FingoUserInfo.styles.css'
+import { getLevelColor } from 'src/utils'
 
 const FingoUserInfo = () => {
+    const now = new Date()
+    const time = now.getHours()
+
+    const getGreetingText = useMemo(() => {
+        if (time >= 1 && time < 11) {
+            return 'Good morning'
+        } else if (time >= 11 && time < 16) {
+            return 'Goog afternoon'
+        } else if (time >= 16 && time < 19) {
+            return 'Goog afternoon'
+        } else if (time >= 19 || time < 5) {
+            return 'Good evening'
+        } else {
+            return 'Hey'
+        }
+    }, [time])
+
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { user, newUser, auth_setNewUser } = useAuth()
@@ -39,8 +57,21 @@ const FingoUserInfo = () => {
 
     return (
         <div className='FingoUserInfo'>
-            <div className='d-flex align-items-center p-3'>
+            <div className='FingoUserInfoInner d-flex align-items-center'>
                 <div className='profile-picture'>
+                    {!newUser && Boolean(user) && (
+                        <div
+                            className='FingoCardDailyXPHeaderLevel'
+                            style={{
+                                backgroundColor: getLevelColor(
+                                    'default',
+                                    user?.xp?.level
+                                ),
+                            }}
+                        >
+                            Lvl {user?.xp?.level ?? 1}
+                        </div>
+                    )}
                     <label htmlFor='profile-picture-upload'>
                         {newUser ? (
                             <img
@@ -72,8 +103,9 @@ const FingoUserInfo = () => {
                     />
                 </div>
                 <div className='user-info ml-3'>
+                    <p className='greetingText'>{getGreetingText}</p>
                     <h4 className='user-name'>
-                        Hey, {newUser ? 'Stranger' : user?.displayName ?? ''}!
+                        {newUser ? 'Stranger' : user?.displayName ?? ''}!
                         <span
                             style={{
                                 display: 'inline-block',
