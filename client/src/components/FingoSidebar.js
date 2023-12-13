@@ -154,7 +154,7 @@ const FingoSidebar = ({ open }) => {
                                 <div className='icon'>
                                     <img src={IcHome} alt='home icon' />
                                 </div>
-                                <span>Learn</span>
+                                <span>Home</span>
                             </a>
                         </li>
                         {newUser && (
