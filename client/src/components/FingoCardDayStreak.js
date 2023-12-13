@@ -39,7 +39,9 @@ const FingoCardDayStreak = () => {
     )
 
     const getStreakMessage = useMemo(() => {
-        const lastCompletedDay = user?.lastCompletedDay ? dayjs(user?.lastCompletedDay).toISOString() : null
+        const lastCompletedDay = user?.lastCompletedDay
+            ? dayjs(user?.lastCompletedDay).toISOString()
+            : null
         if (user?.streak > 0) {
             if (
                 user?.completedDays &&
@@ -81,19 +83,37 @@ const FingoCardDayStreak = () => {
     return (
         <div
             className={`mb-3 FingoCardDayStreak FingoShapeRadius ${
-                user?.streak > 0 && dayOfWeek > 0 ? 'highlight' : ''
+                user?.streak > 0 &&
+                dayOfWeek > 0 &&
+                user?.lastCompletedDay &&
+                dayjs(user?.lastCompletedDay).isSame(
+                    dayjs(today).toISOString(),
+                    'day'
+                )
+                    ? 'highlight'
+                    : ''
             }`}
         >
             <div className='col-12 FingoCardDayStreakInner'>
                 <div className='left FingoCardDayStreakImg'>
                     <img
-                        src={user?.streak > 0 ? FireOn : Fire}
+                        src={
+                            user?.streak > 0 &&
+                            dayOfWeek > 0 &&
+                            user?.lastCompletedDay &&
+                            dayjs(user?.lastCompletedDay).isSame(
+                                dayjs(today).toISOString(),
+                                'day'
+                            )
+                                ? FireOn
+                                : Fire
+                        }
                         alt='Fire icon'
                     />
                 </div>
                 <div className='right'>
                     <h4>{user?.streak ?? 0} day streak</h4>
-                    <p style={{fontSize:"0.85rem"}}>{getStreakMessage}</p>
+                    <p style={{ fontSize: '0.85rem' }}>{getStreakMessage}</p>
                 </div>
             </div>
             <div className='FingoCardDayStreakCalendar FingoShapeRadius'>

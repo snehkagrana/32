@@ -166,7 +166,7 @@
     background-color: #454545;
 }
 
-.FingoCardDayStreak.highlight .FingoCardDayStreakCalendar li a.active {
+.FingoCardDayStreak .FingoCardDayStreakCalendar li a.active {
     background-color: #ff9601;
 }
 
