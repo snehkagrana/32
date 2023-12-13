@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.808fbcac.css",
-    "main.js": "/static/js/main.dc2c53e4.js",
+    "main.css": "/static/css/main.df2a3458.css",
+    "main.js": "/static/js/main.e34008f2.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
     "static/media/8.png": "/static/media/8.9daef5f1f68e0fc2fb5f.png",
@@ -64,11 +64,13 @@
     "static/media/sneh.jpg": "/static/media/sneh.f9ee79a2259e5e5a0ac8.jpg",
     "static/media/wrong-audio.mp3": "/static/media/wrong-audio.52e80b0ac4001d1e740d.mp3",
     "static/media/loudly-crying-face.svg": "/static/media/loudly-crying-face.33a7333119b0b78f74c07dcc8af4ac1d.svg",
+    "static/media/star-filled-fade.png": "/static/media/star-filled-fade.4509d191cf386ab2ab28.png",
     "static/media/64944-emoticon-index-finger-the-gesture-emoji.png": "/static/media/64944-emoticon-index-finger-the-gesture-emoji.400bd3dffad316e5a3be.png",
+    "static/media/star-filled.png": "/static/media/star-filled.3f3c9c14588af74d8397.png",
     "static/media/seedling.png": "/static/media/seedling.d1f34df2751ebe97d20e.png",
     "static/media/nonSignedUp": "/static/media/nonSignedUp.d9bed86ebd119aa37490",
     "static/media/correct-audio.mp3": "/static/media/correct-audio.2944938830ac5d97fe17.mp3",
-    "static/media/arrow-2.svg": "/static/media/arrow-2.3ed5e3b2e67cbbf4da6dc3d3f6ef0a05.svg",
+    "static/media/arrow-2.svg": "/static/media/arrow-2.98d9806fc08dd27e4453c7561d0a89ef.svg",
     "static/media/banana-icon.svg": "/static/media/banana-icon.8417494552c51ccbaeb17168958af1f9.svg",
     "static/media/user-cirlce-add.svg": "/static/media/user-cirlce-add.525e2dd061b7de0ae838afb9bd43ddcc.svg",
     "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
@@ -78,14 +80,15 @@
     "static/media/arrow.svg": "/static/media/arrow.bf930bbf3ec41fd9c9756230ec293975.svg",
     "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
     "static/media/lightning-fill2.svg": "/static/media/lightning-fill2.2b5a211d830a24fab92e291d50f65d1d.svg",
-    "static/media/enter.svg": "/static/media/enter.03b9d4ce8bcb86a794c21affed1e1b40.svg",
+    "static/media/enter.svg": "/static/media/enter.2b2db0a88e9d8150b0f69824a2137236.svg",
+    "static/media/star-filled.svg": "/static/media/star-filled.ed1ad811101f5eda6c44676dfa87e596.svg",
     "static/media/info.svg": "/static/media/info.ef876f7b40a92ef036458f95b7e325e2.svg",
-    "main.808fbcac.css.map": "/static/css/main.808fbcac.css.map",
-    "main.dc2c53e4.js.map": "/static/js/main.dc2c53e4.js.map",
+    "main.df2a3458.css.map": "/static/css/main.df2a3458.css.map",
+    "main.e34008f2.js.map": "/static/js/main.e34008f2.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.808fbcac.css",
-    "static/js/main.dc2c53e4.js"
+    "static/css/main.df2a3458.css",
+    "static/js/main.e34008f2.js"
   ]
 }
