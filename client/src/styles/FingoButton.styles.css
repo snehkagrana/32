@@ -1,0 +1,44 @@
+.FingoButton {
+    font-weight: 700;
+    border-radius: 7px;
+}
+
+.FingoButton.success {
+    background-color: rgb(40, 167, 69);
+    border-color: rgb(40, 167, 69);
+    box-shadow: rgb(26, 89, 40) 0px 7px;
+    transition: all 0.2s ease 0s;
+}
+.FingoButton.success:active,
+.FingoButton.success:hover {
+    transform: translateY(5px);
+    background-color: #28a745 !important;
+}
+.FingoButton.success:active:focus {
+    outline: none;
+    border: none;
+    box-shadow: rgb(26, 89, 40) 0px 7px !important;
+    transform: translateY(5px);
+    background-color: #28a745 !important;
+}
+
+/* white */
+.FingoButton.white {
+    background-color: rgb(255, 255, 255);
+    border-color: rgb(242, 242, 242);
+    box-shadow: rgb(214, 214, 214) 0px 7px;
+    transition: all 0.2s ease 0s;
+    color: #333;
+}
+.FingoButton.white:active,
+.FingoButton.white:hover {
+    transform: translateY(5px);
+    background-color: #ffffff !important;
+}
+.FingoButton.white:active:focus {
+    outline: none;
+    border: none;
+    box-shadow: rgb(224, 224, 224) 0px 7px !important;
+    transform: translateY(5px);
+    background-color: #ffffff !important;
+}
