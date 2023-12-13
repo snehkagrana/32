@@ -7,6 +7,12 @@ const FingoSwitchTheme = () => {
     const dispatch = useDispatch()
     const { app_isDarkTheme, app_togglePaletteMode } = useApp()
 
+    // Get the stored theme from local storage or use "light" as the default
+    const storedTheme = localStorage.getItem('theme') || 'light'
+
+    // Set the theme based on the stored value
+    document.documentElement.setAttribute('data-theme', storedTheme)
+
     const onClick = useCallback(() => {
         dispatch(app_togglePaletteMode())
         const nextValue = app_isDarkTheme ? 'light' : 'dark'
