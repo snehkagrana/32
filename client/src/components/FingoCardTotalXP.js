@@ -5,7 +5,7 @@ import { ReactComponent as InfoIcon } from 'src/assets/svg/info.svg'
 import { useDispatch } from 'react-redux'
 import Assets from 'src/assets'
 import { ReactComponent as BananaIcon } from 'src/assets/svg/banana-icon.svg'
-import { getLevelColor } from 'src/utils'
+import { getLevelColor, getProgressCurrentLevel } from 'src/utils'
 
 const FingoCardTotalXP = () => {
     const { totalXP } = useApp()
@@ -106,7 +106,11 @@ const FingoCardTotalXP = () => {
                                 aria-valuemin='0'
                                 aria-valuemax='1000'
                                 style={{
-                                    width: '50%',
+                                    width: `${getProgressCurrentLevel(
+                                        user?.xp?.total
+                                            ? parseInt(user.xp.total)
+                                            : 0
+                                    )}%`,
                                     backgroundColor: getLevelColor(
                                         'default',
                                         user?.xp?.level
