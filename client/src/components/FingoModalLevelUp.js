@@ -1,16 +1,48 @@
 import { useApp } from 'src/hooks'
-import { FingoModal } from './core'
+import { FingoButton, FingoModal } from './core'
 import { useDispatch } from 'react-redux'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Assets from 'src/assets'
+import 'src/styles/FingoModalLevelUp.styles.css'
+import { getLevelColor } from 'src/utils'
+import Confetti from 'react-dom-confetti'
+import { XP_LEVEL_COLORS_DEFAULT } from 'src/constants'
 
-const FingoModalLevelUp = () => {
+const confettiConfig = {
+    angle: 10,
+    spread: 360,
+    startVelocity: 30,
+    elementCount: 150,
+    dragFriction: 0.12,
+    duration: 2000,
+    stagger: 3,
+    width: '10px',
+    height: '10px',
+    perspective: '420px',
+    colors: XP_LEVEL_COLORS_DEFAULT,
+}
+
+const FingoModalLevelUp = ({ isFormScorePage }) => {
     const dispatch = useDispatch()
+    const [celebrate, setCelebrate] = useState(false)
     const { modalLevelUp, app_setModalLevelUp } = useApp()
 
     const onClose = useCallback(() => {
-        dispatch(app_setModalLevelUp({ open: false, data: null }))
+        dispatch(app_setModalLevelUp({ ...modalLevelUp, open: false }))
+        setTimeout(() => {
+            dispatch(app_setModalLevelUp({ open: false, data: null }))
+        }, 300)
         // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [modalLevelUp])
+
+    useEffect(() => {
+        if (modalLevelUp?.open && modalLevelUp?.data) {
+            setTimeout(() => {
+                setCelebrate(true)
+            }, 300)
+        } else {
+            setCelebrate(false)
+        }
     }, [modalLevelUp])
 
     const getLevelImage = level => {
@@ -45,10 +77,67 @@ const FingoModalLevelUp = () => {
 
     return (
         <FingoModal open={modalLevelUp.open} onClose={onClose}>
-            <img
-                src={getLevelImage(modalLevelUp?.data?.level ?? 0)}
-                alt='Level'
-            />
+            <div
+                className='FingoModalLevelUp'
+                style={{
+                    background: getLevelColor(
+                        'default',
+                        modalLevelUp?.data?.level
+                    ),
+                }}
+            >
+                <div
+                    className='FingoModalLevelCelebrate'
+                    style={{
+                        backgroundImage: `url('${Assets.CelebrateBadge2}')`,
+                    }}
+                />
+                <img
+                    className='relative'
+                    src={getLevelImage(modalLevelUp?.data?.level ?? 0)}
+                    alt='Level'
+                />
+
+                <div className='relative mb-3 text-center'>
+                    {isFormScorePage ? (
+                        <>
+                            <h2>Congratulations!</h2>
+                            <h6>
+                                You reached Level{' '}
+                                {modalLevelUp?.data?.level
+                                    ? modalLevelUp.data.level
+                                    : ''}
+                            </h6>
+                        </>
+                    ) : (
+                        <>
+                            <h2>
+                                Level{' '}
+                                {modalLevelUp?.data?.level
+                                    ? modalLevelUp.data.level
+                                    : ''}
+                            </h2>
+                            <h6>
+                                You have earned 🍌{' '}
+                                {modalLevelUp?.data?.total
+                                    ? modalLevelUp.data.total
+                                    : ''}
+                                .
+                            </h6>
+                            <h6>
+                                Keep learning to go from being a monkey to a
+                                human.
+                            </h6>
+                        </>
+                    )}
+                </div>
+                <FingoButton color='white' onClick={onClose}>
+                    Continue
+                </FingoButton>
+            </div>
+            <div className='confetti-container'>
+                <Confetti active={celebrate} config={confettiConfig} />
+            </div>
         </FingoModal>
     )
 }
