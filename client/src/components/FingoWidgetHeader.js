@@ -18,7 +18,7 @@ const MENU_ITEMS = [
     {
         icon: BananaIconSVG,
         name: 'total_xp',
-        color: '#ffca2c',
+        color: '#c89600',
     },
     // ...another menu menu tab
 ]
