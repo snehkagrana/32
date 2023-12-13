@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.df2a3458.css",
-    "main.js": "/static/js/main.e34008f2.js",
+    "main.css": "/static/css/main.1a03d58f.css",
+    "main.js": "/static/js/main.d3c0769c.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
     "static/media/8.png": "/static/media/8.9daef5f1f68e0fc2fb5f.png",
@@ -42,6 +42,7 @@
     "static/media/fingo-landing-page-5-1.png": "/static/media/fingo-landing-page-5-1.488577cc13e1636f23df.png",
     "static/media/103498-party-picture-hard-emoji-free-download-image.png": "/static/media/103498-party-picture-hard-emoji-free-download-image.9ec8218a08d44d570034.png",
     "static/media/success-1.mp3": "/static/media/success-1.fd2c2fea27379cbc44da.mp3",
+    "static/media/game-level-complete.mp3": "/static/media/game-level-complete.f65684e8e91f5683f947.mp3",
     "static/media/103180-hobby-emoji-free-transparent-image-hd.png": "/static/media/103180-hobby-emoji-free-transparent-image-hd.3d1cfd70ac61c855df7e.png",
     "static/media/73728-emoticon-smiley-peace-emojis-laughter-emoji.png": "/static/media/73728-emoticon-smiley-peace-emojis-laughter-emoji.cd609439bc553160bdf1.png",
     "static/media/1.png": "/static/media/1.5ceda60411368d78de6c.png",
@@ -83,12 +84,12 @@
     "static/media/enter.svg": "/static/media/enter.2b2db0a88e9d8150b0f69824a2137236.svg",
     "static/media/star-filled.svg": "/static/media/star-filled.ed1ad811101f5eda6c44676dfa87e596.svg",
     "static/media/info.svg": "/static/media/info.ef876f7b40a92ef036458f95b7e325e2.svg",
-    "main.df2a3458.css.map": "/static/css/main.df2a3458.css.map",
-    "main.e34008f2.js.map": "/static/js/main.e34008f2.js.map",
+    "main.1a03d58f.css.map": "/static/css/main.1a03d58f.css.map",
+    "main.d3c0769c.js.map": "/static/js/main.d3c0769c.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.df2a3458.css",
-    "static/js/main.e34008f2.js"
+    "static/css/main.1a03d58f.css",
+    "static/js/main.d3c0769c.js"
   ]
 }
