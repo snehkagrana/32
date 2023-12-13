@@ -10,6 +10,10 @@
     /* border: 2px solid #888888; */
 }
 
+.FingoCardTotalXPHeaderLevelContainer {
+    height: 30px;
+}
+
 .FingoCardTotalXPHeaderLevel {
     background-color: rgb(40, 167, 69);
     border-radius: 1rem;
@@ -21,17 +25,6 @@
     line-height: 1;
 }
 
-/* .FingoCardTotalXP .title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 1.2rem;
-} */
-
-/* .FingoCardTotalXPLevel h4 {
-    font-size: 16px;
-    margin-bottom: 0.3rem;
-} */
-
 .FingoCardTotalXP .xp-header {
     margin-bottom: 0.5rem;
     color: #494949;
@@ -40,7 +33,9 @@
 .FingoCardTotalXP .xp-header p {
     margin-bottom: 0;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 14px;
+    text-align: left;
+    line-height: 1.2;
 }
 
 /* .FingoCardTotalXP .xp-name {
@@ -77,6 +72,17 @@
     padding-right: 25%;
 }
 
+.FingoCardTotalXP.Level-8 .FingoCardTotalXPImg {
+    height: 63%;
+    width: 63%;
+    top: -7px;
+    right: 1%;
+}
+
+.FingoCardTotalXP.Level-8 .FingoCardTotalXPInner .right {
+    padding-right: 0;
+}
+
 .FingoCardTotalXPContent {
     display: flex;
     width: 100%;
@@ -100,7 +106,7 @@
 }
 
 .FingoCardTotalXPContent .progress-bar {
-    background-color: rgb(0 205 156) !important;
+    /* background-color: rgb(0 205 156) !important; */
 }
 
 .FingoCardTotalXPContent .xp-count {
@@ -123,10 +129,16 @@
 
 .FingoCardTotalXP .FingoIconButton {
     position: absolute;
-    top: 8px;
-    right: 8px;
-    background-color: rgba(0, 0, 0, 0.1);
-    height: 26px;
-    width: 26px;
-    color: #444;
+    top: 4px;
+    right: 4px;
+    height: 24px;
+    width: 24px;
+    color: #555555;
+    background-color: transparent;
+    background-color: rgb(226 226 226 / 40%);
+}
+
+[data-theme='dark'] .FingoCardTotalXP .FingoIconButton {
+    color: #c7c7c7;
+    background-color: rgb(51 51 51 / 40%);
 }

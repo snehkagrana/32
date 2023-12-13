@@ -5,6 +5,7 @@ import { ReactComponent as InfoIcon } from 'src/assets/svg/info.svg'
 import { useDispatch } from 'react-redux'
 import Assets from 'src/assets'
 import { ReactComponent as BananaIcon } from 'src/assets/svg/banana-icon.svg'
+import { getLevelColor } from 'src/utils'
 
 const FingoCardTotalXP = () => {
     const { totalXP } = useApp()
@@ -54,14 +55,16 @@ const FingoCardTotalXP = () => {
         dispatch(
             app_setModalLevelUp({
                 open: true,
-                data: { total: user?.xp?.total, level: user?.xp?.level },
+                data: user?.xp ? user.xp : null,
             })
         )
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [openModalLevelUp])
+    }, [openModalLevelUp, user])
 
     return (
-        <div className={`mb-3 FingoCardTotalXP FingoShapeRadius`}>
+        <div
+            className={`mb-3 FingoCardTotalXP FingoShapeRadius Level-${user?.xp?.level}`}
+        >
             <div
                 className='FingoCardTotalXPImg'
                 style={{
@@ -71,11 +74,21 @@ const FingoCardTotalXP = () => {
                 }}
             />
             {/* <h2 className='title'>Total XP</h2> */}
-            {!newUser && Boolean(user) && (
-                <div className='FingoCardTotalXPHeaderLevel'>
-                    <span>LEVEL {user?.xp?.level ?? 1}</span>
-                </div>
-            )}
+            <div className='FingoCardTotalXPHeaderLevelContainer'>
+                {!newUser && Boolean(user) && (
+                    <div
+                        className='FingoCardTotalXPHeaderLevel'
+                        style={{
+                            backgroundColor: getLevelColor(
+                                'default',
+                                user?.xp?.level
+                            ),
+                        }}
+                    >
+                        <span>LEVEL {user?.xp?.level}</span>
+                    </div>
+                )}
+            </div>
             <div className='FingoCardTotalXPInner'>
                 <div className='left'>
                     <BananaIcon />
@@ -87,12 +100,18 @@ const FingoCardTotalXP = () => {
                     <div className='FingoCardTotalXPContent'>
                         <div class='progress'>
                             <div
-                                class='progress-bar bg-success'
+                                class='progress-bar'
                                 role='progressbar'
                                 aria-valuenow={getTotalXP || 0}
                                 aria-valuemin='0'
                                 aria-valuemax='1000'
-                                style={{ width: '50%' }}
+                                style={{
+                                    width: '50%',
+                                    backgroundColor: getLevelColor(
+                                        'default',
+                                        user?.xp?.level
+                                    ),
+                                }}
                             ></div>
                         </div>
                     </div>

@@ -1,6 +1,6 @@
 import Axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import nonSignedUp from 'src/images/nonSignedUp'
 import signedUp from 'src/images/pepe.jpg'
@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 import { useAuth } from 'src/hooks'
 
 import 'src/styles/FingoUserInfo.styles.css'
+import { getLevelColor } from 'src/utils'
 
 const FingoUserInfo = () => {
     const now = new Date()
@@ -59,7 +60,15 @@ const FingoUserInfo = () => {
             <div className='FingoUserInfoInner d-flex align-items-center'>
                 <div className='profile-picture'>
                     {!newUser && Boolean(user) && (
-                        <div className='FingoCardDailyXPHeaderLevel'>
+                        <div
+                            className='FingoCardDailyXPHeaderLevel'
+                            style={{
+                                backgroundColor: getLevelColor(
+                                    'default',
+                                    user?.xp?.level
+                                ),
+                            }}
+                        >
                             Lvl {user?.xp?.level ?? 1}
                         </div>
                     )}

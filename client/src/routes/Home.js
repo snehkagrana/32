@@ -84,7 +84,7 @@ import FingoModalLevelUp from "src/components/FingoModalLevelUp";
 ////join room is the invitation link to which user must be redirected to
 const Home = (props) => {
   const dispatch = useDispatch();
-  const { auth_setUser, auth_setNewUser, auth_setOpenModalRegister } = useAuth()
+  const { auth_setUser, auth_setNewUser, auth_setOpenModalRegister, auth_loginWithEmailAndPassword } = useAuth()
   const [searchValue, setSearchValue] = useState("");
   const [userName, setUserName] = useState(null);
   const [skills, setSkills] = useState([]);
@@ -302,8 +302,8 @@ const Home = (props) => {
       setSkills(res.data.data);
       // setSelectedSkill(res.data.data[0].skill);
       // console.log('last_played', last_played);
-      if (Object.entries(last_played).length > 0) {
-        if (last_played.skill === null) {
+      if (last_played && Object.entries(last_played).length > 0) {
+        if (last_played?.skill === null) {
           // console.log('skill is null');
           setContinueHeader("Explore new Skills");
         } else {
@@ -436,6 +436,7 @@ const Home = (props) => {
   }, []);
 
   useEffect(() => {
+    dispatch(auth_loginWithEmailAndPassword())
     if (newUser) {
       getSkills({});
     }
