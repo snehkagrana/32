@@ -121,9 +121,11 @@ const FingoCardTotalXP = () => {
                     </div>
                 </div>
             </div>
-            <button className='FingoIconButton' onClick={onClickLevelInfo}>
-                <InfoIcon />
-            </button>
+            {!newUser && Boolean(user) && (
+                <button className='FingoIconButton' onClick={onClickLevelInfo}>
+                    <InfoIcon />
+                </button>
+            )}
         </div>
     )
 }
