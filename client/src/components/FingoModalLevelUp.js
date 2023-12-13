@@ -7,6 +7,8 @@ import 'src/styles/FingoModalLevelUp.styles.css'
 import { getLevelColor } from 'src/utils'
 import Confetti from 'react-dom-confetti'
 import { XP_LEVEL_COLORS_DEFAULT } from 'src/constants'
+import { Howl } from 'howler'
+import Sound from 'src/sounds/game-level-complete.mp3'
 
 const confettiConfig = {
     angle: 10,
@@ -27,6 +29,10 @@ const FingoModalLevelUp = ({ isFormScorePage }) => {
     const [celebrate, setCelebrate] = useState(false)
     const { modalLevelUp, app_setModalLevelUp } = useApp()
 
+    const sound = new Howl({
+        src: [Sound], // Replace with the path to your sound file
+    })
+
     const onClose = useCallback(() => {
         dispatch(app_setModalLevelUp({ ...modalLevelUp, open: false }))
         setTimeout(() => {
@@ -44,6 +50,21 @@ const FingoModalLevelUp = ({ isFormScorePage }) => {
             setCelebrate(false)
         }
     }, [modalLevelUp])
+
+    useEffect(() => {
+        if (isFormScorePage) {
+            sound.once('load', () => {
+                if (celebrate) {
+                    sound.play()
+                }
+            })
+            sound.load()
+            return () => {
+                sound.unload()
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [celebrate, isFormScorePage])
 
     const getLevelImage = level => {
         if (level) {

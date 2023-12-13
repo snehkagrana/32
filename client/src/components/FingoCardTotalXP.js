@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import Assets from 'src/assets'
 import { ReactComponent as BananaIcon } from 'src/assets/svg/banana-icon.svg'
 import { getLevelColor, getProgressCurrentLevel } from 'src/utils'
+import { LEVEL_THRESHOLDS } from 'src/constants'
 
 const FingoCardTotalXP = () => {
     const { totalXP } = useApp()
@@ -61,6 +62,15 @@ const FingoCardTotalXP = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [openModalLevelUp, user])
 
+    const getNextTargetXp = useMemo(() => {
+        if (user?.xp?.total) {
+            const filteredLevels = LEVEL_THRESHOLDS.filter(
+                x => x > parseInt(user.xp.total, 10)
+            )
+            return filteredLevels.length > 0 ? filteredLevels[0] : 0
+        }
+    }, [user])
+
     return (
         <div
             className={`mb-3 FingoCardTotalXP FingoShapeRadius Level-${user?.xp?.level}`}
@@ -95,7 +105,9 @@ const FingoCardTotalXP = () => {
                 </div>
                 <div className='right'>
                     <div className='xp-header'>
-                        <p>Total XP / Next Target</p>
+                        <p>
+                            {user?.xp?.total} / {getNextTargetXp}
+                        </p>
                     </div>
                     <div className='FingoCardTotalXPContent'>
                         <div class='progress'>

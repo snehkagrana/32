@@ -28,14 +28,15 @@
 .FingoCardTotalXP .xp-header {
     margin-bottom: 0.5rem;
     color: #494949;
+    text-align: center;
+    justify-content: center;
 }
 
 .FingoCardTotalXP .xp-header p {
     margin-bottom: 0;
     font-weight: bold;
-    font-size: 14px;
-    text-align: left;
-    line-height: 1.2;
+    font-size: 17px;
+    line-height: 1;
 }
 
 /* .FingoCardTotalXP .xp-name {
