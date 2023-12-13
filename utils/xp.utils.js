@@ -10,7 +10,7 @@ const getLevelByXpPoints = (points) => {
             return i;
         }
     }
-    return 1;
+    return 0
 };
 
 module.exports = {

@@ -310,10 +310,11 @@ app.post("/server/register", (req, res) => {
                         role: "basic",
                         streak: 0,
                         lastCompletedDay: null,
+                        last_played: null,
                         xp: {
                             current: 0,
                             daily: 0,
-                            level: 1
+                            level: 0
                         },
                     });
                     await newUser.save();
