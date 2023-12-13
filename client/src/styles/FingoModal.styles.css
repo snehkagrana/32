@@ -1,1 +1,40 @@
-.FingoModal {}
+.FingoModal {
+}
+
+.FingoModal .modal-content {
+    border-radius: 12px;
+    border: 2px solid rgb(0 0 0 / 2%);
+    padding: 0;
+    background-color: transparent;
+}
+
+@media (min-width: 576px) {
+    .FingoModal .modal-content {
+        border-radius: 16px !important;
+    }
+}
+
+[data-theme='dark'] FingoModal .modal-content {
+    border: 2px solid rgb(255 255 255 / 28%);
+}
+
+.FingoModalClose {
+    width: 38px;
+    height: 38px;
+    border-radius: 38px;
+    border: none !important;
+    background-color: transparent;
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    background: #ff4141;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;
+    color: #fff;
+    z-index: 1001;
+}
+
+.FingoModalClose svg {
+    width: 22px;
+    margin-top: -2px;
+    height: auto;
+}

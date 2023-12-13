@@ -1,5 +1,5 @@
 import React from 'react'
-
+import 'src/styles/FingoModal.styles.css'
 import { Modal as BootstrapModal } from 'react-bootstrap'
 
 export const FingoModal = ({ open, onClose, children }) => {
@@ -11,7 +11,7 @@ export const FingoModal = ({ open, onClose, children }) => {
             aria-labelledby='contained-modal-title-vcenter'
             centered
         >
-            <button className='auth_modal_close' onClick={onClose}>
+            <button className='FingoModalClose' onClick={onClose}>
                 <svg
                     xmlns='http://www.w3.org/2000/svg'
                     width='1024'
