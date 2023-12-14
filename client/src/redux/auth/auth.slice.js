@@ -5,9 +5,6 @@ import { auth_loginWithEmailAndPassword } from './auth.thunk'
 const initialState = {
     auth_openModalLogin: false,
     auth_openModalRegister: false,
-    user: null,
-    newUser: false,
-
     loginIsLoading: false,
     loginIsError: false,
 }
@@ -23,12 +20,7 @@ export const authSlice = createSlice({
         auth_setOpenModalRegister(state, action) {
             state.auth_openModalRegister = action.payload
         },
-        auth_setUser(state, action) {
-            state.user = action.payload
-        },
-        auth_setNewUser(state, action) {
-            state.newUser = action.payload
-        },
+        auth_reset: () => initialState,
     },
     extraReducers: builder => {
         // Login
@@ -48,12 +40,6 @@ export const authSlice = createSlice({
             (state, action) => {
                 state.loginIsError = false
                 state.loginIsLoading = false
-                if (action.payload.data?.redirect == '/login') {
-                    state.newUser = true
-                    state.user = null
-                } else if (action.payload.data?.user?.email) {
-                    state.user = action.payload.data.user
-                }
             }
         )
     },

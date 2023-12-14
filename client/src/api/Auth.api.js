@@ -2,18 +2,27 @@ import { Axios } from 'src/api'
 
 export const AuthAPI = {
     register: async body => {
-        return Axios.post('/server/api/auth/register', body)
+        const response = await Axios.post('/server/api/auth/register', body)
+        return response?.data
     },
     loginWithEmailAndPassword: async body => {
-        return Axios.post('/server/api/auth/login', body)
+        const response = await Axios.post('/server/api/auth/login', body)
+        return response.data
     },
-    getAuthenticatedUser: async body => {
-        return Axios.get('/server/api/auth/user')
+    getAuthenticatedUser: async token => {
+        const response = await Axios.get('/server/api/auth/user', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        return response?.data
     },
-    sync: async body => {
-        return Axios.get('/server/api/auth/sync')
+    sync: async () => {
+        const response = await Axios.get('/server/api/auth/sync')
+        return response?.data
     },
-    revokeToken: async body => {
-        return Axios.get('/server/api/auth/logout')
+    revokeToken: async () => {
+        const response = await Axios.get('/server/api/auth/logout')
+        return response?.data
     },
 }

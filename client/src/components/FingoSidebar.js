@@ -29,10 +29,12 @@ const FingoSidebar = ({ open }) => {
         auth_setOpenModalLogin,
         auth_setOpenModalRegister,
         user,
-        newUser,
-        auth_setNewUser,
-        auth_setUser,
+        authPersisted_setNewUser,
+        authPersisted_setUser,
+        isAuthenticated,
     } = useAuth()
+
+    console.log('isAuthenticated', isAuthenticated)
 
     const {
         app_setSkills,
@@ -40,8 +42,6 @@ const FingoSidebar = ({ open }) => {
         app_setTotalXP,
         app_setOpenSidebar,
     } = useApp()
-    const role = useRef('')
-    const [userName, setUserName] = useState(null)
 
     const handleLogOut = () => {
         Swal.fire({
@@ -71,8 +71,8 @@ const FingoSidebar = ({ open }) => {
                     dispatch(app_setSkills([]))
                     dispatch(app_setDailyXP(0))
                     dispatch(app_setTotalXP(0))
-                    dispatch(auth_setUser(null))
-                    dispatch(auth_setNewUser(null))
+                    dispatch(authPersisted_setUser(null))
+                    dispatch(authPersisted_setNewUser(null))
                 })
             }
         })
@@ -101,30 +101,30 @@ const FingoSidebar = ({ open }) => {
 
     ////to authenticate user before allowing him to enter the home page
     ////if he is not redirect him to login page
-    useEffect(() => {
-        Axios({
-            method: 'GET',
-            withCredentials: true,
-            url: '/server/login',
-        }).then(function (response) {
-            if (response.data.redirect == '/login') {
-                // console.log("Please log in");
-                dispatch(auth_setNewUser(true))
-                // navigate(`/auth/login`);
-            } else if (response.data.redirect == '/updateemail') {
-                navigate('/updateemail')
-            } else {
-                // console.log("Already logged in");
-                role.current = response.data.user.role
-                // setUser(response.data.user)
-                setUserName(
-                    response.data.user.displayName
-                        ? response.data.user.displayName?.split(' ')[0]
-                        : response.data.user.email
-                )
-            }
-        })
-    }, [])
+    // useEffect(() => {
+    //     Axios({
+    //         method: 'GET',
+    //         withCredentials: true,
+    //         url: '/server/login',
+    //     }).then(function (response) {
+    //         if (response.data.redirect == '/login') {
+    //             // console.log("Please log in");
+    //             dispatch(authPersisted_setNewUser(true))
+    //             // navigate(`/auth/login`);
+    //         } else if (response.data.redirect == '/updateemail') {
+    //             navigate('/updateemail')
+    //         } else {
+    //             // console.log("Already logged in");
+    //             role.current = response.data.user.role
+    //             // setUser(response.data.user)
+    //             setUserName(
+    //                 response.data.user.displayName
+    //                     ? response.data.user.displayName?.split(' ')[0]
+    //                     : response.data.user.email
+    //             )
+    //         }
+    //     })
+    // }, [])
 
     const onClickBackdrop = () => {
         dispatch(app_setOpenSidebar(false))
@@ -157,7 +157,7 @@ const FingoSidebar = ({ open }) => {
                                 <span>Home</span>
                             </a>
                         </li>
-                        {newUser && (
+                        {!isAuthenticated && (
                             <>
                                 <li>
                                     <a
@@ -189,7 +189,7 @@ const FingoSidebar = ({ open }) => {
                                 </li>
                             </>
                         )}
-                        {!newUser && (
+                        {isAuthenticated && (
                             <li>
                                 <a
                                     href='#'
@@ -205,7 +205,7 @@ const FingoSidebar = ({ open }) => {
                                 </a>
                             </li>
                         )}
-                        {user && user?.role === 'admin' && (
+                        {isAuthenticated && user?.role === 'admin' && (
                             <>
                                 <li>
                                     <a

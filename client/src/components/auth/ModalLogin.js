@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+/* eslint-disable eqeqeq */
+import React, { useState, useEffect, useCallback } from 'react'
 import Axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { Row, Form, Button, Col, Modal } from 'react-bootstrap'
@@ -6,17 +7,20 @@ import CustomGoogleSignInButton from '../CustomGoogleSignInButton'
 import '../../styles/auth.styles.css'
 import { useAuth } from 'src/hooks'
 import { batch, useDispatch } from 'react-redux'
+import { authUtils } from 'src/utils'
 
 export default function ModalLogin() {
     const dispatch = useDispatch()
     const {
+        auth_getUser,
         auth_openModalLogin,
         auth_setOpenModalLogin,
         auth_setOpenModalRegister,
+        auth_loginWithEmailAndPassword,
     } = useAuth()
 
-    const [loginEmail, setLoginEmail] = useState('')
-    const [loginPassword, setLoginPassword] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
     const [authMsg, setAuthMsg] = useState('')
     const [showAuthMsg, setShowAuthMsg] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
@@ -45,35 +49,73 @@ export default function ModalLogin() {
         navigate('/home')
     }
 
-    const handleLogin = () => {
-        Axios({
-            method: 'POST',
-            data: {
-                email: loginEmail,
-                password: loginPassword,
-            },
-            withCredentials: true,
-            url: '/server/login',
-        }).then(function (response) {
-            if (response.data.message === 'Incorrect Email or Wrong Password') {
-                setAuthMsg(response.data.message)
-                setShowAuthMsg(true)
-            } else if (response.data.message === 'Login Successfully') {
-                setAuthMsg(response.data.message)
-                setShowAuthMsg(true)
-                if (response.data.redirect === '/home') {
-                    handleCloseModal()
-                    navigate(`/home`)
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 150)
+    const handleLogin = useCallback(() => {
+        if (email && password) {
+            dispatch(auth_loginWithEmailAndPassword({ email, password })).then(
+                result => {
+                    if (result?.meta?.requestStatus === 'fulfilled') {
+                        const token = result.payload.data?.access_token
+                        if (token) {
+                            authUtils.saveUserAccessToken(token)
+
+                            if (result?.payload?.redirect == '/updateemail') {
+                                navigate('/updateemail')
+                            } else {
+                                /**
+                                 * After login success
+                                 * Get user info, xp, and other info belongs to user
+                                 */
+                                dispatch(auth_getUser(token)).then(result => {
+                                    if (
+                                        result?.meta?.requestStatus ===
+                                        'fulfilled'
+                                    ) {
+                                        handleCloseModal()
+                                        setTimeout(() => {
+                                            navigate(`/home`)
+                                            // window.location.reload()
+                                        }, 150)
+                                    }
+                                })
+                            }
+                        }
+                    }
                 }
-            } else {
-                setAuthMsg('Unknown error occurred. Please try again.')
-                setShowAuthMsg(true)
-            }
-        })
-    }
+            )
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [email, password])
+
+    // const handleLogin = () => {
+    //     dispatch()
+    //     Axios({
+    //         method: 'POST',
+    //         data: {
+    //             email: email,
+    //             password: password,
+    //         },
+    //         withCredentials: true,
+    //         url: '/server/login',
+    //     }).then(function (response) {
+    //         if (response.data.message === 'Incorrect Email or Wrong Password') {
+    //             setAuthMsg(response.data.message)
+    //             setShowAuthMsg(true)
+    //         } else if (response.data.message === 'Login Successfully') {
+    //             setAuthMsg(response.data.message)
+    //             setShowAuthMsg(true)
+    //             if (response.data.redirect === '/home') {
+    //                 handleCloseModal()
+    //                 navigate(`/home`)
+    //                 setTimeout(() => {
+    //                     window.location.reload()
+    //                 }, 150)
+    //             }
+    //         } else {
+    //             setAuthMsg('Unknown error occurred. Please try again.')
+    //             setShowAuthMsg(true)
+    //         }
+    //     })
+    // }
 
     const loginWithGoogle = e => {
         e.stopPropagation()
@@ -82,15 +124,15 @@ export default function ModalLogin() {
 
     const handlePasswordBlur = () => {
         setHasInteractedWithPassword(true)
-        if (loginPassword === '') {
+        if (password === '') {
             setPasswordTooltipMessage("Password can't be empty")
         }
-        checkValidCredentials(loginEmail, loginPassword)
+        checkValidCredentials(email, password)
     }
 
     const handleEmailChange = e => {
         const email = e.target.value.trim()
-        setLoginEmail(email)
+        setEmail(email)
         if (hasInteractedWithEmail) {
             if (email === '') {
                 setEmailTooltipMessage("Email can't be empty")
@@ -104,10 +146,10 @@ export default function ModalLogin() {
 
     const handleEmailBlur = () => {
         setHasInteractedWithEmail(true)
-        if (loginEmail === '') {
+        if (email === '') {
             setEmailTooltipMessage("Email can't be empty")
             setValidEmail(false)
-        } else if (!isValidEmail(loginEmail)) {
+        } else if (!isValidEmail(email)) {
             setEmailTooltipMessage('Invalid email format')
             setValidEmail(false)
         } else {
@@ -131,8 +173,8 @@ export default function ModalLogin() {
         } else {
             setPasswordTooltipMessage('')
         }
-        setLoginPassword(password)
-        checkValidCredentials(loginEmail, password)
+        setPassword(password)
+        checkValidCredentials(email, password)
     }
 
     const checkValidCredentials = (email, password) => {
@@ -160,7 +202,7 @@ export default function ModalLogin() {
         Axios({
             method: 'POST',
             data: {
-                email: loginEmail,
+                email: email,
                 link: link,
             },
             withCredentials: true,
