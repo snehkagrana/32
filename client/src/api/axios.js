@@ -1,5 +1,6 @@
 import _axios from 'axios'
 import { appConfig } from 'src/configs/app.config'
+import { authUtils } from 'src/utils'
 
 // On request rejected
 const onRequestError = axiosError => {
@@ -22,6 +23,9 @@ const onResponseError = axiosError => {
 const Axios = _axios.create({
     baseURL: appConfig.apiBaseUrl,
     timeout: 20000,
+    headers: {
+        Authorization: `Bearer ${authUtils.getUserAccessToken()}`,
+    },
 })
 
 // On request
