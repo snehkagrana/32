@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.a3a73893.css",
-    "main.js": "/static/js/main.172890d7.js",
+    "main.js": "/static/js/main.ea2cc1f0.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
     "static/media/8.png": "/static/media/8.9daef5f1f68e0fc2fb5f.png",
@@ -85,11 +85,11 @@
     "static/media/star-filled.svg": "/static/media/star-filled.ed1ad811101f5eda6c44676dfa87e596.svg",
     "static/media/info.svg": "/static/media/info.ef876f7b40a92ef036458f95b7e325e2.svg",
     "main.a3a73893.css.map": "/static/css/main.a3a73893.css.map",
-    "main.172890d7.js.map": "/static/js/main.172890d7.js.map",
+    "main.ea2cc1f0.js.map": "/static/js/main.ea2cc1f0.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.a3a73893.css",
-    "static/js/main.172890d7.js"
+    "static/js/main.ea2cc1f0.js"
   ]
 }
