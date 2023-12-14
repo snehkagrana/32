@@ -541,7 +541,7 @@ const Home = (props) => {
                                 backgroundColor: "#28a745",
                                 borderColor: "#28a745",
                                 padding: "5px",
-                                borderRadius: "7px",
+                                borderRadius: "12px",
                                 boxShadow: "0px 7px #1a5928",
                                 transition: "0.2s ease",
                                 fontWeight: "800",
