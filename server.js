@@ -28,7 +28,7 @@ const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const base64url = require("base64url");
 const { getLevelByXpPoints } = require("./utils/xp.utils");
-
+const indexRouter = require('./routes/auth.routes')
 
 aws.config.update({
     secretAccessKey: process.env.ACCESS_SECRET_KEY,
@@ -68,6 +68,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({
     origin: ['https://fingodev.kujang.space']
 }));
+
+/** ######## New Routes ########### */
+app.use('/server/api/auth', indexRouter);  
 
 app.use(
     session({
