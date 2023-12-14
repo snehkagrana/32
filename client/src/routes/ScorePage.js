@@ -281,6 +281,7 @@ const ScorePage = () => {
                                             <>
                                                 <FingoButton
                                                     color='white'
+                                                    style={{borderRadius: '12px'}}
                                                     onClick={() => {
                                                         const newUserQueryParam =
                                                             searchParams.get(

@@ -269,6 +269,7 @@ const InformationPage = () => {
                                         {pageNumber > 0 && (
                                             <Button
                                                 variant='secondary'
+                                                style={{ minWidth: '20%', boxShadow: "0px 7px #303030", borderRadius: "12px" }}
                                                 onClick={prev}
                                             >
                                                 Prev
@@ -278,7 +279,7 @@ const InformationPage = () => {
                                     <div>
                                         {pageNumber + 1 < maxInfoPages && (
                                             <Button
-                                                style={{ minWidth: '20%' }}
+                                                style={{ minWidth: '20%', boxShadow: "0px 7px #1a5928", borderRadius: "12px" }}
                                                 variant='success'
                                                 onClick={next}
                                             >
@@ -291,6 +292,7 @@ const InformationPage = () => {
                                                 <>
                                                     <Button
                                                         variant='success'
+                                                        style={{ minWidth: '20%', boxShadow: "0px 7px #1a5928", borderRadius: "10px" }}
                                                         onClick={() => {
                                                             const newUserQueryParam =
                                                                 searchParams.get(

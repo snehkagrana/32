@@ -558,7 +558,7 @@ const Quiz = () => {
                   <>
                     <Button
                       variant="success"
-                      style={{ boxShadow: "0px 7px #1a5928", minWidth: 100 }}
+                      style={{ boxShadow: "0px 7px #1a5928", minWidth: 100, borderRadius: "12px" }}
                       onClick={next}
                     >
                       Next
@@ -575,6 +575,7 @@ const Quiz = () => {
                     whiteSpace: "nowrap", // Prevent text from wrapping
                     textAlign: "center",
                     boxShadow: "0px 7px #1a5928",
+                    borderRadius: "12px",
                 }}
                 onClick={handleCheck}
                 disabled={answersList.length === 0}
@@ -585,6 +586,7 @@ const Quiz = () => {
             {currentQuestionIndex.current + 1 === maxQuestions.current && isSubmittedAnswer && (
                 <>
                   <Button
+                    style={{borderRadius: "12px", boxShadow: "0px 7px #212121", }}
                     onClick={() => {
                       saveXP();
                     }}
@@ -629,7 +631,7 @@ const Quiz = () => {
                 <>
                   <Button
                     variant="success"
-                    style={{ boxShadow: "0px 7px #1a5928" }}
+                    style={{ boxShadow: "0px 7px #1a5928", borderRadius: "12px"  }}
                     onClick={next}
                   >
                     Next
