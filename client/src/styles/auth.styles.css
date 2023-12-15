@@ -1,28 +1,9 @@
-.auth_modal_close {
-  width: 40px;
-  height: 40px;
-  border: none !important;
-  background-color: transparent;
-  position: absolute;
-  top: -20px;
-  right: -20px;
-  background: #ffffff;
-  border-radius: 40px;
-  box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;
-}
-
-.auth_modal_close svg {
-  width: 24px;
-  margin-top: -2px;
-  height: auto;
-}
-
 @media (min-width: 576px) {
-  .modal-dialog {
-    max-width: 400px;
-  }
+    .modal-dialog {
+        max-width: 400px;
+    }
 }
 
 .form-text-name {
-  height: 22px;
+    height: 22px;
 }

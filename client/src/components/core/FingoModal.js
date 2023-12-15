@@ -2,9 +2,11 @@ import React from 'react'
 import 'src/styles/FingoModal.styles.css'
 import { Modal as BootstrapModal } from 'react-bootstrap'
 
-export const FingoModal = ({ open, onClose, children }) => {
+export const FingoModal = props => {
+    const { open, onClose, children, rest } = props
     return (
         <BootstrapModal
+            {...rest}
             className='FingoModal'
             show={open}
             onHide={onClose}
@@ -24,7 +26,7 @@ export const FingoModal = ({ open, onClose, children }) => {
                     />
                 </svg>
             </button>
-            <div className="FingoShapeRadius">{children}</div>
+            <div className='FingoShapeRadius'>{children}</div>
         </BootstrapModal>
     )
 }
