@@ -45,8 +45,8 @@ const FingoSwitchTheme = () => {
                         </g>
                         <g filter='url(#filter1_d_102_221)'>
                             <path
-                                fill-rule='evenodd'
-                                clip-rule='evenodd'
+                                fillRule='evenodd'
+                                clipRule='evenodd'
                                 d='M1258.54 510.693C1325.33 510.693 1379.49 454.255 1379.49 384.636C1379.49 315.017 1325.33 258.579 1258.54 258.579C1196.57 258.579 1145.49 307.147 1138.42 369.751C1133.36 368.912 1128.17 368.475 1122.88 368.475C1076.28 368.475 1037.67 402.302 1030.8 446.476C1022.71 444.097 1014.11 442.816 1005.19 442.816C973.255 442.816 945.352 459.263 930.332 483.74C921.648 480.277 912.161 478.371 902.223 478.371C880.912 478.371 861.672 487.137 847.991 501.223C834.032 476.234 804.28 458.977 769.831 458.977C747.621 458.977 727.364 466.15 712.032 477.944C691.636 449.396 650.518 429.887 603.116 429.887C535.415 429.887 480.532 469.683 480.532 518.774C480.532 567.864 535.415 607.66 603.116 607.66C641.409 607.66 675.6 594.929 698.08 574.986C713.658 594.703 739.981 607.66 769.831 607.66C795.145 607.66 817.923 598.342 833.761 583.486C845.597 609.186 871.8 627.053 902.223 627.053C926.953 627.053 948.895 615.247 962.598 597.024C975.176 603.795 989.711 607.66 1005.19 607.66C1045.34 607.66 1079.11 581.671 1088.94 546.409C1099.45 550.478 1110.9 552.712 1122.88 552.712C1160.47 552.712 1192.86 530.697 1207.58 498.995C1223.07 506.502 1240.33 510.693 1258.54 510.693Z'
                                 fill='#ffffff'
                                 opacity='0.45'
@@ -58,7 +58,7 @@ const FingoSwitchTheme = () => {
                             rx='339.968'
                             ry='339.385'
                             fill='#F7F8FB'
-                            fill-opacity='0.1'
+                            fillOpacity='0.1'
                         />
                         <ellipse
                             cx='691.377'
@@ -66,7 +66,7 @@ const FingoSwitchTheme = () => {
                             rx='292.569'
                             ry='290.901'
                             fill='#F7F8FB'
-                            fill-opacity='0.2'
+                            fillOpacity='0.2'
                         />
                         <ellipse
                             cx='643.978'
@@ -74,7 +74,7 @@ const FingoSwitchTheme = () => {
                             rx='245.169'
                             ry='242.418'
                             fill='#F7F8FB'
-                            fill-opacity='0.3'
+                            fillOpacity='0.3'
                         />
                         <path
                             d='M81.723 206.863L84.9984 223.866C85.2312 225.074 86.1791 226.018 87.3889 226.246L104.606 229.489L87.3889 232.731C86.1791 232.959 85.2312 233.903 84.9984 235.112L81.723 252.114L78.4477 235.112C78.2148 233.903 77.267 232.959 76.0571 232.731L58.8406 229.489L76.0571 226.246C77.267 226.018 78.2148 225.074 78.4477 223.866L81.723 206.863Z'
@@ -132,8 +132,8 @@ const FingoSwitchTheme = () => {
                                 rx='162.5'
                                 ry='162.5'
                                 fill='#E9C948'
-                                fill-opacity='0.2'
-                                shape-rendering='crispEdges'
+                                fillOpacity='0.2'
+                                shapeRendering='crispEdges'
                             />
                         </g>
                         <defs>
@@ -144,10 +144,10 @@ const FingoSwitchTheme = () => {
                                 width='908.954'
                                 height='378.475'
                                 filterUnits='userSpaceOnUse'
-                                color-interpolation-filters='sRGB'
+                                colorInterpolationFilters='sRGB'
                             >
                                 <feFlood
-                                    flood-opacity='0'
+                                    floodOpacity='0'
                                     result='BackgroundImageFix'
                                 />
                                 <feColorMatrix
@@ -182,10 +182,10 @@ const FingoSwitchTheme = () => {
                                 width='910.954'
                                 height='380.475'
                                 filterUnits='userSpaceOnUse'
-                                color-interpolation-filters='sRGB'
+                                colorInterpolationFilters='sRGB'
                             >
                                 <feFlood
-                                    flood-opacity='0'
+                                    floodOpacity='0'
                                     result='BackgroundImageFix'
                                 />
                                 <feColorMatrix
@@ -220,10 +220,10 @@ const FingoSwitchTheme = () => {
                                 width='347'
                                 height='347'
                                 filterUnits='userSpaceOnUse'
-                                color-interpolation-filters='sRGB'
+                                colorInterpolationFilters='sRGB'
                             >
                                 <feFlood
-                                    flood-opacity='0'
+                                    floodOpacity='0'
                                     result='BackgroundImageFix'
                                 />
                                 <feColorMatrix
@@ -333,8 +333,8 @@ const FingoSwitchTheme = () => {
                         </g>
                         <g filter='url(#filter1_d_102_188)'>
                             <path
-                                fill-rule='evenodd'
-                                clip-rule='evenodd'
+                                fillRule='evenodd'
+                                clipRule='evenodd'
                                 d='M1559.54 509.693C1626.33 509.693 1680.49 453.255 1680.49 383.636C1680.49 314.016 1626.33 257.579 1559.54 257.579C1497.57 257.579 1446.49 306.147 1439.42 368.751C1434.36 367.911 1429.17 367.474 1423.88 367.474C1377.28 367.474 1338.67 401.301 1331.8 445.476C1323.71 443.097 1315.11 441.816 1306.19 441.816C1274.25 441.816 1246.35 458.262 1231.33 482.74C1222.65 479.277 1213.16 477.37 1203.22 477.37C1181.91 477.37 1162.67 486.137 1148.99 500.222C1135.03 475.233 1105.28 457.977 1070.83 457.977C1048.62 457.977 1028.36 465.15 1013.03 476.944C992.636 448.396 951.518 428.887 904.116 428.887C836.415 428.887 781.532 468.683 781.532 517.773C781.532 566.864 836.415 606.66 904.116 606.66C942.409 606.66 976.6 593.929 999.08 573.986C1014.66 593.703 1040.98 606.66 1070.83 606.66C1096.15 606.66 1118.92 597.342 1134.76 582.485C1146.6 608.186 1172.8 626.053 1203.22 626.053C1227.95 626.053 1249.9 614.247 1263.6 596.024C1276.18 602.795 1290.71 606.66 1306.19 606.66C1346.34 606.66 1380.11 580.671 1389.94 545.408C1400.45 549.478 1411.9 551.712 1423.88 551.712C1461.47 551.712 1493.86 529.697 1508.58 497.995C1524.07 505.502 1541.33 509.693 1559.54 509.693Z'
                                 fill='#FBFDFF'
                             />
@@ -345,7 +345,7 @@ const FingoSwitchTheme = () => {
                             rx='339.968'
                             ry='339.385'
                             fill='#F7F8FB'
-                            fill-opacity='0.05'
+                            fillOpacity='0.05'
                         />
                         <ellipse
                             cx='502.377'
@@ -353,7 +353,7 @@ const FingoSwitchTheme = () => {
                             rx='292.569'
                             ry='290.901'
                             fill='#F7F8FB'
-                            fill-opacity='0.08'
+                            fillOpacity='0.08'
                         />
                         <ellipse
                             cx='524.978'
@@ -361,7 +361,7 @@ const FingoSwitchTheme = () => {
                             rx='245.169'
                             ry='242.418'
                             fill='#F7F8FB'
-                            fill-opacity='0.1'
+                            fillOpacity='0.1'
                         />
                         <path
                             d='M32.3977 221.616L35.2552 236.45C35.4881 237.659 36.436 238.603 37.6458 238.831L52.669 241.66L37.6458 244.489C36.436 244.717 35.4881 245.661 35.2552 246.87L32.3977 261.704L29.5402 246.87C29.3073 245.661 28.3594 244.717 27.1496 244.489L12.1263 241.66L27.1496 238.831C28.3594 238.603 29.3073 237.659 29.5402 236.45L32.3977 221.616Z'
@@ -444,8 +444,8 @@ const FingoSwitchTheme = () => {
                                 rx='162.5'
                                 ry='162.5'
                                 fill='#C5C7CF'
-                                fill-opacity='0.3'
-                                shape-rendering='crispEdges'
+                                fillOpacity='0.3'
+                                shapeRendering='crispEdges'
                             />
                         </g>
                         <defs>
@@ -456,10 +456,10 @@ const FingoSwitchTheme = () => {
                                 width='908.954'
                                 height='378.475'
                                 filterUnits='userSpaceOnUse'
-                                color-interpolation-filters='sRGB'
+                                colorInterpolationFilters='sRGB'
                             >
                                 <feFlood
-                                    flood-opacity='0'
+                                    floodOpacity='0'
                                     result='BackgroundImageFix'
                                 />
                                 <feColorMatrix
@@ -494,10 +494,10 @@ const FingoSwitchTheme = () => {
                                 width='910.954'
                                 height='380.475'
                                 filterUnits='userSpaceOnUse'
-                                color-interpolation-filters='sRGB'
+                                colorInterpolationFilters='sRGB'
                             >
                                 <feFlood
-                                    flood-opacity='0'
+                                    floodOpacity='0'
                                     result='BackgroundImageFix'
                                 />
                                 <feColorMatrix
@@ -532,10 +532,10 @@ const FingoSwitchTheme = () => {
                                 width='347'
                                 height='347'
                                 filterUnits='userSpaceOnUse'
-                                color-interpolation-filters='sRGB'
+                                colorInterpolationFilters='sRGB'
                             >
                                 <feFlood
-                                    flood-opacity='0'
+                                    floodOpacity='0'
                                     result='BackgroundImageFix'
                                 />
                                 <feColorMatrix

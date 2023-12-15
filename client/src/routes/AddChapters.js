@@ -277,7 +277,7 @@ const AddChapters = (props) => {
                                     {categoriesList.map((x, i) => {
                                         return (
                                             <div className="row mb-3">
-                                                <div class="form-group col-sm-6 col-md-6">
+                                                <div classNme="form-group col-sm-6 col-md-6">
                                                     <Form.Group>
                                                         <Form.Control
                                                             type="string"
@@ -296,7 +296,7 @@ const AddChapters = (props) => {
                                                         />
                                                     </Form.Group>
                                                 </div>
-                                                <div class="form-group col-sm-6 col-md-6">
+                                                <div classNme="form-group col-sm-6 col-md-6">
                                                     {categoriesList.length !==
                                                         1 && (
                                                         <button
@@ -430,7 +430,7 @@ const AddChapters = (props) => {
                                     {subCategoriesList.map((x, i) => {
                                         return (
                                             <div className="row mb-3">
-                                                <div class="form-group col-sm-6 col-md-6">
+                                                <div classNme="form-group col-sm-6 col-md-6">
                                                     <Form.Group>
                                                         <Form.Control
                                                             type="string"
@@ -449,7 +449,7 @@ const AddChapters = (props) => {
                                                         />
                                                     </Form.Group>
                                                 </div>
-                                                <div class="form-group col-sm-6 col-md-6">
+                                                <div classNme="form-group col-sm-6 col-md-6">
                                                     {subCategoriesList.length !==
                                                         1 && (
                                                         <button

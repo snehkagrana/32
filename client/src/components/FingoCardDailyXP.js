@@ -98,7 +98,7 @@ const FingoCardDailyXP = () => {
                         <p>Earn {getDailyXp} XP</p>
                     </div>
                     <div className='FingoCardDailyXPContent'>
-                        <div class='progress'>
+                        <div className='progress'>
                             {newUser ? (
                                 <div className='xp-count'>
                                     {getDailyXp || 0}/60
@@ -109,7 +109,7 @@ const FingoCardDailyXP = () => {
                                 </div>
                             )}
                             <div
-                                class='progress-bar bg-warning'
+                                className='progress-bar bg-warning'
                                 role='progressbar'
                                 aria-valuenow={getDailyXp}
                                 aria-valuemin='0'

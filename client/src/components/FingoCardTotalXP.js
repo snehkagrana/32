@@ -123,10 +123,10 @@ const FingoCardTotalXP = () => {
                         )}
                     </div>
                     <div className='FingoCardTotalXPContent'>
-                        <div class='progress'>
+                        <div className='progress'>
                             {!newUser && Boolean(user) ? (
                                 <div
-                                    class='progress-bar'
+                                    className='progress-bar'
                                     role='progressbar'
                                     aria-valuenow={getTotalXP || 0}
                                     aria-valuemin='0'
@@ -145,7 +145,7 @@ const FingoCardTotalXP = () => {
                                 />
                             ) : (
                                 <div
-                                    class='progress-bar'
+                                    className='progress-bar'
                                     role='progressbar'
                                     aria-valuenow={getTotalXP || 0}
                                     aria-valuemin='0'

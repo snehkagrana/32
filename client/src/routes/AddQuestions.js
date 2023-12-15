@@ -251,7 +251,7 @@ const AddQuestion = (props) => {
                                 {optionsList.map((x, i) => {
                                     return (
                                         <div className="row mb-3">
-                                            <div class="form-group col-sm-6 col-md-6">
+                                            <div className="form-group col-sm-6 col-md-6">
                                                 <Form.Group>
                                                     <Form.Check
                                                         type="checkbox"
@@ -276,7 +276,7 @@ const AddQuestion = (props) => {
                                                     />
                                                 </Form.Group>
                                             </div>
-                                            <div class="form-group col-sm-6 col-md-6">
+                                            <div className="form-group col-sm-6 col-md-6">
                                                 {optionsList.length !== 1 && (
                                                     <button
                                                         className="btn btn-danger mx-1"

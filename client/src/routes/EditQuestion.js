@@ -171,7 +171,7 @@ const EditQuestion = (props) => {
                                 {optionsList.map((x, i) => {
                                     return (
                                         <div className="row mb-3">
-                                            <div class="form-group col-md-4">
+                                            <div className="form-group col-md-4">
                                                 <Form.Group>
                                                     <Form.Check
                                                         type="checkbox"
@@ -197,7 +197,7 @@ const EditQuestion = (props) => {
                                                     />
                                                 </Form.Group>
                                             </div>
-                                            <div class="form-group col-md-2 mt-4">
+                                            <div className="form-group col-md-2 mt-4">
                                                 {optionsList.length !== 1 && (
                                                     <button
                                                         className="btn btn-danger mx-1"

@@ -61,11 +61,11 @@ const SubCategorySidebar = (props) => {
           }}
         >
           <div
-            class="alert alert-warning d-flex justify-content-between"
+            className="alert alert-warning d-flex justify-content-between"
             role="alert"
             data-mdb-color="warning"
           >
-            <p class="mb-0">
+            <p className="mb-0">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"

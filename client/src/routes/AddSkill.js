@@ -102,7 +102,7 @@ const AddSkill = (props) => {
                                 {categoriesList.map((x, i) => {
                                     return (
                                         <div className="row mb-3">
-                                            <div class="form-group col-md-4">
+                                            <div className="form-group col-md-4">
                                                 <Form.Group>
                                                     <Form.Control
                                                         type="string"
@@ -116,7 +116,7 @@ const AddSkill = (props) => {
                                                     />
                                                 </Form.Group>
                                             </div>
-                                            <div class="form-group col-md-2 mt-4">
+                                            <div className="form-group col-md-2 mt-4">
                                                 {categoriesList.length !==
                                                     1 && (
                                                     <button

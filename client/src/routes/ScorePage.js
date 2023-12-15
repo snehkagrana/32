@@ -221,8 +221,8 @@ const ScorePage = () => {
                 <title>Score page</title>
             </Helmet>
             <div>
-                <div class='FingoLessonCompleteHeader'>
-                    <h2 class='text-center'>
+                <div className='FingoLessonCompleteHeader'>
+                    <h2 className='text-center'>
                         {skillName.split('_').join(' ')} {'->'}{' '}
                         {category.split('_').join(' ')} {'->'}{' '}
                         {subcategory.split('_').join(' ')}
