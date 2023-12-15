@@ -8,7 +8,6 @@ export const AuthAPI = {
     },
     loginWithEmailAndPassword: async body => {
         const response = await Axios.post('/server/api/auth/login', body)
-        console.log('loginWithEmailAndPassword', response)
         if (response?.data?.data?.access_token) {
             authUtils.saveUserAccessToken(response.data.data.access_token)
         }
