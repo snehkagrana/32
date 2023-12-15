@@ -73,7 +73,7 @@ const PrevArrow = (props) => {
 const StartPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { auth_setOpenModalLogin } = useAuth()
+    const { auth_setOpenModalLogin, isAuthenticated, auth_syncAndGetUser } = useAuth()
 
     const [currentWord, setCurrentWord] = useState("");
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -153,6 +153,21 @@ const StartPage = () => {
     const onClickLogin = () => {
         dispatch(auth_setOpenModalLogin(true))
     }
+
+    useEffect(() => {
+        if(isAuthenticated) {
+            ;(async () => {
+                auth_syncAndGetUser().then(result => {
+                    if (result?._id) {
+                        setTimeout(() => {
+                            navigate('/home')
+                        }, 500)
+                    }
+                })
+            })()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isAuthenticated])
 
     return (
         <div className={`flex justify-center px-3 dottedBackground ${darkMode ? 'dark-mode' : 'light-mode'} overflow-hidden`}>
