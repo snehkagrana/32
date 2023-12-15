@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.1a03d58f.css",
-    "main.js": "/static/js/main.25b132ef.js",
+    "main.css": "/static/css/main.f6e8521a.css",
+    "main.js": "/static/js/main.9e5c8006.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
     "static/media/8.png": "/static/media/8.9daef5f1f68e0fc2fb5f.png",
@@ -9,18 +9,12 @@
     "static/media/5-money-bag-png-image.png": "/static/media/5-money-bag-png-image.67e6560665949337f935.png",
     "static/media/64997-emoticon-on-money-keep-bag-carving-emoji.png": "/static/media/64997-emoticon-on-money-keep-bag-carving-emoji.e6508e91da874d588355.png",
     "static/media/71577-recycling-recycle-symbol-paper-emoji-free-hq-image.png": "/static/media/71577-recycling-recycle-symbol-paper-emoji-free-hq-image.bb0c629f08aa81cdc510.png",
-    "static/media/Sector.png": "/static/media/Sector.a1f0777df16b087c5d70.png",
     "static/media/103717-blue-photos-sky-emoji-free-transparent-image-hq.png": "/static/media/103717-blue-photos-sky-emoji-free-transparent-image-hq.fb2ac5a8fec49bf25e26.png",
     "static/media/64998-money-dollar-sign-currency-android-emoji.png": "/static/media/64998-money-dollar-sign-currency-android-emoji.87721f50d5e086eb5098.png",
     "static/media/harshit.jpg": "/static/media/harshit.649b34921f593ef2488d.jpg",
-    "static/media/Insurance.png": "/static/media/Insurance.11dbd0df84825d4b1241.png",
-    "static/media/Economics.png": "/static/media/Economics.de043e5d61dc57990a59.png",
     "static/media/101916-emoji-cool-free-download-image.png": "/static/media/101916-emoji-cool-free-download-image.e72e7fc4587a1f5d1817.png",
-    "static/media/Personal.png": "/static/media/Personal.ddd2a6cd7cd5a3b43396.png",
     "static/media/celebrate-badge.png": "/static/media/celebrate-badge.5a20feb5eaba2a2976ad.png",
-    "static/media/Crypto.png": "/static/media/Crypto.d0d4e1d99f58a4c73a95.png",
     "static/media/64926-emoticon-domain-network-sticker-graphics-emoji-portable.png": "/static/media/64926-emoticon-domain-network-sticker-graphics-emoji-portable.a781d79f3a0b8120acdd.png",
-    "static/media/Fixed.png": "/static/media/Fixed.399665b8dea08fc57602.png",
     "static/media/fingo-landing-page-section-2.png": "/static/media/fingo-landing-page-section-2.dc5b0293218f63747cc2.png",
     "static/media/65025-emoticon-like-signal-emoji-button-thumb.png": "/static/media/65025-emoticon-like-signal-emoji-button-thumb.1e0ed28749aec5bf73b3.png",
     "static/media/102587-funny-picture-emoji-boy-free-download-png-hq.png": "/static/media/102587-funny-picture-emoji-boy-free-download-png-hq.99b9a5203d392b524466.png",
@@ -35,8 +29,6 @@
     "static/media/72527-purple-symbol-viber-circle-violet-hd-image-free-png.png": "/static/media/72527-purple-symbol-viber-circle-violet-hd-image-free-png.7cbef658b16142a92f38.png",
     "static/media/fingo-landing-page-5-4.png": "/static/media/fingo-landing-page-5-4.fd72553a713b198da19d.png",
     "static/media/101756-career-emoji-download-hq.png": "/static/media/101756-career-emoji-download-hq.ba0d9c6bebd584561b2a.png",
-    "static/media/Trading.png": "/static/media/Trading.a12c1f3b87c7bdc17df0.png",
-    "static/media/Investing.png": "/static/media/Investing.5f97fcad2df14e15e373.png",
     "static/media/64983-emoticon-sunglasses-smiley-iphone-go-emoji.png": "/static/media/64983-emoticon-sunglasses-smiley-iphone-go-emoji.731a85f6d4845012f2e8.png",
     "static/media/fingo-landing-page-5-3.png": "/static/media/fingo-landing-page-5-3.38b8cf6ca4397127ab1d.png",
     "static/media/fingo-landing-page-5-1.png": "/static/media/fingo-landing-page-5-1.488577cc13e1636f23df.png",
@@ -82,14 +74,13 @@
     "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
     "static/media/lightning-fill2.svg": "/static/media/lightning-fill2.2b5a211d830a24fab92e291d50f65d1d.svg",
     "static/media/enter.svg": "/static/media/enter.2b2db0a88e9d8150b0f69824a2137236.svg",
-    "static/media/star-filled.svg": "/static/media/star-filled.ed1ad811101f5eda6c44676dfa87e596.svg",
     "static/media/info.svg": "/static/media/info.ef876f7b40a92ef036458f95b7e325e2.svg",
-    "main.1a03d58f.css.map": "/static/css/main.1a03d58f.css.map",
-    "main.25b132ef.js.map": "/static/js/main.25b132ef.js.map",
+    "main.f6e8521a.css.map": "/static/css/main.f6e8521a.css.map",
+    "main.9e5c8006.js.map": "/static/js/main.9e5c8006.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.1a03d58f.css",
-    "static/js/main.25b132ef.js"
+    "static/css/main.f6e8521a.css",
+    "static/js/main.9e5c8006.js"
   ]
 }
