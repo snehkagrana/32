@@ -3,7 +3,9 @@ import Cookies from 'js-cookie'
 const KEY = 'FingoUserToken'
 
 const saveUserAccessToken = token => {
-    Cookies.set(KEY, token)
+    var expires = new Date()
+    expires.setTime(expires.getTime() + 604800000)
+    document.cookie = KEY + '=' + token + ';expires=' + expires.toUTCString()
 }
 const getUserAccessToken = () => {
     return Cookies.get(KEY)
