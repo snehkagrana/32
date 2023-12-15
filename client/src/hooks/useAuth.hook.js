@@ -25,27 +25,39 @@ export const useAuth = () => {
     }, [statePersisted.user, statePersisted.newUser])
 
     const auth_syncAndGetUser = async () => {
-        try {
-            const response = await AuthAPI.sync()
-            if (response?.message) {
-                dispatch(
-                    auth_thunkActions.auth_getUser(
-                        authUtils.getUserAccessToken()
+        const token = authUtils.getUserAccessToken()
+        if (token) {
+            try {
+                const response = await AuthAPI.sync()
+                if (response?.message) {
+                    const result = await dispatch(
+                        auth_thunkActions.auth_getUser(
+                            authUtils.getUserAccessToken()
+                        )
                     )
-                )
+                    if (result?.meta?.requestStatus === 'fulfilled') {
+                        return result?.payload?.data
+                    }
+                } else return undefined
+            } catch (err) {
+                // invalid token
+                if (err?.response?.status === 401) {
+                    batch(() => {
+                        dispatch(
+                            authPersisted_reducerActions.authPersisted_setUser(
+                                null
+                            )
+                        )
+                        dispatch(
+                            authPersisted_reducerActions.authPersisted_setNewUser(
+                                true
+                            )
+                        )
+                    })
+                }
             }
-        } catch (err) {
-            // invalid token
-            if (err?.response?.status === 401) {
-                batch(() => {
-                    dispatch(
-                        authPersisted_reducerActions.authPersisted_setUser(null)
-                    )
-                    dispatch(
-                        authPersisted_reducerActions.authPersisted_setNewUser(true)
-                    )
-                })
-            }
+        } else {
+            // missing token
         }
     }
 

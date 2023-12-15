@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
-import Axios from "axios";
+import Axios from 'src/api/axios'
 import { Link, useNavigate } from "react-router-dom";
 import Toast from "react-bootstrap/Toast";
 import { Row, Form, Button, Col, Image } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
+import { useAuth } from "src/hooks";
 
 const EnterEmail = (props) => {
+    const { auth_syncAndGetUser } = useAuth();
     const [authMsg, setAuthMsg] = useState("");
     const [email, setEmail] = useState("");
     const [fullName, setFullName] = useState("");
@@ -55,26 +57,19 @@ const EnterEmail = (props) => {
     ////send the login page to enter credentials
 
     useEffect(() => {
-        // console.log("in use effect");
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            if (response.data.redirect == "/login") {
-                // console.log("Please log in");
-                navigate(`/auth/login`);
-            }
-            setAuthMsg(response.data.message);
-            setShowAuthMsg(true);
+        auth_syncAndGetUser().then(result => {
+            if (result?._id) {
+                setAuthMsg(result?.message);
+                setShowAuthMsg(true);
             if (
-                response.data.user.email != undefined &&
-                response.data.user.email.length > 0
+                result?.email != undefined &&
+                result?.email.length > 0
             ) {
-                setEmail(response.data.user.email);
+                setEmail(result?.email);
             }
-            role.current = response.data.user.role;
-        });
+            role.current = result?.role;
+            }
+        })
     }, []);
 
     return (

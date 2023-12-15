@@ -5,8 +5,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { Row, Form, Button, Col, Image } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
+import { useAuth } from "src/hooks";
 
 const EditQuestion = (props) => {
+    const { user, isAuthenticated } = useAuth();
     const { skill, category, subcategory, id } = useParams();
     const [questionObject, setQuestionObject] = useState({});
     const [question, setQuestion] = useState("");
@@ -114,22 +116,11 @@ const EditQuestion = (props) => {
 
     useEffect(() => {
         // console.log("in use effect");
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            if (response.data.redirect == "/login") {
-                // console.log("Please log in");
-                navigate(`/auth/login`);
-            } else if (response.data.user.role === "basic") {
-                navigate(`/accessdenied`);
-            } else {
-                role.current = response.data.user.role;
-                getQuestion();
-            }
-        });
-    }, []);
+        if(isAuthenticated && user.role === "basic") {
+            navigate(`/accessdenied`);
+        }
+        getQuestion();
+    }, [user, isAuthenticated]);
 
     return (
         <>

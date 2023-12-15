@@ -9,28 +9,15 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { SocialIcon } from "react-social-icons";
+import { useAuth } from "src/hooks";
 
 const sneh = require("../images/sneh.jpg");
 const harshit = require("../images/harshit.jpg");
 
 const AboutUs = () => {
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [role, setRole] = useState("unknown");
-
-    useEffect(() => {
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            console.log("con", response.data);
-            if (response.data.redirect === "/home") {
-                setRole(response.data.user.role);
-            } else {
-                setRole("unknown");
-            }
-        });
-    }, []);
 
     return (
         <>
@@ -38,7 +25,7 @@ const AboutUs = () => {
                 <title>About Us</title>
             </Helmet>
             {/* <Navbar proprole={'basic'}/> */}
-            {role === "unknown" ? (
+            {user?.role === "unknown" ? (
                 <GeneralNavbar />
             ) : (
                 <Navbar proprole={role} />

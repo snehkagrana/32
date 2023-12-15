@@ -1,4 +1,4 @@
-import Axios from 'axios'
+import Axios from 'src/api/axios'
 import { useNavigate } from 'react-router-dom'
 import { useMemo, useState } from 'react'
 

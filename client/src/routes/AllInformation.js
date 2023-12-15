@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Axios from "axios";
+import Axios from 'src/api/axios'
 import { Link, useNavigate } from "react-router-dom";
 import {
     Modal,
@@ -15,8 +15,10 @@ import {
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
 import Card from "react-bootstrap/Card";
+import { useAuth } from "src/hooks";
 
 const AllInformation = () => {
+    const { user } = useAuth();
     const { skill, category, subcategory } = useParams();
     const navigate = useNavigate();
     const [informationList, setInformationList] = useState([]);
@@ -72,28 +74,16 @@ const AllInformation = () => {
     };
 
     useEffect(() => {
-        // console.log("in use effect");
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            if (response.data.redirect == "/login") {
-                // console.log("Please log in");
-                navigate(`/auth/login`);
-            } else {
-                getAllInformation();
-                role.current = response.data.user.role;
-            }
-        });
-    }, []);
+        getAllInformation();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user]);
 
     return (
         <>
             <Helmet>
                 <title>All Information</title>
             </Helmet>
-            <Navbar proprole={role} />
+            <Navbar proprole={user?.role} />
             <Container>
                 <br />
                 <h2 style={{ color: "#000" }} className="text-center">

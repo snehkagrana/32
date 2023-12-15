@@ -1,13 +1,15 @@
 import React, { useRef, useState, useEffect } from "react";
-import Axios from "axios";
+import Axios from 'src/api/axios'
 import { useNavigate } from "react-router-dom";
 import { Row, Form, Button, Col, Image } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
+import { useAuth } from "src/hooks";
 
 const AddChapters = (props) => {
+    const { user, isAuthenticated } = useAuth()
     const [subCategoriesList, setSubCategoriesList] = useState([
         { sub_category: "" },
     ]);
@@ -164,29 +166,19 @@ const AddChapters = (props) => {
     ////send the login page to enter credentials
 
     useEffect(() => {
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            if (response.data.redirect == "/login") {
-                // console.log("Please log in");
-                navigate(`/auth/login`);
-            } else if (response.data.user.role === "basic") {
-                navigate(`/accessdenied`);
-            } else {
-                role.current = response.data.user.role;
-                getSkills();
-            }
-        });
-    }, []);
+        if(isAuthenticated && user.role === "basic") {
+            navigate(`/accessdenied`);
+        }
+        getSkills();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user, isAuthenticated]);
 
     return (
         <>
             <Helmet>
                 <title>Add Chapters</title>
             </Helmet>
-            <Navbar proprole={role} />
+            <Navbar proprole={user?.role} />
             <Row>
                 <Col>
                     <br></br>

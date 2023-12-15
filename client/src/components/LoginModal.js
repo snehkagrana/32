@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import GoogleButton from "react-google-button";
-import Axios from "axios";
+import Axios from 'src/api/axios'
 
 const LoginModal = ({ onLogin, onGoogleLogin, onClose }) => {
   const [show, setShow] = useState(false);

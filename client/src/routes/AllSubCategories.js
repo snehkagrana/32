@@ -14,8 +14,10 @@ import {
 } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
+import { useAuth } from "src/hooks";
 
 const AllSubCategories = () => {
+    const { user, isAuthenticated } = useAuth()
     const { skill, category } = useParams();
     const navigate = useNavigate();
     const role = useRef("");
@@ -132,23 +134,12 @@ const AllSubCategories = () => {
 
     useEffect(() => {
         // console.log("in use effect");
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            if (response.data.redirect == "/login") {
-                // console.log("Please log in");
-                navigate(`/auth/login`);
-            } else if (response.data.user.role === "basic") {
-                navigate(`/accessdenied`);
-            } else {
-                // console.log("Already logged in");
-                getAllSubCategories();
-                role.current = response.data.user.role;
-            }
-        });
-    }, []);
+        if(isAuthenticated && user.role === "basic") {
+            navigate(`/accessdenied`);
+        }
+        getAllSubCategories();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user, isAuthenticated]);
 
     return (
         <>
@@ -157,7 +148,7 @@ const AllSubCategories = () => {
                     {skill} {category} SubCategories
                 </title>
             </Helmet>
-            <Navbar proprole={role} />
+            <Navbar proprole={user?.role} />
             <Container>
                 <br />
                 <h2 style={{ color: "#000" }} className="text-center">

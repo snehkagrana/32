@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import Axios from 'axios'
+import Axios from 'src/api/axios'
 import {
     MDBContainer,
     MDBNavbar,

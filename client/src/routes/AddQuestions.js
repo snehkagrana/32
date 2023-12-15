@@ -1,12 +1,14 @@
 import React, { useRef, useState, useEffect } from "react";
-import Axios from "axios";
+import Axios from 'src/api/axios'
 import { Link, useNavigate } from "react-router-dom";
 import Toast from "react-bootstrap/Toast";
 import { Row, Form, Button, Col, Image } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
+import { useAuth } from "src/hooks";
 
 const AddQuestion = (props) => {
+    const { user, isAuthenticated } = useAuth()
     const [file, setFile] = useState("");
     const [question, setQuestion] = useState("");
     const [explaination, setExplaination] = useState("");
@@ -183,30 +185,23 @@ const AddQuestion = (props) => {
     ////send the login page to enter credentials
 
     useEffect(() => {
-        // console.log("in use effect");
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            if (response.data.redirect == "/login") {
-                // console.log("Please log in");
-                navigate(`/auth/login`);
-            } else if (response.data.user.role === "basic") {
+        if(isAuthenticated) {
+            if (user.role === "basic") {
                 navigate(`/accessdenied`);
-            } else {
-                role.current = response.data.user.role;
-                getSkills();
             }
-        });
-    }, []);
+            getSkills()
+        } else {
+            navigate(`/accessdenied`);
+        }
+        // console.log("in use effect");
+    }, [user, isAuthenticated]);
 
     return (
         <>
             <Helmet>
                 <title>Add Question</title>
             </Helmet>
-            <Navbar proprole={role} />
+            <Navbar proprole={user?.role} />
             <Row>
                 <Col>
                     <div>

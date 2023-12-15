@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
-import Axios from "axios";
+import Axios from 'src/api/axios'
 import { Button, Card, ListGroup, Row } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
@@ -10,8 +10,10 @@ import "../styles/QuizPage.styles.css";
 import WrongAudio from "../sounds/wrong-audio.mp3"
 import CorrectAudio from "../sounds/correct-audio.mp3"
 import { FingoHomeLayout } from "src/components/layouts";
+import { useAuth } from "src/hooks";
 
 const Quiz = () => {
+  const { auth_syncAndGetUser } = useAuth()
   const [imageURL, setImageURL] = useState("");
   const { skillName, subcategory, category } = useParams();
   const navigate = useNavigate();
@@ -345,19 +347,13 @@ const Quiz = () => {
         getAllQuestions(newUser);
       }
     } else {
-      Axios({
-        method: "GET",
-        withCredentials: true,
-        url: "/server/login",
-      }).then(function (response) {
-        if (response.data.redirect == "/login") {
-          navigate(`/auth/login`);
-        } else {
-          getSkillBySkillName();
-          getAllQuestions();
-          role.current = response.data.user.role;
-        }
-      });
+      auth_syncAndGetUser().then(result => {
+          if (result?._id) {
+            getSkillBySkillName();
+            getAllQuestions();
+            role.current = result?.role;
+          }
+      })
     }
   }, [searchParams]);
 

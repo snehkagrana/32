@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { useParams, useLocation, useSearchParams } from 'react-router-dom'
-import Axios from 'axios'
+import Axios from 'src/api/axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { Badge, Card, Button } from 'react-bootstrap'
 import { Helmet } from 'react-helmet'
@@ -13,7 +13,6 @@ import { AuthAPI } from 'src/api'
 import { useApp, useAuth } from 'src/hooks'
 import { batch, useDispatch } from 'react-redux'
 import FingoModalLevelUp from 'src/components/FingoModalLevelUp'
-import { ReactComponent as StarFilled } from 'src/assets/svg/star-filled.svg'
 import 'src/styles/FingoLessonComplete.styles.css'
 import { FingoButton } from 'src/components/core'
 import StartFilled from 'src/assets/images/star-filled.png'
@@ -21,7 +20,7 @@ import StartFilledFade from 'src/assets/images/star-filled-fade.png'
 
 const ScorePage = () => {
     const dispatch = useDispatch()
-    const { isNewUser, user, auth_setUser } = useAuth()
+    const { user, auth_syncAndGetUser } = useAuth()
     const { app_setModalLevelUp } = useApp()
     const { skillName, category, subcategory } = useParams()
     const location = useLocation()
@@ -82,13 +81,13 @@ const ScorePage = () => {
         }
     }, [celebrate])
 
-    const getSkillBySkillName = isNewUser => {
+    const getSkillBySkillName = newUser => {
         Axios({
             method: 'GET',
             withCredentials: true,
             url: `/server/skills/${skillName}`,
             params: {
-                newUser: isNewUser,
+                newUser: newUser,
             },
         }).then(res => {
             setSkillDetails(res.data.data[0])
@@ -107,13 +106,13 @@ const ScorePage = () => {
         })
     }
 
-    const getAllScores = isNewUser => {
+    const getAllScores = newUser => {
         Axios({
             method: 'GET',
             withCredentials: true,
             url: `/server/allscores`,
             params: {
-                newUser: isNewUser,
+                newUser: newUser,
             },
         }).then(res => {
             // console.log("all scores ", res.data);
@@ -121,30 +120,24 @@ const ScorePage = () => {
     }
 
     const getUserInfo = async () => {
-        try {
-            const response = await AuthAPI.loginWithEmailAndPassword()
-            if (response.data?.user) {
-                setXP(response.data.user.xp.current)
-                role.current = response.data.user.role
+        auth_syncAndGetUser().then(result => {
+            if (result?._id) {
+                setXP(result?.xp?.current)
+                role.current = result?.role
                 // Put logic to show modal level up here
                 if (
-                    parseInt(user?.xp?.total) <
-                        parseInt(response.data.user?.xp?.total) &&
-                    parseInt(user?.xp?.level) <
-                        parseInt(response.data.user?.xp?.level)
+                    parseInt(user?.xp?.total) < parseInt(result?.xp?.total) &&
+                    parseInt(user?.xp?.level) < parseInt(result?.xp?.level)
                 ) {
-                    batch(() => {
-                        dispatch(auth_setUser(response.data.user))
-                        dispatch(
-                            app_setModalLevelUp({
-                                open: true,
-                                data: response.data.user?.xp,
-                            })
-                        )
-                    })
+                    dispatch(
+                        app_setModalLevelUp({
+                            open: true,
+                            data: result?.xp,
+                        })
+                    )
                 }
             }
-        } catch (e) {}
+        })
     }
 
     useEffect(() => {
@@ -182,7 +175,7 @@ const ScorePage = () => {
             }
         } else {
             getUserInfo()
-            if (!isNewUser && Boolean(user)) {
+            if (!newUser && Boolean(user)) {
                 setCelebrate(true)
                 getSkillBySkillName()
                 getAllScores()

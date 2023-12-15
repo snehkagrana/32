@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import {useParams, useSearchParams} from "react-router-dom";
-import Axios from "axios";
+import Axios from 'src/api/axios'
 import { Link, useNavigate } from "react-router-dom";
 import {
     Badge,
@@ -19,8 +19,10 @@ import { FingoHomeLayout } from "src/components/layouts";
 import FingoWidgetContainer from "src/components/FingoWidgetContainer";
 import { FingoScrollToTop } from "src/components/layouts/FingoHomeLayout";
 import FingoModalLevelUp from "src/components/FingoModalLevelUp";
+import { useAuth } from "src/hooks";
 
 const SkillCategoryPage = () => {
+    const { auth_syncAndGetUser } = useAuth()
     const { skillName } = useParams();
     const { categoryName } = useParams();
     const navigate = useNavigate();
@@ -94,20 +96,12 @@ const SkillCategoryPage = () => {
 
             checkIsCompleted.current = tempCheckIsCompleted;
         } else {
-            Axios({
-                method: "GET",
-                withCredentials: true,
-                url: "/server/login",
-            }).then(function (response) {
-                if (response.data.redirect == "/login") {
-                    // console.log("Please log in");
-                    navigate(`/auth/login`);
-                } else {
-                    // console.log("Already logged in");
+            auth_syncAndGetUser().then(result => {
+                if (result?._id) {
                     getSkillBySkillName();
-                    role.current = response.data.user.role;
+                    role.current = result?.role;
                     var tempCheckIsCompleted = [];
-                    response.data.user.score.forEach((score) => {
+                    result?.score && result.score.forEach((score) => {
                         if (
                             score.skill === skillName &&
                             score.category === categoryName
@@ -117,9 +111,8 @@ const SkillCategoryPage = () => {
                             );
                     });
                     checkIsCompleted.current = tempCheckIsCompleted;
-                    // console.log('checkIsCompleted', checkIsCompleted.current);
                 }
-            });
+            })
         }
     }, [searchParams]);
 

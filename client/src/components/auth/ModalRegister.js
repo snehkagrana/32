@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Axios from 'axios'
+import Axios from 'src/api/axios'
 import { useNavigate } from 'react-router-dom'
 import { Form, Button, Modal } from 'react-bootstrap'
 import CustomGoogleSignInButton from '../CustomGoogleSignInButton'

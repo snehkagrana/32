@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom'
 
 import './App.css'
-import Home from './routes/Home'
+// import Home from './routes/Home'
 import EnterEmail from './routes/EnterEmail'
 import AddQuestions from './routes/AddQuestions'
 import AddChapters from './routes/AddChapters'
@@ -44,6 +44,7 @@ import PrivacyPolicy from './routes/PrivacyPolicy'
 import 'src/styles/FingoGlobal.styles.css'
 import NewProfilePage from './routes/NewProfilePage'
 import DailyQuestPage from './routes/DailyQuestPage'
+import HomePage from './pages/HomePage'
 
 const App = () => {
     return (
@@ -58,7 +59,7 @@ const App = () => {
                 />
                 <Route exact path='/profile' element={<NewProfilePage />} />
                 <Route exact path='/daily-quest' element={<DailyQuestPage />} />
-                <Route exact path='/home' element={<Home />} />
+                <Route exact path='/home' element={<HomePage />} />
                 <Route exact path='/auth/login' element={<Login />} />
                 <Route exact path='/auth/register' element={<Register />} />
                 <Route

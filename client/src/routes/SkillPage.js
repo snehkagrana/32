@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Axios from "axios";
+import Axios from 'src/api/axios'
 import { Link, useNavigate } from "react-router-dom";
 import {
     Container,
@@ -14,8 +14,10 @@ import {
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
 import { FingoHomeLayout } from "src/components/layouts";
+import { useAuth } from "src/hooks";
 
 const SkillPage = () => {
+    const { auth_syncAndGetUser } = useAuth();
     const { skillName } = useParams();
     const navigate = useNavigate();
     const role = useRef("");
@@ -77,20 +79,12 @@ const SkillPage = () => {
     ////if he is not redirect him to login page
     useEffect(() => {
         // console.log("in use effect");
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            if (response.data.redirect == "/login") {
-                // console.log("Please log in");
-                navigate(`/auth/login`);
-            } else {
-                // console.log("Already logged in");
-                getSkillBySkillName(response.data.user.score);
-                role.current = response.data.user.role;
+        auth_syncAndGetUser().then(result => {
+            if (result?._id) {
+                getSkillBySkillName(result?.score);
+                role.current = result?.role;
             }
-        });
+        })
     }, []);
 
     return (

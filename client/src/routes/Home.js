@@ -298,7 +298,6 @@ const Home = (props) => {
         newUser: newUser,
       },
     }).then((res) => {
-      // console.log('res.data skills', res.data.data);
       setSkills(res.data.data);
       // setSelectedSkill(res.data.data[0].skill);
       // console.log('last_played', last_played);

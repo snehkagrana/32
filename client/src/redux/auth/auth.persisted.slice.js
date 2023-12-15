@@ -1,10 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { auth_loginWithEmailAndPassword, auth_getUser } from './auth.thunk'
+import {
+    auth_loginWithEmailAndPassword,
+    auth_getUser,
+    auth_logout,
+} from './auth.thunk'
 
 // Initial state
 const initialState = {
     user: null,
-    newUser: false,
+    newUser: true,
 }
 
 // Actual Slice
@@ -45,6 +49,15 @@ export const authPersistedSlice = createSlice({
                 state.newUser = false
                 state.user = action.payload.data
             }
+        })
+
+        builder.addCase(auth_logout.rejected, (state, action) => {
+            state.newUser = true
+            state.user = null
+        })
+        builder.addCase(auth_logout.fulfilled, (state, action) => {
+            state.newUser = true
+            state.user = null
         })
     },
 })

@@ -1,13 +1,12 @@
 /* eslint-disable eqeqeq */
 import React, { useState, useEffect, useCallback } from 'react'
-import Axios from 'axios'
+import Axios from 'src/api/axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { Row, Form, Button, Col, Modal } from 'react-bootstrap'
 import CustomGoogleSignInButton from '../CustomGoogleSignInButton'
 import '../../styles/auth.styles.css'
 import { useAuth } from 'src/hooks'
 import { batch, useDispatch } from 'react-redux'
-import { authUtils } from 'src/utils'
 
 export default function ModalLogin() {
     const dispatch = useDispatch()
@@ -56,8 +55,6 @@ export default function ModalLogin() {
                     if (result?.meta?.requestStatus === 'fulfilled') {
                         const token = result.payload.data?.access_token
                         if (token) {
-                            authUtils.saveUserAccessToken(token)
-
                             if (result?.payload?.redirect == '/updateemail') {
                                 navigate('/updateemail')
                             } else {
@@ -73,8 +70,7 @@ export default function ModalLogin() {
                                         handleCloseModal()
                                         setTimeout(() => {
                                             navigate(`/home`)
-                                            // window.location.reload()
-                                        }, 150)
+                                        }, 500)
                                     }
                                 })
                             }
@@ -85,37 +81,6 @@ export default function ModalLogin() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [email, password])
-
-    // const handleLogin = () => {
-    //     dispatch()
-    //     Axios({
-    //         method: 'POST',
-    //         data: {
-    //             email: email,
-    //             password: password,
-    //         },
-    //         withCredentials: true,
-    //         url: '/server/login',
-    //     }).then(function (response) {
-    //         if (response.data.message === 'Incorrect Email or Wrong Password') {
-    //             setAuthMsg(response.data.message)
-    //             setShowAuthMsg(true)
-    //         } else if (response.data.message === 'Login Successfully') {
-    //             setAuthMsg(response.data.message)
-    //             setShowAuthMsg(true)
-    //             if (response.data.redirect === '/home') {
-    //                 handleCloseModal()
-    //                 navigate(`/home`)
-    //                 setTimeout(() => {
-    //                     window.location.reload()
-    //                 }, 150)
-    //             }
-    //         } else {
-    //             setAuthMsg('Unknown error occurred. Please try again.')
-    //             setShowAuthMsg(true)
-    //         }
-    //     })
-    // }
 
     const loginWithGoogle = e => {
         e.stopPropagation()
@@ -231,19 +196,6 @@ export default function ModalLogin() {
             setEmailTooltipMessage('')
         }
     }, [auth_openModalLogin])
-
-    useEffect(() => {
-        Axios({
-            method: 'GET',
-            withCredentials: true,
-            url: '/server/login',
-        }).then(function (response) {
-            if (response.data.message !== 'Enter your credentials to Log In') {
-                setAuthMsg(response.data.message)
-                setShowAuthMsg(true)
-            }
-        })
-    }, [])
 
     return (
         <Modal

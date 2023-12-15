@@ -11,3 +11,7 @@ export const auth_loginWithEmailAndPassword = createAsyncThunk(
 export const auth_getUser = createAsyncThunk('@auth/getUser', async (token) => {
     return await AuthAPI.getAuthenticatedUser(token)
 })
+
+export const auth_logout = createAsyncThunk('@auth/logout', async (token) => {
+    return await AuthAPI.revokeToken(token)
+})

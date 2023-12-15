@@ -1,13 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 // eslint-disable-next-line jsx-a11y/anchor-is-valid
-import Axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { useEffect, useRef, useState } from 'react'
 import 'src/styles/FingoSidebar.styles.css'
 import { MDBNavbarBrand } from 'mdb-react-ui-kit'
-
-import nonSignedUp from 'src/images/nonSignedUp'
-import signedUp from 'src/images/pepe.jpg'
 
 import { ReactComponent as LogoutIcon } from 'src/assets/svg/loudly-crying-face.svg'
 import { ReactComponent as EnterIcon } from 'src/assets/svg/enter.svg'
@@ -21,6 +16,7 @@ import IcHome from 'src/assets/images/ic_home.png'
 
 import Swal from 'sweetalert2'
 import FingoUserInfo from './FingoUserInfo'
+import { authUtils } from 'src/utils'
 
 const FingoSidebar = ({ open }) => {
     const dispatch = useDispatch()
@@ -29,12 +25,9 @@ const FingoSidebar = ({ open }) => {
         auth_setOpenModalLogin,
         auth_setOpenModalRegister,
         user,
-        authPersisted_setNewUser,
-        authPersisted_setUser,
         isAuthenticated,
+        auth_logout,
     } = useAuth()
-
-    console.log('isAuthenticated', isAuthenticated)
 
     const {
         app_setSkills,
@@ -54,25 +47,18 @@ const FingoSidebar = ({ open }) => {
             confirmButtonText: 'Yes',
         }).then(result => {
             if (result.isConfirmed) {
-                Axios({
-                    method: 'GET',
-                    withCredentials: true,
-                    url: '/server/logout',
-                })
-                    .then(res => {
-                        navigate(`/`)
-                    })
-                    .catch(e => {
-                        // whenever it's should redirect to home
-                        navigate(`/`)
-                    })
-
-                batch(() => {
-                    dispatch(app_setSkills([]))
-                    dispatch(app_setDailyXP(0))
-                    dispatch(app_setTotalXP(0))
-                    dispatch(authPersisted_setUser(null))
-                    dispatch(authPersisted_setNewUser(null))
+                dispatch(auth_logout()).then(result => {
+                    authUtils.removeUserAccessToken()
+                    if (result) {
+                        batch(() => {
+                            dispatch(app_setSkills([]))
+                            dispatch(app_setDailyXP(0))
+                            dispatch(app_setTotalXP(0))
+                        })
+                        setTimeout(() => {
+                            navigate('/home')
+                        }, 500)
+                    }
                 })
             }
         })
@@ -98,33 +84,6 @@ const FingoSidebar = ({ open }) => {
                 break
         }
     }
-
-    ////to authenticate user before allowing him to enter the home page
-    ////if he is not redirect him to login page
-    // useEffect(() => {
-    //     Axios({
-    //         method: 'GET',
-    //         withCredentials: true,
-    //         url: '/server/login',
-    //     }).then(function (response) {
-    //         if (response.data.redirect == '/login') {
-    //             // console.log("Please log in");
-    //             dispatch(authPersisted_setNewUser(true))
-    //             // navigate(`/auth/login`);
-    //         } else if (response.data.redirect == '/updateemail') {
-    //             navigate('/updateemail')
-    //         } else {
-    //             // console.log("Already logged in");
-    //             role.current = response.data.user.role
-    //             // setUser(response.data.user)
-    //             setUserName(
-    //                 response.data.user.displayName
-    //                     ? response.data.user.displayName?.split(' ')[0]
-    //                     : response.data.user.email
-    //             )
-    //         }
-    //     })
-    // }, [])
 
     const onClickBackdrop = () => {
         dispatch(app_setOpenSidebar(false))

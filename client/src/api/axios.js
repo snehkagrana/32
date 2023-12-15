@@ -23,21 +23,25 @@ const onResponseError = axiosError => {
 const Axios = _axios.create({
     baseURL: appConfig.apiBaseUrl,
     timeout: 20000,
-    headers: {
-        Authorization: `Bearer ${authUtils.getUserAccessToken()}`,
-    },
 })
 
 // On request
 Axios.interceptors.request.use(
     async config => {
+        try {
+            const idToken = authUtils.getUserAccessToken()
+            if (idToken) {
+                config.headers['Authorization'] = `Bearer ${idToken}`
+            }
+        } catch (e) {
+            console.log(e)
+        }
         return config
     },
     error => {
         return Promise.reject(onRequestError(error))
     }
 )
-
 // On response
 Axios.interceptors.response.use(
     async response => {
