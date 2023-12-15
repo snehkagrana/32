@@ -75,6 +75,8 @@ export default function ModalLogin() {
                                 })
                             }
                         }
+                    } else if (result?.meta?.requestStatus === 'rejected') {
+                        setAuthMsg(result?.payload?.message ?? '')
                     }
                 }
             )
@@ -194,6 +196,7 @@ export default function ModalLogin() {
         if (!auth_openModalLogin) {
             setPasswordTooltipMessage('')
             setEmailTooltipMessage('')
+            setAuthMsg('')
         }
     }, [auth_openModalLogin])
 

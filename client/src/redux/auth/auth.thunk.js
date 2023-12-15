@@ -3,8 +3,16 @@ import { AuthAPI } from 'src/api'
 
 export const auth_loginWithEmailAndPassword = createAsyncThunk(
     '@auth/loginWithEmailAndPassword',
-    async body => {
-        return await AuthAPI.loginWithEmailAndPassword(body)
+    async (body, { rejectWithValue }) => {
+        try {
+            const response = await AuthAPI.loginWithEmailAndPassword(body)
+            return response
+        } catch (err) {
+            if (!err.response) {
+                throw err
+            }
+            return rejectWithValue(err.response.data)
+        }
     }
 )
 
