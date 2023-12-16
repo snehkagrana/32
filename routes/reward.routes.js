@@ -11,6 +11,7 @@ const validate = require('../utils/validator.util')
 router.post(
     '/admin/reward',
     validate(schema.create),
+    AuthGuard,
     ErrorHandler(RewardController.admin_create)
 )
 
@@ -25,6 +26,7 @@ router.get(
 router.put(
     '/admin/reward',
     validate(schema.create),
+    AuthGuard,
     ErrorHandler(RewardController.admin_update)
 )
 
@@ -32,6 +34,7 @@ router.put(
 router.post(
     '/admin/reward/delete',
     validate(schema.delete),
+    AuthGuard,
     ErrorHandler(RewardController.admin_remove)
 )
 
@@ -39,9 +42,9 @@ router.post(
 router.post(
     '/admin/reward/gift',
     validate(schema.giftReward),
+    AuthGuard,
     ErrorHandler(RewardController.admin_giftReward)
 )
-
 
 /**
  * Reward routes for user basic
@@ -51,7 +54,8 @@ router.get('/reward', AuthGuard, ErrorHandler(RewardController.findAll))
 // redeem
 router.post(
     '/reward/redeem',
-    validate(schema.giftReward),
+    validate(schema.redeem),
+    AuthGuard,
     ErrorHandler(RewardController.redeem)
 )
 

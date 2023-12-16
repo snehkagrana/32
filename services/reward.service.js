@@ -44,3 +44,48 @@ exports.giftReward = async (email, rewardItems) => {
         }
     })
 }
+
+exports.redeem = async (email, body) => {
+    const reward = await RewardModel.findById(body.itemId)
+    UserModel.findOne({ email }).exec(async function (err, user) {
+        if (err) {
+            console.log('ERROR', err)
+        } else {
+            if (user) {
+                if (user?.rewards?.length > 0) {
+                    const mergedRewards = [
+                        ...user?.rewards,
+                        {
+                            ...reward._doc,
+                            notes: body.notes,
+                            isRedeemed: true,
+                            hasSeen: true,
+                            redeemedAt: new Date().toISOString(),
+                        },
+                    ]
+                    return await UserModel.updateOne(
+                        { email },
+                        { $set: { rewards: mergedRewards } }
+                    )
+                } else {
+                    return await UserModel.updateOne(
+                        { email },
+                        {
+                            $set: {
+                                rewards: [
+                                    {
+                                        ...reward._doc,
+                                        notes: body.notes,
+                                        isRedeemed: true,
+                                        hasSeen: true,
+                                        redeemedAt: new Date().toISOString(),
+                                    },
+                                ],
+                            },
+                        }
+                    )
+                }
+            }
+        }
+    })
+}

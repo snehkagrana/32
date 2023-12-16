@@ -35,8 +35,8 @@ module.exports = {
         .options({ allowUnknown: true }),
     redeem: Joi.object()
         .keys({
-            rewardId: Joi.string().required(),
-            notes: Joi.string().optional(),
+            itemId: Joi.string().required(),
+            notes: Joi.string().allow(null).allow('').optional(),
         })
         .options({ allowUnknown: true }),
 }

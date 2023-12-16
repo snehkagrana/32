@@ -90,8 +90,7 @@ const UserSchema = new mongoose.Schema({
                 type: String,
             },
             notes: String,
-
-            givenAt: {
+            receivedAt: {
                 type: Date,
                 // `Date.now()` returns the current unix timestamp as a number
                 default: Date.now,

@@ -71,16 +71,10 @@ exports.findAll = async (req, res) => {
 
 // claim reward
 exports.redeem = async (req, res) => {
-    if (req.body.items?.length > 0) {
-        const items = req.body.items.map(item => ({
-            ...item,
-            isRedeemed: false,
-            hasSeen: false,
-            redeemedAt: null,
-        }))
-        await RewardService.giftReward(req.body.email, items)
+    if (req.user.email && req.body) {
+        await RewardService.redeem(req.user.email, req.body)
         return res.json({
-            message: 'Gift reward successfully.',
+            message: 'Redeem successfully.',
         })
     } else {
         return res.status(400).json({ message: 'Items cannot empty or null' })
