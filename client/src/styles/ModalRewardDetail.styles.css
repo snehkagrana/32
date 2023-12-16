@@ -1,0 +1,86 @@
+.RewardDetail .FingoWaves {
+    color: #00b65f;
+}
+
+.RewardDetail .FingoWaves > div {
+    background-color: #00b65f;
+    height: 220px;
+}
+
+@media (min-width: 576px) {
+    .ModalRewardDetail .modal-dialog {
+        max-width: 500px;
+    }
+}
+
+.RewardDetail {
+    background-color: #ffffff;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.RewardDetail .HeaderTitle {
+    color: #fff;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 28px;
+}
+
+@media (min-width: 576px) {
+    .RewardDetail {
+    }
+}
+
+.RewardDetail h2 {
+    font-weight: 700;
+    font-size: 22px;
+}
+
+@media (min-width: 576px) {
+    .ModalRewardDetail .ListReward {
+    }
+}
+
+[data-theme='dark'] .ModalRewardDetail .RewardDetail {
+    background-color: #383838;
+}
+
+.RewardDetailContent {
+    margin-top: -260px;
+    display: flex;
+    align-self: center;
+    width: 280px;
+    flex-direction: column;
+    padding-bottom: 40px;
+}
+
+@media (min-width: 576px) {
+    .RewardDetailContent {
+        width: 400px;
+    }
+}
+
+.RewardDetailContent h6 {
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.RewardDetailContent p {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.RewardDetailImg {
+    overflow: hidden;
+    margin-bottom: 1.2rem;
+    border: 2px solid rgb(109 109 109 / 10%);
+}
+
+.RewardDetail img {
+    width: 100%;
+    height: auto;
+}

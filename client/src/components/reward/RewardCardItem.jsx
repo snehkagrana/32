@@ -1,14 +1,23 @@
 import { useCallback, useMemo } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import Card from 'react-bootstrap/Card'
+import { useDispatch } from 'react-redux'
 
 import AmazonImg from 'src/assets/images/giftcard/amazon.jpg'
 import GooglePlayImg from 'src/assets/images/giftcard/google-play.jpg'
 import OtherImg from 'src/assets/images/giftcard/other.jpg'
+import { useReward } from 'src/hooks'
 
 import 'src/styles/RewardCardItem.styles.css'
 
 const RewardCardItem = props => {
+    const dispatch = useDispatch()
+    const {
+        modalDetail,
+        reward_setModalDetail,
+        openModalListReward,
+        reward_setOpenModalListReward,
+    } = useReward()
     const { name, imageURL, type, diamondValue } = props?.data
 
     const getGiftCardImage = useMemo(() => {
@@ -27,12 +36,17 @@ const RewardCardItem = props => {
     }, [imageURL, type])
 
     const onClickRedeem = useCallback(() => {
-        alert('do something')
-    }, [])
+        dispatch(reward_setOpenModalListReward(false))
+        dispatch(reward_setModalDetail({ open: true, data: props.data }))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [modalDetail, openModalListReward])
 
     if (props.data) {
         return (
-            <Card className='RewardCardItem FingoShapeRadius overflow-hidden'>
+            <Card
+                className='RewardCardItem FingoShapeRadius overflow-hidden'
+                onClick={onClickRedeem}
+            >
                 <Card.Img variant='top' src={getGiftCardImage} />
                 <Card.Body>
                     <div>

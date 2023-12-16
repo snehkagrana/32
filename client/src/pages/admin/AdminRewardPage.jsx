@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux'
 import { FingoButton } from 'src/components/core'
 import { ModalFormReward, RewardCardItem } from 'src/components/reward'
 import LoadingBox from 'src/components/LoadingBox'
+import ModalRewardDetail from 'src/components/reward/ModalRewardDetail'
 
 const AdminRewardPage = () => {
     const dispatch = useDispatch()
@@ -103,6 +104,7 @@ const AdminRewardPage = () => {
                 </div>
             </Container>
             <ModalFormReward />
+            <ModalRewardDetail />
         </FingoHomeLayout>
     )
 }

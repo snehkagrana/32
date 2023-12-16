@@ -11,6 +11,10 @@ const initialState = {
         data: null,
     },
     openModalListReward: false,
+    modalDetail: {
+        open: false,
+        data: null,
+    },
 
     listRewardData: [],
     listRewardIsLoading: false,
@@ -27,6 +31,9 @@ export const rewardSlice = createSlice({
         },
         reward_setOpenModalListReward(state, action) {
             state.openModalListReward = action.payload
+        },
+        reward_setModalDetail(state, action) {
+            state.modalDetail = action.payload
         },
         reward_reset: () => initialState,
     },

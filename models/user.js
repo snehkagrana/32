@@ -66,6 +66,8 @@ const UserSchema = new mongoose.Schema({
                 type: String,
                 required: true,
             },
+            description: String,
+            brandUrl: String,
             currencyValue: {
                 type: mongoose.Schema.Types.Decimal128,
                 required: true,

@@ -13,8 +13,9 @@ import Swal from 'sweetalert2'
 
 const schema = Yup.object().shape({
     name: Yup.string().required('Field required'),
+    description: Yup.string().nullable(),
+    brandUrl: Yup.string().nullable(),
     currencyValue: Yup.string().required('Field required'),
-    // currencyCode: Yup.string().required('Field required'),
     currencyCode: Yup.object().shape({
         value: Yup.string().required('Field required'),
         label: Yup.string().required('Field required'),
@@ -110,7 +111,7 @@ const ModalFormReward = () => {
                     <h2>Add Gift Card</h2>
                 </div>
                 <Row className='row'>
-                    <Col xs={12}>
+                    <Col xs={12} className='px-2'>
                         <Controller
                             name='type'
                             control={control}
@@ -134,7 +135,7 @@ const ModalFormReward = () => {
                             )}
                         />
                     </Col>
-                    <Col xs={12}>
+                    <Col xs={12} className='px-2'>
                         <Controller
                             name='name'
                             control={control}
@@ -157,7 +158,58 @@ const ModalFormReward = () => {
                             )}
                         />
                     </Col>
-                    <Col xs={12} md={4}>
+                    <Col xs={12} className='px-2'>
+                        <Controller
+                            name='description'
+                            control={control}
+                            render={({ field }) => (
+                                <Form.Group
+                                    className='mb-3'
+                                    controlId='formGroupName'
+                                >
+                                    <Form.Label>Desc</Form.Label>
+                                    <Form.Control
+                                        {...field}
+                                        as='textarea'
+                                        rows={3}
+                                        placeholder='Input description'
+                                    />
+                                    {errors?.description?.message && (
+                                        <Form.Control.Feedback type='invalid'>
+                                            {errors?.description?.message ?? ''}
+                                        </Form.Control.Feedback>
+                                    )}
+                                </Form.Group>
+                            )}
+                        />
+                    </Col>
+                    <Col xs={12} className='px-2'>
+                        <Controller
+                            name='brandUrl'
+                            control={control}
+                            render={({ field }) => (
+                                <Form.Group
+                                    className='mb-3'
+                                    controlId='formGroupName'
+                                >
+                                    <Form.Label>Brand URL</Form.Label>
+                                    <Form.Control
+                                        {...field}
+                                        placeholder='Input brand url'
+                                    />
+                                    {errors?.brandUrl?.message && (
+                                        <Form.Control.Feedback type='invalid'>
+                                            {errors?.brandUrl?.message ?? ''}
+                                        </Form.Control.Feedback>
+                                    )}
+                                    <Form.Control.Feedback type='valid'>
+                                        eg: www.amazon.com
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            )}
+                        />
+                    </Col>
+                    <Col xs={12} md={4} className='px-2'>
                         <Controller
                             name='diamondValue'
                             control={control}
@@ -205,7 +257,7 @@ const ModalFormReward = () => {
                             )}
                         />
                     </Col>
-                    <Col xs={12} md={4}>
+                    <Col xs={12} md={4} className='px-2'>
                         <Controller
                             name='currencyCode'
                             control={control}
@@ -230,7 +282,7 @@ const ModalFormReward = () => {
                             )}
                         />
                     </Col>
-                    <Col xs={12} md={6}>
+                    <Col xs={12} md={6} className='px-2'>
                         <Controller
                             name='claimCode'
                             control={control}
@@ -253,7 +305,7 @@ const ModalFormReward = () => {
                             )}
                         />
                     </Col>
-                    <Col xs={12} md={6}>
+                    <Col xs={12} md={6} className='px-2'>
                         <Controller
                             name='pin'
                             control={control}

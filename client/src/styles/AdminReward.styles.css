@@ -13,6 +13,7 @@
     }
 }
 
+.FormReward .valid-feedback,
 .FormReward .invalid-feedback {
     display: block !important;
 }

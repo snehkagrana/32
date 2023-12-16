@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Form, Row, Col } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { useReward } from 'src/hooks'
@@ -62,38 +62,6 @@ const ModalListReward = () => {
         defaultValues: initialValues,
         resolver: yupResolver(schema),
     })
-
-    const onValidSubmit = async values => {
-        try {
-            const response = await RewardApi.admin_createReward({
-                ...values,
-                currencyCode: values?.currencyCode?.value || null,
-                type: values?.type?.value || null,
-            })
-            if (response?.data?._id) {
-                Swal.fire({
-                    title: 'Success',
-                    text: 'Reward saved successfully!',
-                    icon: 'success',
-                    showCancelButton: false,
-                    confirmButtonColor: '#009c4e',
-                    confirmButtonText: 'Ok',
-                }).then(result => {
-                    if (result.isConfirmed) {
-                        handleCloseModal()
-                        dispatch(reward_getList())
-                        reset(initialValues)
-                    }
-                })
-            }
-        } catch (e) {
-            console.log('e', e)
-        }
-    }
-
-    const onInvalidSubmit = _errors => {
-        console.log('_errors', _errors)
-    }
 
     const handleCloseModal = () => {
         dispatch(reward_setOpenModalListReward(false))

@@ -4,6 +4,8 @@ module.exports = {
     create: Joi.object()
         .keys({
             name: Joi.string().required(),
+            description: Joi.string().allow(null).allow('').optional(),
+            brandUrl: Joi.string().allow(null).allow('').optional(),
             currencyValue: Joi.string().required(),
             currencyCode: Joi.string().required(),
             diamondValue: Joi.number().required(),
