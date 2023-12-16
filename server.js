@@ -2055,6 +2055,9 @@ app.post("/server/savexp", AuthGuard, (req, res) => {
                             current: xp,
                             daily: doc.xp.daily ? doc.xp.daily + xp : xp,
                             total: doc.xp.total ? doc.xp.total + xp : xp,
+                            level: getLevelByXpPoints(
+                                doc?.xp?.total ? doc.xp.total + xp : 0
+                            ),
                         },
                     },
                 }
