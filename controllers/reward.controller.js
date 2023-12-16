@@ -1,6 +1,6 @@
 const RewardService = require('../services/reward.service')
 
-exports.create = async (req, res) => {
+exports.admin_create = async (req, res) => {
     const result = await RewardService.create(req.body)
     if (result) {
         return res.json({
@@ -10,7 +10,7 @@ exports.create = async (req, res) => {
     }
 }
 
-exports.update = async (req, res) => {
+exports.admin_update = async (req, res) => {
     const result = await RewardService.update(req.body)
     if (result) {
         return res.json({
@@ -20,7 +20,7 @@ exports.update = async (req, res) => {
     }
 }
 
-exports.findAll = async (req, res) => {
+exports.admin_findAll = async (req, res) => {
     const rewards = await RewardService.findAll(req)
     return res.json({
         data: rewards,
@@ -28,7 +28,7 @@ exports.findAll = async (req, res) => {
     })
 }
 
-exports.remove = async (req, res) => {
+exports.admin_remove = async (req, res) => {
     const result = await RewardService.remove(req.body.id)
     if (result) {
         return res.json({
@@ -38,7 +38,7 @@ exports.remove = async (req, res) => {
     }
 }
 
-exports.giftReward = async (req, res) => {
+exports.admin_giftReward = async (req, res) => {
     if (req.body.items?.length > 0) {
         const items = req.body.items.map(item => ({
             ...item,
@@ -53,4 +53,19 @@ exports.giftReward = async (req, res) => {
     } else {
         return res.status(400).json({ message: 'Items cannot empty or null' })
     }
+}
+
+// find all reward for user basic
+exports.findAll = async (req, res) => {
+    const rewards = await RewardService.findAll(req)
+    const filteredRewards = rewards.map(item => ({
+        ...item._doc,
+        pin: null,
+        claimCode: null,
+    }))
+    console.log('filteredRewards', filteredRewards)
+    return res.json({
+        data: rewards,
+        message: 'Success.',
+    })
 }

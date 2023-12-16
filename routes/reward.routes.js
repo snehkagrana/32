@@ -11,31 +11,41 @@ const validate = require('../utils/validator.util')
 router.post(
     '/admin/reward',
     validate(schema.create),
-    ErrorHandler(RewardController.create)
+    ErrorHandler(RewardController.admin_create)
 )
 
-// Get list reward
-router.get('/admin/reward', AuthGuard, ErrorHandler(RewardController.findAll))
+// Get list reward for admin
+router.get(
+    '/admin/reward',
+    AuthGuard,
+    ErrorHandler(RewardController.admin_findAll)
+)
 
 // Update reward
 router.put(
     '/admin/reward',
     validate(schema.create),
-    ErrorHandler(RewardController.update)
+    ErrorHandler(RewardController.admin_update)
 )
 
 // Delete reward
 router.post(
     '/admin/reward/delete',
     validate(schema.delete),
-    ErrorHandler(RewardController.remove)
+    ErrorHandler(RewardController.admin_remove)
 )
 
 // Gift user reward
 router.post(
     '/admin/reward/gift',
     validate(schema.giftReward),
-    ErrorHandler(RewardController.giftReward)
+    ErrorHandler(RewardController.admin_giftReward)
 )
+
+
+/**
+ * Reward routes for user basic
+ */
+router.get('/reward', AuthGuard, ErrorHandler(RewardController.findAll))
 
 module.exports = router
