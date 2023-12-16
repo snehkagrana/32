@@ -14,7 +14,7 @@ import '../index.css'
 import { useAuth } from 'src/hooks'
 
 const InformationPage = () => {
-    const { auth_syncAndGetUser } = useAuth()
+    const { user, isAuthenticated } = useAuth()
     const [imageURL, setImageURL] = useState('')
     const { skillName, category, subcategory, page } = useParams()
     const navigate = useNavigate()
@@ -159,31 +159,30 @@ const InformationPage = () => {
                 isCompleted.current = false
             }
         } else {
-            auth_syncAndGetUser().then(result => {
-                if (result?._id) {
-                    getSkillBySkillName()
-                    getInformation()
-                    role.current = result.role
-                    var checkIsCompleted = result?.score && result.score.filter(
-                        function (score) {
-                            return (
-                                score.skill === skillName &&
-                                score.category === category &&
-                                score.sub_category === subcategory
-                            )
-                        }
-                    )
-                    if (checkIsCompleted.length > 0) {
-                        isCompleted.current = true
-                        setScore(checkIsCompleted[0].points)
-                    } else {
-                        isCompleted.current = false
-                    }
+            if (isAuthenticated && user) {
+                getSkillBySkillName()
+                getInformation()
+                role.current = user.role
+                // eslint-disable-next-line no-redeclare
+                var checkIsCompleted =
+                    user?.score &&
+                    user.score.filter(function (score) {
+                        return (
+                            score.skill === skillName &&
+                            score.category === category &&
+                            score.sub_category === subcategory
+                        )
+                    })
+                if (checkIsCompleted.length > 0) {
+                    isCompleted.current = true
+                    setScore(checkIsCompleted[0].points)
+                } else {
+                    isCompleted.current = false
                 }
-            })
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pageNumber, searchParams, subcategory])
+    }, [pageNumber, searchParams, subcategory, isAuthenticated, user])
 
     useEffect(() => {
         if (page) {

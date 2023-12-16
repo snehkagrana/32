@@ -13,7 +13,7 @@ import { FingoHomeLayout } from "src/components/layouts";
 import { useAuth } from "src/hooks";
 
 const Quiz = () => {
-  const { auth_syncAndGetUser } = useAuth()
+  const { isAuthenticated, user } = useAuth()
   const [imageURL, setImageURL] = useState("");
   const { skillName, subcategory, category } = useParams();
   const navigate = useNavigate();
@@ -347,15 +347,13 @@ const Quiz = () => {
         getAllQuestions(newUser);
       }
     } else {
-      auth_syncAndGetUser().then(result => {
-          if (result?._id) {
-            getSkillBySkillName();
-            getAllQuestions();
-            role.current = result?.role;
-          }
-      })
+      if(isAuthenticated && user) {
+        getSkillBySkillName();
+        getAllQuestions();
+        role.current = user?.role;
+      }
     }
-  }, [searchParams]);
+  }, [searchParams, isAuthenticated, user]);
 
   const isDisabledAnswer = useMemo(() => {
     return (

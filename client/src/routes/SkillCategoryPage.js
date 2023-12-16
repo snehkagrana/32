@@ -23,7 +23,7 @@ import { useAuth } from "src/hooks";
 import ModalListReward from "src/components/reward/ModalListReward";
 
 const SkillCategoryPage = () => {
-    const { auth_syncAndGetUser } = useAuth()
+    const { isAuthenticated, user } = useAuth()
     const { skillName } = useParams();
     const { categoryName } = useParams();
     const navigate = useNavigate();
@@ -97,25 +97,23 @@ const SkillCategoryPage = () => {
 
             checkIsCompleted.current = tempCheckIsCompleted;
         } else {
-            auth_syncAndGetUser().then(result => {
-                if (result?._id) {
-                    getSkillBySkillName();
-                    role.current = result?.role;
-                    var tempCheckIsCompleted = [];
-                    result?.score && result.score.forEach((score) => {
-                        if (
-                            score.skill === skillName &&
-                            score.category === categoryName
-                        )
-                            tempCheckIsCompleted = tempCheckIsCompleted.concat(
-                                score.sub_category
-                            );
-                    });
-                    checkIsCompleted.current = tempCheckIsCompleted;
-                }
-            })
+            if(isAuthenticated && user) {
+                getSkillBySkillName();
+                role.current = user?.role;
+                var tempCheckIsCompleted = [];
+                user?.score && user.score.forEach((score) => {
+                    if (
+                        score.skill === skillName &&
+                        score.category === categoryName
+                    )
+                        tempCheckIsCompleted = tempCheckIsCompleted.concat(
+                            score.sub_category
+                        );
+                });
+                checkIsCompleted.current = tempCheckIsCompleted;
+            }
         }
-    }, [searchParams]);
+    }, [searchParams, isAuthenticated, user, skillName, categoryName]);
 
     return (
         <FingoHomeLayout>
