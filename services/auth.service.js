@@ -51,6 +51,7 @@ exports.syncUserXp = async email => {
                     { email },
                     {
                         $set: {
+                            diamond: doc?.diamond ? doc.diamond : 0,
                             streak: doc.streak,
                             xp: {
                                 current: doc?.xp?.current ? doc.xp.current : 0,

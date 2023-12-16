@@ -20,6 +20,7 @@ exports.register = async (req, res) => {
         role: 'basic',
         streak: 0,
         lastCompletedDay: null,
+        diamond: 0,
         xp: {
             current: 0,
             daily: 0,
