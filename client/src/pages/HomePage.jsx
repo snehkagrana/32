@@ -51,6 +51,7 @@ import { useAuth } from 'src/hooks'
 import { FingoScrollToTop } from 'src/components/layouts/FingoHomeLayout'
 import FingoModalLevelUp from 'src/components/FingoModalLevelUp'
 import { authUtils } from 'src/utils'
+import ModalListReward from 'src/components/reward/ModalListReward'
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -908,6 +909,7 @@ const HomePage = props => {
                 </div>
             </div>
             <FingoModalLevelUp />
+            <ModalListReward />
         </FingoHomeLayout>
     )
 }

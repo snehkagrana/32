@@ -9,4 +9,8 @@ export const RewardApi = {
         const response = await Axios.get('/server/api/admin/reward', { params })
         return response?.data
     },
+    findAll: async params => {
+        const response = await Axios.get('/server/api/reward', { params })
+        return response?.data
+    },
 }

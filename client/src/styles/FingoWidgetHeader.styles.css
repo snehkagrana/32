@@ -34,8 +34,8 @@
 .FingoWidgetHeader li a {
     text-decoration: none;
     user-select: none;
-    height: 48px;
-    width: 100px;
+    height: 42px;
+    width: 92%;
     display: flex;
     align-items: center;
     justify-content: center;

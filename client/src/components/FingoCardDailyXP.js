@@ -15,7 +15,6 @@ import ImageLevel8 from 'src/assets/images/levels/8.png'
 import ImageLevel9 from 'src/assets/images/levels/9.png'
 import ImageLevel10 from 'src/assets/images/levels/10.png'
 
-import { ReactComponent as InfoIcon } from 'src/assets/svg/info.svg'
 import { useDispatch } from 'react-redux'
 
 const FingoCardDailyXP = () => {

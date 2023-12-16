@@ -1,15 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { reward_adminGetList } from './reward.thunk'
+import { reward_adminGetList, reward_getList } from './reward.thunk'
 
 // Initial state
 const initialState = {
-    listIsLoading: false,
-    listIsError: false,
-    listData: [],
+    adminListRewardIsLoading: false,
+    adminListRewardIsError: false,
+    adminListRewardData: [],
     modalForm: {
         open: false,
         data: null,
     },
+    openModalListReward: false,
+
+    listRewardData: [],
+    listRewardIsLoading: false,
+    listRewardIsError: false,
 }
 
 // Actual Slice
@@ -20,22 +25,40 @@ export const rewardSlice = createSlice({
         reward_setModalForm(state, action) {
             state.modalForm = action.payload
         },
+        reward_setOpenModalListReward(state, action) {
+            state.openModalListReward = action.payload
+        },
         reward_reset: () => initialState,
     },
     extraReducers: builder => {
-        // Login
+        // Get list reward for admin
         builder.addCase(reward_adminGetList.pending, state => {
-            state.listIsLoading = true
-            state.listIsError = false
+            state.adminListRewardIsLoading = true
+            state.adminListRewardIsError = false
         })
         builder.addCase(reward_adminGetList.rejected, (state, action) => {
-            state.listIsLoading = false
-            state.listIsError = true
+            state.adminListRewardIsLoading = false
+            state.adminListRewardIsError = true
         })
         builder.addCase(reward_adminGetList.fulfilled, (state, action) => {
-            state.listIsError = false
-            state.listIsLoading = false
-            state.listData = action.payload?.data || []
+            state.adminListRewardIsError = false
+            state.adminListRewardIsLoading = false
+            state.adminListRewardData = action.payload?.data || []
+        })
+
+        // Get list reward for user basic
+        builder.addCase(reward_getList.pending, state => {
+            state.listRewardIsLoading = true
+            state.listRewardIsError = false
+        })
+        builder.addCase(reward_getList.rejected, (state, action) => {
+            state.listRewardIsLoading = false
+            state.listRewardIsError = true
+        })
+        builder.addCase(reward_getList.fulfilled, (state, action) => {
+            state.listRewardIsError = false
+            state.listRewardIsLoading = false
+            state.listRewardData = action.payload?.data || []
         })
     },
 })

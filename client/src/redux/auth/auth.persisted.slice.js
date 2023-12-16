@@ -47,7 +47,10 @@ export const authPersistedSlice = createSlice({
         builder.addCase(auth_getUser.fulfilled, (state, action) => {
             if (action?.payload?.data?._id) {
                 state.newUser = false
-                state.user = action.payload.data
+                state.user = {
+                    ...state.user,
+                    ...action.payload.data,
+                }
             }
         })
 

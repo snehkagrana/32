@@ -1,0 +1,31 @@
+@media (min-width: 576px) {
+    .ModalListReward .modal-dialog {
+        max-width: 720px;
+    }
+}
+
+.ListRewardContainer {
+    background-color: #ffffff;
+    width: 100%;
+    padding: 1.2rem 2rem;
+}
+
+@media (min-width: 576px) {
+    .ListRewardContainer {
+        padding: 2rem 3rem;
+    }
+}
+
+.ListRewardContainer h2 {
+    font-weight: 700;
+    font-size: 22px;
+}
+
+@media (min-width: 576px) {
+    .ModalListReward .ListReward {
+    }
+}
+
+[data-theme='dark'] .ModalListReward .ListReward {
+    background-color: #333;
+}

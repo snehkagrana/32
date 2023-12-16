@@ -96,216 +96,214 @@ const ModalFormReward = () => {
     }
 
     return (
-        <div className='ModalFormReward'>
-            <FingoModal
-                open={modalForm.open}
-                onClose={handleCloseModal}
-                centered
+        <FingoModal
+            open={modalForm.open}
+            onClose={handleCloseModal}
+            centered
+            className='ModalFormReward'
+        >
+            <Form
+                onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
+                className='FormReward FingoShapeRadius'
             >
-                <Form
-                    onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
-                    className='FormReward FingoShapeRadius'
-                >
-                    <div className='mb-3'>
-                        <h3>Add Gift Card</h3>
-                    </div>
-                    <Row className='row'>
-                        <Col xs={12}>
-                            <Controller
-                                name='type'
-                                control={control}
-                                render={({ field }) => (
-                                    <Form.Group
-                                        className='mb-3'
-                                        controlId='formGroupType'
-                                    >
-                                        <Form.Label>Select Type</Form.Label>
-                                        <Select
-                                            {...field}
-                                            options={DROPDOWN_REWARD_TYPES}
-                                            placeholder='Select Type'
-                                        />
-                                        {errors?.type?.message && (
-                                            <Form.Control.Feedback type='invalid'>
-                                                {errors?.type?.message ?? ''}
-                                            </Form.Control.Feedback>
-                                        )}
-                                    </Form.Group>
-                                )}
-                            />
-                        </Col>
-                        <Col xs={12}>
-                            <Controller
-                                name='name'
-                                control={control}
-                                render={({ field }) => (
-                                    <Form.Group
-                                        className='mb-3'
-                                        controlId='formGroupName'
-                                    >
-                                        <Form.Label>Name</Form.Label>
-                                        <Form.Control
-                                            {...field}
-                                            placeholder='Input name'
-                                        />
-                                        {errors?.name?.message && (
-                                            <Form.Control.Feedback type='invalid'>
-                                                {errors?.name?.message ?? ''}
-                                            </Form.Control.Feedback>
-                                        )}
-                                    </Form.Group>
-                                )}
-                            />
-                        </Col>
-                        <Col xs={12} md={4}>
-                            <Controller
-                                name='diamondValue'
-                                control={control}
-                                render={({ field }) => (
-                                    <Form.Group
-                                        className='mb-3'
-                                        controlId='formGroupDiamondValue'
-                                    >
-                                        <Form.Label>Diamond Value</Form.Label>
-                                        <Form.Control
-                                            {...field}
-                                            placeholder='Diamond Value'
-                                        />
-                                        {errors?.diamondValue?.message && (
-                                            <Form.Control.Feedback type='invalid'>
-                                                {errors?.diamondValue
-                                                    ?.message ?? ''}
-                                            </Form.Control.Feedback>
-                                        )}
-                                    </Form.Group>
-                                )}
-                            />
-                        </Col>
-                        <Col xs={12} md={4}>
-                            <Controller
-                                name='currencyValue'
-                                control={control}
-                                render={({ field }) => (
-                                    <Form.Group
-                                        className='mb-3'
-                                        controlId='formGroupCurrencyValue'
-                                    >
-                                        <Form.Label>Currency Value</Form.Label>
-                                        <Form.Control
-                                            {...field}
-                                            placeholder='Currency Value'
-                                        />
-                                        {errors?.currencyValue?.message && (
-                                            <Form.Control.Feedback type='invalid'>
-                                                {errors?.currencyValue
-                                                    ?.message ?? ''}
-                                            </Form.Control.Feedback>
-                                        )}
-                                    </Form.Group>
-                                )}
-                            />
-                        </Col>
-                        <Col xs={12} md={4}>
-                            <Controller
-                                name='currencyCode'
-                                control={control}
-                                render={({ field }) => (
-                                    <Form.Group
-                                        className='mb-3'
-                                        controlId='formGroupType'
-                                    >
-                                        <Form.Label>Select Type</Form.Label>
-                                        <Select
-                                            {...field}
-                                            options={DROPDOWN_CURRENCY_CODES}
-                                            placeholder='Select Type'
-                                        />
-                                        {errors?.currencyCode?.message && (
-                                            <Form.Control.Feedback type='invalid'>
-                                                {errors?.currencyCode
-                                                    ?.message ?? ''}
-                                            </Form.Control.Feedback>
-                                        )}
-                                    </Form.Group>
-                                )}
-                            />
-                        </Col>
-                        <Col xs={12} md={6}>
-                            <Controller
-                                name='claimCode'
-                                control={control}
-                                render={({ field }) => (
-                                    <Form.Group
-                                        className='mb-3'
-                                        controlId='formGroupclaimCode'
-                                    >
-                                        <Form.Label>Claim Code</Form.Label>
-                                        <Form.Control
-                                            {...field}
-                                            placeholder='Claim Code'
-                                        />
-                                        {errors?.claimCode?.message && (
-                                            <Form.Control.Feedback type='invalid'>
-                                                {errors?.claimCode?.message ??
-                                                    ''}
-                                            </Form.Control.Feedback>
-                                        )}
-                                    </Form.Group>
-                                )}
-                            />
-                        </Col>
-                        <Col xs={12} md={6}>
-                            <Controller
-                                name='pin'
-                                control={control}
-                                render={({ field }) => (
-                                    <Form.Group
-                                        className='mb-3'
-                                        controlId='formGrouppin'
-                                    >
-                                        <Form.Label>PIN</Form.Label>
-                                        <Form.Control
-                                            {...field}
-                                            placeholder='PIN'
-                                        />
-                                        {errors?.pin?.message && (
-                                            <Form.Control.Feedback type='invalid'>
-                                                {errors?.pin?.message ?? ''}
-                                            </Form.Control.Feedback>
-                                        )}
-                                    </Form.Group>
-                                )}
-                            />
-                        </Col>
-                        <Col xs={12} className='mt-4'>
-                            <Row>
-                                <Col xs={12} md={6}>
-                                    <FingoButton
-                                        style={{ width: '100%' }}
-                                        size='large'
-                                        color='success'
-                                        type='button'
-                                        onClick={onClickCancel}
-                                    >
-                                        Cancel
-                                    </FingoButton>
-                                </Col>
-                                <Col xs={12} md={6}>
-                                    <FingoButton
-                                        style={{ width: '100%' }}
-                                        size='large'
-                                        type='submit'
-                                        color='success'
-                                    >
-                                        Save
-                                    </FingoButton>
-                                </Col>
-                            </Row>
-                        </Col>
-                    </Row>
-                </Form>
-            </FingoModal>
-        </div>
+                <div className='mb-4'>
+                    <h2>Add Gift Card</h2>
+                </div>
+                <Row className='row'>
+                    <Col xs={12}>
+                        <Controller
+                            name='type'
+                            control={control}
+                            render={({ field }) => (
+                                <Form.Group
+                                    className='mb-3'
+                                    controlId='formGroupType'
+                                >
+                                    <Form.Label>Select Type</Form.Label>
+                                    <Select
+                                        {...field}
+                                        options={DROPDOWN_REWARD_TYPES}
+                                        placeholder='Select Type'
+                                    />
+                                    {errors?.type?.message && (
+                                        <Form.Control.Feedback type='invalid'>
+                                            {errors?.type?.message ?? ''}
+                                        </Form.Control.Feedback>
+                                    )}
+                                </Form.Group>
+                            )}
+                        />
+                    </Col>
+                    <Col xs={12}>
+                        <Controller
+                            name='name'
+                            control={control}
+                            render={({ field }) => (
+                                <Form.Group
+                                    className='mb-3'
+                                    controlId='formGroupName'
+                                >
+                                    <Form.Label>Name</Form.Label>
+                                    <Form.Control
+                                        {...field}
+                                        placeholder='Input name'
+                                    />
+                                    {errors?.name?.message && (
+                                        <Form.Control.Feedback type='invalid'>
+                                            {errors?.name?.message ?? ''}
+                                        </Form.Control.Feedback>
+                                    )}
+                                </Form.Group>
+                            )}
+                        />
+                    </Col>
+                    <Col xs={12} md={4}>
+                        <Controller
+                            name='diamondValue'
+                            control={control}
+                            render={({ field }) => (
+                                <Form.Group
+                                    className='mb-3'
+                                    controlId='formGroupDiamondValue'
+                                >
+                                    <Form.Label>Diamond Value</Form.Label>
+                                    <Form.Control
+                                        {...field}
+                                        placeholder='Diamond Value'
+                                    />
+                                    {errors?.diamondValue?.message && (
+                                        <Form.Control.Feedback type='invalid'>
+                                            {errors?.diamondValue?.message ??
+                                                ''}
+                                        </Form.Control.Feedback>
+                                    )}
+                                </Form.Group>
+                            )}
+                        />
+                    </Col>
+                    <Col xs={12} md={4}>
+                        <Controller
+                            name='currencyValue'
+                            control={control}
+                            render={({ field }) => (
+                                <Form.Group
+                                    className='mb-3'
+                                    controlId='formGroupCurrencyValue'
+                                >
+                                    <Form.Label>Currency Value</Form.Label>
+                                    <Form.Control
+                                        {...field}
+                                        placeholder='Currency Value'
+                                    />
+                                    {errors?.currencyValue?.message && (
+                                        <Form.Control.Feedback type='invalid'>
+                                            {errors?.currencyValue?.message ??
+                                                ''}
+                                        </Form.Control.Feedback>
+                                    )}
+                                </Form.Group>
+                            )}
+                        />
+                    </Col>
+                    <Col xs={12} md={4}>
+                        <Controller
+                            name='currencyCode'
+                            control={control}
+                            render={({ field }) => (
+                                <Form.Group
+                                    className='mb-3'
+                                    controlId='formGroupType'
+                                >
+                                    <Form.Label>Select Type</Form.Label>
+                                    <Select
+                                        {...field}
+                                        options={DROPDOWN_CURRENCY_CODES}
+                                        placeholder='Select Type'
+                                    />
+                                    {errors?.currencyCode?.message && (
+                                        <Form.Control.Feedback type='invalid'>
+                                            {errors?.currencyCode?.message ??
+                                                ''}
+                                        </Form.Control.Feedback>
+                                    )}
+                                </Form.Group>
+                            )}
+                        />
+                    </Col>
+                    <Col xs={12} md={6}>
+                        <Controller
+                            name='claimCode'
+                            control={control}
+                            render={({ field }) => (
+                                <Form.Group
+                                    className='mb-3'
+                                    controlId='formGroupclaimCode'
+                                >
+                                    <Form.Label>Claim Code</Form.Label>
+                                    <Form.Control
+                                        {...field}
+                                        placeholder='Claim Code'
+                                    />
+                                    {errors?.claimCode?.message && (
+                                        <Form.Control.Feedback type='invalid'>
+                                            {errors?.claimCode?.message ?? ''}
+                                        </Form.Control.Feedback>
+                                    )}
+                                </Form.Group>
+                            )}
+                        />
+                    </Col>
+                    <Col xs={12} md={6}>
+                        <Controller
+                            name='pin'
+                            control={control}
+                            render={({ field }) => (
+                                <Form.Group
+                                    className='mb-3'
+                                    controlId='formGrouppin'
+                                >
+                                    <Form.Label>PIN</Form.Label>
+                                    <Form.Control
+                                        {...field}
+                                        placeholder='PIN'
+                                    />
+                                    {errors?.pin?.message && (
+                                        <Form.Control.Feedback type='invalid'>
+                                            {errors?.pin?.message ?? ''}
+                                        </Form.Control.Feedback>
+                                    )}
+                                </Form.Group>
+                            )}
+                        />
+                    </Col>
+                    <Col xs={12} className='mt-4'>
+                        <Row>
+                            <Col xs={12} md={6}>
+                                <FingoButton
+                                    style={{ width: '100%' }}
+                                    size='large'
+                                    color='success'
+                                    type='button'
+                                    onClick={onClickCancel}
+                                >
+                                    Cancel
+                                </FingoButton>
+                            </Col>
+                            <Col xs={12} md={6}>
+                                <FingoButton
+                                    style={{ width: '100%' }}
+                                    size='large'
+                                    type='submit'
+                                    color='success'
+                                >
+                                    Save
+                                </FingoButton>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+            </Form>
+        </FingoModal>
     )
 }
 

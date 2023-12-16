@@ -1,5 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
+import React, { useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import { Helmet } from 'react-helmet'
@@ -19,11 +18,10 @@ const AdminRewardPage = () => {
         reward_adminGetList,
         modalForm,
         reward_setModalForm,
-        listData,
-        listIsLoading,
+        adminListRewardData,
+        adminListRewardIsLoading,
     } = useReward()
-    const { skillName } = useParams()
-    const { categoryName } = useParams()
+    const { user, isAuthenticated } = useAuth()
     const navigate = useNavigate()
 
     const handleClick = () => {
@@ -40,21 +38,25 @@ const AdminRewardPage = () => {
     }
 
     useEffect(() => {
-        getListRewards()
+        if (isAuthenticated && user?.role === 'admin') {
+            getListRewards()
+        } else {
+            navigate(`/accessdenied`)
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [user, isAuthenticated])
 
     return (
         <FingoHomeLayout>
             <Helmet>
                 <title>Reward</title>
             </Helmet>
-            <Container>
+            <Container fluid>
                 <div className='row justify-center h-auto'>
-                    <div className='col-12 col-md-9'>
+                    <div className='col-12 col-md-10 col-lg-8'>
                         <Row className='justify-content-md-center'>
                             <Col>
-                                <div className='sub_category_card_container'>
+                                <div className='AdminRewardContainer'>
                                     <div className='AdminRewardHeader mb-4'>
                                         <button
                                             className='back-arrow'
@@ -63,7 +65,7 @@ const AdminRewardPage = () => {
                                             <BackIcon />
                                         </button>
                                         <div>
-                                            <h2 className='mb-1 text-center'>
+                                            <h2 className='mb-3, text-center'>
                                                 Reward
                                             </h2>
                                             <FingoButton
@@ -74,16 +76,17 @@ const AdminRewardPage = () => {
                                             </FingoButton>
                                         </div>
                                     </div>
-                                    {listIsLoading ? (
+                                    {adminListRewardIsLoading ? (
                                         <LoadingBox height={300} />
                                     ) : (
                                         <Row>
-                                            {listData?.length > 0 &&
-                                                listData.map(x => (
+                                            {adminListRewardData?.length > 0 &&
+                                                adminListRewardData.map(x => (
                                                     <Col
                                                         key={x._id}
                                                         xs={12}
-                                                        md={4}
+                                                        md={6}
+                                                        className='mb-3 px-2'
                                                     >
                                                         <RewardCardItem
                                                             data={x}

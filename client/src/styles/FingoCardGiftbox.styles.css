@@ -1,0 +1,26 @@
+.FingoCardGiftbox {
+    padding: 1.1rem 1rem;
+    border: 2px solid rgb(109 109 109 / 10%);
+    position: relative;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+[data-theme='dark'] .FingoCardGiftbox {
+    background-color: #333;
+}
+
+.FingoCardGiftboxImg {
+    margin-bottom: 0.5rem;
+}
+
+.FingoCardGiftboxImg img {
+    width: 72px;
+    height: auto;
+}
+
+.FingoCardGiftboxContent a {
+}

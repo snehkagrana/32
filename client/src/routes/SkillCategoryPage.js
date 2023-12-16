@@ -20,6 +20,7 @@ import FingoWidgetContainer from "src/components/FingoWidgetContainer";
 import { FingoScrollToTop } from "src/components/layouts/FingoHomeLayout";
 import FingoModalLevelUp from "src/components/FingoModalLevelUp";
 import { useAuth } from "src/hooks";
+import ModalListReward from "src/components/reward/ModalListReward";
 
 const SkillCategoryPage = () => {
     const { auth_syncAndGetUser } = useAuth()
@@ -192,6 +193,7 @@ const SkillCategoryPage = () => {
                 </Container>
             </div>
             <FingoModalLevelUp />
+            <ModalListReward />
         </FingoHomeLayout>
     );
 };
