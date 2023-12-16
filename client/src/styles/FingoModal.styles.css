@@ -1,4 +1,19 @@
 .FingoModal {
+    z-index: 1060;
+}
+
+.FingoModal .modal-dialog {
+    margin: 0 auto;
+}
+
+.FingoModal .modal-dialog {
+    margin: 0 1.4rem;
+}
+
+@media (min-width: 576px) {
+    .FingoModal .modal-dialog {
+        margin: 0 auto;
+    }
 }
 
 .FingoModal .modal-content {
