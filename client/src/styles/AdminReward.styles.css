@@ -12,7 +12,7 @@
     .FormReward {
         padding: 2rem 4rem;
     }
-    .modal-dialog {
+    .ModalFormReward .modal-dialog {
         max-width: 680px;
     }
 }
