@@ -30,7 +30,8 @@ const base64url = require("base64url");
 const { getLevelByXpPoints } = require("./utils/xp.utils");
 const authRoutes = require('./routes/auth.routes')
 const rewardRoutes = require('./routes/reward.routes')
-const AuthGuard = require('./middlewares/auth.middleware')
+const AuthGuard = require('./middlewares/auth.middleware');
+const { getDiamondUser } = require("./utils/reward.util");
 
 aws.config.update({
     secretAccessKey: process.env.ACCESS_SECRET_KEY,
@@ -154,6 +155,10 @@ app.post("/server/login", (req, res, next) => {
                                     { email: req.user.email },
                                     {
                                         $set: {
+                                            diamond: getDiamondUser(
+                                                req.user?.diamond ? parseInt(req.user.diamond, 10) : 0,
+                                                req.user?.xp?.total ? req.user.xp.total : 0
+                                            ),
                                             xp: {
                                                 current: req?.user?.xp?.current ? req.user.xp.current : 0,
                                                 daily: req?.user?.xp?.daily ? req.user.xp.daily : 0,
@@ -218,6 +223,10 @@ app.get("/server/login", (req, res) => {
                         { email: req.user.email },
                         {
                             $set: {
+                                diamond: getDiamondUser(
+                                    doc?.diamond ? parseInt(doc.diamond, 10) : 0,
+                                    doc?.xp?.total ? doc.xp.total : 0
+                                ),
                                 streak: doc.streak,
                                 xp: {
                                     current: doc?.xp?.current ? doc.xp.current : 0,
@@ -317,6 +326,7 @@ app.post("/server/register", (req, res) => {
                         streak: 0,
                         lastCompletedDay: null,
                         last_played: null,
+                        diamond: 0,
                         xp: {
                             current: 0,
                             daily: 0,
@@ -2051,6 +2061,10 @@ app.post("/server/savexp", AuthGuard, (req, res) => {
                 { email: req.user.email },
                 {
                     $set: {
+                        diamond: getDiamondUser(
+                            doc?.diamond ? parseInt(doc.diamond, 10) : 0,
+                            doc?.xp?.total ? doc.xp.total : 0
+                        ),
                         xp: {
                             current: xp,
                             daily: doc.xp.daily ? doc.xp.daily + xp : xp,

@@ -26,6 +26,6 @@
     }
 }
 
-[data-theme='dark'] .ModalListReward .ListReward {
-    background-color: #333;
+[data-theme='dark'] .ModalListReward .ListRewardContainer {
+    background-color: #383838;
 }

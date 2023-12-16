@@ -33,4 +33,10 @@ module.exports = {
             }),
         })
         .options({ allowUnknown: true }),
+    redeem: Joi.object()
+        .keys({
+            rewardId: Joi.string().required(),
+            notes: Joi.string().optional(),
+        })
+        .options({ allowUnknown: true }),
 }

@@ -1,6 +1,7 @@
 const UserModel = require('../models/user')
 const cacheUtil = require('../utils/cache.util')
 const { daysDifference } = require('../utils/common.util')
+const { getDiamondUser } = require('../utils/reward.util')
 const { getLevelByXpPoints } = require('../utils/xp.utils')
 
 exports.createUser = user => {
@@ -23,7 +24,7 @@ exports.logoutUser = (token, exp) => {
     return cacheUtil.set(token, token, milliseconds)
 }
 
-exports.syncUserXp = async email => {
+exports.syncUser = async email => {
     UserModel.findOne({ email }, async (err, doc) => {
         if (err) {
             console.log('ERROR', err)
@@ -47,18 +48,25 @@ exports.syncUserXp = async email => {
                     doc.xp.daily = 0
                 }
 
+                // console.log("getDiamondUser", getDiamondUser(doc.diamond))
+
                 await UserModel.findOneAndUpdate(
                     { email },
                     {
                         $set: {
-                            diamond: doc?.diamond ? doc.diamond : 0,
+                            diamond: getDiamondUser(
+                                doc?.diamond ? parseInt(doc.diamond, 10) : 0,
+                                doc?.xp?.total ? doc.xp.total : 0
+                            ),
                             streak: doc.streak,
                             xp: {
                                 current: doc?.xp?.current ? doc.xp.current : 0,
                                 daily: doc?.xp?.daily ? doc.xp.daily : 0,
                                 total: doc?.xp?.total ? doc.xp.total : 0,
                                 level: getLevelByXpPoints(
-                                    doc?.xp?.total ? doc.xp.total : 0
+                                    doc?.xp?.total
+                                        ? parseInt(doc.xp.total, 10)
+                                        : 0
                                 ),
                             },
                         },

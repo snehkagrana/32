@@ -40,7 +40,7 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     const user = await AuthService.findUserByEmail(req.body.email)
-    await AuthService.syncUserXp(req.body.email)
+    await AuthService.syncUser(req.body.email)
     if (user) {
         const isMatched = await bcryptUtil.compareHash(
             req.body.password,
@@ -85,8 +85,8 @@ exports.getUser = async (req, res) => {
     })
 }
 
-exports.syncUserXp = async (req, res) => {
-    await AuthService.syncUserXp(req.user.email)
+exports.syncUser = async (req, res) => {
+    await AuthService.syncUser(req.user.email)
     return res.json({ message: 'Sync successfully.' })
 }
 

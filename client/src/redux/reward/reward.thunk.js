@@ -45,3 +45,18 @@ export const reward_getList = createAsyncThunk(
         }
     }
 )
+
+export const reward_redeem = createAsyncThunk(
+    '@reward/getList',
+    async (body, { rejectWithValue }) => {
+        try {
+            const response = await RewardApi.redeem(body)
+            return response
+        } catch (err) {
+            if (!err.response) {
+                throw err
+            }
+            return rejectWithValue(err.response.data)
+        }
+    }
+)

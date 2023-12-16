@@ -48,4 +48,11 @@ router.post(
  */
 router.get('/reward', AuthGuard, ErrorHandler(RewardController.findAll))
 
+// redeem
+router.post(
+    '/reward/redeem',
+    validate(schema.giftReward),
+    ErrorHandler(RewardController.redeem)
+)
+
 module.exports = router

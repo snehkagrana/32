@@ -63,9 +63,26 @@ exports.findAll = async (req, res) => {
         pin: null,
         claimCode: null,
     }))
-    console.log('filteredRewards', filteredRewards)
     return res.json({
-        data: rewards,
+        data: filteredRewards,
         message: 'Success.',
     })
+}
+
+// claim reward
+exports.redeem = async (req, res) => {
+    if (req.body.items?.length > 0) {
+        const items = req.body.items.map(item => ({
+            ...item,
+            isRedeemed: false,
+            hasSeen: false,
+            redeemedAt: null,
+        }))
+        await RewardService.giftReward(req.body.email, items)
+        return res.json({
+            message: 'Gift reward successfully.',
+        })
+    } else {
+        return res.status(400).json({ message: 'Items cannot empty or null' })
+    }
 }

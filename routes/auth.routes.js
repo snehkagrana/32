@@ -18,7 +18,7 @@ router.post(
     ErrorHandler(AuthController.login)
 )
 router.get('/user', AuthGuard, ErrorHandler(AuthController.getUser))
-router.get('/sync', AuthGuard, ErrorHandler(AuthController.syncUserXp))
+router.get('/sync', AuthGuard, ErrorHandler(AuthController.syncUser))
 router.get('/logout', AuthGuard, ErrorHandler(AuthController.logout))
 
 module.exports = router
