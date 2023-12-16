@@ -210,6 +210,19 @@ const FingoSidebar = ({ open }) => {
                                         <span> Edit/Delete</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a
+                                        href='#'
+                                        className='FingoShapeRadius'
+                                        onClick={e => {
+                                            e.preventDefault()
+                                            navigate(`/admin/reward`)
+                                        }}
+                                    >
+                                        <div className='icon'></div>
+                                        <span>Rewards</span>
+                                    </a>
+                                </li>
                             </>
                         )}
                     </ul>

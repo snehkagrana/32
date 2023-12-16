@@ -45,6 +45,7 @@ import 'src/styles/FingoGlobal.styles.css'
 import NewProfilePage from './routes/NewProfilePage'
 import DailyQuestPage from './routes/DailyQuestPage'
 import HomePage from './pages/HomePage'
+import AdminRewardPage from './pages/admin/AdminRewardPage'
 
 const App = () => {
     return (
@@ -151,6 +152,13 @@ const App = () => {
                 />
                 <Route exact path='/contactus' element={<ContactUs />} />
                 <Route exact path='/aboutus' element={<AboutUs />} />
+
+                {/* ----- admin routes ----- */}
+                <Route
+                    exact
+                    path='/admin/reward'
+                    element={<AdminRewardPage />}
+                />
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </Router>

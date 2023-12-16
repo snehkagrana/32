@@ -11,8 +11,8 @@ import { Button } from 'react-bootstrap'
 export const FingoButton = props => {
     return (
         <Button
-            className={`FingoButton ${props.color}`}
             {...props}
+            className={`FingoButton ${props.color}`}
             onClick={props.onClick}
         >
             {props.children}

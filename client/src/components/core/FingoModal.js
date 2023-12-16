@@ -3,11 +3,11 @@ import 'src/styles/FingoModal.styles.css'
 import { Modal as BootstrapModal } from 'react-bootstrap'
 
 export const FingoModal = props => {
-    const { open, onClose, children, rest } = props
+    const { open, onClose, children, className, rest } = props
     return (
         <BootstrapModal
             {...rest}
-            className='FingoModal'
+            className={`FingoModal ${className}`}
             show={open}
             onHide={onClose}
             aria-labelledby='contained-modal-title-vcenter'
