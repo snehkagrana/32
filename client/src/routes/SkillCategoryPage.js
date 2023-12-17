@@ -22,6 +22,7 @@ import FingoModalLevelUp from "src/components/FingoModalLevelUp";
 import { useAuth } from "src/hooks";
 import ModalListReward from "src/components/reward/ModalListReward";
 import ModalRewardDetail from "src/components/reward/ModalRewardDetail";
+import { ModalFormReward } from "src/components/reward";
 
 const SkillCategoryPage = () => {
     const { isAuthenticated, user } = useAuth()
@@ -191,6 +192,7 @@ const SkillCategoryPage = () => {
                     </div>
                 </Container>
             </div>
+            <ModalFormReward />
             <FingoModalLevelUp />
             <ModalListReward />
             <ModalRewardDetail />

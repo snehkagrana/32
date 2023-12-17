@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { Form, Row, Col } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { useReward } from 'src/hooks'
-import { FingoButton, FingoModal } from 'src/components/core'
+import {
+    FingoButton,
+    FingoInput,
+    FingoModal,
+    FingoSelect,
+} from 'src/components/core'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
@@ -32,6 +37,8 @@ const schema = Yup.object().shape({
 
 const initialValues = {
     name: '',
+    description: '',
+    brandUrl: '',
     currencyValue: null,
     currencyCode: DROPDOWN_CURRENCY_CODES.find(x => x.value == 'INR'),
     diamondValue: null,
@@ -45,10 +52,15 @@ const ModalFormReward = () => {
     const dispatch = useDispatch()
     const { modalForm, reward_setModalForm, reward_adminGetList } = useReward()
 
+    const isEdit = useMemo(() => {
+        return Boolean(modalForm.data?._id)
+    }, [modalForm.data])
+
     const {
         control,
         reset,
         handleSubmit,
+        setValue,
         formState: { errors },
     } = useForm({
         defaultValues: initialValues,
@@ -96,6 +108,32 @@ const ModalFormReward = () => {
         handleCloseModal()
     }
 
+    useEffect(() => {
+        if (modalForm.open && modalForm.data) {
+            setValue('name', modalForm.data.name)
+            setValue('description', modalForm.data.description)
+            setValue('brandUrl', modalForm.data.brandUrl)
+            setValue('currencyValue', modalForm.data.currencyValue)
+            setValue(
+                'currencyCode',
+                DROPDOWN_CURRENCY_CODES.find(
+                    x => x.value === modalForm.data.currencyCode
+                )
+            )
+            setValue('diamondValue', modalForm.data.diamondValue)
+            setValue('imageURL', modalForm.data.imageURL)
+            setValue('claimCode', modalForm.data.claimCode)
+            setValue('pin', modalForm.data.pin)
+            setValue(
+                'type',
+                DROPDOWN_REWARD_TYPES.find(x => x.value === modalForm.data.type)
+            )
+        } else {
+            reset(initialValues)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [modalForm])
+
     return (
         <FingoModal
             open={modalForm.open}
@@ -108,7 +146,7 @@ const ModalFormReward = () => {
                 className='FormReward FingoShapeRadius'
             >
                 <div className='mb-4'>
-                    <h2>Add Gift Card</h2>
+                    <h2>{isEdit ? 'Edit Gift Card' : 'Add Gift Card'}</h2>
                 </div>
                 <Row className='row'>
                     <Col xs={12} className='px-2'>
@@ -121,7 +159,7 @@ const ModalFormReward = () => {
                                     controlId='formGroupType'
                                 >
                                     <Form.Label>Select Type</Form.Label>
-                                    <Select
+                                    <FingoSelect
                                         {...field}
                                         options={DROPDOWN_REWARD_TYPES}
                                         placeholder='Select Type'
@@ -145,7 +183,7 @@ const ModalFormReward = () => {
                                     controlId='formGroupName'
                                 >
                                     <Form.Label>Name</Form.Label>
-                                    <Form.Control
+                                    <FingoInput
                                         {...field}
                                         placeholder='Input name'
                                     />
@@ -168,7 +206,7 @@ const ModalFormReward = () => {
                                     controlId='formGroupName'
                                 >
                                     <Form.Label>Desc</Form.Label>
-                                    <Form.Control
+                                    <FingoInput
                                         {...field}
                                         as='textarea'
                                         rows={3}
@@ -193,7 +231,7 @@ const ModalFormReward = () => {
                                     controlId='formGroupName'
                                 >
                                     <Form.Label>Brand URL</Form.Label>
-                                    <Form.Control
+                                    <FingoInput
                                         {...field}
                                         placeholder='Input brand url'
                                     />
@@ -219,7 +257,7 @@ const ModalFormReward = () => {
                                     controlId='formGroupDiamondValue'
                                 >
                                     <Form.Label>Diamond Value</Form.Label>
-                                    <Form.Control
+                                    <FingoInput
                                         {...field}
                                         placeholder='Diamond Value'
                                     />
@@ -243,7 +281,7 @@ const ModalFormReward = () => {
                                     controlId='formGroupCurrencyValue'
                                 >
                                     <Form.Label>Currency Value</Form.Label>
-                                    <Form.Control
+                                    <FingoInput
                                         {...field}
                                         placeholder='Currency Value'
                                     />
@@ -267,7 +305,7 @@ const ModalFormReward = () => {
                                     controlId='formGroupType'
                                 >
                                     <Form.Label>Select Type</Form.Label>
-                                    <Select
+                                    <FingoSelect
                                         {...field}
                                         options={DROPDOWN_CURRENCY_CODES}
                                         placeholder='Select Type'
@@ -292,7 +330,7 @@ const ModalFormReward = () => {
                                     controlId='formGroupclaimCode'
                                 >
                                     <Form.Label>Claim Code</Form.Label>
-                                    <Form.Control
+                                    <FingoInput
                                         {...field}
                                         placeholder='Claim Code'
                                     />
@@ -315,10 +353,7 @@ const ModalFormReward = () => {
                                     controlId='formGrouppin'
                                 >
                                     <Form.Label>PIN</Form.Label>
-                                    <Form.Control
-                                        {...field}
-                                        placeholder='PIN'
-                                    />
+                                    <FingoInput {...field} placeholder='PIN' />
                                     {errors?.pin?.message && (
                                         <Form.Control.Feedback type='invalid'>
                                             {errors?.pin?.message ?? ''}
@@ -334,7 +369,7 @@ const ModalFormReward = () => {
                                 <FingoButton
                                     style={{ width: '100%' }}
                                     size='large'
-                                    color='success'
+                                    variant='link'
                                     type='button'
                                     onClick={onClickCancel}
                                 >

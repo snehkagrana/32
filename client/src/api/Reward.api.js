@@ -9,6 +9,13 @@ export const RewardApi = {
         const response = await Axios.get('/server/api/admin/reward', { params })
         return response?.data
     },
+    admin_delete: async body => {
+        const response = await Axios.post(
+            '/server/api/admin/reward/delete',
+            body
+        )
+        return response?.data
+    },
     findAll: async params => {
         const response = await Axios.get('/server/api/reward', { params })
         return response?.data

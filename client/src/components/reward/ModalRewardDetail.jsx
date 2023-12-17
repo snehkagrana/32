@@ -9,11 +9,18 @@ import OtherImg from 'src/assets/images/giftcard/other.jpg'
 import 'src/styles/ModalRewardDetail.styles.css'
 import { RewardApi } from 'src/api'
 import LoadingBox from '../LoadingBox'
+import Swal from 'sweetalert2'
 
 const ModalRewardDetail = () => {
     const dispatch = useDispatch()
-    const { auth_syncAndGetUser } = useAuth()
-    const { modalDetail, reward_setModalDetail } = useReward()
+    const { auth_syncAndGetUser, user } = useAuth()
+    const {
+        modalDetail,
+        reward_setModalDetail,
+        modalForm,
+        reward_setModalForm,
+        reward_adminGetList,
+    } = useReward()
     const [redeemSuccess, setRedeemSuccess] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [redeemedItem, setRedeemedItem] = useState(null)
@@ -34,9 +41,8 @@ const ModalRewardDetail = () => {
                 auth_syncAndGetUser().then(result => {
                     setIsLoading(true)
                     if (result?._id) {
+                        setIsLoading(false)
                         if (result?.rewards?.length > 0) {
-                            setIsLoading(false)
-
                             setRedeemedItem(
                                 result?.rewards.find(
                                     x => x._id === modalDetail.data._id
@@ -49,7 +55,7 @@ const ModalRewardDetail = () => {
                 })
             }
         } catch (e) {
-            setIsLoading(true)
+            setIsLoading(false)
         }
     }, [modalDetail.data])
 
@@ -73,6 +79,59 @@ const ModalRewardDetail = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [modalDetail.data])
+
+    const onClickDelete = useCallback(() => {
+        if (modalDetail.data) {
+            handleCloseModal()
+            Swal.fire({
+                title: 'Confirm!',
+                html: `Are you sure want to delete Gift Card <strong>${modalDetail.data?.name}</strong> ?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes',
+            }).then(async result => {
+                if (result.isConfirmed) {
+                    setIsLoading(true)
+                    try {
+                        const response = await RewardApi.admin_delete({
+                            id: modalDetail.data._id,
+                        })
+                        setIsLoading(false)
+                        if (response) {
+                            Swal.fire({
+                                title: 'Success',
+                                text: 'Gift Card deleted successfully!',
+                                icon: 'success',
+                                showCancelButton: false,
+                                confirmButtonColor: '#009c4e',
+                                confirmButtonText: 'Ok',
+                            }).then(result => {
+                                if (result.isConfirmed) {
+                                    handleCloseModal()
+                                    dispatch(reward_adminGetList())
+                                }
+                            })
+                        }
+                    } catch (e) {
+                        setIsLoading(false)
+                    }
+                }
+            })
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [modalDetail.data, modalForm])
+
+    const onClickEdit = useCallback(() => {
+        if (modalDetail.data) {
+            handleCloseModal()
+            dispatch(
+                reward_setModalForm({ open: true, data: modalDetail.data })
+            )
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [modalDetail.data, modalForm])
 
     useEffect(() => {
         if (!modalDetail.open) {
@@ -177,15 +236,42 @@ const ModalRewardDetail = () => {
                                                 </Col>
                                                 <Col xs={12}>
                                                     <FingoButton
+                                                        className='mb-4 w-100'
                                                         size='lg'
                                                         color='success'
                                                         onClick={onClickRedeem}
-                                                        style={{
-                                                            width: '100%',
-                                                        }}
                                                     >
                                                         Redeem
                                                     </FingoButton>
+
+                                                    {user?.role === 'admin' && (
+                                                        <Row xs={6}>
+                                                            <Col xs={6}>
+                                                                <FingoButton
+                                                                    className='w-100'
+                                                                    onClick={
+                                                                        onClickEdit
+                                                                    }
+                                                                >
+                                                                    Edit
+                                                                </FingoButton>
+                                                            </Col>
+                                                            <Col xs={6}>
+                                                                <FingoButton
+                                                                    onClick={
+                                                                        onClickDelete
+                                                                    }
+                                                                    style={{
+                                                                        width: '100%',
+                                                                    }}
+                                                                    size='large'
+                                                                    color='danger'
+                                                                >
+                                                                    Delete
+                                                                </FingoButton>
+                                                            </Col>
+                                                        </Row>
+                                                    )}
                                                 </Col>
                                             </Row>
                                         </div>

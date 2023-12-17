@@ -16,6 +16,8 @@
 .FormReward .valid-feedback,
 .FormReward .invalid-feedback {
     display: block !important;
+    font-size: 0.9rem;
+    font-weight: bold;
 }
 
 .FormReward h2 {
