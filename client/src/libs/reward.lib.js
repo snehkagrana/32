@@ -7,4 +7,8 @@ export const DROPDOWN_REWARD_TYPES = [
         value: 'amazon',
         label: 'Amazon',
     },
+    {
+        value: 'other',
+        label: 'Other',
+    },
 ]
