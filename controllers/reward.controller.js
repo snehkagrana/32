@@ -62,6 +62,9 @@ exports.findAll = async (req, res) => {
         ...item._doc,
         pin: null,
         claimCode: null,
+        currencyValue: item._doc?.currencyValue
+            ? item._doc.currencyValue.toString()
+            : null,
     }))
     return res.json({
         data: filteredRewards,
