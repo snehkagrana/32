@@ -42,3 +42,63 @@
     transform: translateY(5px);
     background-color: #ffffff !important;
 }
+
+/* color primary */
+.FingoButton.primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    box-shadow: rgb(26 84 146) 0px 7px;
+    transition: all 0.2s ease 0s;
+}
+.FingoButton.primary:active,
+.FingoButton.primary:hover {
+    transform: translateY(5px);
+    background-color: #007bff !important;
+}
+.FingoButton.primary:active:focus {
+    outline: none;
+    border: none;
+    box-shadow: rgb(26 84 146) 0px 7px !important;
+    transform: translateY(5px);
+    background-color: #007bff !important;
+}
+
+/* color danger */
+.FingoButton.danger {
+    background-color: #f44336;
+    border-color: #f44336;
+    box-shadow: rgb(139 0 26) 0px 7px;
+    transition: all 0.2s ease 0s;
+}
+.FingoButton.danger:active,
+.FingoButton.danger:hover {
+    transform: translateY(5px);
+    background-color: #f44336 !important;
+}
+.FingoButton.danger:active:focus {
+    outline: none;
+    border: none;
+    box-shadow: rgb(139 0 26) 0px 7px !important;
+    transform: translateY(5px);
+    background-color: #f44336 !important;
+}
+
+/* variant link */
+.FingoButton.btn-link {
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none !important;
+    transition: all 0.2s ease 0s;
+}
+.FingoButton.btn-link:active,
+.FingoButton.btn-link:hover {
+    transform: translateY(5px);
+    background-color: transparent !important;
+}
+.FingoButton.btn-link:active:focus {
+    outline: none;
+    border: none;
+    box-shadow: transparent 0px 7px !important;
+    transform: translateY(5px);
+    background-color: transparent !important;
+}

@@ -12,10 +12,14 @@ export const FingoButton = props => {
     return (
         <Button
             {...props}
-            className={`FingoButton ${props.color}`}
+            className={`FingoButton ${props.color} ${props.className || ''}`}
             onClick={props.onClick}
         >
             {props.children}
         </Button>
     )
+}
+
+FingoButton.defaultProps = {
+    color: 'primary',
 }
