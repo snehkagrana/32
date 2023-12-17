@@ -76,8 +76,16 @@ exports.findAll = async (req, res) => {
     const rewards = await RewardService.findAll(req)
     const filteredRewards = rewards.map(item => ({
         ...item._doc,
-        pin: null,
-        claimCode: null,
+
+        // hide pin & claim code
+        variants:
+            item._doc?.variants?.length > 0
+                ? item._doc.variants.map(v => ({
+                      ...v._doc,
+                      pin: null,
+                      claimCode: null,
+                  }))
+                : [],
         currencyValue: item._doc?.currencyValue
             ? item._doc.currencyValue.toString()
             : null,
@@ -91,11 +99,20 @@ exports.findAll = async (req, res) => {
 // claim reward
 exports.redeem = async (req, res) => {
     if (req.user.email && req.body) {
-        await RewardService.redeem(req.user.email, req.body)
-        return res.json({
-            message: 'Redeem successfully.',
-        })
+        const result = await RewardService.redeem(req.user.email, req.body)
+        if (result) {
+            return res.json({
+                message: 'Redeem successfully.',
+                data: {
+                    ...result._doc,
+                    currencyValue: result?._doc?.currencyValue
+                        ? result._doc.currencyValue.toString()
+                        : null,
+                },
+            })
+        }
+        return res.status(400).json({ message: 'Error' })
     } else {
-        return res.status(400).json({ message: 'Items cannot empty or null' })
+        return res.status(400).json({ message: 'Item id cannot be empty' })
     }
 }

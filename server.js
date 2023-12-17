@@ -31,7 +31,7 @@ const { getLevelByXpPoints } = require("./utils/xp.utils");
 const authRoutes = require('./routes/auth.routes')
 const rewardRoutes = require('./routes/reward.routes')
 const AuthGuard = require('./middlewares/auth.middleware');
-const { getDiamondUser } = require("./utils/reward.util");
+const { reCalculateUserDiamond } = require("./utils/reward.util");
 
 aws.config.update({
     secretAccessKey: process.env.ACCESS_SECRET_KEY,
@@ -155,7 +155,7 @@ app.post("/server/login", (req, res, next) => {
                                     { email: req.user.email },
                                     {
                                         $set: {
-                                            diamond: getDiamondUser(
+                                            diamond: reCalculateUserDiamond(
                                                 req.user?.diamond ? parseInt(req.user.diamond, 10) : 0,
                                                 req.user?.xp?.total ? req.user.xp.total : 0
                                             ),
@@ -223,7 +223,7 @@ app.get("/server/login", (req, res) => {
                         { email: req.user.email },
                         {
                             $set: {
-                                diamond: getDiamondUser(
+                                diamond: reCalculateUserDiamond(
                                     doc?.diamond ? parseInt(doc.diamond, 10) : 0,
                                     doc?.xp?.total ? doc.xp.total : 0
                                 ),
@@ -2061,7 +2061,7 @@ app.post("/server/savexp", AuthGuard, (req, res) => {
                 { email: req.user.email },
                 {
                     $set: {
-                        diamond: getDiamondUser(
+                        diamond: reCalculateUserDiamond(
                             doc?.diamond ? parseInt(doc.diamond, 10) : 0,
                             doc?.xp?.total ? doc.xp.total : 0
                         ),

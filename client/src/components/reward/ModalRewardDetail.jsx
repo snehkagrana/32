@@ -9,6 +9,14 @@ import { RewardApi } from 'src/api'
 import LoadingBox from '../LoadingBox'
 import Swal from 'sweetalert2'
 import Assets from 'src/assets'
+import { useNavigate } from 'react-router-dom'
+import { XP_LEVEL_COLORS_DEFAULT } from 'src/constants'
+import Confetti from 'react-dom-confetti'
+
+const confettiConfig = {
+    colors: XP_LEVEL_COLORS_DEFAULT,
+    elementCount: 150,
+}
 
 const ModalRewardDetail = () => {
     const dispatch = useDispatch()
@@ -23,40 +31,68 @@ const ModalRewardDetail = () => {
     const [redeemSuccess, setRedeemSuccess] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [redeemedItem, setRedeemedItem] = useState(null)
+    const navigate = useNavigate()
+    const [celebrate, setCelebrate] = useState(false)
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleCloseModal = () => {
         dispatch(reward_setModalDetail(false))
     }
 
     const onClickRedeem = useCallback(async () => {
-        setIsLoading(true)
-        try {
-            const response = await RewardApi.redeem({
-                itemId: modalDetail.data._id,
-                notes: '',
-            })
-            if (response) {
-                setRedeemSuccess(true)
-                auth_syncAndGetUser().then(result => {
-                    setIsLoading(true)
-                    if (result?._id) {
-                        setIsLoading(false)
-                        if (result?.rewards?.length > 0) {
-                            setRedeemedItem(
-                                result?.rewards.find(
-                                    x => x._id === modalDetail.data._id
-                                )
-                            )
-                        }
-                    } else {
-                        setIsLoading(true)
+        Swal.fire({
+            title: 'Confirm!',
+            html: `Are you sure want to redeem ${modalDetail?.data?.diamondValue} gems ?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+        }).then(async result => {
+            if (result.isConfirmed) {
+                setIsLoading(true)
+                try {
+                    const response = await RewardApi.redeem({
+                        itemId: modalDetail.data?._id,
+                        variantId: modalDetail.data?.variants?.[0]?._id
+                            ? modalDetail.data.variants[0]._id
+                            : null,
+                        notes: '',
+                    })
+                    if (response) {
+                        setRedeemSuccess(true)
+                        auth_syncAndGetUser().then(result => {
+                            setIsLoading(true)
+                            if (result?._id) {
+                                setIsLoading(false)
+                                if (result?.rewards?.length > 0) {
+                                    setRedeemedItem(
+                                        result?.rewards.find(
+                                            x => x._id === modalDetail.data._id
+                                        )
+                                    )
+                                }
+                            } else {
+                                setIsLoading(true)
+                            }
+                        })
+                        setTimeout(() => {
+                            setCelebrate(true)
+                        }, [750])
                     }
-                })
+                } catch (e) {
+                    setIsLoading(false)
+                }
             }
-        } catch (e) {
-            setIsLoading(false)
-        }
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [modalDetail.data])
+
+    const onClickEarnPoint = useCallback(() => {
+        handleCloseModal()
+        navigate('/home')
+    }, [navigate])
 
     const getGiftCardImage = useMemo(() => {
         if (modalDetail.data) {
@@ -141,6 +177,7 @@ const ModalRewardDetail = () => {
             setIsLoading(false)
             setRedeemSuccess(false)
             setRedeemedItem(null)
+            setCelebrate(false)
         }
     }, [modalDetail.open])
 
@@ -158,6 +195,13 @@ const ModalRewardDetail = () => {
                 return Assets.GiftBoxIcon
         }
     }
+
+    const isAbleToRedeem = useMemo(() => {
+        return (
+            Boolean(user?.diamond >= modalDetail?.data?.diamondValue) &&
+            modalDetail?.data?.variants?.length > 0
+        )
+    }, [user, modalDetail.data])
 
     return (
         <FingoModal
@@ -288,38 +332,53 @@ const ModalRewardDetail = () => {
                                                         className='mb-4 w-100'
                                                         size='lg'
                                                         color='success'
+                                                        disabled={
+                                                            !isAbleToRedeem
+                                                        }
                                                         onClick={onClickRedeem}
                                                     >
                                                         Redeem
                                                     </FingoButton>
+                                                    {!isAbleToRedeem && (
+                                                        <p className='text-center'>
+                                                            Your gems are not
+                                                            enough
+                                                        </p>
+                                                    )}
 
                                                     {user?.role === 'admin' && (
-                                                        <Row xs={6}>
-                                                            <Col xs={6}>
-                                                                <FingoButton
-                                                                    className='w-100'
-                                                                    onClick={
-                                                                        onClickEdit
-                                                                    }
-                                                                >
-                                                                    Edit
-                                                                </FingoButton>
-                                                            </Col>
-                                                            <Col xs={6}>
-                                                                <FingoButton
-                                                                    onClick={
-                                                                        onClickDelete
-                                                                    }
-                                                                    style={{
-                                                                        width: '100%',
-                                                                    }}
-                                                                    size='large'
-                                                                    color='danger'
-                                                                >
-                                                                    Delete
-                                                                </FingoButton>
-                                                            </Col>
-                                                        </Row>
+                                                        <>
+                                                            <hr />
+                                                            <Row
+                                                                xs={6}
+                                                                className='mt-4'
+                                                            >
+                                                                <Col xs={6}>
+                                                                    <FingoButton
+                                                                        className='w-100'
+                                                                        onClick={
+                                                                            onClickEdit
+                                                                        }
+                                                                    >
+                                                                        Edit
+                                                                    </FingoButton>
+                                                                </Col>
+                                                                <Col xs={6}>
+                                                                    <FingoButton
+                                                                        onClick={
+                                                                            onClickDelete
+                                                                        }
+                                                                        style={{
+                                                                            width: '100%',
+                                                                        }}
+                                                                        size='large'
+                                                                        color='danger'
+                                                                    >
+                                                                        Delete
+                                                                    </FingoButton>
+                                                                </Col>
+                                                            </Row>
+                                                        </>
                                                     )}
                                                 </Col>
                                             </Row>
@@ -330,6 +389,9 @@ const ModalRewardDetail = () => {
                         )}
                     </>
                 )}
+                <div className='Celebrate'>
+                    <Confetti active={celebrate} config={confettiConfig} />
+                </div>
             </div>
         </FingoModal>
     )

@@ -9,6 +9,33 @@
     justify-content: center;
 }
 
+.FingoCardGiftbox .HistoryBtn {
+    border: none;
+    outline: none;
+    background-color: #e2fce3;
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+[data-theme='dark'] .FingoCardGiftbox .HistoryBtn {
+    background-color: rgb(51, 71, 51);
+    color: #fff;
+}
+
+.FingoCardGiftbox .HistoryBtn p {
+    font-size: 0.82rem;
+    font-weight: 500;
+    margin-bottom: 0;
+    margin-left: 4px;
+    line-height: 1;
+}
+
 [data-theme='dark'] .FingoCardGiftbox {
     background-color: #333;
 }
@@ -22,5 +49,10 @@
     height: auto;
 }
 
-.FingoCardGiftboxContent a {
+.FingoCardGiftboxContent p {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.FingoCardGiftboxContent p {
 }

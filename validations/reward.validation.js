@@ -44,6 +44,7 @@ module.exports = {
     redeem: Joi.object()
         .keys({
             itemId: Joi.string().required(),
+            variantId: Joi.string().required(),
             notes: Joi.string().allow(null).allow('').optional(),
         })
         .options({ allowUnknown: true }),

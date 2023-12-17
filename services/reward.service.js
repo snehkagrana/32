@@ -1,6 +1,8 @@
 const RewardModel = require('../models/reward')
 const UserModel = require('../models/user')
 
+var ObjectId = require('mongoose').Types.ObjectId
+
 exports.create = body => {
     return RewardModel.create(body)
 }
@@ -68,46 +70,48 @@ exports.upload = async (file, id) => {
 }
 
 exports.redeem = async (email, body) => {
-    const reward = await RewardModel.findById(body.itemId)
-    UserModel.findOne({ email }).exec(async function (err, user) {
-        if (err) {
-            console.log('ERROR', err)
-        } else {
-            if (user) {
-                if (user?.rewards?.length > 0) {
-                    const mergedRewards = [
-                        ...user?.rewards,
-                        {
-                            ...reward._doc,
-                            notes: body.notes,
-                            isRedeemed: true,
-                            hasSeen: true,
-                            redeemedAt: new Date().toISOString(),
-                        },
-                    ]
-                    return await UserModel.updateOne(
-                        { email },
-                        { $set: { rewards: mergedRewards } }
-                    )
-                } else {
-                    return await UserModel.updateOne(
-                        { email },
-                        {
-                            $set: {
-                                rewards: [
-                                    {
-                                        ...reward._doc,
-                                        notes: body.notes,
-                                        isRedeemed: true,
-                                        hasSeen: true,
-                                        redeemedAt: new Date().toISOString(),
-                                    },
-                                ],
-                            },
-                        }
-                    )
-                }
-            }
+    let reward = await RewardModel.findById(body.itemId)
+    let user = await UserModel.findOne({ email })
+
+    const getUpdateUserRewards = userRewards => {
+        const newUserReward = {
+            ...reward._doc,
+            rewardId: reward._doc,
+            variantId: reward._doc.variants.find(x => x._id == body.variantId)
+                ._id,
+            claimCode: reward._doc.variants.find(x => x._id == body.variantId)
+                .claimCode,
+            pin: reward._doc.variants.find(x => x._id == body.variantId).pin,
+            notes: body.notes,
+            isRedeemed: true,
+            hasSeen: true,
+            redeemedAt: new Date().toISOString(),
         }
-    })
+        if (userRewards.length > 0) {
+            return [...userRewards, newUserReward]
+        } else {
+            return [newUserReward]
+        }
+    }
+
+    reward = await RewardModel.findByIdAndUpdate(body.itemId, {
+        $set: {
+            variants: reward.variants.filter(x => x._id != body.variantId),
+        },
+    }).exec()
+
+    user = await UserModel.findOneAndUpdate(
+        { email },
+        {
+            $set: {
+                diamond: user.diamond - reward._doc.diamondValue,
+                rewards: getUpdateUserRewards(user?.rewards ?? []),
+            },
+        },
+        { new: true }
+    ).exec()
+
+    return user.rewards.find(
+        x => x.rewardId == body.itemId && x.variantId == body.variantId
+    )
 }

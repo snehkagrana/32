@@ -180,7 +180,6 @@ const ModalFormReward = () => {
             const file = e.target.files[0]
             const formData = new FormData()
             formData.append('photo', file)
-            // setImageFile(URL.createObjectURL(file))
             handleUploadImage(formData)
         }
     }

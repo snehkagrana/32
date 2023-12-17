@@ -2,6 +2,14 @@
     color: #00b65f;
 }
 
+.RewardDetail .Celebrate {
+    position: absolute;
+    bottom: 0;
+    left: 150px;
+    width: 100%;
+    height: 1px;
+}
+
 .RewardDetail .FingoWaves > div {
     background-color: #00b65f;
     height: 180px;
@@ -90,6 +98,7 @@
     overflow: hidden;
     margin-bottom: 1.2rem;
     border: 2px solid rgb(109 109 109 / 10%);
+    background-color: #fff;
 }
 
 .RewardDetail img {

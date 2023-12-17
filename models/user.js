@@ -62,6 +62,12 @@ const UserSchema = new mongoose.Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Reward',
             },
+            variantId: String,
+            claimCode: {
+                type: String,
+                required: true,
+            },
+            pin: String,
             name: {
                 type: String,
                 required: true,
@@ -79,11 +85,6 @@ const UserSchema = new mongoose.Schema({
                 type: Number,
                 required: true,
             },
-            claimCode: {
-                type: String,
-                required: true,
-            },
-            pin: String,
             type: {
                 type: String,
                 required: true,

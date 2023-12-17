@@ -2,7 +2,7 @@
 import { useCallback, useMemo } from 'react'
 import { useAuth, useReward } from 'src/hooks'
 import { useDispatch } from 'react-redux'
-import { ReactComponent as InfoIcon } from 'src/assets/svg/info.svg'
+import { ReactComponent as InfoIcon } from 'src/assets/svg/outline-history.svg'
 import 'src/styles/FingoCardGiftbox.styles.css'
 
 import GiftboxImg from 'src/assets/images/giftbox.png'
@@ -28,19 +28,31 @@ const FingoCardGiftbox = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [openModalListReward])
 
+    const onClickMyRedeem = e => {
+        e.stopPropagation()
+    }
+
     return (
         <div
             className={`mb-3 FingoCardGiftbox FingoShapeRadius`}
             onClick={onClickCard}
         >
+            <button className='HistoryBtn' onClick={onClickMyRedeem}>
+                <InfoIcon />
+                <p>My Redeem</p>
+            </button>
             <div className='FingoCardGiftboxImg'>
                 <img src={GiftboxImg} alt='giftbox img' />
             </div>
             <div className='FingoCardGiftboxContent'>
                 {user?.diamond > 50 ? (
-                    <a href='#'>{getText}</a>
+                    <a href='#' className='font-bold'>
+                        Claim your Gift Card
+                    </a>
                 ) : (
-                    <p className='mb-0 text-center'>{getText}</p>
+                    <div className='text-center'>
+                        <p className='mb-0 text-center'>{getText}</p>
+                    </div>
                 )}
             </div>
         </div>
