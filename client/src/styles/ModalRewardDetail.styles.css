@@ -4,12 +4,19 @@
 
 .RewardDetail .FingoWaves > div {
     background-color: #00b65f;
-    height: 220px;
+    height: 180px;
+}
+
+.RewardDetail .FingoWaves > svg {
+    margin-top: -3px;
 }
 
 @media (min-width: 576px) {
     .ModalRewardDetail .modal-dialog {
         max-width: 500px;
+    }
+    .RewardDetail .FingoWaves > div {
+        height: 220px;
     }
 }
 
@@ -49,7 +56,7 @@
 }
 
 .RewardDetailContent {
-    margin-top: -260px;
+    margin-top: -188px;
     display: flex;
     align-self: center;
     width: 280px;
@@ -60,6 +67,7 @@
 @media (min-width: 576px) {
     .RewardDetailContent {
         width: 400px;
+        margin-top: -260px;
     }
 }
 
@@ -67,6 +75,10 @@
     color: #333;
     font-weight: bold;
     margin-bottom: 1rem;
+}
+
+[data-theme='dark'] .RewardDetailContent h6 {
+    color: #d6d6d6;
 }
 
 .RewardDetailContent p {
@@ -83,4 +95,39 @@
 .RewardDetail img {
     width: 100%;
     height: auto;
+}
+
+.RedeemSuccess {
+    text-align: center;
+}
+
+.RedeemSuccess h2 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.RedeemCode {
+    font-weight: bold;
+    background: #fff4cc;
+    border-radius: 8px;
+    padding: 3px 10px;
+    border: 2px dashed #ff8600;
+}
+
+.RedeemCode code {
+    color: #d04f00;
+    font-size: 28px;
+}
+
+.RedeemSuccess h6 {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+[data-theme='dark'] .RedeemCode {
+    background: #2b2616;
+}
+
+[data-theme='dark'] .RedeemCode code {
+    color: #fff;
 }
