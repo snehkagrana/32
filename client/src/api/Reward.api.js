@@ -16,6 +16,11 @@ export const RewardApi = {
         )
         return response?.data
     },
+    upload: async body => {
+        const response = await Axios.post('/server/api/admin/reward/upload', body)
+        return response?.data
+    },
+
     findAll: async params => {
         const response = await Axios.get('/server/api/reward', { params })
         return response?.data

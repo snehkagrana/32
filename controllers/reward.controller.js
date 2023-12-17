@@ -55,6 +55,22 @@ exports.admin_giftReward = async (req, res) => {
     }
 }
 
+exports.admin_upload = async (req, res) => {
+    const { file, itemId } = req.body
+    if (itemId) {
+        const result = await RewardService.upload(file, itemId)
+        console.log('result->>', result)
+        res.json({
+            imageUrl: req.file.location, // URL of the uploaded file in S3
+        })
+    } else {
+        return res.json({
+            message: 'Ok',
+            data: req.file.location,
+        })
+    }
+}
+
 // find all reward for user basic
 exports.findAll = async (req, res) => {
     const rewards = await RewardService.findAll(req)

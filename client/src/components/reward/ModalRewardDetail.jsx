@@ -204,8 +204,7 @@ const ModalRewardDetail = () => {
                                         <div>
                                             <Row className='align-items-center justify-space-between'>
                                                 <Col xs={12} className='mb-3'>
-                                                    <h6 className='mb-1'></h6>
-                                                    <p className='mb-0'>
+                                                    <p className='mb-0 RewardDetailRedeemText'>
                                                         Redeem for 💎{' '}
                                                         {
                                                             modalDetail.data

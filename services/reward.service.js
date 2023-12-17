@@ -45,6 +45,28 @@ exports.giftReward = async (email, rewardItems) => {
     })
 }
 
+exports.upload = async (file, id) => {
+    RewardModel.findById(id, async (err, doc) => {
+        if (err) {
+            console.log('ERROR', err)
+        } else {
+            if (file && file.location) {
+                const res = await RewardModel.updateOne(
+                    { _id: id },
+                    { $set: { imageURL: file.location } }
+                )
+            } else {
+                return res.json({
+                    imageUrl: doc.imageUrl,
+                })
+            }
+        }
+        res.json({
+            imageUrl: req.file.location, // URL of the uploaded file in S3
+        })
+    })
+}
+
 exports.redeem = async (email, body) => {
     const reward = await RewardModel.findById(body.itemId)
     UserModel.findOne({ email }).exec(async function (err, user) {

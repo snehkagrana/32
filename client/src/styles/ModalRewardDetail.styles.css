@@ -131,3 +131,9 @@
 [data-theme='dark'] .RedeemCode code {
     color: #fff;
 }
+
+.RewardDetailRedeemText {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    text-align: center;
+}

@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Form, Row, Col } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { useReward } from 'src/hooks'
@@ -12,9 +13,14 @@ import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import { DROPDOWN_CURRENCY_CODES, DROPDOWN_REWARD_TYPES } from 'src/libs'
-import Select from 'react-select'
 import { RewardApi } from 'src/api'
 import Swal from 'sweetalert2'
+import AmazonImg from 'src/assets/images/giftcard/amazon.jpg'
+import GooglePlayImg from 'src/assets/images/giftcard/google-play.jpg'
+import OtherImg from 'src/assets/images/giftcard/other.jpg'
+import PlaceholderImg from 'src/assets/images/placeholder.png'
+import LoadingBox from '../LoadingBox'
+import { ReactComponent as UploadIcon } from 'src/assets/svg/cloud-upload-sharp.svg'
 
 const schema = Yup.object().shape({
     name: Yup.string().required('Field required'),
@@ -51,16 +57,24 @@ const initialValues = {
 const ModalFormReward = () => {
     const dispatch = useDispatch()
     const { modalForm, reward_setModalForm, reward_adminGetList } = useReward()
+    const [isLoadingUpload, setIsLoadingUpload] = useState(false)
+    const [imageFile, setImageFile] = useState(null)
+    const [defaultImageFile, setDefaultImageFile] = useState(null)
 
     const isEdit = useMemo(() => {
         return Boolean(modalForm.data?._id)
     }, [modalForm.data])
+
+    const disabledButton = useMemo(() => {
+        return isLoadingUpload
+    }, [isLoadingUpload])
 
     const {
         control,
         reset,
         handleSubmit,
         setValue,
+        watch,
         formState: { errors },
     } = useForm({
         defaultValues: initialValues,
@@ -73,6 +87,7 @@ const ModalFormReward = () => {
                 ...values,
                 currencyCode: values?.currencyCode?.value || null,
                 type: values?.type?.value || null,
+                imageURL: imageFile || null,
             })
             if (response?.data?._id) {
                 Swal.fire({
@@ -108,6 +123,54 @@ const ModalFormReward = () => {
         handleCloseModal()
     }
 
+    const handleUploadImage = useCallback(
+        async body => {
+            setIsLoadingUpload(true)
+            try {
+                const response = await RewardApi.upload(body)
+                if (response?.data) {
+                    setImageFile(response.data)
+                }
+                setIsLoadingUpload(false)
+            } catch (e) {
+                setImageFile(null)
+                console.log('e', e)
+                setIsLoadingUpload(false)
+            }
+        },
+        [imageFile, defaultImageFile]
+    )
+
+    const onChangeImage = e => {
+        if (e.target.files?.[0]) {
+            const file = e.target.files[0]
+            const formData = new FormData()
+            formData.append('photo', file)
+            // setImageFile(URL.createObjectURL(file))
+            handleUploadImage(formData)
+        }
+    }
+
+    const onChangeType = useCallback(
+        value => {
+            if (!imageFile) {
+                console.log('value', value)
+                switch (value) {
+                    case 'amazon':
+                        setDefaultImageFile(AmazonImg)
+                        break
+                    case 'google play':
+                        setDefaultImageFile(GooglePlayImg)
+                        break
+                    default:
+                        setDefaultImageFile(OtherImg)
+                        break
+                }
+            }
+        },
+        [imageFile, watch('type')]
+    )
+
     useEffect(() => {
         if (modalForm.open && modalForm.data) {
             setValue('name', modalForm.data.name)
@@ -131,7 +194,6 @@ const ModalFormReward = () => {
         } else {
             reset(initialValues)
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [modalForm])
 
     return (
@@ -148,7 +210,48 @@ const ModalFormReward = () => {
                 <div className='mb-4'>
                     <h2>{isEdit ? 'Edit Gift Card' : 'Add Gift Card'}</h2>
                 </div>
-                <Row className='row'>
+
+                <Row className='justify-content-center'>
+                    <Col xs={7} className='px-2 mb-2'>
+                        <div className='ModalRewardUploadContainer'>
+                            <label htmlFor='uploadImage'>
+                                <div className='UploadImageMarker'>
+                                    <UploadIcon />
+                                    <p className='mb-0'>Browse to upload</p>
+                                </div>
+                            </label>
+                            <input
+                                id='uploadImage'
+                                type='file'
+                                onChange={onChangeImage}
+                            />
+                            <div className='ModalRewardUploadImg'>
+                                {!imageFile && !defaultImageFile && (
+                                    <img
+                                        src={PlaceholderImg}
+                                        alt='placeholder'
+                                    />
+                                )}
+                                {imageFile ? (
+                                    <img src={imageFile} alt='img' />
+                                ) : (
+                                    <>
+                                        {defaultImageFile && (
+                                            <img
+                                                src={defaultImageFile}
+                                                alt='img'
+                                            />
+                                        )}
+                                    </>
+                                )}
+                                {isLoadingUpload && (
+                                    <div className='ModalRewardUploadLoading'>
+                                        <LoadingBox height={220} />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </Col>
                     <Col xs={12} className='px-2'>
                         <Controller
                             name='type'
@@ -161,6 +264,10 @@ const ModalFormReward = () => {
                                     <Form.Label>Select Type</Form.Label>
                                     <FingoSelect
                                         {...field}
+                                        onChange={value => {
+                                            onChangeType(value?.value ?? '')
+                                            field.onChange(value)
+                                        }}
                                         options={DROPDOWN_REWARD_TYPES}
                                         placeholder='Select Type'
                                     />
@@ -372,6 +479,7 @@ const ModalFormReward = () => {
                                     variant='link'
                                     type='button'
                                     onClick={onClickCancel}
+                                    disabled={disabledButton}
                                 >
                                     Cancel
                                 </FingoButton>
@@ -382,6 +490,7 @@ const ModalFormReward = () => {
                                     size='large'
                                     type='submit'
                                     color='success'
+                                    disabled={disabledButton}
                                 >
                                     Save
                                 </FingoButton>

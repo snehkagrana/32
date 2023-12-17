@@ -6,6 +6,8 @@ const ErrorHandler = require('../middlewares/error.middleware')
 const AuthGuard = require('../middlewares/auth.middleware')
 const schema = require('../validations/reward.validation')
 const validate = require('../utils/validator.util')
+const { upload } = require('../server')
+const { multerUpload } = require('../configs/multer.config')
 
 // Create reward
 router.post(
@@ -44,6 +46,14 @@ router.post(
     validate(schema.giftReward),
     AuthGuard,
     ErrorHandler(RewardController.admin_giftReward)
+)
+
+// Upload image
+router.post(
+    '/admin/reward/upload',
+    AuthGuard,
+    multerUpload.single('photo'),
+    ErrorHandler(RewardController.admin_upload)
 )
 
 /**
