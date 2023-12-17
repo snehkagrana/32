@@ -8,6 +8,14 @@ export const DROPDOWN_REWARD_TYPES = [
         label: 'Amazon',
     },
     {
+        value: 'flipkart',
+        label: 'Flipkart',
+    },
+    {
+        value: 'paytm',
+        label: 'Paytm',
+    },
+    {
         value: 'other',
         label: 'Other',
     },

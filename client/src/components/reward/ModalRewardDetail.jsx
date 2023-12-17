@@ -3,13 +3,12 @@ import { Row, Col } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { useAuth, useReward } from 'src/hooks'
 import { FingoButton, FingoModal } from 'src/components/core'
-import AmazonImg from 'src/assets/images/giftcard/amazon.jpg'
-import GooglePlayImg from 'src/assets/images/giftcard/google-play.jpg'
 import OtherImg from 'src/assets/images/giftcard/other.jpg'
 import 'src/styles/ModalRewardDetail.styles.css'
 import { RewardApi } from 'src/api'
 import LoadingBox from '../LoadingBox'
 import Swal from 'sweetalert2'
+import Assets from 'src/assets'
 
 const ModalRewardDetail = () => {
     const dispatch = useDispatch()
@@ -67,11 +66,15 @@ const ModalRewardDetail = () => {
             } else {
                 switch (modalDetail.data.type) {
                     case 'amazon':
-                        return AmazonImg
+                        return Assets.GiftCardDefaultAmazon
+                    case 'paytm':
+                        return Assets.GiftCardDefaultPaytm
+                    case 'flipkart':
+                        return Assets.GiftCardDefaultFlipkart
                     case 'google play':
-                        return GooglePlayImg
+                        return Assets.GiftCardDefaultGooglePlay
                     default:
-                        return GooglePlayImg
+                        return Assets.GiftCardDefaultOther
                 }
             }
         } else {
@@ -141,6 +144,21 @@ const ModalRewardDetail = () => {
         }
     }, [modalDetail.open])
 
+    const getLogo = type => {
+        switch (type) {
+            case 'amazon':
+                return Assets.AmazonLogo
+            case 'paytm':
+                return Assets.PaytmLogo
+            case 'flipkart':
+                return Assets.FlipkartLogo
+            case 'google play':
+                return Assets.GooglePlayLogo
+            default:
+                return Assets.GiftBoxIcon
+        }
+    }
+
     return (
         <FingoModal
             open={modalDetail.open}
@@ -203,6 +221,38 @@ const ModalRewardDetail = () => {
                                     ) : (
                                         <div>
                                             <Row className='align-items-center justify-space-between'>
+                                                <Col xs={8}>
+                                                    <div className='RewardDetailLogo'>
+                                                        <img
+                                                            src={getLogo(
+                                                                modalDetail.data
+                                                                    ?.type
+                                                            )}
+                                                            alt='logo'
+                                                        />
+                                                        <p className='mb-0'>
+                                                            {modalDetail.data?.type.toUpperCase()}
+                                                        </p>
+                                                    </div>
+                                                </Col>
+                                                <Col xs={4}>
+                                                    <div className='RewardDetailCurrency'>
+                                                        <p>
+                                                            {
+                                                                modalDetail.data
+                                                                    ?.currencyValue
+                                                            }{' '}
+                                                            {
+                                                                modalDetail.data
+                                                                    ?.currencyCode
+                                                            }
+                                                        </p>
+                                                    </div>
+                                                </Col>
+                                                <Col
+                                                    xs={6}
+                                                    className='mb-3'
+                                                ></Col>
                                                 <Col xs={12} className='mb-3'>
                                                     <p className='mb-0 RewardDetailRedeemText'>
                                                         Redeem for 💎{' '}

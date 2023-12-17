@@ -137,3 +137,41 @@
     font-weight: 700 !important;
     text-align: center;
 }
+
+.RewardDetailLogo {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* border: 2px solid rgb(109 109 109 / 10%); */
+}
+
+.RewardDetailLogo p {
+    font-weight: 700;
+}
+
+.RewardDetailLogo img {
+    margin-right: 0.4rem;
+    width: 32px;
+    height: auto;
+}
+
+.RewardDetailCurrency {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #d2f8e6;
+    color: #00753c;
+    border-radius: 1.4rem;
+    padding: 0.4rem 1rem;
+}
+
+[data-theme='dark'] .RewardDetailCurrency {
+    background-color: #2f3734;
+    color: #9fcdb7;
+}
+
+.RewardDetailCurrency p {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 0;
+}

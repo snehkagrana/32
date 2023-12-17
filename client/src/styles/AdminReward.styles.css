@@ -25,6 +25,11 @@
     font-size: 22px;
 }
 
+.FormReward .form-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
 [data-theme='dark'] .FormReward {
     background-color: #333;
 }
@@ -106,19 +111,23 @@
     display: none;
 }
 
+.ModalRewardUploadContainer:hover label {
+    display: flex;
+}
+
 .ModalRewardUploadContainer label {
+    display: none;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    display: flex;
     flex-direction: column;
     background: rgb(255 255 255 / 0%);
     align-items: center;
     justify-content: center;
     font-size: 16px;
-    color: #0063ff;
+    color: #fff;
     font-weight: 700;
 }
 
@@ -130,11 +139,11 @@
 .UploadImageMarker {
     display: flex;
     flex-direction: column;
-    background: rgb(255 255 255 / 48%);
+    background: #0063ff;
     align-items: center;
     justify-content: center;
     border-radius: 10px;
-    padding: 6px 16px;
+    padding: 10px 16px;
     cursor: pointer;
 }
 
@@ -158,4 +167,86 @@
     height: 100%;
     background-color: rgb(103 103 103 / 30%);
     border-radius: 12px;
+}
+
+.FormRewardVariantContainer {
+    border-radius: 12px;
+    background-color: #eef4ff;
+    padding: 1rem 2rem;
+    margin-top: 0.8rem;
+    border: 2px solid rgb(109 109 109 / 10%);
+}
+
+.FormRewardVariantContainer hr {
+    margin-top: 0.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.FormRewardVariantHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.FormRewardVariantHeader .TrashBtn {
+    border-radius: 34px;
+    height: 34px;
+    width: 34px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+[data-theme='dark'] .FormRewardVariantContainer {
+    background-color: #293340;
+}
+
+.FormRewardVariantContainer .subtitle {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #444;
+}
+
+[data-theme='dark'] .FormRewardVariantContainer .subtitle {
+    color: #ececec;
+}
+
+.ModalFormReward .RadioType {
+    display: inline-flex;
+    padding: 6px 12px;
+    border-radius: 20px;
+    align-items: center;
+    justify-content: center;
+    margin: 0.2rem;
+    cursor: pointer !important;
+}
+
+.ModalFormReward .RadioType.active {
+    background: #0063ff;
+}
+
+.ModalFormReward .RadioType.active .RadioTypeLabel p {
+    color: #fff;
+}
+
+.ModalFormReward .RadioType input {
+    display: none;
+}
+
+.ModalFormReward .RadioTypeLabel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ModalFormReward .RadioTypeLabel img {
+    width: 25px;
+    height: auto;
+}
+
+.ModalFormReward .RadioTypeLabel p {
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: bold;
 }

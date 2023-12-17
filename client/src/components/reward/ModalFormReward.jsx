@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Form, Row, Col } from 'react-bootstrap'
+import { Form, Row, Col, Button } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { useReward } from 'src/hooks'
 import {
@@ -9,18 +9,16 @@ import {
     FingoModal,
     FingoSelect,
 } from 'src/components/core'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import { DROPDOWN_CURRENCY_CODES, DROPDOWN_REWARD_TYPES } from 'src/libs'
 import { RewardApi } from 'src/api'
 import Swal from 'sweetalert2'
-import AmazonImg from 'src/assets/images/giftcard/amazon.jpg'
-import GooglePlayImg from 'src/assets/images/giftcard/google-play.jpg'
-import OtherImg from 'src/assets/images/giftcard/other.jpg'
-import PlaceholderImg from 'src/assets/images/placeholder.png'
 import LoadingBox from '../LoadingBox'
 import { ReactComponent as UploadIcon } from 'src/assets/svg/cloud-upload-sharp.svg'
+import { ReactComponent as TrashcanIcon } from 'src/assets/svg/trash-bin-trash-linear.svg'
+import Assets from 'src/assets'
 
 const schema = Yup.object().shape({
     name: Yup.string().required('Field required'),
@@ -33,12 +31,15 @@ const schema = Yup.object().shape({
     }),
     diamondValue: Yup.string().required('Field required'),
     imageURL: Yup.string().nullable(),
-    claimCode: Yup.string().required('Field required'),
-    pin: Yup.string().nullable(),
-    type: Yup.object().shape({
-        value: Yup.string().required('Field required'),
-        label: Yup.string().required('Field required'),
-    }),
+    type: Yup.string().required('Field required'),
+    variants: Yup.array(
+        Yup.object()
+            .shape({
+                claimCode: Yup.string().required('Field required'),
+                pin: Yup.string().nullable(),
+            })
+            .required()
+    ),
 })
 
 const initialValues = {
@@ -46,12 +47,22 @@ const initialValues = {
     description: '',
     brandUrl: '',
     currencyValue: null,
-    currencyCode: DROPDOWN_CURRENCY_CODES.find(x => x.value == 'INR'),
+    currencyCode: DROPDOWN_CURRENCY_CODES.find(x => x.value === 'INR'),
     diamondValue: null,
     imageURL: null,
-    claimCode: null,
-    pin: null,
     type: null,
+    variants: [
+        {
+            claimCode: null,
+            pin: null,
+            isAvailable: true,
+        },
+        {
+            claimCode: null,
+            pin: null,
+            isAvailable: true,
+        },
+    ],
 }
 
 const ModalFormReward = () => {
@@ -74,6 +85,7 @@ const ModalFormReward = () => {
         reset,
         handleSubmit,
         setValue,
+        getValues,
         watch,
         formState: { errors },
     } = useForm({
@@ -81,12 +93,17 @@ const ModalFormReward = () => {
         resolver: yupResolver(schema),
     })
 
+    const { fields, insert, update, remove } = useFieldArray({
+        control,
+        name: 'variants',
+    })
+
     const onValidSubmit = async values => {
+        console.log('values', values)
         try {
             const response = await RewardApi.admin_createReward({
                 ...values,
                 currencyCode: values?.currencyCode?.value || null,
-                type: values?.type?.value || null,
                 imageURL: imageFile || null,
             })
             if (response?.data?._id) {
@@ -99,7 +116,7 @@ const ModalFormReward = () => {
                     confirmButtonText: 'Ok',
                 }).then(result => {
                     if (result.isConfirmed) {
-                        handleCloseModal()
+                        onConfirmClose()
                         dispatch(reward_adminGetList())
                         reset(initialValues)
                     }
@@ -114,8 +131,25 @@ const ModalFormReward = () => {
         console.log('_errors', _errors)
     }
 
-    const handleCloseModal = () => {
+    const onConfirmClose = () => {
         dispatch(reward_setModalForm({ open: false, data: null }))
+    }
+
+    const handleCloseModal = () => {
+        Swal.fire({
+            title: 'Confirm!',
+            html: `Are you sure want to close ?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+        }).then(async result => {
+            if (result.isConfirmed) {
+                onConfirmClose()
+            }
+        })
     }
 
     const onClickCancel = () => {
@@ -154,22 +188,46 @@ const ModalFormReward = () => {
     const onChangeType = useCallback(
         value => {
             if (!imageFile) {
-                console.log('value', value)
                 switch (value) {
                     case 'amazon':
-                        setDefaultImageFile(AmazonImg)
+                        setDefaultImageFile(Assets.GiftCardDefaultAmazon)
+                        break
+                    case 'paytm':
+                        setDefaultImageFile(Assets.GiftCardDefaultPaytm)
+                        break
+                    case 'flipkart':
+                        setDefaultImageFile(Assets.GiftCardDefaultFlipkart)
                         break
                     case 'google play':
-                        setDefaultImageFile(GooglePlayImg)
+                        setDefaultImageFile(Assets.GiftCardDefaultGooglePlay)
                         break
                     default:
-                        setDefaultImageFile(OtherImg)
+                        setDefaultImageFile(Assets.GiftCardDefaultOther)
                         break
                 }
             }
         },
         [imageFile, watch('type')]
     )
+
+    const getLogo = type => {
+        switch (type) {
+            case 'amazon':
+                return Assets.AmazonLogo
+            case 'paytm':
+                return Assets.PaytmLogo
+            case 'flipkart':
+                return Assets.FlipkartLogo
+            case 'google play':
+                return Assets.GooglePlayLogo
+            default:
+                return Assets.GiftBoxIcon
+        }
+    }
+
+    const onClickAddVariant = index => {
+        insert(index, initialValues.variants[0])
+    }
 
     useEffect(() => {
         if (modalForm.open && modalForm.data) {
@@ -185,16 +243,19 @@ const ModalFormReward = () => {
             )
             setValue('diamondValue', modalForm.data.diamondValue)
             setValue('imageURL', modalForm.data.imageURL)
-            setValue('claimCode', modalForm.data.claimCode)
-            setValue('pin', modalForm.data.pin)
-            setValue(
-                'type',
-                DROPDOWN_REWARD_TYPES.find(x => x.value === modalForm.data.type)
-            )
+            setValue('type', modalForm.data.type)
+            setValue('variants', modalForm.data.variants)
+            if (modalForm.data?.imageURL) {
+                setImageFile(modalForm.data.imageURL)
+            } else {
+                onChangeType(modalForm.data.type)
+            }
         } else {
             reset(initialValues)
+            setImageFile(null)
+            setDefaultImageFile(null)
         }
-    }, [modalForm])
+    }, [modalForm.data])
 
     return (
         <FingoModal
@@ -212,7 +273,7 @@ const ModalFormReward = () => {
                 </div>
 
                 <Row className='justify-content-center'>
-                    <Col xs={7} className='px-2 mb-2'>
+                    <Col xs={9} className='px-2 mb-2'>
                         <div className='ModalRewardUploadContainer'>
                             <label htmlFor='uploadImage'>
                                 <div className='UploadImageMarker'>
@@ -228,7 +289,7 @@ const ModalFormReward = () => {
                             <div className='ModalRewardUploadImg'>
                                 {!imageFile && !defaultImageFile && (
                                     <img
-                                        src={PlaceholderImg}
+                                        src={Assets.PlaceholderImg}
                                         alt='placeholder'
                                     />
                                 )}
@@ -250,9 +311,22 @@ const ModalFormReward = () => {
                                     </div>
                                 )}
                             </div>
+                            {imageFile && (
+                                <div className='mt-2 mb-3 text-center'>
+                                    <FingoButton
+                                        onClick={() => {
+                                            setImageFile(null)
+                                        }}
+                                        size='sm'
+                                        color='danger'
+                                    >
+                                        Remove Image
+                                    </FingoButton>
+                                </div>
+                            )}
                         </div>
                     </Col>
-                    <Col xs={12} className='px-2'>
+                    <Col xs={12} className='px-2 mt-3'>
                         <Controller
                             name='type'
                             control={control}
@@ -261,8 +335,43 @@ const ModalFormReward = () => {
                                     className='mb-3'
                                     controlId='formGroupType'
                                 >
-                                    <Form.Label>Select Type</Form.Label>
-                                    <FingoSelect
+                                    {/* <Form.Label>Select Type</Form.Label> */}
+                                    {DROPDOWN_REWARD_TYPES.map(x => (
+                                        <div
+                                            className={`RadioType ${
+                                                getValues('type') === x.value
+                                                    ? 'active'
+                                                    : ''
+                                            }`}
+                                            key={x.value}
+                                        >
+                                            <Form.Check
+                                                {...field}
+                                                onChange={() => {
+                                                    onChangeType(x.value ?? '')
+                                                    setValue('type', x.value)
+                                                }}
+                                                inline
+                                                label={
+                                                    <div className='RadioTypeLabel'>
+                                                        <img
+                                                            src={getLogo(
+                                                                x.value
+                                                            )}
+                                                            alt={x.label}
+                                                        />
+                                                        <p className='mb-0'>
+                                                            {x.label}
+                                                        </p>
+                                                    </div>
+                                                }
+                                                name='type'
+                                                type='radio'
+                                                id={`type-value-${x.value}`}
+                                            />
+                                        </div>
+                                    ))}
+                                    {/* <FingoSelect
                                         {...field}
                                         onChange={value => {
                                             onChangeType(value?.value ?? '')
@@ -275,7 +384,7 @@ const ModalFormReward = () => {
                                         <Form.Control.Feedback type='invalid'>
                                             {errors?.type?.message ?? ''}
                                         </Form.Control.Feedback>
-                                    )}
+                                    )} */}
                                 </Form.Group>
                             )}
                         />
@@ -293,6 +402,9 @@ const ModalFormReward = () => {
                                     <FingoInput
                                         {...field}
                                         placeholder='Input name'
+                                        isInvalid={Boolean(
+                                            errors?.name?.message
+                                        )}
                                     />
                                     {errors?.name?.message && (
                                         <Form.Control.Feedback type='invalid'>
@@ -316,8 +428,11 @@ const ModalFormReward = () => {
                                     <FingoInput
                                         {...field}
                                         as='textarea'
-                                        rows={3}
+                                        rows={2}
                                         placeholder='Input description'
+                                        isInvalid={Boolean(
+                                            errors?.description?.message
+                                        )}
                                     />
                                     {errors?.description?.message && (
                                         <Form.Control.Feedback type='invalid'>
@@ -341,6 +456,9 @@ const ModalFormReward = () => {
                                     <FingoInput
                                         {...field}
                                         placeholder='Input brand url'
+                                        isInvalid={Boolean(
+                                            errors?.brandUrl?.message
+                                        )}
                                     />
                                     {errors?.brandUrl?.message && (
                                         <Form.Control.Feedback type='invalid'>
@@ -367,6 +485,9 @@ const ModalFormReward = () => {
                                     <FingoInput
                                         {...field}
                                         placeholder='Diamond Value'
+                                        isInvalid={Boolean(
+                                            errors?.diamondValue?.message
+                                        )}
                                     />
                                     {errors?.diamondValue?.message && (
                                         <Form.Control.Feedback type='invalid'>
@@ -391,6 +512,9 @@ const ModalFormReward = () => {
                                     <FingoInput
                                         {...field}
                                         placeholder='Currency Value'
+                                        isInvalid={Boolean(
+                                            errors?.currencyValue?.message
+                                        )}
                                     />
                                     {errors?.currencyValue?.message && (
                                         <Form.Control.Feedback type='invalid'>
@@ -427,48 +551,157 @@ const ModalFormReward = () => {
                             )}
                         />
                     </Col>
-                    <Col xs={12} md={6} className='px-2'>
-                        <Controller
-                            name='claimCode'
-                            control={control}
-                            render={({ field }) => (
-                                <Form.Group
-                                    className='mb-3'
-                                    controlId='formGroupclaimCode'
-                                >
-                                    <Form.Label>Claim Code</Form.Label>
-                                    <FingoInput
-                                        {...field}
-                                        placeholder='Claim Code'
-                                    />
-                                    {errors?.claimCode?.message && (
-                                        <Form.Control.Feedback type='invalid'>
-                                            {errors?.claimCode?.message ?? ''}
-                                        </Form.Control.Feedback>
-                                    )}
-                                </Form.Group>
+                    <Col xs={12} className='px-2'>
+                        <div className='FormRewardVariantContainer'>
+                            {fields.length > 0 ? (
+                                fields.map((variant, index) => (
+                                    <Row key={String(index)}>
+                                        <Col xs={12} className='px-2'>
+                                            <div className='FormRewardVariantHeader relative'>
+                                                <h6 className='subtitle'>
+                                                    Item {index + 1}
+                                                </h6>
+                                                {fields.length > 1 && (
+                                                    <Button
+                                                        variant='danger'
+                                                        className='TrashBtn'
+                                                        onClick={() =>
+                                                            remove(index)
+                                                        }
+                                                    >
+                                                        <TrashcanIcon />
+                                                    </Button>
+                                                )}
+                                            </div>
+                                        </Col>
+                                        <Col xs={6} className='px-2'>
+                                            <Controller
+                                                name={`variants.${index}.claimCode`}
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <Form.Group
+                                                        className='mb-3'
+                                                        controlId='formGroupclaimCode'
+                                                    >
+                                                        <Form.Label>
+                                                            Claim Code
+                                                        </Form.Label>
+                                                        <FingoInput
+                                                            {...field}
+                                                            value={
+                                                                isEdit
+                                                                    ? getValues(
+                                                                          `variants.${index}.claimCode`
+                                                                      )
+                                                                    : field.value
+                                                            }
+                                                            isInvalid={Boolean(
+                                                                errors
+                                                                    ?.variants?.[
+                                                                    index
+                                                                ]?.claimCode
+                                                                    ?.message
+                                                            )}
+                                                            placeholder='Claim Code'
+                                                        />
+                                                        {errors?.variants?.[
+                                                            index
+                                                        ]?.claimCode
+                                                            ?.message && (
+                                                            <Form.Control.Feedback type='invalid'>
+                                                                {errors
+                                                                    ?.variants?.[
+                                                                    index
+                                                                ]?.claimCode
+                                                                    ?.message ??
+                                                                    ''}
+                                                            </Form.Control.Feedback>
+                                                        )}
+                                                    </Form.Group>
+                                                )}
+                                            />
+                                        </Col>
+                                        <Col xs={6} className='px-2'>
+                                            <Controller
+                                                name={`variants.${index}.pin`}
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <Form.Group
+                                                        className='mb-3'
+                                                        controlId='formGrouppin'
+                                                    >
+                                                        <Form.Label>
+                                                            PIN
+                                                        </Form.Label>
+                                                        <FingoInput
+                                                            {...field}
+                                                            value={
+                                                                isEdit
+                                                                    ? getValues(
+                                                                          `variants.${index}.pin`
+                                                                      )
+                                                                    : field.value
+                                                            }
+                                                            isInvalid={Boolean(
+                                                                errors
+                                                                    ?.variants?.[
+                                                                    index
+                                                                ]?.pin?.message
+                                                            )}
+                                                            placeholder='PIN'
+                                                        />
+                                                        {errors?.variants?.[
+                                                            index
+                                                        ]?.pin?.message && (
+                                                            <Form.Control.Feedback type='invalid'>
+                                                                {errors
+                                                                    ?.variants?.[
+                                                                    index
+                                                                ]?.pin
+                                                                    ?.message ??
+                                                                    ''}
+                                                            </Form.Control.Feedback>
+                                                        )}
+                                                    </Form.Group>
+                                                )}
+                                            />
+                                        </Col>
+                                        <Col xs={12} className='px-2'>
+                                            {index !== fields.length - 1 && (
+                                                <hr />
+                                            )}
+                                        </Col>
+                                        {index === fields.length - 1 && (
+                                            <Col
+                                                xs={12}
+                                                className='px-2 text-center mb-2'
+                                            >
+                                                <FingoButton
+                                                    style={{ width: 120 }}
+                                                    size='sm'
+                                                    onClick={() =>
+                                                        onClickAddVariant(
+                                                            fields.length
+                                                        )
+                                                    }
+                                                >
+                                                    Add Item
+                                                </FingoButton>
+                                            </Col>
+                                        )}
+                                    </Row>
+                                ))
+                            ) : (
+                                <div>
+                                    <p>Variant empty</p>
+                                    <FingoButton
+                                        onClick={() => onClickAddVariant(0)}
+                                    >
+                                        Add variant
+                                    </FingoButton>
+                                </div>
                             )}
-                        />
-                    </Col>
-                    <Col xs={12} md={6} className='px-2'>
-                        <Controller
-                            name='pin'
-                            control={control}
-                            render={({ field }) => (
-                                <Form.Group
-                                    className='mb-3'
-                                    controlId='formGrouppin'
-                                >
-                                    <Form.Label>PIN</Form.Label>
-                                    <FingoInput {...field} placeholder='PIN' />
-                                    {errors?.pin?.message && (
-                                        <Form.Control.Feedback type='invalid'>
-                                            {errors?.pin?.message ?? ''}
-                                        </Form.Control.Feedback>
-                                    )}
-                                </Form.Group>
-                            )}
-                        />
+                        </div>
                     </Col>
                     <Col xs={12} className='mt-4'>
                         <Row>

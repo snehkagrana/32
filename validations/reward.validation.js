@@ -9,10 +9,16 @@ module.exports = {
             currencyValue: Joi.string().required(),
             currencyCode: Joi.string().required(),
             diamondValue: Joi.number().required(),
-            claimCode: Joi.string().allow(null).allow('').optional(),
-            pin: Joi.string().allow(null).allow('').optional(),
             type: Joi.string().allow(null).allow('').optional(),
             imageURL: Joi.string().allow(null).allow('').optional(),
+            variants: Joi.array()
+                .items({
+                    claimCode: Joi.string().required(),
+                    pin: Joi.string().allow(null).allow('').optional(),
+                    isAvailable: Joi.boolean(),
+                    notes: Joi.string().allow(null).allow('').optional(),
+                })
+                .required(),
         })
         .options({ allowUnknown: true }),
     delete: Joi.object().keys({

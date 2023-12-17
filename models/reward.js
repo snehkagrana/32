@@ -18,11 +18,6 @@ const RewardSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    claimCode: {
-        type: String,
-        required: true,
-    },
-    pin: String,
     type: {
         type: String,
         required: true,
@@ -30,6 +25,16 @@ const RewardSchema = new mongoose.Schema({
     imageURL: {
         type: String,
     },
+    variants: [
+        {
+            claimCode: {
+                type: String,
+                required: true,
+            },
+            pin: String,
+            isAvailable: Boolean,
+        },
+    ],
 })
 
 RewardSchema.set('toJSON', {

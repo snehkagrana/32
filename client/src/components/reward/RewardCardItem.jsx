@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import Card from 'react-bootstrap/Card'
 import { useDispatch } from 'react-redux'
+import Assets from 'src/assets'
 
 import AmazonImg from 'src/assets/images/giftcard/amazon.jpg'
 import GooglePlayImg from 'src/assets/images/giftcard/google-play.jpg'
@@ -26,11 +27,15 @@ const RewardCardItem = props => {
         } else {
             switch (type) {
                 case 'amazon':
-                    return AmazonImg
+                    return Assets.GiftCardDefaultAmazon
+                case 'paytm':
+                    return Assets.GiftCardDefaultPaytm
+                case 'flipkart':
+                    return Assets.GiftCardDefaultFlipkart
                 case 'google play':
-                    return GooglePlayImg
+                    return Assets.GiftCardDefaultGooglePlay
                 default:
-                    return OtherImg
+                    return Assets.GiftCardDefaultOther
             }
         }
     }, [imageURL, type])
