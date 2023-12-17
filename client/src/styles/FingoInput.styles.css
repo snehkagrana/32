@@ -1,0 +1,22 @@
+.FingoInput {
+    font-weight: 500;
+    border-radius: 10px;
+    border: 2px solid rgb(109 109 109 / 10%);
+    background-color: #fff;
+}
+
+.FingoInput:hover {
+    border: 2px solid rgb(109 109 109 / 35%);
+}
+
+.FingoInput:focus {
+    color: #495057;
+    border-color: #007bff;
+    outline: 0;
+    box-shadow: none !important;
+}
+
+[data-theme='dark'] .FingoInput {
+    background-color: #181818;
+    color: #fbfbfb;
+}
