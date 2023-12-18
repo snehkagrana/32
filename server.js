@@ -30,6 +30,7 @@ const base64url = require("base64url");
 const { getLevelByXpPoints } = require("./utils/xp.utils");
 const authRoutes = require('./routes/auth.routes')
 const rewardRoutes = require('./routes/reward.routes')
+const accountRoutes = require('./routes/account.routes')
 const AuthGuard = require('./middlewares/auth.middleware');
 const { reCalculateUserDiamond } = require("./utils/reward.util");
 
@@ -75,6 +76,7 @@ app.use(cors({
 /** ######## New Routes ########### */
 app.use('/server/api/auth', authRoutes);  
 app.use('/server/api', rewardRoutes);  
+app.use('/server/api', accountRoutes);  
 
 app.use(
     session({
