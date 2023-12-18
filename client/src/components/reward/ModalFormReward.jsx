@@ -101,11 +101,15 @@ const ModalFormReward = () => {
     const onValidSubmit = async values => {
         console.log('values', values)
         try {
-            const response = await RewardApi.admin_createReward({
-                ...values,
-                currencyCode: values?.currencyCode?.value || null,
-                imageURL: imageFile || null,
-            })
+            const response = await RewardApi.admin_createOrUpdateReward(
+                {
+                    ...values,
+                    _id: isEdit ? modalForm.data?._id : null,
+                    currencyCode: values?.currencyCode?.value || null,
+                    imageURL: imageFile || null,
+                },
+                isEdit
+            )
             if (response?.data?._id) {
                 Swal.fire({
                     title: 'Success',
@@ -370,6 +374,11 @@ const ModalFormReward = () => {
                                             />
                                         </div>
                                     ))}
+                                    {errors?.type?.message && (
+                                        <Form.Control.Feedback type='invalid'>
+                                            {errors?.type?.message ?? ''}
+                                        </Form.Control.Feedback>
+                                    )}
                                     {/* <FingoSelect
                                         {...field}
                                         onChange={value => {

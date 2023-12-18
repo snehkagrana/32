@@ -58,7 +58,9 @@ const RewardCardItem = props => {
                     <div>
                         <Row className='align-items-center justify-space-between'>
                             <Col xs={8}>
-                                <h4 className='mb-1'>{name}</h4>
+                                <div className='TitleContainer'>
+                                    <h4 className='mb-1'>{name}</h4>
+                                </div>
                                 <p className='mb-0'>
                                     Redeem for <DiamondSvg /> {diamondValue}
                                 </p>

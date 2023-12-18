@@ -9,6 +9,14 @@ const validate = require('../utils/validator.util')
 const { upload } = require('../server')
 const { multerUpload } = require('../configs/multer.config')
 
+// Update reward
+router.post(
+    '/admin/reward/update',
+    validate(schema.create),
+    AuthGuard,
+    ErrorHandler(RewardController.admin_update)
+)
+
 // Create reward
 router.post(
     '/admin/reward',
@@ -22,14 +30,6 @@ router.get(
     '/admin/reward',
     AuthGuard,
     ErrorHandler(RewardController.admin_findAll)
-)
-
-// Update reward
-router.put(
-    '/admin/reward',
-    validate(schema.create),
-    AuthGuard,
-    ErrorHandler(RewardController.admin_update)
 )
 
 // Delete reward

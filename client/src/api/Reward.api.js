@@ -1,8 +1,11 @@
 import { Axios } from 'src/api'
 
 export const RewardApi = {
-    admin_createReward: async body => {
-        const response = await Axios.post('/server/api/admin/reward', body)
+    admin_createOrUpdateReward: async (body, isEdit) => {
+        const endpoint = isEdit
+            ? '/server/api/admin/reward/update'
+            : '/server/api/admin/reward'
+        const response = await Axios.post(endpoint, body)
         return response?.data
     },
     admin_findAll: async params => {
@@ -33,7 +36,9 @@ export const RewardApi = {
         return response?.data
     },
     findAllMyReward: async params => {
-        const response = await Axios.get('/server/api/account/my-reward', { params })
+        const response = await Axios.get('/server/api/account/my-reward', {
+            params,
+        })
         return response?.data
     },
 }

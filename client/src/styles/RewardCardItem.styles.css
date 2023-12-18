@@ -29,3 +29,8 @@
     font-weight: 700;
     font-size: 0.9rem;
 }
+
+.RewardCardItem .TitleContainer {
+    height: 44px;
+    overflow: hidden;
+}
