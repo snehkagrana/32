@@ -20,7 +20,7 @@ export const reward_adminCreateReward = createAsyncThunk(
     '@reward/reward_adminCreateReward',
     async (body, { rejectWithValue }) => {
         try {
-            const response = await RewardApi.admin_createReward(body)
+            const response = await RewardApi.admin_createOrUpdateReward(body)
             return response
         } catch (err) {
             if (!err.response) {
