@@ -1,7 +1,7 @@
 const UserModel = require('../models/user')
 const cacheUtil = require('../utils/cache.util')
 const { daysDifference } = require('../utils/common.util')
-const { reCalculateUserDiamond } = require('../utils/reward.util')
+const { initializeDiamondUser } = require('../utils/reward.util')
 const { getLevelByXpPoints } = require('../utils/xp.utils')
 
 exports.createUser = user => {
@@ -48,16 +48,18 @@ exports.syncUser = async email => {
                     doc.xp.daily = 0
                 }
 
-                // console.log("reCalculateUserDiamond", reCalculateUserDiamond(doc.diamond))
+                // console.log("initializeDiamondUser", initializeDiamondUser(doc.diamond))
 
                 await UserModel.findOneAndUpdate(
                     { email },
                     {
                         $set: {
-                            diamond: reCalculateUserDiamond(
+                            diamond: initializeDiamondUser(
                                 doc?.diamond ? parseInt(doc.diamond, 10) : 0,
-                                doc?.xp?.total ? doc.xp.total : 0
+                                doc?.xp?.total ? doc.xp.total : 0,
+                                doc.diamondInitialized,
                             ),
+                            diamondInitialized: true,
                             streak: doc.streak,
                             xp: {
                                 current: doc?.xp?.current ? doc.xp.current : 0,
