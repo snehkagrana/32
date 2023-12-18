@@ -1,5 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { reward_adminGetList, reward_getList } from './reward.thunk'
+import {
+    reward_adminGetList,
+    reward_getList,
+    reward_getListMyRewards,
+} from './reward.thunk'
 
 // Initial state
 const initialState = {
@@ -11,6 +15,7 @@ const initialState = {
         data: null,
     },
     openModalListReward: false,
+    openModalListMyReward: false,
     modalDetail: {
         open: false,
         data: null,
@@ -19,6 +24,10 @@ const initialState = {
     listRewardData: [],
     listRewardIsLoading: false,
     listRewardIsError: false,
+
+    listMyRewardData: [],
+    listMyRewardIsLoading: false,
+    listMyRewardIsError: false,
 }
 
 // Actual Slice
@@ -31,6 +40,9 @@ export const rewardSlice = createSlice({
         },
         reward_setOpenModalListReward(state, action) {
             state.openModalListReward = action.payload
+        },
+        reward_setOpenModalListMyReward(state, action) {
+            state.openModalListMyReward = action.payload
         },
         reward_setModalDetail(state, action) {
             state.modalDetail = action.payload
@@ -66,6 +78,21 @@ export const rewardSlice = createSlice({
             state.listRewardIsError = false
             state.listRewardIsLoading = false
             state.listRewardData = action.payload?.data || []
+        })
+
+        // Get list my reward
+        builder.addCase(reward_getListMyRewards.pending, state => {
+            state.listMyRewardIsLoading = true
+            state.listMyRewardIsError = false
+        })
+        builder.addCase(reward_getListMyRewards.rejected, (state, action) => {
+            state.listMyRewardIsLoading = false
+            state.listMyRewardIsError = true
+        })
+        builder.addCase(reward_getListMyRewards.fulfilled, (state, action) => {
+            state.listMyRewardIsError = false
+            state.listMyRewardIsLoading = false
+            state.listMyRewardData = action.payload?.data || []
         })
     },
 })

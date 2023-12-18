@@ -6,6 +6,7 @@ import { ReactComponent as InfoIcon } from 'src/assets/svg/outline-history.svg'
 import 'src/styles/FingoCardGiftbox.styles.css'
 
 import GiftboxImg from 'src/assets/images/giftbox.png'
+import toast from 'react-hot-toast'
 
 const FingoCardGiftbox = () => {
     const { user } = useAuth()
@@ -28,8 +29,11 @@ const FingoCardGiftbox = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [openModalListReward])
 
+    const notify = () => toast.success('Here is your toast.')
+
     const onClickMyRedeem = e => {
         e.stopPropagation()
+        notify()
     }
 
     return (

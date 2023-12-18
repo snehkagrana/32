@@ -20,7 +20,7 @@ const confettiConfig = {
 
 const ModalRewardDetail = () => {
     const dispatch = useDispatch()
-    const { auth_syncAndGetUser, user } = useAuth()
+    const { user } = useAuth()
     const {
         modalDetail,
         reward_setModalDetail,
@@ -60,28 +60,18 @@ const ModalRewardDetail = () => {
                             : null,
                         notes: '',
                     })
+                    setIsLoading(false)
                     if (response) {
                         setRedeemSuccess(true)
-                        auth_syncAndGetUser().then(result => {
-                            setIsLoading(true)
-                            if (result?._id) {
-                                setIsLoading(false)
-                                if (result?.rewards?.length > 0) {
-                                    setRedeemedItem(
-                                        result?.rewards.find(
-                                            x => x._id === modalDetail.data._id
-                                        )
-                                    )
-                                }
-                            } else {
-                                setIsLoading(true)
-                            }
-                        })
+                        if (response?.data?.rewardId) {
+                            setRedeemedItem(response.data)
+                        }
                         setTimeout(() => {
                             setCelebrate(true)
                         }, [750])
                     }
                 } catch (e) {
+                    setRedeemSuccess(false)
                     setIsLoading(false)
                 }
             }

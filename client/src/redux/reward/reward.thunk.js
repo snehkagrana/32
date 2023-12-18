@@ -60,3 +60,18 @@ export const reward_redeem = createAsyncThunk(
         }
     }
 )
+
+export const reward_getListMyRewards = createAsyncThunk(
+    '@reward/getListMyRewards',
+    async (params, { rejectWithValue }) => {
+        try {
+            const response = await RewardApi.findAllMyReward(params)
+            return response
+        } catch (err) {
+            if (!err.response) {
+                throw err
+            }
+            return rejectWithValue(err.response.data)
+        }
+    }
+)

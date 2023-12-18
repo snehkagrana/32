@@ -17,7 +17,10 @@ export const RewardApi = {
         return response?.data
     },
     upload: async body => {
-        const response = await Axios.post('/server/api/admin/reward/upload', body)
+        const response = await Axios.post(
+            '/server/api/admin/reward/upload',
+            body
+        )
         return response?.data
     },
 
@@ -27,6 +30,10 @@ export const RewardApi = {
     },
     redeem: async body => {
         const response = await Axios.post('/server/api/reward/redeem', body)
+        return response?.data
+    },
+    findAllMyReward: async params => {
+        const response = await Axios.get('/server/api/account/my-reward', { params })
         return response?.data
     },
 }
