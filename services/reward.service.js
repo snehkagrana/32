@@ -9,7 +9,7 @@ exports.create = body => {
 
 exports.update = async body => {
     const { _id, ...rest } = body
-    return await RewardModel.findOneAndUpdate({ _id: _id }, rest)
+    return await RewardModel.findOneAndUpdate({ _id: _id }, rest, { new: true })
 }
 
 exports.findAll = async filters => {
@@ -24,27 +24,73 @@ exports.remove = async id => {
     return await RewardModel.deleteOne({ _id: id })
 }
 
-exports.giftReward = async (email, rewardItems) => {
-    UserModel.findOne({ email }).exec(async function (err, user) {
-        if (err) {
-            console.log('ERROR', err)
-        } else {
-            if (user) {
-                if (user?.rewards?.length > 0) {
-                    const mergedRewards = [...user?.rewards, ...rewardItems]
-                    return await UserModel.updateOne(
-                        { email },
-                        { $set: { rewards: mergedRewards } }
-                    )
-                } else {
-                    return await UserModel.updateOne(
-                        { email },
-                        { $set: { rewards: rewardItems } }
-                    )
-                }
+exports.giftReward = async (adminEmail, body) => {
+    let reward = await RewardModel.findById(body.itemId)
+    let userAdmin = await UserModel.findOne({ email: adminEmail })
+    let user = await UserModel.findOne({ email: body.email })
+
+    let result = null
+
+    // check is reward code still exist
+    const rewardVariantStillExists = reward.variants.find(
+        x => x._id == body.variantId
+    )
+
+    if (user && userAdmin && rewardVariantStillExists) {
+        const getUpdateUserRewards = userRewards => {
+            const newUserReward = {
+                ...reward._doc,
+                givenBy: {
+                    userId: userAdmin._id,
+                    displayName: userAdmin.displayName,
+                    email: userAdmin.email,
+                },
+                rewardId: body.itemId,
+                variantId: body.variantId,
+                claimCode: reward._doc.variants.find(
+                    x => x._id == body.variantId
+                ).claimCode,
+                pin: reward._doc.variants.find(x => x._id == body.variantId)
+                    .pin,
+                notes: body.notes,
+                isRedeemed: false,
+                hasSeen: false,
+                redeemedAt: new Date().toISOString(),
+            }
+            if (userRewards.length > 0) {
+                return [...userRewards, newUserReward]
+            } else {
+                return [newUserReward]
             }
         }
-    })
+
+        // delete given code from reward variants
+        reward = await RewardModel.findByIdAndUpdate(body.itemId, {
+            $set: {
+                variants: reward.variants.filter(x => x._id != body.variantId),
+            },
+        }).exec()
+
+        // update user rewards
+        user = await UserModel.findOneAndUpdate(
+            { email: body.email },
+            {
+                // NOTES! don'ts decrement diamond user
+                $set: {
+                    rewards: getUpdateUserRewards(user?.rewards ?? []),
+                },
+            },
+            { new: true }
+        ).exec()
+
+        result = user.rewards.find(
+            x => x.rewardId == body.itemId && x.variantId == body.variantId
+        )
+    } else {
+        result = null
+    }
+
+    return result
 }
 
 exports.upload = async (file, id) => {
@@ -72,46 +118,59 @@ exports.upload = async (file, id) => {
 exports.redeem = async (email, body) => {
     let reward = await RewardModel.findById(body.itemId)
     let user = await UserModel.findOne({ email })
+    let result = null
 
-    const getUpdateUserRewards = userRewards => {
-        const newUserReward = {
-            ...reward._doc,
-            rewardId: reward._doc,
-            variantId: reward._doc.variants.find(x => x._id == body.variantId)
-                ._id,
-            claimCode: reward._doc.variants.find(x => x._id == body.variantId)
-                .claimCode,
-            pin: reward._doc.variants.find(x => x._id == body.variantId).pin,
-            notes: body.notes,
-            isRedeemed: true,
-            hasSeen: true,
-            redeemedAt: new Date().toISOString(),
+    const rewardVariantStillExists = reward.variants.find(
+        x => x._id == body.variantId
+    )
+
+    // variant reward still exist can be to redeem
+    if (rewardVariantStillExists) {
+        const getUpdateUserRewards = userRewards => {
+            const newUserReward = {
+                ...reward._doc,
+                rewardId: body.itemId,
+                variantId: body.variantId,
+                claimCode: reward._doc.variants.find(
+                    x => x._id == body.variantId
+                ).claimCode,
+                pin: reward._doc.variants.find(x => x._id == body.variantId)
+                    .pin,
+                notes: body.notes,
+                isRedeemed: true,
+                hasSeen: true,
+                redeemedAt: new Date().toISOString(),
+            }
+            if (userRewards.length > 0) {
+                return [...userRewards, newUserReward]
+            } else {
+                return [newUserReward]
+            }
         }
-        if (userRewards.length > 0) {
-            return [...userRewards, newUserReward]
-        } else {
-            return [newUserReward]
-        }
+
+        reward = await RewardModel.findByIdAndUpdate(body.itemId, {
+            $set: {
+                variants: reward.variants.filter(x => x._id != body.variantId),
+            },
+        }).exec()
+
+        user = await UserModel.findOneAndUpdate(
+            { email },
+            {
+                $set: {
+                    diamond: user.diamond - reward._doc.diamondValue,
+                    rewards: getUpdateUserRewards(user?.rewards ?? []),
+                },
+            },
+            { new: true }
+        ).exec()
+
+        result = user.rewards.find(
+            x => x.rewardId == body.itemId && x.variantId == body.variantId
+        )
+    } else {
+        result = null
     }
 
-    reward = await RewardModel.findByIdAndUpdate(body.itemId, {
-        $set: {
-            variants: reward.variants.filter(x => x._id != body.variantId),
-        },
-    }).exec()
-
-    user = await UserModel.findOneAndUpdate(
-        { email },
-        {
-            $set: {
-                diamond: user.diamond - reward._doc.diamondValue,
-                rewards: getUpdateUserRewards(user?.rewards ?? []),
-            },
-        },
-        { new: true }
-    ).exec()
-
-    return user.rewards.find(
-        x => x.rewardId == body.itemId && x.variantId == body.variantId
-    )
+    return result
 }

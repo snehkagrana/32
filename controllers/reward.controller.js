@@ -39,19 +39,22 @@ exports.admin_remove = async (req, res) => {
 }
 
 exports.admin_giftReward = async (req, res) => {
-    if (req.body.items?.length > 0) {
-        const items = req.body.items.map(item => ({
-            ...item,
-            isRedeemed: false,
-            hasSeen: false,
-            redeemedAt: null,
-        }))
-        await RewardService.giftReward(req.body.email, items)
-        return res.json({
-            message: 'Gift reward successfully.',
-        })
+    if (req.user.email && req.body) {
+        const result = await RewardService.giftReward(req.user.email, req.body)
+        if (result) {
+            return res.json({
+                message: 'Gift reward successfully.',
+                data: {
+                    ...result._doc,
+                    currencyValue: result?._doc?.currencyValue
+                        ? result._doc.currencyValue.toString()
+                        : null,
+                },
+            })
+        }
+        return res.status(400).json({ message: 'Failed to gift reward' })
     } else {
-        return res.status(400).json({ message: 'Items cannot empty or null' })
+        return res.status(400).json({ message: 'Item id cannot be empty' })
     }
 }
 
@@ -59,7 +62,7 @@ exports.admin_upload = async (req, res) => {
     const { file, itemId } = req.body
     if (itemId) {
         const result = await RewardService.upload(file, itemId)
-        console.log('result->>', result)
+        // console.log('result->>', result)
         res.json({
             imageUrl: req.file.location, // URL of the uploaded file in S3
         })
@@ -96,7 +99,7 @@ exports.findAll = async (req, res) => {
     })
 }
 
-// claim reward
+// Redeem reward
 exports.redeem = async (req, res) => {
     if (req.user.email && req.body) {
         const result = await RewardService.redeem(req.user.email, req.body)

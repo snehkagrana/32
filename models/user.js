@@ -62,7 +62,16 @@ const UserSchema = new mongoose.Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Reward',
             },
-            variantId: String,
+            variantId: mongoose.Schema.Types.ObjectId,
+            givenBy: {
+                type: {
+                    userId: mongoose.Schema.Types.ObjectId,
+                    displayName: String,
+                    email: String,
+                },
+                required: false,
+                default: null,
+            },
             claimCode: {
                 type: String,
                 required: true,
@@ -92,7 +101,11 @@ const UserSchema = new mongoose.Schema({
             imageURL: {
                 type: String,
             },
-            notes: String,
+            notes: {
+                type: String,
+                required: false,
+                default: null,
+            },
             receivedAt: {
                 type: Date,
                 // `Date.now()` returns the current unix timestamp as a number
