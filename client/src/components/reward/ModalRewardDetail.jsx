@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Row, Col } from 'react-bootstrap'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Row, Col, ProgressBar, Alert } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { useAuth, useReward } from 'src/hooks'
 import { FingoButton, FingoModal } from 'src/components/core'
@@ -12,6 +12,12 @@ import Assets from 'src/assets'
 import { useNavigate } from 'react-router-dom'
 import { XP_LEVEL_COLORS_DEFAULT } from 'src/constants'
 import Confetti from 'react-dom-confetti'
+import { ReactComponent as DiamondSvg } from 'src/assets/svg/diamond.svg'
+import { ReactComponent as CopySvg } from 'src/assets/svg/baseline-content-copy.svg'
+import { ReactComponent as Eye } from 'src/assets/svg/eye.svg'
+import { ReactComponent as EyeOff } from 'src/assets/svg/eye-off.svg'
+import CopyToClipboard from 'react-copy-to-clipboard'
+import toast from 'react-hot-toast'
 
 const confettiConfig = {
     colors: XP_LEVEL_COLORS_DEFAULT,
@@ -33,6 +39,8 @@ const ModalRewardDetail = () => {
     const [redeemedItem, setRedeemedItem] = useState(null)
     const navigate = useNavigate()
     const [celebrate, setCelebrate] = useState(false)
+    const [showPin, setShowPin] = useState(false)
+    const copyRef = useRef(null)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleCloseModal = () => {
@@ -71,6 +79,7 @@ const ModalRewardDetail = () => {
                         }, [750])
                     }
                 } catch (e) {
+                    toast.error('Opss.. failed to claim your gift card')
                     setRedeemSuccess(false)
                     setIsLoading(false)
                 }
@@ -108,6 +117,10 @@ const ModalRewardDetail = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [modalDetail.data])
+
+    const onClickCopy = () => {
+        toast.success('Copied to clipboard.')
+    }
 
     const onClickDelete = useCallback(() => {
         if (modalDetail.data) {
@@ -167,6 +180,7 @@ const ModalRewardDetail = () => {
             setIsLoading(false)
             setRedeemSuccess(false)
             setRedeemedItem(null)
+            setShowPin(false)
             setCelebrate(false)
         }
     }, [modalDetail.open])
@@ -191,6 +205,22 @@ const ModalRewardDetail = () => {
             Boolean(user?.diamond >= modalDetail?.data?.diamondValue) &&
             modalDetail?.data?.variants?.length > 0
         )
+    }, [user, modalDetail.data])
+
+    const getProgressBarColor = useMemo(() => {
+        if (user?.diamond >= modalDetail?.data?.diamondValue) {
+            return 'success'
+        } else {
+            return 'warning'
+        }
+    }, [user, modalDetail.data])
+
+    const getPercentageProgressBar = useMemo(() => {
+        if (user?.diamond >= modalDetail?.data?.diamondValue) {
+            return 100
+        } else {
+            return (user?.diamond / modalDetail?.data?.diamondValue) * 100
+        }
     }, [user, modalDetail.data])
 
     return (
@@ -236,24 +266,91 @@ const ModalRewardDetail = () => {
                                     </div>
 
                                     {redeemSuccess && redeemedItem ? (
-                                        <div className='RedeemSuccess'>
-                                            <h2>
+                                        <div className='RedeemSuccess mb-4'>
+                                            <h6 className='mb-2'>
+                                                {redeemedItem?.name}
+                                            </h6>
+                                            <p className='mb-3'>
                                                 Here's is the code for your{' '}
                                                 {redeemedItem?.currencyValue}{' '}
                                                 {redeemedItem?.currencyCode}{' '}
-                                            </h2>
-                                            <h6 className='mb-4'>
-                                                {redeemedItem?.name}
-                                            </h6>
+                                            </p>
 
-                                            <div className='RedeemCode'>
-                                                <code>
-                                                    {redeemedItem?.claimCode}
-                                                </code>
+                                            <div
+                                                className='RedeemCode'
+                                                onClick={onClickCopy}
+                                            >
+                                                <p className='RedeemCodeLabel'>
+                                                    Code
+                                                </p>
+                                                <CopyToClipboard
+                                                    text={
+                                                        redeemedItem?.claimCode
+                                                    }
+                                                >
+                                                    <code>
+                                                        {
+                                                            redeemedItem?.claimCode
+                                                        }
+                                                    </code>
+                                                </CopyToClipboard>
+                                                <CopyToClipboard
+                                                    text={
+                                                        redeemedItem?.claimCode
+                                                    }
+                                                >
+                                                    <CopySvg
+                                                        onClick={onClickCopy}
+                                                        className='cp'
+                                                    />
+                                                </CopyToClipboard>
                                             </div>
+
+                                            {/* pin */}
+                                            {redeemedItem.pin && (
+                                                <div className='mt-2'>
+                                                    <p className='mb-1 text-bold'>
+                                                        PIN
+                                                    </p>
+                                                    <div className='RedeemPin'>
+                                                        {/* {redeemedItem?.pin && <></>} */}
+                                                        <input
+                                                            value={
+                                                                redeemedItem.pin
+                                                            }
+                                                            type={
+                                                                showPin
+                                                                    ? 'text'
+                                                                    : 'password'
+                                                            }
+                                                        />
+                                                        <button
+                                                            className='ToggleShowPin'
+                                                            onClick={() =>
+                                                                setShowPin(
+                                                                    !showPin
+                                                                )
+                                                            }
+                                                        >
+                                                            {showPin ? (
+                                                                <Eye />
+                                                            ) : (
+                                                                <EyeOff />
+                                                            )}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     ) : (
                                         <div>
+                                            {modalDetail?.data?.variants
+                                                ?.length < 1 && (
+                                                <Alert variant='danger text-center mb-2'>
+                                                    This gift card is not
+                                                    available
+                                                </Alert>
+                                            )}
                                             <Row className='align-items-center justify-space-between'>
                                                 <Col xs={8}>
                                                     <div className='RewardDetailLogo'>
@@ -283,18 +380,40 @@ const ModalRewardDetail = () => {
                                                         </p>
                                                     </div>
                                                 </Col>
-                                                <Col
-                                                    xs={6}
-                                                    className='mb-3'
-                                                ></Col>
-                                                <Col xs={12} className='mb-3'>
-                                                    <p className='mb-0 RewardDetailRedeemText'>
-                                                        Redeem for 💎{' '}
-                                                        {
+                                                <Col xs={12} className='mb-3' />
+                                                <Col xs={12} className='mb-2'>
+                                                    <div className='ProgressBarTextContainer mb-1'>
+                                                        <p className='mb-0 RewardDetailRedeemText'>
+                                                            REDEEM FOR{' '}
+                                                            <DiamondSvg />{' '}
+                                                            {
+                                                                modalDetail.data
+                                                                    .diamondValue
+                                                            }
+                                                        </p>
+                                                        {user.diamond <
                                                             modalDetail.data
-                                                                .diamondValue
+                                                                .diamondValue && (
+                                                            <p className='mb-0 RewardDetailRedeemText'>
+                                                                {user.diamond} /{' '}
+                                                                {
+                                                                    modalDetail
+                                                                        .data
+                                                                        .diamondValue
+                                                                }
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                    <ProgressBar
+                                                        variant={
+                                                            getProgressBarColor
                                                         }
-                                                    </p>
+                                                        now={
+                                                            getPercentageProgressBar
+                                                        }
+                                                    />
+                                                </Col>
+                                                <Col xs={12} className='mb-1'>
                                                     <hr />
                                                 </Col>
                                                 <Col xs={12} className='mb-3'>
@@ -331,8 +450,8 @@ const ModalRewardDetail = () => {
                                                     </FingoButton>
                                                     {!isAbleToRedeem && (
                                                         <p className='text-center'>
-                                                            Your gems are not
-                                                            enough
+                                                            Earn gems to claim
+                                                            your gift
                                                         </p>
                                                     )}
 
@@ -341,7 +460,7 @@ const ModalRewardDetail = () => {
                                                             <hr />
                                                             <Row
                                                                 xs={6}
-                                                                className='mt-4'
+                                                                className='mt-4 mb-4'
                                                             >
                                                                 <Col xs={6}>
                                                                     <FingoButton

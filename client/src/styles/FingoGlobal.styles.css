@@ -134,3 +134,13 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
     padding: 0;
     background-color: transparent;
 }
+
+
+.progress {
+    border-radius: 3rem !important;
+}
+
+.alert {
+    padding: 0.4rem 1rem !important;
+    font-weight: 500 !important
+}

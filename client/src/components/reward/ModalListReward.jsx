@@ -87,8 +87,11 @@ const ModalListReward = () => {
             className='ModalListReward'
         >
             <div className='ListRewardContainer FingoShapeRadius'>
-                <h2 className='mb-3'>Redeem your gems</h2>
-                <p>Select the products you would like to redeem</p>
+                <div className='ListRewardHeader'>
+                    <h2 className='mb-1'>Redeem your gems</h2>
+                    <p>Select the products you would like to redeem</p>
+                </div>
+                <hr />
                 <div className='ListReward'>
                     <Row>
                         {isLoading ? (

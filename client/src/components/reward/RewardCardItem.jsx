@@ -8,6 +8,7 @@ import AmazonImg from 'src/assets/images/giftcard/amazon.jpg'
 import GooglePlayImg from 'src/assets/images/giftcard/google-play.jpg'
 import OtherImg from 'src/assets/images/giftcard/other.jpg'
 import { useReward } from 'src/hooks'
+import { ReactComponent as DiamondSvg } from 'src/assets/svg/diamond.svg'
 
 import 'src/styles/RewardCardItem.styles.css'
 
@@ -59,7 +60,7 @@ const RewardCardItem = props => {
                             <Col xs={8}>
                                 <h4 className='mb-1'>{name}</h4>
                                 <p className='mb-0'>
-                                    Redeem for 💎 {diamondValue}
+                                    Redeem for <DiamondSvg /> {diamondValue}
                                 </p>
                             </Col>
                             <Col xs={4}>

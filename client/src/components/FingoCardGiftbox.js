@@ -29,7 +29,7 @@ const FingoCardGiftbox = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [openModalListReward])
 
-    const notify = () => toast.success('Here is your toast.')
+    const notify = () => toast.success('Comming soon.')
 
     const onClickMyRedeem = e => {
         e.stopPropagation()
@@ -43,13 +43,13 @@ const FingoCardGiftbox = () => {
         >
             <button className='HistoryBtn' onClick={onClickMyRedeem}>
                 <InfoIcon />
-                <p>My Redeem</p>
+                <p>My Rewards</p>
             </button>
             <div className='FingoCardGiftboxImg'>
                 <img src={GiftboxImg} alt='giftbox img' />
             </div>
             <div className='FingoCardGiftboxContent'>
-                {user?.diamond > 50 ? (
+                {user?.diamond >= 50 ? (
                     <a href='#' className='font-bold'>
                         Claim your Gift Card
                     </a>

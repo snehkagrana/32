@@ -16,14 +16,18 @@
     }
 }
 
-.ListRewardContainer h2 {
-    font-weight: 700;
-    font-size: 22px;
-}
-
 @media (min-width: 576px) {
     .ModalListReward .ListReward {
     }
+}
+
+.ListRewardHeader h2 {
+    font-weight: 700;
+    font-size: 21px;
+}
+
+.ListRewardHeader p {
+    font-size: 0.9rem;
 }
 
 [data-theme='dark'] .ModalListReward .ListRewardContainer {
