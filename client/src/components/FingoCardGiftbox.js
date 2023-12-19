@@ -1,17 +1,17 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useCallback, useMemo } from 'react'
-import { useAuth, useReward } from 'src/hooks'
+import { useApp, useAuth, useReward } from 'src/hooks'
 import { useDispatch } from 'react-redux'
 import { ReactComponent as InfoIcon } from 'src/assets/svg/outline-history.svg'
-import 'src/styles/FingoCardGiftbox.styles.css'
-
+import { ReactComponent as QuestionSvg } from 'src/assets/svg/question-circle.svg'
 import GiftboxImg from 'src/assets/images/giftbox.png'
 import toast from 'react-hot-toast'
+import 'src/styles/FingoCardGiftbox.styles.css'
 
 const FingoCardGiftbox = () => {
     const { user } = useAuth()
     const dispatch = useDispatch()
-
+    const { app_setOpenModalHowToEarnDiamond } = useApp()
     const { reward_setOpenModalListReward, openModalListReward } = useReward()
 
     const getText = useMemo(() => {
@@ -36,15 +36,25 @@ const FingoCardGiftbox = () => {
         notify()
     }
 
+    const onClickQuestionBtn = e => {
+        e.stopPropagation()
+        dispatch(app_setOpenModalHowToEarnDiamond(true))
+    }
+
     return (
         <div
             className={`mb-3 FingoCardGiftbox FingoShapeRadius`}
             onClick={onClickCard}
         >
-            <button className='HistoryBtn' onClick={onClickMyRedeem}>
-                <InfoIcon />
-                <p>My Rewards</p>
-            </button>
+            <div className='HeaderBtn'>
+                <button className='QuestionBtn' onClick={onClickQuestionBtn}>
+                    <QuestionSvg />
+                </button>
+                <button className='HistoryBtn' onClick={onClickMyRedeem}>
+                    <InfoIcon />
+                    <p>My Rewards</p>
+                </button>
+            </div>
             <div className='FingoCardGiftboxImg'>
                 <img src={GiftboxImg} alt='giftbox img' />
             </div>

@@ -1,0 +1,86 @@
+@media (min-width: 576px) {
+    .ModalInfoEarnDiamond .modal-dialog {
+        max-width: 368px;
+    }
+}
+
+.InfoEarnDiamondContainer {
+    background-color: #ffffff;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.HowToEarnDiamondContent {
+    padding: 0.5rem 1.2rem;
+}
+
+.HowToEarnDiamondContent .item {
+    font-weight: 500;
+    padding: 10px 0 10px 20px;
+    border-radius: 0.4rem;
+    border: 2px solid rgb(109 109 109 / 10%);
+    font-weight: 600;
+}
+
+.HowToEarnDiamondContent .item:hover {
+    border: 2px solid #007bff;
+}
+
+.HowToEarnDiamondContent .num {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #007bff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+@media (min-width: 576px) {
+    .HowToEarnDiamondContent {
+        padding: 1.2rem 2rem;
+    }
+}
+
+[data-theme='dark'] .ModalInfoEarnDiamond .InfoEarnDiamondContainer {
+    background-color: #383838;
+}
+
+.HowToEarnDiamondHeader {
+    padding: 1rem 0.75rem;
+    background-color: #c8f1ff;
+    color: #044888;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+[data-theme='dark'] .HowToEarnDiamondHeader {
+    background-color: #2a424a;
+    color: #fbfbfb;
+}
+
+.HowToEarnDiamondHeader svg.questionIcon {
+    width: 34px;
+    height: auto;
+    margin-bottom: 0.65rem;
+}
+
+.HowToEarnDiamondHeader h6 {
+    font-size: 19px;
+    font-weight: 700;
+}
+
+@media (min-width: 576px) {
+    .HowToEarnDiamondHeader {
+        padding: 1.2rem 1rem;
+    }
+}

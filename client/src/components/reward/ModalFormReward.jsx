@@ -104,31 +104,31 @@ const ModalFormReward = () => {
     const onValidSubmit = async values => {
         try {
             console.log('onValidSubmit => values =>', values)
-            // const response = await RewardApi.admin_createOrUpdateReward(
-            //     {
-            //         ...values,
-            //         _id: isEdit ? modalForm.data?._id : null,
-            //         currencyCode: values?.currencyCode?.value || null,
-            //         imageURL: imageFile || null,
-            //     },
-            //     isEdit
-            // )
-            // if (response?.data) {
-            //     Swal.fire({
-            //         title: 'Success',
-            //         text: 'Reward saved successfully!',
-            //         icon: 'success',
-            //         showCancelButton: false,
-            //         confirmButtonColor: '#009c4e',
-            //         confirmButtonText: 'Ok',
-            //     }).then(result => {
-            //         if (result.isConfirmed) {
-            //             onConfirmClose()
-            //             dispatch(reward_adminGetList())
-            //             reset(initialValues)
-            //         }
-            //     })
-            // }
+            const response = await RewardApi.admin_createOrUpdateReward(
+                {
+                    ...values,
+                    _id: isEdit ? modalForm.data?._id : null,
+                    currencyCode: values?.currencyCode?.value || null,
+                    imageURL: imageFile || null,
+                },
+                isEdit
+            )
+            if (response?.data) {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Reward saved successfully!',
+                    icon: 'success',
+                    showCancelButton: false,
+                    confirmButtonColor: '#009c4e',
+                    confirmButtonText: 'Ok',
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        onConfirmClose()
+                        dispatch(reward_adminGetList())
+                        reset(initialValues)
+                    }
+                })
+            }
         } catch (e) {
             console.log('e', e)
         }
@@ -237,25 +237,27 @@ const ModalFormReward = () => {
 
     useEffect(() => {
         if (modalForm.open && modalForm.data) {
-            setValue('name', modalForm.data.name)
-            setValue('description', modalForm.data.description)
-            setValue('brandUrl', modalForm.data.brandUrl)
-            setValue('currencyValue', modalForm.data.currencyValue)
-            setValue(
-                'currencyCode',
-                DROPDOWN_CURRENCY_CODES.find(
-                    x => x.value === modalForm.data.currencyCode
+            setTimeout(() => {
+                setValue('name', modalForm.data.name)
+                setValue('description', modalForm.data.description)
+                setValue('brandUrl', modalForm.data.brandUrl)
+                setValue('currencyValue', modalForm.data.currencyValue)
+                setValue(
+                    'currencyCode',
+                    DROPDOWN_CURRENCY_CODES.find(
+                        x => x.value === modalForm.data.currencyCode
+                    )
                 )
-            )
-            setValue('diamondValue', modalForm.data.diamondValue)
-            setValue('imageURL', modalForm.data.imageURL)
-            setValue('type', modalForm.data.type)
-            setValue('variants', modalForm.data.variants)
-            if (modalForm.data?.imageURL) {
-                setImageFile(modalForm.data.imageURL)
-            } else {
-                onChangeType(modalForm.data.type)
-            }
+                setValue('diamondValue', modalForm.data.diamondValue)
+                setValue('imageURL', modalForm.data.imageURL)
+                setValue('type', modalForm.data.type)
+                setValue('variants', modalForm.data.variants)
+                if (modalForm.data?.imageURL) {
+                    setImageFile(modalForm.data.imageURL)
+                } else {
+                    onChangeType(modalForm.data.type)
+                }
+            }, 350)
         } else {
             reset(initialValues)
             setImageFile(null)
@@ -744,12 +746,7 @@ const ModalFormReward = () => {
                                 ))
                             ) : (
                                 <div className='text-center'>
-                                    <p>Variant empty</p>
-                                    <FingoButton
-                                        onClick={() => onClickAddVariant(0)}
-                                    >
-                                        Add variant
-                                    </FingoButton>
+                                    <p>Item code is empty</p>
                                 </div>
                             )}
                             <Row>

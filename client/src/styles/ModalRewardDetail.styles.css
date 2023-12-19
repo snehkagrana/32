@@ -270,3 +270,28 @@
     width: 20px;
     height: auto;
 }
+
+.GemsNotEnough {
+    background-color: #ffedc4;
+    color: #3d370c;
+    border-radius: 5px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+}
+
+[data-theme='dark'] .GemsNotEnough {
+    background-color: #4e4d4a;
+    color: #fff;
+}
+
+.GemsNotEnough svg {
+    width: 26px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.GemsNotEnough p {
+    font-size: 15px;
+    font-weight: 600;
+}

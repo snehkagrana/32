@@ -68,7 +68,7 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     font-size: 0.9rem !important;
     grid-template-columns: minmax(0, 100%) !important;
     max-width: 95% !important;
-    padding: 0 0 1.25em !important;
+    padding: 0 0 1.5em !important;
     position: relative !important;
     width: 25em !important;
 }

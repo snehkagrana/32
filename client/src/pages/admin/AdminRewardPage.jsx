@@ -13,6 +13,7 @@ import { ModalFormReward, RewardCardItem } from 'src/components/reward'
 import LoadingBox from 'src/components/LoadingBox'
 import ModalRewardDetail from 'src/components/reward/ModalRewardDetail'
 import { ModalVerifyAction } from 'src/components/admin'
+import ModalInfoEarnDiamond from 'src/components/reward/ModalInfoEarnDiamond'
 
 const AdminRewardPage = () => {
     const dispatch = useDispatch()
@@ -107,6 +108,7 @@ const AdminRewardPage = () => {
             <ModalFormReward />
             <ModalRewardDetail />
             <ModalVerifyAction />
+            <ModalInfoEarnDiamond />
         </FingoHomeLayout>
     )
 }

@@ -17,6 +17,7 @@ import { ReactComponent as DiamondSvg } from 'src/assets/svg/diamond.svg'
 import { ReactComponent as CopySvg } from 'src/assets/svg/baseline-content-copy.svg'
 import { ReactComponent as Eye } from 'src/assets/svg/eye.svg'
 import { ReactComponent as EyeOff } from 'src/assets/svg/eye-off.svg'
+import { ReactComponent as SadSvg } from 'src/assets/svg/sad.svg'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import toast from 'react-hot-toast'
 
@@ -98,7 +99,7 @@ const ModalRewardDetail = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [modalDetail.data])
 
-    const onClickEarnPoint = useCallback(() => {
+    const onClickEarnGems = useCallback(() => {
         handleCloseModal()
         navigate('/home')
     }, [navigate])
@@ -459,22 +460,52 @@ const ModalRewardDetail = () => {
                                                     <hr />
                                                 </Col>
                                                 <Col xs={12}>
-                                                    <FingoButton
-                                                        className='mb-4 w-100'
-                                                        size='lg'
-                                                        color='success'
-                                                        disabled={
-                                                            !isAbleToRedeem
-                                                        }
-                                                        onClick={onClickRedeem}
-                                                    >
-                                                        Redeem
-                                                    </FingoButton>
-                                                    {!isAbleToRedeem && (
-                                                        <p className='text-center'>
-                                                            Earn gems to claim
-                                                            your gift
-                                                        </p>
+                                                    {!isAbleToRedeem ? (
+                                                        <>
+                                                            <div className='GemsNotEnough mb-3'>
+                                                                <SadSvg />
+                                                                <div>
+                                                                    <p className='mb-0'>
+                                                                        You
+                                                                        don't
+                                                                        have
+                                                                        enough
+                                                                        gems.
+                                                                    </p>
+                                                                    <p className='mb-0'>
+                                                                        Complete
+                                                                        more
+                                                                        lessons
+                                                                        to earn
+                                                                        more
+                                                                        gems.
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <FingoButton
+                                                                className='mb-4 w-100'
+                                                                color='primary'
+                                                                onClick={
+                                                                    onClickEarnGems
+                                                                }
+                                                            >
+                                                                Earn Gems
+                                                            </FingoButton>
+                                                        </>
+                                                    ) : (
+                                                        <FingoButton
+                                                            className='mb-4 w-100'
+                                                            size='lg'
+                                                            color='success'
+                                                            disabled={
+                                                                !isAbleToRedeem
+                                                            }
+                                                            onClick={
+                                                                onClickRedeem
+                                                            }
+                                                        >
+                                                            Redeem
+                                                        </FingoButton>
                                                     )}
 
                                                     {user?.role === 'admin' && (
