@@ -15,7 +15,7 @@ import {
 import Slider from "react-slick";
 import fingoLogo from '../images/fingo-logo.png';
 import fingoSectionTwo from '../images/fingo-landing-page-section-2.png';
-import fingoSectionThree from '../images/fingo-landing-page-section-3.png';
+import fingoSectionThree from '../images/landingQuiz.png';
 import fingoSectionFiveOne from '../images/fingo-landing-page-5-1.png'
 import fingoSectionFiveTwo from '../images/fingo-landing-page-5-2.png'
 import fingoSectionFiveThree from '../images/fingo-landing-page-5-3.png'
@@ -312,7 +312,7 @@ const StartPage = () => {
                             </Reveal>
                             <Reveal motionType={"leftToRight"}>
                                 <div className="flex flex-col w-full py-5 rounded-md lg:flex-row-reverse">
-                                    <img src={fingoSectionThree} alt="" className="start_page_img start_page_img_2 object-cover sm:max-w-lg aspect-auto" height={"450px"} />
+                                    <img src={fingoSectionThree} alt="" className="start_page_img start_page_img_2 object-cover sm:max-w-lg aspect-auto" height={"500px"} />
 
 
 

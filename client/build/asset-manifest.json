@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.a3a73893.css",
-    "main.js": "/static/js/main.ea2cc1f0.js",
+    "main.js": "/static/js/main.8be64b5c.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
     "static/media/8.png": "/static/media/8.9daef5f1f68e0fc2fb5f.png",
@@ -26,7 +26,6 @@
     "static/media/102587-funny-picture-emoji-boy-free-download-png-hq.png": "/static/media/102587-funny-picture-emoji-boy-free-download-png-hq.99b9a5203d392b524466.png",
     "static/media/fingo-landing-page-5-5.png": "/static/media/fingo-landing-page-5-5.cafa699fff7cf808ffc3.png",
     "static/media/7.png": "/static/media/7.5954f7b377fefc4be4e4.png",
-    "static/media/fingo-landing-page-section-3.png": "/static/media/fingo-landing-page-section-3.2f46889d7d71a4b283c9.png",
     "static/media/9.png": "/static/media/9.77cc839302e4b0deae14.png",
     "static/media/10.png": "/static/media/10.cc91901ccbe7ff6858df.png",
     "static/media/fingo-landing-page-5-2.png": "/static/media/fingo-landing-page-5-2.a254c6ba968014119d35.png",
@@ -36,6 +35,7 @@
     "static/media/fingo-landing-page-5-4.png": "/static/media/fingo-landing-page-5-4.fd72553a713b198da19d.png",
     "static/media/101756-career-emoji-download-hq.png": "/static/media/101756-career-emoji-download-hq.ba0d9c6bebd584561b2a.png",
     "static/media/Trading.png": "/static/media/Trading.a12c1f3b87c7bdc17df0.png",
+    "static/media/landingQuiz.png": "/static/media/landingQuiz.5fef5f4066b604914a9a.png",
     "static/media/Investing.png": "/static/media/Investing.5f97fcad2df14e15e373.png",
     "static/media/64983-emoticon-sunglasses-smiley-iphone-go-emoji.png": "/static/media/64983-emoticon-sunglasses-smiley-iphone-go-emoji.731a85f6d4845012f2e8.png",
     "static/media/fingo-landing-page-5-3.png": "/static/media/fingo-landing-page-5-3.38b8cf6ca4397127ab1d.png",
@@ -85,11 +85,11 @@
     "static/media/star-filled.svg": "/static/media/star-filled.ed1ad811101f5eda6c44676dfa87e596.svg",
     "static/media/info.svg": "/static/media/info.ef876f7b40a92ef036458f95b7e325e2.svg",
     "main.a3a73893.css.map": "/static/css/main.a3a73893.css.map",
-    "main.ea2cc1f0.js.map": "/static/js/main.ea2cc1f0.js.map",
+    "main.8be64b5c.js.map": "/static/js/main.8be64b5c.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.a3a73893.css",
-    "static/js/main.ea2cc1f0.js"
+    "static/js/main.8be64b5c.js"
   ]
 }
