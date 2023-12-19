@@ -301,10 +301,7 @@ const ModalRewardDetail = () => {
                                                 {redeemedItem?.currencyCode}{' '}
                                             </p>
 
-                                            <div
-                                                className='RedeemCode'
-                                                onClick={onClickCopy}
-                                            >
+                                            <div className='RedeemCode'>
                                                 <p className='RedeemCodeLabel'>
                                                     Code
                                                 </p>
@@ -313,7 +310,7 @@ const ModalRewardDetail = () => {
                                                         redeemedItem?.claimCode
                                                     }
                                                 >
-                                                    <code>
+                                                    <code onClick={onClickCopy}>
                                                         {
                                                             redeemedItem?.claimCode
                                                         }
