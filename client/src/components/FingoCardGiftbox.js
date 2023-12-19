@@ -4,6 +4,7 @@ import { useApp, useAuth, useReward } from 'src/hooks'
 import { useDispatch } from 'react-redux'
 import { ReactComponent as InfoIcon } from 'src/assets/svg/outline-history.svg'
 import { ReactComponent as QuestionSvg } from 'src/assets/svg/question-circle.svg'
+import { ReactComponent as DiamondSvg } from 'src/assets/svg/diamond.svg'
 import GiftboxImg from 'src/assets/images/giftbox.png'
 import toast from 'react-hot-toast'
 import 'src/styles/FingoCardGiftbox.styles.css'
@@ -12,17 +13,11 @@ const FingoCardGiftbox = () => {
     const { user } = useAuth()
     const dispatch = useDispatch()
     const { app_setOpenModalHowToEarnDiamond } = useApp()
-    const { reward_setOpenModalListReward, openModalListReward } = useReward()
-
-    const getText = useMemo(() => {
-        if (user?.diamond) {
-            if (user?.diamond < 50) {
-                return `Earn ${50 - user.diamond} more Gems to claim your Gift`
-            } else {
-                return ''
-            }
-        } else return 'Earn 50 Gems to claim your gift'
-    }, [user])
+    const {
+        reward_setOpenModalListReward,
+        openModalListReward,
+        reward_setOpenModalListMyReward,
+    } = useReward()
 
     const onClickCard = useCallback(() => {
         dispatch(reward_setOpenModalListReward(true))
@@ -33,6 +28,7 @@ const FingoCardGiftbox = () => {
 
     const onClickMyRedeem = e => {
         e.stopPropagation()
+        dispatch(reward_setOpenModalListMyReward(true))
         notify()
     }
 
@@ -65,7 +61,16 @@ const FingoCardGiftbox = () => {
                     </a>
                 ) : (
                     <div className='text-center'>
-                        <p className='mb-0 text-center'>{getText}</p>
+                        {user?.diamond < 50 ? (
+                            <p className='mb-0 text-center'>
+                                Earn {50 - user.diamond} more <DiamondSvg /> to
+                                claim your Gift
+                            </p>
+                        ) : (
+                            <p className='mb-0 text-center'>
+                                Earn 50 <DiamondSvg /> to claim your gift
+                            </p>
+                        )}
                     </div>
                 )}
             </div>
