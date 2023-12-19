@@ -16,7 +16,27 @@
 .FingoSelect [class$='-control']:focus {
 }
 
-/* [data-theme='dark'] .FingoSelect [class$='-control'] {
+[data-theme='dark'] .FingoSelect [class$='-control'] {
     background-color: #181818;
-    color: #fbfbfb;
-} */
+    color: #fbfbfb !important;
+}
+
+[data-theme='dark'] .FingoSelect [class$='-control'] [class$='-Input'] {
+    color: #fbfbfb !important;
+}
+
+[data-theme='dark'] .FingoSelect [class$='-control'] [class$='-singleValue'] {
+    color: #fbfbfb !important;
+}
+
+[data-theme='dark'] .FingoSelect [class$='-menu'] {
+    background-color: #181818;
+}
+
+[data-theme='dark'] .FingoSelect [class$='-option'] {
+    background-color: #181818;
+}
+
+[data-theme='dark'] .FingoSelect [class$='-option']:hover {
+    background-color: #555555;
+}
