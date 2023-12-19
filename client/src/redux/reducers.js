@@ -7,6 +7,7 @@ import { authSlice } from './auth'
 import { userSlice } from './user'
 import { authPersistedSlice } from './auth/auth.persisted.slice'
 import { rewardSlice } from './reward'
+import { adminSlice } from './admin'
 
 // plain reducers
 const plainReducers = {
@@ -15,6 +16,7 @@ const plainReducers = {
     [userSlice.name]: userSlice.reducer,
     [authPersistedSlice.name]: authPersistedSlice.reducer,
     [rewardSlice.name]: rewardSlice.reducer,
+    [adminSlice.name]: adminSlice.reducer,
 }
 
 // root reducer

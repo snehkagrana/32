@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Row, Col, ProgressBar, Alert } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
-import { useAuth, useReward } from 'src/hooks'
+import { useAdmin, useAuth, useReward } from 'src/hooks'
 import { FingoButton, FingoModal } from 'src/components/core'
 import OtherImg from 'src/assets/images/giftcard/other.jpg'
 import 'src/styles/ModalRewardDetail.styles.css'
@@ -26,7 +27,12 @@ const confettiConfig = {
 
 const ModalRewardDetail = () => {
     const dispatch = useDispatch()
-    const { user } = useAuth()
+    const { user, auth_syncAndGetUser } = useAuth()
+    const {
+        openModalVerifyAction,
+        admin_setOpenModalVerifyAction,
+        isVerified,
+    } = useAdmin()
     const {
         modalDetail,
         reward_setModalDetail,
@@ -40,7 +46,7 @@ const ModalRewardDetail = () => {
     const navigate = useNavigate()
     const [celebrate, setCelebrate] = useState(false)
     const [showPin, setShowPin] = useState(false)
-    const copyRef = useRef(null)
+    const [hasConfirmDelete, setHasConfirmDelete] = useState(false)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleCloseModal = () => {
@@ -77,6 +83,10 @@ const ModalRewardDetail = () => {
                         setTimeout(() => {
                             setCelebrate(true)
                         }, [750])
+
+                        auth_syncAndGetUser().then(result => {
+                            // do nothing
+                        })
                     }
                 } catch (e) {
                     toast.error('Opss.. failed to claim your gift card')
@@ -124,7 +134,7 @@ const ModalRewardDetail = () => {
 
     const onClickDelete = useCallback(() => {
         if (modalDetail.data) {
-            handleCloseModal()
+            // handleCloseModal()
             Swal.fire({
                 title: 'Confirm!',
                 html: `Are you sure want to delete Gift Card <strong>${modalDetail.data?.name}</strong> ?`,
@@ -135,35 +145,14 @@ const ModalRewardDetail = () => {
                 confirmButtonText: 'Yes',
             }).then(async result => {
                 if (result.isConfirmed) {
-                    setIsLoading(true)
-                    try {
-                        const response = await RewardApi.admin_delete({
-                            id: modalDetail.data._id,
-                        })
-                        setIsLoading(false)
-                        if (response) {
-                            Swal.fire({
-                                title: 'Success',
-                                text: 'Gift Card deleted successfully!',
-                                icon: 'success',
-                                showCancelButton: false,
-                                confirmButtonColor: '#009c4e',
-                                confirmButtonText: 'Ok',
-                            }).then(result => {
-                                if (result.isConfirmed) {
-                                    handleCloseModal()
-                                    dispatch(reward_adminGetList())
-                                }
-                            })
-                        }
-                    } catch (e) {
-                        setIsLoading(false)
-                    }
+                    setHasConfirmDelete(true)
+                    dispatch(admin_setOpenModalVerifyAction(true))
+                } else {
+                    setHasConfirmDelete(false)
                 }
             })
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [modalDetail.data, modalForm])
+    }, [modalDetail.data, modalForm, openModalVerifyAction, isVerified])
 
     const onClickEdit = useCallback(() => {
         if (modalDetail.data) {
@@ -172,9 +161,44 @@ const ModalRewardDetail = () => {
                 reward_setModalForm({ open: true, data: modalDetail.data })
             )
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [modalDetail.data, modalForm])
 
+    const handleDelete = async () => {
+        setIsLoading(true)
+        setHasConfirmDelete(false)
+        try {
+            const response = await RewardApi.admin_delete({
+                id: modalDetail.data._id,
+            })
+            setIsLoading(false)
+            if (response) {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Gift Card deleted successfully!',
+                    icon: 'success',
+                    showCancelButton: false,
+                    confirmButtonColor: '#009c4e',
+                    confirmButtonText: 'Ok',
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        handleCloseModal()
+                        dispatch(admin_setOpenModalVerifyAction(false))
+                        dispatch(reward_adminGetList())
+                    }
+                })
+            }
+        } catch (e) {
+            setIsLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        if (hasConfirmDelete && isVerified && modalDetail.data) {
+            handleDelete()
+        }
+    }, [modalDetail.data, hasConfirmDelete, isVerified])
+
+    // reset
     useEffect(() => {
         if (!modalDetail.open) {
             setIsLoading(false)
@@ -182,6 +206,7 @@ const ModalRewardDetail = () => {
             setRedeemedItem(null)
             setShowPin(false)
             setCelebrate(false)
+            setHasConfirmDelete(false)
         }
     }, [modalDetail.open])
 
