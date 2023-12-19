@@ -186,6 +186,7 @@ const Quiz = () => {
           category: category,
           sub_category: subcategory,
           points: points.current,
+          score: score.current,
         },
         withCredentials: true,
         url: "/server/savescore",

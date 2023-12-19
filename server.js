@@ -2035,10 +2035,38 @@ app.post("/server/savescore", AuthGuard, (req, res) => {
                 [dayOfWeek]: today,
             };
 
+            const getGemsAwarded = () => {
+                let newDiamondAwarded = 0;
+                // sample req.body.score = [1, 0, 1, 0, 1]
+                if(req.body?.score?.length > 0) {
+                    const correctAnswers = req.body.score.filter(s => s > 0)
+                    // all correct
+                    if (req.body.score.length === correctAnswers.length) {
+                        newDiamondAwarded = 3
+                    } 
+                    // upto 2 wrong answers
+                    else if (correctAnswers.length + 2 >= req.body.score.length) {
+                        newDiamondAwarded = 2
+                    }
+                    // upto 3 wrong answers
+                    else if (correctAnswers.length + 3 >= req.body.score.length) {
+                        newDiamondAwarded = 1
+                    } 
+                    else {
+                        newDiamondAwarded = 0;
+                    }
+                } else {
+                    // return current diamond
+                    return doc.diamond
+                }
+                return doc.diamond + newDiamondAwarded
+            }
+
             await User.updateOne(
                 { email: req.user.email },
                 {
                     $set: {
+                        diamond: getGemsAwarded(),
                         score: allScoresList,
                         last_played: {
                             skill: req.body.skill,
