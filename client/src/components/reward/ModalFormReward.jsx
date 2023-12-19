@@ -99,7 +99,6 @@ const ModalFormReward = () => {
     })
 
     const onValidSubmit = async values => {
-        console.log('values', values)
         try {
             const response = await RewardApi.admin_createOrUpdateReward(
                 {
@@ -110,7 +109,7 @@ const ModalFormReward = () => {
                 },
                 isEdit
             )
-            if (response?.data?._id) {
+            if (response?.data) {
                 Swal.fire({
                     title: 'Success',
                     text: 'Reward saved successfully!',
