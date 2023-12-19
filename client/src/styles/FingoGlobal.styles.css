@@ -43,11 +43,11 @@ body {
 }
 
 div:where(.swal2-container) {
-    z-index: 1063 !important
+    z-index: 1063 !important;
 }
 
 div:where(.swal2-container) h2:where(.swal2-title) {
-    font-size: 24px !important;
+    font-size: 22px !important;
     font-weight: 700 !important;
     color: #444 !important;
 }
@@ -55,6 +55,7 @@ div:where(.swal2-container) h2:where(.swal2-title) {
 div:where(.swal2-container) .swal2-html-container {
     font-size: 0.9rem !important;
     font-weight: 500 !important;
+    margin-top: 0.3rem !important;
 }
 
 div:where(.swal2-container) div:where(.swal2-popup) {
@@ -65,11 +66,11 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     color: #545454 !important;
     font-family: inherit !important;
     font-size: 0.9rem !important;
-    grid-template-columns: minmax(0,100%) !important;
+    grid-template-columns: minmax(0, 100%) !important;
     max-width: 95% !important;
     padding: 0 0 1.25em !important;
     position: relative !important;
-    width: 28em !important;
+    width: 25em !important;
 }
 
 [data-theme='dark'] div:where(.swal2-container) div:where(.swal2-popup) {
@@ -82,15 +83,25 @@ div:where(.swal2-container) div:where(.swal2-popup) {
 }
 
 div:where(.swal2-container) button:where(.swal2-styled) {
-    border-radius: 7px!important;
+    border-radius: 7px !important;
     font-size: 13px !important;
     font-weight: 700 !important;
     margin-top: 4px !important;
+    padding: 5px 10px !important;
     min-width: 100px !important;
-    transition: all .2s ease 0s !important;
+    transition: all 0.2s ease 0s !important;
 }
 
-div:where(.swal2-container).swal2-backdrop-show, div:where(.swal2-container).swal2-noanimation {
+div:where(.swal2-container) div:where(.swal2-actions) {
+    margin: 0.65rem auto 0 !important;
+}
+
+div:where(.swal2-container) button:where(.swal2-styled):hover {
+    transform: translateY(2px) !important;
+}
+
+div:where(.swal2-container).swal2-backdrop-show,
+div:where(.swal2-container).swal2-noanimation {
     background: rgb(0 0 0 / 60%) !important;
 }
 
@@ -135,12 +146,11 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
     background-color: transparent;
 }
 
-
 .progress {
     border-radius: 3rem !important;
 }
 
 .alert {
     padding: 0.4rem 1rem !important;
-    font-weight: 500 !important
+    font-weight: 500 !important;
 }
