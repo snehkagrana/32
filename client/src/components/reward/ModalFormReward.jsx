@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Form, Row, Col, Button } from 'react-bootstrap'
@@ -18,7 +19,9 @@ import Swal from 'sweetalert2'
 import LoadingBox from '../LoadingBox'
 import { ReactComponent as UploadIcon } from 'src/assets/svg/cloud-upload-sharp.svg'
 import { ReactComponent as TrashcanIcon } from 'src/assets/svg/trash-bin-trash-linear.svg'
+import { ReactComponent as RedeemIcon } from 'src/assets/svg/redeem.svg'
 import Assets from 'src/assets'
+import toast from 'react-hot-toast'
 
 const schema = Yup.object().shape({
     name: Yup.string().required('Field required'),
@@ -100,31 +103,32 @@ const ModalFormReward = () => {
 
     const onValidSubmit = async values => {
         try {
-            const response = await RewardApi.admin_createOrUpdateReward(
-                {
-                    ...values,
-                    _id: isEdit ? modalForm.data?._id : null,
-                    currencyCode: values?.currencyCode?.value || null,
-                    imageURL: imageFile || null,
-                },
-                isEdit
-            )
-            if (response?.data) {
-                Swal.fire({
-                    title: 'Success',
-                    text: 'Reward saved successfully!',
-                    icon: 'success',
-                    showCancelButton: false,
-                    confirmButtonColor: '#009c4e',
-                    confirmButtonText: 'Ok',
-                }).then(result => {
-                    if (result.isConfirmed) {
-                        onConfirmClose()
-                        dispatch(reward_adminGetList())
-                        reset(initialValues)
-                    }
-                })
-            }
+            console.log('onValidSubmit => values =>', values)
+            // const response = await RewardApi.admin_createOrUpdateReward(
+            //     {
+            //         ...values,
+            //         _id: isEdit ? modalForm.data?._id : null,
+            //         currencyCode: values?.currencyCode?.value || null,
+            //         imageURL: imageFile || null,
+            //     },
+            //     isEdit
+            // )
+            // if (response?.data) {
+            //     Swal.fire({
+            //         title: 'Success',
+            //         text: 'Reward saved successfully!',
+            //         icon: 'success',
+            //         showCancelButton: false,
+            //         confirmButtonColor: '#009c4e',
+            //         confirmButtonText: 'Ok',
+            //     }).then(result => {
+            //         if (result.isConfirmed) {
+            //             onConfirmClose()
+            //             dispatch(reward_adminGetList())
+            //             reset(initialValues)
+            //         }
+            //     })
+            // }
         } catch (e) {
             console.log('e', e)
         }
@@ -258,6 +262,13 @@ const ModalFormReward = () => {
             setDefaultImageFile(null)
         }
     }, [modalForm.data])
+
+    // console.log("getValues('variants')", getValues('variants'))
+
+    const onClickRedeemedByUser = e => {
+        e.preventDefault()
+        toast.error('Detail user info not available.')
+    }
 
     return (
         <FingoModal
@@ -562,144 +573,177 @@ const ModalFormReward = () => {
                         <div className='FormRewardVariantContainer'>
                             {fields.length > 0 ? (
                                 fields.map((variant, index) => (
-                                    <Row key={String(index)}>
-                                        <Col xs={12} className='px-2'>
-                                            <div className='FormRewardVariantHeader relative'>
-                                                <h6 className='subtitle'>
-                                                    Item {index + 1}
-                                                </h6>
-                                                {fields.length > 1 && (
-                                                    <Button
-                                                        variant='danger'
-                                                        className='TrashBtn'
-                                                        onClick={() =>
-                                                            remove(index)
-                                                        }
-                                                    >
-                                                        <TrashcanIcon />
-                                                    </Button>
-                                                )}
-                                            </div>
-                                        </Col>
-                                        <Col xs={6} className='px-2'>
-                                            <Controller
-                                                name={`variants.${index}.claimCode`}
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <Form.Group
-                                                        className='mb-3'
-                                                        controlId='formGroupclaimCode'
-                                                    >
-                                                        <Form.Label>
-                                                            Claim Code
-                                                        </Form.Label>
-                                                        <FingoInput
-                                                            {...field}
-                                                            value={
-                                                                isEdit
-                                                                    ? getValues(
-                                                                          `variants.${index}.claimCode`
-                                                                      )
-                                                                    : field.value
-                                                            }
-                                                            isInvalid={Boolean(
-                                                                errors
-                                                                    ?.variants?.[
-                                                                    index
-                                                                ]?.claimCode
-                                                                    ?.message
-                                                            )}
-                                                            placeholder='Claim Code'
-                                                        />
-                                                        {errors?.variants?.[
-                                                            index
-                                                        ]?.claimCode
-                                                            ?.message && (
-                                                            <Form.Control.Feedback type='invalid'>
-                                                                {errors
-                                                                    ?.variants?.[
-                                                                    index
-                                                                ]?.claimCode
-                                                                    ?.message ??
-                                                                    ''}
-                                                            </Form.Control.Feedback>
+                                    <div
+                                        className={`FormRewardVariantContent mb-3 ${
+                                            !variant.isAvailable
+                                                ? 'VariantDisabled'
+                                                : ''
+                                        }`}
+                                        key={String(index)}
+                                    >
+                                        <Row>
+                                            <Col xs={12} className='px-2'>
+                                                <div className='FormRewardVariantHeader relative'>
+                                                    {variant.isAvailable ? (
+                                                        <h6 className='subtitle'>
+                                                            Item {index + 1}
+                                                        </h6>
+                                                    ) : (
+                                                        <div className='RedeemedBy flex align-items-center mb-3'>
+                                                            <RedeemIcon />
+                                                            <p className='mb-0 ml-2'>
+                                                                Redeemed By{' '}
+                                                                {variant?.redeemedBy && (
+                                                                    <a
+                                                                        href='#'
+                                                                        onClick={e =>
+                                                                            onClickRedeemedByUser(
+                                                                                e,
+                                                                                variant
+                                                                                    .redeemedBy
+                                                                                    ._id
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <strong>
+                                                                            {
+                                                                                variant
+                                                                                    ?.redeemedBy
+                                                                                    .displayName
+                                                                            }
+                                                                        </strong>
+                                                                    </a>
+                                                                )}
+                                                            </p>
+                                                        </div>
+                                                    )}
+                                                    {fields.length > 1 &&
+                                                        variant.isAvailable && (
+                                                            <Button
+                                                                disabled={
+                                                                    !variant.isAvailable
+                                                                }
+                                                                variant='danger'
+                                                                className='TrashBtn'
+                                                                onClick={() =>
+                                                                    remove(
+                                                                        index
+                                                                    )
+                                                                }
+                                                            >
+                                                                <TrashcanIcon />
+                                                            </Button>
                                                         )}
-                                                    </Form.Group>
-                                                )}
-                                            />
-                                        </Col>
-                                        <Col xs={6} className='px-2'>
-                                            <Controller
-                                                name={`variants.${index}.pin`}
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <Form.Group
-                                                        className='mb-3'
-                                                        controlId='formGrouppin'
-                                                    >
-                                                        <Form.Label>
-                                                            PIN
-                                                        </Form.Label>
-                                                        <FingoInput
-                                                            {...field}
-                                                            value={
-                                                                isEdit
-                                                                    ? getValues(
-                                                                          `variants.${index}.pin`
-                                                                      )
-                                                                    : field.value
-                                                            }
-                                                            isInvalid={Boolean(
-                                                                errors
-                                                                    ?.variants?.[
-                                                                    index
-                                                                ]?.pin?.message
-                                                            )}
-                                                            placeholder='PIN'
-                                                        />
-                                                        {errors?.variants?.[
-                                                            index
-                                                        ]?.pin?.message && (
-                                                            <Form.Control.Feedback type='invalid'>
-                                                                {errors
-                                                                    ?.variants?.[
-                                                                    index
-                                                                ]?.pin
-                                                                    ?.message ??
-                                                                    ''}
-                                                            </Form.Control.Feedback>
-                                                        )}
-                                                    </Form.Group>
-                                                )}
-                                            />
-                                        </Col>
-                                        <Col xs={12} className='px-2'>
-                                            {index !== fields.length - 1 && (
-                                                <hr />
-                                            )}
-                                        </Col>
-                                        {index === fields.length - 1 && (
-                                            <Col
-                                                xs={12}
-                                                className='px-2 text-center mb-2'
-                                            >
-                                                <FingoButton
-                                                    style={{ width: 120 }}
-                                                    size='sm'
-                                                    onClick={() =>
-                                                        onClickAddVariant(
-                                                            fields.length
-                                                        )
-                                                    }
-                                                >
-                                                    Add Item
-                                                </FingoButton>
+                                                </div>
                                             </Col>
-                                        )}
-                                    </Row>
+                                            <Col xs={7} className='px-2'>
+                                                <Controller
+                                                    name={`variants.${index}.claimCode`}
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <Form.Group
+                                                            className='mb-1'
+                                                            controlId='formGroupclaimCode'
+                                                        >
+                                                            <Form.Label>
+                                                                Claim Code
+                                                            </Form.Label>
+                                                            <FingoInput
+                                                                {...field}
+                                                                disabled={
+                                                                    !variant.isAvailable
+                                                                }
+                                                                value={
+                                                                    isEdit
+                                                                        ? getValues(
+                                                                              `variants.${index}.claimCode`
+                                                                          )
+                                                                        : field.value
+                                                                }
+                                                                isInvalid={Boolean(
+                                                                    errors
+                                                                        ?.variants?.[
+                                                                        index
+                                                                    ]?.claimCode
+                                                                        ?.message
+                                                                )}
+                                                                placeholder='Claim Code'
+                                                            />
+                                                            {errors?.variants?.[
+                                                                index
+                                                            ]?.claimCode
+                                                                ?.message && (
+                                                                <Form.Control.Feedback type='invalid'>
+                                                                    {errors
+                                                                        ?.variants?.[
+                                                                        index
+                                                                    ]?.claimCode
+                                                                        ?.message ??
+                                                                        ''}
+                                                                </Form.Control.Feedback>
+                                                            )}
+                                                        </Form.Group>
+                                                    )}
+                                                />
+                                            </Col>
+                                            <Col xs={5} className='px-2'>
+                                                <Controller
+                                                    name={`variants.${index}.pin`}
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <Form.Group
+                                                            className='mb-1'
+                                                            controlId='formGrouppin'
+                                                        >
+                                                            <Form.Label>
+                                                                PIN
+                                                            </Form.Label>
+                                                            <FingoInput
+                                                                {...field}
+                                                                disabled={
+                                                                    !variant.isAvailable
+                                                                }
+                                                                value={
+                                                                    isEdit
+                                                                        ? getValues(
+                                                                              `variants.${index}.pin`
+                                                                          )
+                                                                        : field.value
+                                                                }
+                                                                isInvalid={Boolean(
+                                                                    errors
+                                                                        ?.variants?.[
+                                                                        index
+                                                                    ]?.pin
+                                                                        ?.message
+                                                                )}
+                                                                placeholder='PIN'
+                                                            />
+                                                            {errors?.variants?.[
+                                                                index
+                                                            ]?.pin?.message && (
+                                                                <Form.Control.Feedback type='invalid'>
+                                                                    {errors
+                                                                        ?.variants?.[
+                                                                        index
+                                                                    ]?.pin
+                                                                        ?.message ??
+                                                                        ''}
+                                                                </Form.Control.Feedback>
+                                                            )}
+                                                        </Form.Group>
+                                                    )}
+                                                />
+                                            </Col>
+                                            {/* <Col xs={12} className='px-2'>
+                                                {index !==
+                                                    fields.length - 1 && <hr />}
+                                            </Col> */}
+                                        </Row>
+                                    </div>
                                 ))
                             ) : (
-                                <div>
+                                <div className='text-center'>
                                     <p>Variant empty</p>
                                     <FingoButton
                                         onClick={() => onClickAddVariant(0)}
@@ -708,6 +752,19 @@ const ModalFormReward = () => {
                                     </FingoButton>
                                 </div>
                             )}
+                            <Row>
+                                <Col xs={12} className='px-2 text-center mb-4'>
+                                    <FingoButton
+                                        style={{ width: 120 }}
+                                        size='sm'
+                                        onClick={() =>
+                                            onClickAddVariant(fields.length)
+                                        }
+                                    >
+                                        Add Item
+                                    </FingoButton>
+                                </Col>
+                            </Row>
                         </div>
                     </Col>
                     <Col xs={12} className='mt-4'>

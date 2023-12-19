@@ -170,11 +170,11 @@
 }
 
 .FormRewardVariantContainer {
-    border-radius: 12px;
+    /* border-radius: 12px;
     background-color: #eef4ff;
-    padding: 1rem 2rem;
+    padding: 1rem 2rem; */
     margin-top: 0.8rem;
-    border: 2px solid rgb(109 109 109 / 10%);
+    /* border: 2px solid rgb(109 109 109 / 10%); */
 }
 
 .FormRewardVariantContainer hr {
@@ -196,6 +196,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: transparent;
+    color: #dc3545;
+}
+
+.FormRewardVariantHeader .TrashBtn:hover {
+    background-color: #dc3545;
+    color: #ffff;
 }
 
 [data-theme='dark'] .FormRewardVariantContainer {
@@ -249,4 +256,48 @@
     margin-left: 0.5rem;
     font-size: 0.9rem;
     font-weight: bold;
+}
+
+.FormRewardVariantContent {
+    border-radius: 12px;
+    background-color: #eef4ff;
+    padding: 1rem 2rem;
+    margin-top: 0.8rem;
+    border-radius: 0.5rem;
+    border: 2px dashed #1379ff;
+}
+
+.FormRewardVariantContent.VariantDisabled {
+    background-color: #faeded;
+    border: 2px dashed #ec3030;
+}
+
+[data-theme='dark'] .FormRewardVariantContent {
+    background-color: #545f72;
+}
+
+[data-theme='dark'] .FormRewardVariantContent.VariantDisabled {
+    background-color: #554242;
+}
+
+.FormRewardVariantContent hr {
+    margin-top: 0.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.FormRewardVariantContent .RedeemedBy {
+    border-radius: 2rem;
+    padding: 0.5rem 1rem;
+    background-color: #f5c8c8;
+    font-size: 0.85rem;
+    color: #d11212;
+}
+
+.FormRewardVariantContent .RedeemedBy a {
+    color: #d11212;
+}
+
+.FormRewardVariantContent .RedeemedBy svg {
+    height: 20px;
+    width: auto;
 }

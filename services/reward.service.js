@@ -1,3 +1,4 @@
+const reward = require('../models/reward')
 const RewardModel = require('../models/reward')
 const UserModel = require('../models/user')
 
@@ -13,7 +14,7 @@ exports.update = async body => {
 }
 
 exports.findAll = async filters => {
-    return RewardModel.find(filters)
+    return await RewardModel.find(filters)
 }
 
 exports.findById = async id => {
@@ -32,11 +33,12 @@ exports.giftReward = async (adminEmail, body) => {
     let result = null
 
     // check is reward code still exist
+    // don't need to check user diamond
     const rewardVariantStillExists = reward.variants.find(
         x => x._id == body.variantId
     )
 
-    if (user && userAdmin && rewardVariantStillExists) {
+    if (user && userAdmin && rewardVariantStillExists?.isAvailable) {
         const getUpdateUserRewards = userRewards => {
             const newUserReward = {
                 ...reward._doc,
@@ -64,10 +66,28 @@ exports.giftReward = async (adminEmail, body) => {
             }
         }
 
+        const getUpdateVariantsValue = _variants => {
+            return _variants.map(x => {
+                if (x._id == body.variantId) {
+                    return {
+                        ...x._doc,
+                        isAvailable: false,
+                        redeemedBy: {
+                            userId: user?._id,
+                            displayName: user.displayName ?? '',
+                            email: user.email,
+                        },
+                    }
+                } else {
+                    return x._doc
+                }
+            })
+        }
+
         // delete given code from reward variants
         reward = await RewardModel.findByIdAndUpdate(body.itemId, {
             $set: {
-                variants: reward.variants.filter(x => x._id != body.variantId),
+                variants: getUpdateVariantsValue(reward.variants),
             },
         }).exec()
 
@@ -124,8 +144,11 @@ exports.redeem = async (email, body) => {
         x => x._id == body.variantId
     )
 
-    // variant reward still exist can be to redeem
-    if (rewardVariantStillExists) {
+    // variant reward still exist & user diamond greater than diamond value can be to redeem
+    if (
+        rewardVariantStillExists?.isAvailable &&
+        user.diamond >= reward.diamondValue
+    ) {
         const getUpdateUserRewards = userRewards => {
             const newUserReward = {
                 ...reward._doc,
@@ -148,9 +171,30 @@ exports.redeem = async (email, body) => {
             }
         }
 
+        const getUpdateVariantsValue = _variants => {
+            return _variants.map(x => {
+                if (x._id == body.variantId) {
+                    return {
+                        ...x._doc,
+                        isAvailable: false,
+                        redeemedBy: {
+                            userId: user?._id,
+                            displayName: user?.displayName
+                                ? user.displayName
+                                : user.username ?? '',
+                            email: user.email,
+                        },
+                    }
+                } else {
+                    return x._doc
+                }
+            })
+        }
+
         reward = await RewardModel.findByIdAndUpdate(body.itemId, {
             $set: {
-                variants: reward.variants.filter(x => x._id != body.variantId),
+                // update variants
+                variants: getUpdateVariantsValue(reward.variants),
             },
         }).exec()
 

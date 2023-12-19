@@ -81,17 +81,16 @@ exports.findAll = async (req, res) => {
         ...item._doc,
 
         // hide pin & claim code
-        variants:
-            item._doc?.variants?.length > 0
-                ? item._doc.variants.map(v => ({
-                      ...v._doc,
-                      pin: null,
-                      claimCode: null,
-                  }))
-                : [],
-        currencyValue: item._doc?.currencyValue
-            ? item._doc.currencyValue.toString()
-            : null,
+        // prettier-ignore
+        variants: item._doc?.variants?.length > 0 ? item._doc.variants.filter(x => x._doc.isAvailable).map(v => {
+            return {
+                ...v._doc,
+                pin: null,
+                claimCode: null,
+            }
+        }) : [],
+        // prettier-ignore
+        currencyValue: item._doc?.currencyValue ? item._doc.currencyValue.toString() : null,
     }))
     return res.json({
         data: filteredRewards,

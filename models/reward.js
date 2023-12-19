@@ -33,6 +33,15 @@ const RewardSchema = new mongoose.Schema({
             },
             pin: String,
             isAvailable: Boolean,
+            redeemedBy: {
+                type: {
+                    userId: mongoose.Schema.Types.ObjectId,
+                    displayName: String,
+                    email: String,
+                },
+                required: false,
+                default: null,
+            },
         },
     ],
 })
