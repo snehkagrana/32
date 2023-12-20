@@ -64,3 +64,37 @@
 .ListRewardSignUp .btn {
     min-width: 180px;
 }
+
+.ListRewardHeaderDiamondEarned {
+    position: relative;
+    display: inline-block;
+    background-color: #e0ffee;
+    border-radius: 20px;
+    padding: 8px 14px;
+    color: #243f2a;
+}
+
+[data-theme='dark'] .ListRewardHeaderDiamondEarned {
+    background-color: #325843;
+    color: #fbfbfb;
+}
+
+.ListRewardHeaderDiamondEarned p {
+    line-height: 1;
+    font-weight: 700;
+    margin-bottom: 0;
+    font-size: 16px !important;
+}
+
+.ListRewardHeaderDiamondEarned svg {
+    width: 18;
+    height: auto;
+}
+
+@media (min-width: 576px) {
+    .ListRewardHeaderDiamondEarned {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+}

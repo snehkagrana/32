@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react'
 import { Form, Row, Col } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
-import { useAuth, useReward } from 'src/hooks'
+import { useAuth, useMediaQuery, useReward } from 'src/hooks'
 import { FingoButton, FingoModal } from 'src/components/core'
 import LoadingBox from 'src/components/LoadingBox'
 import RewardCardItem from './RewardCardItem'
 import 'src/styles/ModalListReward.styles.css'
+import { ReactComponent as DiamondSvg } from 'src/assets/svg/diamond.svg'
 
 const ModalListReward = () => {
     const dispatch = useDispatch()
-    const { isAuthenticated, auth_setOpenModalRegister } = useAuth()
+    const { isAuthenticated, auth_setOpenModalRegister, user } = useAuth()
     const {
         openModalListReward,
         reward_setOpenModalListReward,
@@ -17,6 +18,8 @@ const ModalListReward = () => {
         listRewardData: data,
         reward_getList,
     } = useReward()
+
+    const matchMobile = useMediaQuery('(max-width: 576px)')
 
     const handleCloseModal = () => {
         dispatch(reward_setOpenModalListReward(false))
@@ -42,9 +45,16 @@ const ModalListReward = () => {
             className='ModalListReward'
         >
             <div className='relative ListRewardContainer FingoShapeRadius'>
-                <div className='ListRewardHeader'>
+                <div className='ListRewardHeader relative'>
                     <h2 className='mb-1'>Redeem your gems</h2>
-                    <p>Select the products you would like to redeem</p>
+                    <p>Select the gift card you would like to redeem</p>
+                    {isAuthenticated && (
+                        <div className='ListRewardHeaderDiamondEarned'>
+                            <p>
+                                You have <DiamondSvg /> {user.diamond || 0}
+                            </p>
+                        </div>
+                    )}
                 </div>
                 <hr />
                 <div
