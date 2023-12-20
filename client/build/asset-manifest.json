@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.15911c92.css",
-    "main.js": "/static/js/main.ab73d7f1.js",
+    "main.js": "/static/js/main.18c2988b.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
     "static/media/8.png": "/static/media/8.9daef5f1f68e0fc2fb5f.png",
@@ -16,6 +16,7 @@
     "static/media/celebrate-badge.png": "/static/media/celebrate-badge.5a20feb5eaba2a2976ad.png",
     "static/media/64926-emoticon-domain-network-sticker-graphics-emoji-portable.png": "/static/media/64926-emoticon-domain-network-sticker-graphics-emoji-portable.a781d79f3a0b8120acdd.png",
     "static/media/fingo-landing-page-section-2.png": "/static/media/fingo-landing-page-section-2.dc5b0293218f63747cc2.png",
+    "static/media/announcement-sound.mp3": "/static/media/announcement-sound.c200e530c68e3e64a443.mp3",
     "static/media/65025-emoticon-like-signal-emoji-button-thumb.png": "/static/media/65025-emoticon-like-signal-emoji-button-thumb.1e0ed28749aec5bf73b3.png",
     "static/media/102587-funny-picture-emoji-boy-free-download-png-hq.png": "/static/media/102587-funny-picture-emoji-boy-free-download-png-hq.99b9a5203d392b524466.png",
     "static/media/fingo-landing-page-5-5.png": "/static/media/fingo-landing-page-5-5.cafa699fff7cf808ffc3.png",
@@ -96,11 +97,11 @@
     "static/media/baseline-content-copy.svg": "/static/media/baseline-content-copy.58ba17b96079dd681d38d228fdc7ef61.svg",
     "static/media/info.svg": "/static/media/info.ef876f7b40a92ef036458f95b7e325e2.svg",
     "main.15911c92.css.map": "/static/css/main.15911c92.css.map",
-    "main.ab73d7f1.js.map": "/static/js/main.ab73d7f1.js.map",
+    "main.18c2988b.js.map": "/static/js/main.18c2988b.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.15911c92.css",
-    "static/js/main.ab73d7f1.js"
+    "static/js/main.18c2988b.js"
   ]
 }
