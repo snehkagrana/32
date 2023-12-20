@@ -77,12 +77,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 2px solid transparent;
 }
 
 @media (min-width: 360px) {
     .FingoFooter li a {
         height: 50px;
-        width: 76px;
+        width: 60px;
     }
 }
 
@@ -96,12 +97,18 @@
     background-color: #ddf4ff;
     border: 2px solid #8bdaff;
     color: #00a7ff;
+    border-radius: 30px;
+}
+
+[data-theme='dark'] .FingoFooter li a:hover,
+[data-theme='dark'] .FingoFooter li a.active {
+    background-color: #222531;
 }
 
 #FingoFooterRoot .popover {
     max-width: 100%;
     width: 100%;
-    transform: translate3d(0px, -40px, 0px) !important;
+    transform: translate3d(0px, -47px, 0px) !important;
     background-color: transparent;
     border: none;
     box-shadow: none;
@@ -116,4 +123,45 @@
     width: 16px;
     border-radius: 16px;
     background-color: red;
+}
+
+.FooterProfileBtn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.FooterProfileBtn:hover,
+.FooterProfileBtn.active {
+    background-color: #ddf4ff;
+    border: 3px solid #8bdaff;
+    color: #00a7ff;
+    border-radius: 30px;
+}
+
+.FooterProfileWrapper {
+    height: 40px;
+    width: 40px;
+    border-radius: 40px;
+    overflow: hidden;
+}
+
+.FooterProfileWrapper img {
+    width: 100%;
+    height: auto;
+}
+
+.FooterProfileBtn .FooterUserLevel {
+    background-color: rgb(40, 167, 69);
+    border-radius: 1rem;
+    color: #ffffff;
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    font-weight: bold;
+    font-size: 0.65rem;
+    line-height: 1;
+    position: absolute;
+    bottom: -8px;
+    white-space: nowrap;
 }

@@ -2,21 +2,22 @@
 import { useNavigate } from 'react-router-dom'
 import 'src/styles/FingoFooter.styles.css'
 
-import MenuIcon from 'src/assets/images/10110130.png'
+import SidebarBtn from 'src/assets/images/sidebar-trigger-btn.png'
 import IcHome from 'src/assets/images/ic_home.png'
 import IcTreasure from 'src/assets/images/ic_treasure.png'
 import IcUser from 'src/assets/images/ic_user.png'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useApp, useAuth, useMediaQuery } from 'src/hooks'
 import { Overlay, Popover } from 'react-bootstrap'
 import FingoCardDailyXP from './FingoCardDailyXP'
 import FingoUserInfo from './FingoUserInfo'
-import { useDispatch } from 'react-redux'
-import FingoSidebar from './FingoSidebar'
+import signedUp from 'src/images/pepe.jpg'
+import { getLevelColor } from 'src/utils'
+import FingoMobileMenu from './FingoMobileMenu'
 
 const FOOTER_ITEMS = [
     {
-        icon: MenuIcon,
+        icon: SidebarBtn,
         name: 'menu',
     },
     {
@@ -35,9 +36,8 @@ const FOOTER_ITEMS = [
 
 const FingoFooter = () => {
     const navigate = useNavigate()
-    const dispatch = useDispatch()
-    const { user } = useAuth()
-    const { openSidebar, app_setOpenSidebar } = useApp()
+    const { user, isAuthenticated } = useAuth()
+    const { openSidebar } = useApp()
     const matchMobile = useMediaQuery('(max-width: 570px)')
     const [show, setShow] = useState(false)
     const [target, setTarget] = useState(null)
@@ -50,10 +50,6 @@ const FingoFooter = () => {
             navigate('/home')
             setShow(false)
             setTarget(null)
-        } else if (name === 'menu') {
-            setShow(false)
-            setTarget(null)
-            dispatch(app_setOpenSidebar(!openSidebar))
         } else {
             setShow(name === activeTab ? false : true)
             setTarget(e.target)
@@ -71,23 +67,66 @@ const FingoFooter = () => {
         [user]
     )
 
+    const getAvatarUrl = useMemo(() => {
+        return user?.imgPath ? user.imgPath : signedUp
+    }, [user])
+
     return (
         <div id='FingoFooterRoot' ref={ref}>
             <div className='FingoFooter'>
                 <div className='FingoFooterInner'>
                     <ul>
-                        {FOOTER_ITEMS.map((i, index) => (
-                            <li key={String(index)}>
-                                <a
-                                    href='#'
-                                    className={`FingoShapeRadius relative`}
-                                    onClick={e => onClickMenu(e, i.name)}
-                                >
-                                    {renderBadge(i.name)}
-                                    <img src={i.icon} alt='footer icon' />
-                                </a>
-                            </li>
-                        ))}
+                        {FOOTER_ITEMS.map((i, index) => {
+                            if (i.name === 'profile' && isAuthenticated) {
+                                return (
+                                    <li key={String(index)}>
+                                        <div
+                                            className='FooterProfileBtn'
+                                            onClick={e =>
+                                                onClickMenu(e, i.name)
+                                            }
+                                        >
+                                            <div className='FooterProfileWrapper'>
+                                                <img
+                                                    src={getAvatarUrl}
+                                                    alt='Avatar img'
+                                                />
+                                            </div>
+                                            <div
+                                                className='FooterUserLevel'
+                                                style={{
+                                                    backgroundColor:
+                                                        getLevelColor(
+                                                            'default',
+                                                            user?.xp?.level
+                                                        ),
+                                                }}
+                                            >
+                                                Lvl {user?.xp?.level ?? 1}
+                                            </div>
+                                        </div>
+                                    </li>
+                                )
+                            } else {
+                                return (
+                                    <li key={String(index)}>
+                                        <a
+                                            href='#'
+                                            className={`FingoShapeRadius relative`}
+                                            onClick={e =>
+                                                onClickMenu(e, i.name)
+                                            }
+                                        >
+                                            {renderBadge(i.name)}
+                                            <img
+                                                src={i.icon}
+                                                alt='footer icon'
+                                            />
+                                        </a>
+                                    </li>
+                                )
+                            }
+                        })}
                     </ul>
                 </div>
             </div>
@@ -101,14 +140,13 @@ const FingoFooter = () => {
                     containerPadding={0}
                     className='FingoPopover'
                 >
-                    <Popover id='popover-contained'>
+                    <Popover>
+                        {activeTab === 'menu' && <FingoMobileMenu />}
                         {activeTab === 'daily-quest' && <FingoCardDailyXP />}
                         {activeTab === 'profile' && <FingoUserInfo />}
                     </Popover>
                 </Overlay>
             )}
-
-            {matchMobile && <FingoSidebar open={openSidebar} />}
         </div>
     )
 }
