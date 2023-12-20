@@ -17,6 +17,8 @@ import 'src/styles/FingoLessonComplete.styles.css'
 import { FingoButton } from 'src/components/core'
 import StartFilled from 'src/assets/images/star-filled.png'
 import StartFilledFade from 'src/assets/images/star-filled-fade.png'
+import { ReactComponent as DiamondSvg } from 'src/assets/svg/diamond.svg'
+import 'src/styles/ScorePage.styles.css'
 
 const ScorePage = () => {
     const dispatch = useDispatch()
@@ -35,6 +37,7 @@ const ScorePage = () => {
     console.log('data', data)
 
     const [xp, setXP] = useState(0)
+    const [diamondEarned, setDiamondEarned] = useState(0)
     const [celebrate, setCelebrate] = useState(false)
 
     const [searchParams, setSearchParams] = useSearchParams()
@@ -119,10 +122,35 @@ const ScorePage = () => {
         })
     }
 
+    const calculateDiamondEarned = paramsScore => {
+        if (paramsScore && paramsScore.length > 0) {
+            let diamondEarned = 0
+            // sample paramsScore = [1, 0, 1, 0, 1]
+            const correctAnswers = paramsScore.filter(s => s > 0)
+
+            // all correct
+            if (paramsScore.length === correctAnswers.length) {
+                diamondEarned = 3
+            }
+            // upto 2 wrong answers
+            else if (correctAnswers.length + 2 >= paramsScore.length) {
+                diamondEarned = 2
+            }
+            // upto 3 wrong answers
+            else if (correctAnswers.length + 3 >= paramsScore.length) {
+                diamondEarned = 1
+            } else {
+                diamondEarned = 0
+            }
+            setDiamondEarned(diamondEarned)
+        }
+    }
+
     const getUserInfo = async () => {
         auth_syncAndGetUser().then(result => {
             if (result?._id) {
                 setXP(result?.xp?.current)
+                // setDiamondEarned()
                 role.current = result?.role
                 // Put logic to show modal level up here
                 if (
@@ -175,6 +203,7 @@ const ScorePage = () => {
             }
         } else {
             getUserInfo()
+            calculateDiamondEarned(data.score.current)
             if (!newUser && Boolean(user)) {
                 setCelebrate(true)
                 getSkillBySkillName()
@@ -268,6 +297,9 @@ const ScorePage = () => {
                                 <div className='FingoLessonCompleteContent'>
                                     <h2>You earned</h2>
                                     <h6>🍌{xp}</h6>
+                                    <h6 className='ScorePageDiamondText'>
+                                        <DiamondSvg /> {diamondEarned}
+                                    </h6>
                                     <div className='relative flex flex-column mt-4'>
                                         {subCategoryIndex.current + 1 <
                                             totalSubCategories.current && (
