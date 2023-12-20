@@ -24,6 +24,9 @@ const FingoCardTotalXP = () => {
 
     const getLevelImage = level => {
         if (level) {
+            if (level > 10) {
+                return Assets.ImageLevel10
+            }
             switch (level) {
                 case 1:
                     return Assets.ImageLevel1
@@ -123,10 +126,10 @@ const FingoCardTotalXP = () => {
                         )}
                     </div>
                     <div className='FingoCardTotalXPContent'>
-                        <div class='progress'>
+                        <div className='progress'>
                             {!newUser && Boolean(user) ? (
                                 <div
-                                    class='progress-bar'
+                                    className='progress-bar'
                                     role='progressbar'
                                     aria-valuenow={getTotalXP || 0}
                                     aria-valuemin='0'
@@ -145,7 +148,7 @@ const FingoCardTotalXP = () => {
                                 />
                             ) : (
                                 <div
-                                    class='progress-bar'
+                                    className='progress-bar'
                                     role='progressbar'
                                     aria-valuenow={getTotalXP || 0}
                                     aria-valuemin='0'

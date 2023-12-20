@@ -1,0 +1,100 @@
+@media (min-width: 576px) {
+    .ModalListReward .modal-dialog {
+        max-width: 768px;
+    }
+}
+
+.ListRewardContainer {
+    background-color: #ffffff;
+    width: 100%;
+    padding: 1.2rem 2rem;
+}
+
+@media (min-width: 576px) {
+    .ListRewardContainer {
+        padding: 2rem 3rem;
+    }
+}
+
+@media (min-width: 576px) {
+    .ModalListReward .ListReward {
+    }
+}
+
+.ListRewardHeader h2 {
+    font-weight: 700;
+    font-size: 21px;
+}
+
+.ListRewardHeader p {
+    font-size: 0.9rem;
+}
+
+[data-theme='dark'] .ModalListReward .ListRewardContainer {
+    background-color: #383838;
+}
+
+.ListReward.ListForGuest {
+    height: 320px;
+    overflow: hidden;
+}
+
+.ListRewardSignUp {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: rgb(255 255 255 / 83%);
+    backdrop-filter: blur(2px);
+}
+
+.ListRewardSignUp h2 {
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.ListRewardSignUp .btn {
+    min-width: 180px;
+}
+
+.ListRewardHeaderDiamondEarned {
+    position: relative;
+    display: inline-block;
+    background-color: #e0ffee;
+    border-radius: 20px;
+    padding: 8px 14px;
+    color: #243f2a;
+}
+
+[data-theme='dark'] .ListRewardHeaderDiamondEarned {
+    background-color: #325843;
+    color: #fbfbfb;
+}
+
+.ListRewardHeaderDiamondEarned p {
+    line-height: 1;
+    font-weight: 700;
+    margin-bottom: 0;
+    font-size: 16px !important;
+}
+
+.ListRewardHeaderDiamondEarned svg {
+    width: 18;
+    height: auto;
+}
+
+@media (min-width: 576px) {
+    .ListRewardHeaderDiamondEarned {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+}

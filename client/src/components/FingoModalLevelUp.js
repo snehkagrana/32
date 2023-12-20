@@ -69,6 +69,9 @@ const FingoModalLevelUp = ({ isFormScorePage }) => {
 
     const getLevelImage = level => {
         if (level) {
+            if (level > 10) {
+                return Assets.ImageLevel10
+            } 
             switch (level) {
                 case 1:
                     return Assets.ImageLevel1

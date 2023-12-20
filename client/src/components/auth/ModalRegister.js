@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import Axios from 'axios'
+import Axios from 'src/api/axios'
 import { useNavigate } from 'react-router-dom'
-import { Form, Button, Modal } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap'
 import CustomGoogleSignInButton from '../CustomGoogleSignInButton'
 import '../../styles/auth.styles.css'
 import { batch, useDispatch } from 'react-redux'
 import { useAuth } from 'src/hooks'
+import { FingoModal } from 'src/components/core'
 
 export default function ModalRegister() {
     const dispatch = useDispatch()
@@ -208,26 +209,13 @@ export default function ModalRegister() {
     }
 
     return (
-        <Modal
+        <FingoModal
             className='auth_modal'
-            show={auth_openModalRegister}
-            onHide={handleCloseModal}
+            open={auth_openModalRegister}
+            onClose={handleCloseModal}
             aria-labelledby='contained-modal-title-vcenter'
             centered
         >
-            <button className='auth_modal_close' onClick={handleCloseModal}>
-                <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    width='1024'
-                    height='1024'
-                    viewBox='0 0 1024 1024'
-                >
-                    <path
-                        fill='currentColor'
-                        d='M195.2 195.2a64 64 0 0 1 90.496 0L512 421.504L738.304 195.2a64 64 0 0 1 90.496 90.496L602.496 512L828.8 738.304a64 64 0 0 1-90.496 90.496L512 602.496L285.696 828.8a64 64 0 0 1-90.496-90.496L421.504 512L195.2 285.696a64 64 0 0 1 0-90.496z'
-                    />
-                </svg>
-            </button>
             <Form
                 className='FingoShapeRadius'
                 style={{
@@ -430,6 +418,6 @@ export default function ModalRegister() {
                     </div>
                 </div>
             </Form>
-        </Modal>
+        </FingoModal>
     )
 }

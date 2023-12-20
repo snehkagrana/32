@@ -10,6 +10,7 @@ const getLevelByXpPoints = (points) => {
             return i;
         }
     }
+    
     return 1
 };
 

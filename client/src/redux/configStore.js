@@ -17,6 +17,7 @@ import storage from 'redux-persist/lib/storage'
 import { rootReducer } from './reducers'
 
 import { unauthenticatedMiddleware } from './middlewares'
+import { authPersistedSlice } from './auth/auth.persisted.slice'
 // import { appSlice } from 'src/redux/app'
 
 // Config for Redux Persist
@@ -24,7 +25,7 @@ const persistConfig = {
     key: 'root',
     version: 1,
     storage,
-    whitelist: [],
+    whitelist: [authPersistedSlice.name],
 }
 
 // Listener Middleware

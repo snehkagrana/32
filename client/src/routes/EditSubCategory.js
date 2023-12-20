@@ -1,12 +1,14 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Axios from "axios";
+import Axios from 'src/api/axios'
 import { Link, useNavigate } from "react-router-dom";
 import { Row, Form, Button, Col, Image } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
+import { useAuth } from "src/hooks";
 
 const EditSubCategory = (props) => {
+    const { user, isAuthenticated } = useAuth();
     const { skill, category, subcategory } = useParams();
     const [editedSubCategory, setEditedSubCategory] = useState(subcategory);
     const role = useRef("");
@@ -28,29 +30,17 @@ const EditSubCategory = (props) => {
     };
 
     useEffect(() => {
-        // console.log("in use effect");
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            if (response.data.redirect == "/login") {
-                // console.log("Please log in");
-                navigate(`/auth/login`);
-            } else if (response.data.user.role === "basic") {
-                navigate(`/accessdenied`);
-            } else {
-                role.current = response.data.user.role;
-            }
-        });
-    }, []);
+        if(isAuthenticated && user.role === "basic") {
+            navigate(`/accessdenied`);
+        }
+    }, [user, isAuthenticated]);
 
     return (
         <>
             <Helmet>
                 <title>Edit Sub Category</title>
             </Helmet>
-            <Navbar proprole={role} />
+            <Navbar proprole={user?.role} />
             <Row style={{ marginLeft: "0px", marginRight: "0px" }}>
                 <Col>
                     <div>

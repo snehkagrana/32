@@ -10,7 +10,8 @@ const initialState = {
     modalLevelUp: {
         open: false,
         data: null
-    }
+    },
+    openModalHowToEarnDiamond: false
 }
 
 // Actual Slice
@@ -39,6 +40,9 @@ export const appSlice = createSlice({
         },
         app_setTotalXP(state, action) {
             state.totalXP = action.payload
+        },
+        app_setOpenModalHowToEarnDiamond(state, action) {
+            state.openModalHowToEarnDiamond = action.payload
         },
     },
 })

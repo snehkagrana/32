@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useCallback, useMemo } from 'react'
-import { useApp, useAuth } from 'src/hooks'
+import { useApp, useAuth, useReward } from 'src/hooks'
 import 'src/styles/FingoCardDailyXP.styles.css'
 import { ReactComponent as LightningIcon } from 'src/assets/svg/lightning-fill2.svg'
 import TreasureImg from 'src/assets/images/ic_treasure.png'
@@ -15,13 +17,14 @@ import ImageLevel8 from 'src/assets/images/levels/8.png'
 import ImageLevel9 from 'src/assets/images/levels/9.png'
 import ImageLevel10 from 'src/assets/images/levels/10.png'
 
-import { ReactComponent as InfoIcon } from 'src/assets/svg/info.svg'
 import { useDispatch } from 'react-redux'
+import { RewardApi } from 'src/api'
 
 const FingoCardDailyXP = () => {
     const dispatch = useDispatch()
-    const { dailyXP, openModalLevelUp, app_setModalLevelUp } = useApp()
-    const { newUser, user } = useAuth()
+    const { dailyXP } = useApp()
+    const { openModalClaimReward, reward_setOpenModalClaimReward } = useReward()
+    const { newUser, user, isAuthenticated } = useAuth()
 
     const getDailyXp = useMemo(() => {
         if (user) {
@@ -66,15 +69,30 @@ const FingoCardDailyXP = () => {
         return ImageLevel1
     }
 
-    const onClickLevelInfo = useCallback(() => {
-        dispatch(
-            app_setModalLevelUp({
-                open: true,
-                data: { total: user?.xp?.total, level: user?.xp?.level },
-            })
-        )
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [openModalLevelUp])
+    const onClickClaimReward = useCallback(
+        async e => {
+            e.preventDefault()
+            try {
+                const response = await RewardApi.claimReward({
+                    type: 'daily quest',
+                })
+                if (response?.data?.value) {
+                    dispatch(
+                        reward_setOpenModalClaimReward({
+                            open: true,
+                            data: {
+                                type: 'daily quest',
+                                value: response?.data?.value,
+                            },
+                        })
+                    )
+                }
+            } catch (e) {
+                console.log('e', e)
+            }
+        },
+        [openModalClaimReward]
+    )
 
     return (
         <div className={`mb-3 FingoCardDailyXP FingoShapeRadius`}>
@@ -87,7 +105,18 @@ const FingoCardDailyXP = () => {
                 }}
             />
             <div className='FingoCardDailyXPHeader'>
-                <h2 className='title'>Daily Quests</h2>
+                <h2 className='title mb-0'>Daily Quests</h2>
+                {isAuthenticated &&
+                    getDailyXp >= 60 &&
+                    !user?.claimedGemsDailyQuest && (
+                        <a
+                            href='#'
+                            onClick={onClickClaimReward}
+                            alt='claim reward'
+                        >
+                            Claim Reward
+                        </a>
+                    )}
             </div>
             <div className='FingoCardDailyXPInner'>
                 <div className='left'>
@@ -98,7 +127,7 @@ const FingoCardDailyXP = () => {
                         <p>Earn 60 Bananas</p>
                     </div>
                     <div className='FingoCardDailyXPContent'>
-                        <div class='progress'>
+                        <div className='progress'>
                             {newUser ? (
                                 <div className='xp-count'>
                                     {Math.min(getDailyXp, 60) || 0}/60
@@ -109,7 +138,7 @@ const FingoCardDailyXP = () => {
                                 </div>
                             )}
                             <div
-                                class='progress-bar bg-warning'
+                                className='progress-bar bg-warning'
                                 role='progressbar'
                                 aria-valuenow={getDailyXp}
                                 aria-valuemin='0'

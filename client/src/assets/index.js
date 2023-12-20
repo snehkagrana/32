@@ -11,6 +11,19 @@ import ImageLevel10 from 'src/assets/images/levels/10.png'
 import CelebrateBadge from 'src/assets/images/celebrate-badge.png'
 import CelebrateBadge2 from 'src/assets/images/celebrate-badge-2.png'
 
+import PlaceholderImg from 'src/assets/images/placeholder.png'
+
+import GiftCardDefaultAmazon from 'src/assets/images/giftcard/amazon.png'
+import GiftCardDefaultPaytm from 'src/assets/images/giftcard/paytm.png'
+import GiftCardDefaultFlipkart from 'src/assets/images/giftcard/flipkart.png'
+import GiftCardDefaultGooglePlay from 'src/assets/images/giftcard/google-play.jpg'
+import GiftCardDefaultOther from 'src/assets/images/giftcard/other.jpg'
+import AmazonLogo from 'src/assets/images/giftcard/amazon-logo.png'
+import GooglePlayLogo from 'src/assets/images/giftcard/google-play-logo.png'
+import PaytmLogo from 'src/assets/images/giftcard/paytm-logo.png'
+import FlipkartLogo from 'src/assets/images/giftcard/flipkart-logo.png'
+import GiftBoxIcon from 'src/assets/images/giftbox.png'
+
 const Assets = {
     ImageLevel1,
     ImageLevel2,
@@ -24,6 +37,18 @@ const Assets = {
     ImageLevel10,
     CelebrateBadge,
     CelebrateBadge2,
+
+    PlaceholderImg,
+    GiftCardDefaultAmazon,
+    GiftCardDefaultPaytm,
+    GiftCardDefaultFlipkart,
+    GiftCardDefaultGooglePlay,
+    GiftCardDefaultOther,
+    AmazonLogo,
+    GooglePlayLogo,
+    PaytmLogo,
+    FlipkartLogo,
+    GiftBoxIcon,
 }
 
 export default Assets

@@ -1,13 +1,15 @@
 import React, {useRef, useState, useEffect} from "react";
-import Axios from "axios";
+import Axios from 'src/api/axios'
 import {Link, useNavigate} from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import {Container, Card, Row, ProgressBar, Col, Image} from "react-bootstrap";
 import {Helmet} from "react-helmet";
 import Navbar from "../components/Navbar";
 import {FaCalendar, FaStar, FaTrophy, FaMedal, FaFire} from "react-icons/fa";
+import { useAuth } from "src/hooks";
 
 const ProfilePage = (props) => {
+    const { auth_syncAndGetUser } = useAuth();
     const [userName, setUserName] = useState(null);
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
@@ -79,26 +81,19 @@ const ProfilePage = (props) => {
     ////if he is not redirect him to login page
     useEffect(() => {
         // console.log("in use effect");
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            if (response.data.redirect == "/login") {
-                // console.log("Please log in");
-                navigate(`/auth/login`);
-            } else {
+        auth_syncAndGetUser().then(result => {
+            if (result?._id) {
                 setUserName(
-                    response.data.user.displayName
-                        ? response.data.user.displayName
-                        : response.data.user.email
+                    result?.displayName
+                        ? result?.displayName
+                        : result?.email
                 );
-                setUser(response.data.user);
-                setProfilePicture(response.data.user.imgPath);
-                role.current = response.data.user.role;
+                setUser(result);
+                setProfilePicture(result?.imgPath);
+                role.current = result?.role;
                 getScore();
             }
-        });
+        })
     }, []);
 
     return (

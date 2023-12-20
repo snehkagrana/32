@@ -6,24 +6,21 @@ import Navbar from "../components/Navbar";
 import GeneralNavbar from "../components/GeneralNavbar";
 import { Container } from "react-bootstrap";
 import Footer from "../components/Footer";
+import { useAuth } from "src/hooks";
 
 const PrivacyPolicy = () => {
+    const { auth_syncAndGetUser } = useAuth();
     const navigate = useNavigate();
     const [role, setRole] = useState("unknown");
 
     useEffect(() => {
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            console.log("con", response.data);
-            if (response.data.redirect === "/home") {
-                setRole(response.data.user.role);
+        auth_syncAndGetUser().then(result => {
+            if (result?._id) {
+                setRole(result?.role);
             } else {
                 setRole("unknown");
             }
-        });
+        })
     }, []);
 
     return (

@@ -1,29 +1,15 @@
 import React, { useState, useEffect } from "react";
-import Axios from "axios";
+import Axios from 'src/api/axios'
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
 import GeneralNavbar from "../components/GeneralNavbar";
 import { Container } from "react-bootstrap";
 import Footer from "../components/Footer";
+import { useAuth } from "src/hooks";
 const Terms = () => {
+    const { user } = useAuth()
     const navigate = useNavigate();
-    const [role, setRole] = useState("unknown");
-
-    useEffect(() => {
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            console.log("con", response.data);
-            if (response.data.redirect === "/home") {
-                setRole(response.data.user.role);
-            } else {
-                setRole("unknown");
-            }
-        });
-    }, []);
 
     return (
         <>
@@ -31,10 +17,10 @@ const Terms = () => {
                 <title>Terms and Conditions</title>
             </Helmet>
             {/* <Navbar proprole={'basic'}/> */}
-            {role === "unknown" ? (
+            {user?.role === "unknown" ? (
                 <GeneralNavbar />
             ) : (
-                <Navbar proprole={role} />
+                <Navbar proprole={user?.role} />
             )}
 
             <Container className="m-5">

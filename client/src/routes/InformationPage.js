@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
-import Axios from 'axios'
+import Axios from 'src/api/axios'
 import { useNavigate } from 'react-router-dom'
 import { Row, Button, Col } from 'react-bootstrap'
 import { Helmet } from 'react-helmet'
@@ -11,8 +11,10 @@ import SubCategorySidebar from '../components/SubCategorySidebar'
 import LoadingBox from '../components/LoadingBox'
 import { FingoHomeLayout } from 'src/components/layouts'
 import '../index.css'
+import { useAuth } from 'src/hooks'
 
 const InformationPage = () => {
+    const { user, isAuthenticated } = useAuth()
     const [imageURL, setImageURL] = useState('')
     const { skillName, category, subcategory, page } = useParams()
     const navigate = useNavigate()
@@ -157,37 +159,30 @@ const InformationPage = () => {
                 isCompleted.current = false
             }
         } else {
-            Axios({
-                method: 'GET',
-                withCredentials: true,
-                url: '/server/login',
-            }).then(function (response) {
-                if (response.data.redirect == '/login') {
-                    navigate(`/auth/login`)
+            if (isAuthenticated && user) {
+                getSkillBySkillName()
+                getInformation()
+                role.current = user.role
+                // eslint-disable-next-line no-redeclare
+                var checkIsCompleted =
+                    user?.score &&
+                    user.score.filter(function (score) {
+                        return (
+                            score.skill === skillName &&
+                            score.category === category &&
+                            score.sub_category === subcategory
+                        )
+                    })
+                if (checkIsCompleted.length > 0) {
+                    isCompleted.current = true
+                    setScore(checkIsCompleted[0].points)
                 } else {
-                    getSkillBySkillName()
-                    getInformation()
-                    role.current = response.data.user.role
-                    var checkIsCompleted = response.data.user.score.filter(
-                        function (score) {
-                            return (
-                                score.skill === skillName &&
-                                score.category === category &&
-                                score.sub_category === subcategory
-                            )
-                        }
-                    )
-                    if (checkIsCompleted.length > 0) {
-                        isCompleted.current = true
-                        setScore(checkIsCompleted[0].points)
-                    } else {
-                        isCompleted.current = false
-                    }
+                    isCompleted.current = false
                 }
-            })
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pageNumber, searchParams, subcategory])
+    }, [pageNumber, searchParams, subcategory, isAuthenticated, user])
 
     useEffect(() => {
         if (page) {

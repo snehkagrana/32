@@ -28,7 +28,13 @@ const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const base64url = require("base64url");
 const { getLevelByXpPoints } = require("./utils/xp.utils");
-
+const authRoutes = require('./routes/auth.routes')
+const rewardRoutes = require('./routes/reward.routes')
+const accountRoutes = require('./routes/account.routes')
+const userRoutes = require('./routes/user.routes')
+const adminRoutes = require('./routes/admin.routes')
+const AuthGuard = require('./middlewares/auth.middleware');
+const { initializeDiamondUser, calculateDiamondUser } = require("./utils/reward.util");
 
 aws.config.update({
     secretAccessKey: process.env.ACCESS_SECRET_KEY,
@@ -68,6 +74,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({
     origin: ['https://fingodev.kujang.space']
 }));
+
+/** ######## New Routes ########### */
+app.use('/server/api/admin', adminRoutes);  
+app.use('/server/api/auth', authRoutes);  
+app.use('/server/api', rewardRoutes);  
+app.use('/server/api', accountRoutes);  
+app.use('/server/api', userRoutes);  
 
 app.use(
     session({
@@ -148,6 +161,12 @@ app.post("/server/login", (req, res, next) => {
                                     { email: req.user.email },
                                     {
                                         $set: {
+                                            diamond: initializeDiamondUser(
+                                                req.user?.diamond ? parseInt(req.user.diamond, 10) : 0,
+                                                req.user?.xp?.total ? req.user.xp.total : 0,
+                                                doc.diamondInitialized
+                                            ),
+                                            diamondInitialized: true,
                                             xp: {
                                                 current: req?.user?.xp?.current ? req.user.xp.current : 0,
                                                 daily: req?.user?.xp?.daily ? req.user.xp.daily : 0,
@@ -212,6 +231,12 @@ app.get("/server/login", (req, res) => {
                         { email: req.user.email },
                         {
                             $set: {
+                                diamond: initializeDiamondUser(
+                                    doc?.diamond ? parseInt(doc.diamond, 10) : 0,
+                                    doc?.xp?.total ? doc.xp.total : 0,
+                                    doc.diamondInitialized
+                                ),
+                                diamondInitialized: true,
                                 streak: doc.streak,
                                 xp: {
                                     current: doc?.xp?.current ? doc.xp.current : 0,
@@ -311,6 +336,7 @@ app.post("/server/register", (req, res) => {
                         streak: 0,
                         lastCompletedDay: null,
                         last_played: null,
+                        diamond: 0,
                         xp: {
                             current: 0,
                             daily: 0,
@@ -327,7 +353,7 @@ app.post("/server/register", (req, res) => {
 });
 
 app.post("/server/updateProfilePhoto",
-    authUser,
+    AuthGuard,
     upload.single("photo"),
     async (req, res) => {
         User.findOne({ email: req.user.email }, async (err, doc) => {
@@ -353,7 +379,7 @@ app.post("/server/updateProfilePhoto",
 
 app.post(
     "/server/upload",
-    authUser,
+    AuthGuard,
     (req, res) => {
         var filename = "";
         if (req.file != undefined) {
@@ -365,7 +391,7 @@ app.post(
         return res.json(redir);
     }
 );
-app.post("/server/updatefullname",authUser, async (req, res) => {
+app.post("/server/updatefullname",AuthGuard, async (req, res) => {
     User.findOne({ email: req.user.email }, async (err, doc) => {
         if (err) {
             console.log("ERROR", err);
@@ -381,7 +407,7 @@ app.post("/server/updatefullname",authUser, async (req, res) => {
     });
 });
 
-app.post("/server/updateemail", authUser, async (req, res) => {
+app.post("/server/updateemail", AuthGuard, async (req, res) => {
     User.findOne({ email: req.user.email }, async (err, doc) => {
         if (err) {
             console.log("ERROR", err);
@@ -532,11 +558,11 @@ app.get("/server/register", (req, res) => {
 });
 
 ////To get email of the logged in user
-app.get("/server/user", authUser, (req, res) => {
+app.get("/server/user", AuthGuard, (req, res) => {
     res.send(req.user); // The req.user stores the entire user that has been authenticated inside of it.
 });
 
-app.get("/server/logout", authUser, (req, res) => {
+app.get("/server/logout", AuthGuard, (req, res) => {
     req.logout(function (err) {
         if (err) {
             return next(err);
@@ -548,7 +574,7 @@ app.get("/server/logout", authUser, (req, res) => {
     return res.status(200).json(redir);
 });
 
-app.get("/server/skills", authUser, (req, res) => {
+app.get("/server/skills", AuthGuard, (req, res) => {
     Skill.find((err, val) => {
         if (err) {
             console.log("ERROR", err);
@@ -562,7 +588,7 @@ app.get("/server/skills", authUser, (req, res) => {
     });
 });
 
-app.get("/server/skills/:skillName", authUser, (req, res) => {
+app.get("/server/skills/:skillName", AuthGuard, (req, res) => {
     var skillName = req.params.skillName;
     Skill.find()
         .where("skill", skillName)
@@ -576,7 +602,7 @@ app.get("/server/skills/:skillName", authUser, (req, res) => {
         });
 });
 
-app.get("/server/information/:skillName", authUser, (req, res) => {
+app.get("/server/information/:skillName", AuthGuard, (req, res) => {
     var skillName = req.params.skillName;
     Information.find()
         .where("skill", skillName)
@@ -591,7 +617,7 @@ app.get("/server/information/:skillName", authUser, (req, res) => {
 
 app.get(
     "/server/information/:skillName/:category/:subcategory/:page",
-    authUser,
+    AuthGuard,
     (req, res) => {
         var skillName = req.params.skillName;
         var category = req.params.category;
@@ -633,7 +659,7 @@ app.get(
 
 app.get(
     "/server/allinformation/:skill/:category/:subcategory/",
-    authUser,
+    AuthGuard,
     (req, res) => {
         var skill = req.params.skill;
         var category = req.params.category;
@@ -653,7 +679,7 @@ app.get(
     }
 );
 
-app.get("/server/question/:id", authUser, (req, res) => {
+app.get("/server/question/:id", AuthGuard, (req, res) => {
     var id = req.params.id;
     Question.findById(id, function (err, question) {
         if (err) {
@@ -677,7 +703,7 @@ app.get("/server/question/:id", authUser, (req, res) => {
     });
 });
 
-app.get("/server/informationById/:id", authUser, (req, res) => {
+app.get("/server/informationById/:id", AuthGuard, (req, res) => {
     var id = req.params.id;
     Information.findById(id, function (err, information) {
         if (err) {
@@ -704,7 +730,7 @@ app.get("/server/informationById/:id", authUser, (req, res) => {
 
 app.post(
     "/server/editquestion/:id",
-    authUser,
+    AuthGuard,
     authRole(["admin"]),
     upload.single("photo"),
     (req, res) => {
@@ -767,7 +793,7 @@ app.post(
 
 app.post(
     "/server/editinformation/:id",
-    authUser,
+    AuthGuard,
     authRole(["admin"]),
     upload.single("photo"),
     (req, res) => {
@@ -820,7 +846,7 @@ app.post(
 
 app.post(
     "/server/deletesubcategory/:skill/:category/:subcategoryid",
-    authUser,
+    AuthGuard,
     (req, res) => {
         var skill = req.params.skill;
         var category = req.params.category;
@@ -952,7 +978,7 @@ app.post(
     }
 );
 
-app.post("/server/deletecategory/:skill/:category", authUser, (req, res) => {
+app.post("/server/deletecategory/:skill/:category", AuthGuard, (req, res) => {
     var skill = req.params.skill;
     var category = req.params.category;
 
@@ -1063,7 +1089,7 @@ app.post("/server/deletecategory/:skill/:category", authUser, (req, res) => {
 
 app.post(
     "/server/editsubcategory/:skill/:category/:subcategory",
-    authUser,
+    AuthGuard,
     (req, res) => {
         var skill = req.params.skill;
         var category = req.params.category;
@@ -1208,7 +1234,7 @@ app.post(
     }
 );
 
-app.post("/server/editcategory/:skill/:category", authUser, (req, res) => {
+app.post("/server/editcategory/:skill/:category", AuthGuard, (req, res) => {
     var skill = req.params.skill;
     var category = req.params.category;
     // console.log('edited category', req.body);
@@ -1355,7 +1381,7 @@ app.post("/server/editcategory/:skill/:category", authUser, (req, res) => {
     return res.json(redir);
 });
 
-app.post("/server/editskillordering/:skill", authUser, (req, res) => {
+app.post("/server/editskillordering/:skill", AuthGuard, (req, res) => {
     Skill.find({ skill: req.body.skill }).exec(async function (err, skillData) {
         skillData = skillData[0];
         // console.log('edit skilldata', skillData);
@@ -1370,7 +1396,7 @@ app.post("/server/editskillordering/:skill", authUser, (req, res) => {
     });
 });
 
-app.post("/server/editcategoryordering/:skill", authUser, (req, res) => {
+app.post("/server/editcategoryordering/:skill", AuthGuard, (req, res) => {
     var skill = req.params.skill;
     Skill.find({ skill: skill }).exec(async function (err, skillData) {
         skillData = skillData[0];
@@ -1390,7 +1416,7 @@ app.post("/server/editcategoryordering/:skill", authUser, (req, res) => {
 
 app.post(
     "/server/editsubcategoryordering/:skill/:category",
-    authUser,
+    AuthGuard,
     (req, res) => {
         // console.log('req.body.sub_categories', req.body.sub_categories);
         var skill = req.params.skill;
@@ -1426,7 +1452,7 @@ app.post(
     }
 );
 
-app.post("/server/editskill/:skill", authUser, (req, res) => {
+app.post("/server/editskill/:skill", AuthGuard, (req, res) => {
     var skill = req.params.skill;
     // console.log('edited skill', req.body);
 
@@ -1493,7 +1519,7 @@ app.post("/server/editskill/:skill", authUser, (req, res) => {
     return res.json(redir);
 });
 
-app.post("/server/deleteskill/:skill", authUser, async (req, res) => {
+app.post("/server/deleteskill/:skill", AuthGuard, async (req, res) => {
     var skill = req.params.skill;
 
     Information.find({ skill: skill }).exec(function (err, informationList) {
@@ -1549,7 +1575,7 @@ app.post("/server/deleteskill/:skill", authUser, async (req, res) => {
     return res.json(redir);
 });
 
-app.post("/server/deletequestion/:id", authUser, async (req, res) => {
+app.post("/server/deletequestion/:id", AuthGuard, async (req, res) => {
     // console.log('yay delete questi');
     var id = req.params.id;
     const question = await Question.find({ _id: id });
@@ -1579,7 +1605,7 @@ app.post("/server/deletequestion/:id", authUser, async (req, res) => {
     return res.json(redir);
 });
 
-app.post("/server/deleteinformation/:id", authUser, async (req, res) => {
+app.post("/server/deleteinformation/:id", AuthGuard, async (req, res) => {
     // console.log('yay delete info');
     var id = req.params.id;
     const info = await Information.find({ _id: id });
@@ -1634,7 +1660,7 @@ app.get("/server/getImage/:key", (req, res) => {
 
 app.get(
     "/server/questions/:skillName/:category/:subcategory",
-    authUser,
+    AuthGuard,
     (req, res) => {
         var skillName = req.params.skillName;
         var category = req.params.category;
@@ -1655,7 +1681,7 @@ app.get(
 
 app.get(
     "/server/subcategories/:skillName/:categoryName",
-    authUser,
+    AuthGuard,
     (req, res) => {
         var skillName = req.params.skillName;
         var categoryName = req.params.categoryName;
@@ -1678,7 +1704,7 @@ app.get(
     }
 );
 
-app.get("/server/categories/:skillName", authUser, (req, res) => {
+app.get("/server/categories/:skillName", AuthGuard, (req, res) => {
     var skillName = req.params.skillName;
     Skill.find()
         .where("skill", skillName)
@@ -1694,7 +1720,7 @@ app.get("/server/categories/:skillName", authUser, (req, res) => {
 });
 app.post(
     "/server/addquestions",
-    authUser,
+    AuthGuard,
     authRole(["admin"]),
     upload.single("photo"),
     async (req, res) => {
@@ -1803,7 +1829,7 @@ app.post(
 
 app.post(
     "/server/addinformation",
-    authUser,
+    AuthGuard,
     authRole(["admin"]),
     upload.single("photo"),
     async (req, res) => {
@@ -1905,7 +1931,7 @@ app.post(
 
 app.post(
     "/server/addsubcategories",
-    authUser,
+    AuthGuard,
     authRole(["admin"]),
     (req, res) => {
         ////checking if another user with same email already exists
@@ -1934,7 +1960,7 @@ app.post(
     }
 );
 
-app.post("/server/addcategories", authUser, authRole(["admin"]), (req, res) => {
+app.post("/server/addcategories", AuthGuard, authRole(["admin"]), (req, res) => {
     ////checking if another user with same email already exists
     Skill.findOne({ skill: req.body.skill }, async (err, doc) => {
         if (err) console.log("ERROR", err);
@@ -1957,7 +1983,7 @@ app.post("/server/addcategories", authUser, authRole(["admin"]), (req, res) => {
     });
 });
 
-app.post("/server/addskill", authUser, authRole(["admin"]), (req, res) => {
+app.post("/server/addskill", AuthGuard, authRole(["admin"]), (req, res) => {
     Skill.findOne({ skill: req.body.skill }, async (err, doc) => {
         if (err) throw err;
         if (!doc) {
@@ -1972,7 +1998,7 @@ app.post("/server/addskill", authUser, authRole(["admin"]), (req, res) => {
     });
 });
 
-app.post("/server/savescore", authUser, (req, res) => {
+app.post("/server/savescore", AuthGuard, (req, res) => {
     User.findOne({ email: req.user.email }, async (err, doc) => {
         if (err) {
             console.log("ERROR", err);
@@ -2009,10 +2035,38 @@ app.post("/server/savescore", authUser, (req, res) => {
                 [dayOfWeek]: today,
             };
 
+            const getGemsAwarded = () => {
+                let newDiamondAwarded = 0;
+                // sample req.body.score = [1, 0, 1, 0, 1]
+                if(req.body?.score?.length > 0) {
+                    const correctAnswers = req.body.score.filter(s => s > 0)
+                    // all correct
+                    if (req.body.score.length === correctAnswers.length) {
+                        newDiamondAwarded = 3
+                    } 
+                    // upto 2 wrong answers
+                    else if (correctAnswers.length + 2 >= req.body.score.length) {
+                        newDiamondAwarded = 2
+                    }
+                    // upto 3 wrong answers
+                    else if (correctAnswers.length + 3 >= req.body.score.length) {
+                        newDiamondAwarded = 1
+                    } 
+                    else {
+                        newDiamondAwarded = 0;
+                    }
+                } else {
+                    // return current diamond
+                    return doc.diamond
+                }
+                return doc.diamond + newDiamondAwarded
+            }
+
             await User.updateOne(
                 { email: req.user.email },
                 {
                     $set: {
+                        diamond: getGemsAwarded(),
                         score: allScoresList,
                         last_played: {
                             skill: req.body.skill,
@@ -2035,7 +2089,7 @@ app.post("/server/savescore", authUser, (req, res) => {
         }
     });
 });
-app.post("/server/savexp", authUser, (req, res) => {
+app.post("/server/savexp", AuthGuard, (req, res) => {
     const {xp} = req.body;
     User.findOne({ email: req.user.email }, async (err, doc) => {
         if (err) {
@@ -2045,10 +2099,19 @@ app.post("/server/savexp", authUser, (req, res) => {
                 { email: req.user.email },
                 {
                     $set: {
+                        diamond: calculateDiamondUser(
+                            doc?.diamond ? parseInt(doc.diamond, 10) : 0,
+                            doc?.xp?.total ? doc.xp.total : 0,
+                            xp
+                        ),
+                        diamondInitialized: true,
                         xp: {
                             current: xp,
                             daily: doc.xp.daily ? doc.xp.daily + xp : xp,
                             total: doc.xp.total ? doc.xp.total + xp : xp,
+                            level: getLevelByXpPoints(
+                                doc?.xp?.total ? doc.xp.total + xp : 0
+                            ),
                         },
                     },
                 }
@@ -2060,7 +2123,7 @@ app.post("/server/savexp", authUser, (req, res) => {
 });
 
 
-app.get("/server/allScoresForUser", authUser, (req, res) => {
+app.get("/server/allScoresForUser", AuthGuard, (req, res) => {
     res.send(req.user.score); // The req.user stores the entire user that has been authenticated inside of it.
 });
 

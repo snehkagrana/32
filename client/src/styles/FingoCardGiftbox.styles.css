@@ -1,0 +1,94 @@
+.FingoCardGiftbox {
+    padding: 2rem 1.1rem 1.1rem 1rem;
+    border: 2px solid rgb(109 109 109 / 10%);
+    position: relative;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.FingoCardGiftbox .HeaderBtn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+}
+
+.FingoCardGiftbox .QuestionBtn {
+    border: none;
+    outline: none;
+    background-color: #e4f3ff;
+    height: 28px;
+    width: 28px;
+    border-radius: 28px;
+}
+
+.FingoCardGiftbox .QuestionBtn:hover {
+    background-color: #c2dcf0;
+}
+
+[data-theme='dark'] .FingoCardGiftbox .QuestionBtn {
+    background-color: rgb(56, 59, 82);
+    color: #fff;
+}
+
+.FingoCardGiftbox .QuestionBtn svg {
+    margin-top: -2px;
+    width: 14px;
+    height: auto;
+}
+
+.FingoCardGiftbox .HistoryBtn {
+    border: none;
+    outline: none;
+    background-color: #e4f3ff;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+.FingoCardGiftbox .HistoryBtn:hover {
+    background-color: #c2dcf0;
+}
+
+[data-theme='dark'] .FingoCardGiftbox .HistoryBtn {
+    background-color: rgb(56, 59, 82);
+    color: #fff;
+}
+
+.FingoCardGiftbox .HistoryBtn p {
+    font-size: 0.82rem;
+    font-weight: 500;
+    margin-bottom: 0;
+    margin-left: 4px;
+    line-height: 1;
+}
+
+[data-theme='dark'] .FingoCardGiftbox {
+    background-color: #333;
+}
+
+.FingoCardGiftboxImg {
+    margin-bottom: 0.5rem;
+}
+
+.FingoCardGiftboxImg img {
+    width: 72px;
+    height: auto;
+}
+
+.FingoCardGiftboxContent p {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.FingoCardGiftboxContent p {
+}

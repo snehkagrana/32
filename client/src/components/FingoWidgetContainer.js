@@ -6,6 +6,7 @@ import FingoCardTotalXP from './FingoCardTotalXP'
 import FingoWidgetHeader from './FingoWidgetHeader'
 import { useMediaQuery } from 'src/hooks'
 import { useLocation } from 'react-router-dom'
+import FingoCardGiftbox from './FingoCardGiftbox'
 
 const FingoWidgetContainer = () => {
     const location = useLocation()
@@ -23,6 +24,7 @@ const FingoWidgetContainer = () => {
                     <FingoCardDayStreak />
                     <FingoCardDailyXP />
                     <FingoCardTotalXP />
+                    <FingoCardGiftbox />
                 </>
             )}
 

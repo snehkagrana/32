@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import Axios from "axios";
+import Axios from 'src/api/axios'
 import {
     Modal,
     Container,
@@ -13,8 +13,10 @@ import {
 } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
+import { useAuth } from "src/hooks";
 
 const AllSkills = () => {
+    const { user, isAuthenticated } = useAuth();
     const navigate = useNavigate();
     const role = useRef("");
     const [skills, setSkills] = useState([]);
@@ -99,28 +101,22 @@ const AllSkills = () => {
     };
 
     useEffect(() => {
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            if (response.data.redirect === "/login") {
-                navigate(`/auth/login`);
-            } else if (response.data.user.role === "basic") {
+        if(isAuthenticated) {
+            if (user.role === "basic") {
                 navigate(`/accessdenied`);
-            } else {
-                getAllSkills();
-                role.current = response.data.user.role;
             }
-        });
-    }, []);
+        } else {
+            navigate(`/accessdenied`);
+        }
+        getAllSkills();
+    }, [user, isAuthenticated]);
 
     return (
         <>
             <Helmet>
                 <title>All Skills</title>
             </Helmet>
-            <Navbar proprole={role} />
+            <Navbar proprole={user?.role} />
             <Container>
                 <br />
                 <h2 style={{ color: "#000" }} className="text-center">

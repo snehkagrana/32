@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { useParams, useLocation, useSearchParams } from 'react-router-dom'
-import Axios from 'axios'
+import Axios from 'src/api/axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { Badge, Card, Button } from 'react-bootstrap'
 import { Helmet } from 'react-helmet'
@@ -13,15 +13,17 @@ import { AuthAPI } from 'src/api'
 import { useApp, useAuth } from 'src/hooks'
 import { batch, useDispatch } from 'react-redux'
 import FingoModalLevelUp from 'src/components/FingoModalLevelUp'
-import { ReactComponent as StarFilled } from 'src/assets/svg/star-filled.svg'
 import 'src/styles/FingoLessonComplete.styles.css'
 import { FingoButton } from 'src/components/core'
-import StartFilled from 'src/assets/images/star-filled.png'
-import StartFilledFade from 'src/assets/images/star-filled-fade.png'
+import StartFilled from 'src/assets/images/diamond-filled.png'
+import StartFilledFade from 'src/assets/images/diamond-faded.png'
+import BG from 'src/assets/images/8270289.jpg'
+import { ReactComponent as DiamondSvg } from 'src/assets/svg/diamond.svg'
+import 'src/styles/ScorePage.styles.css'
 
 const ScorePage = () => {
     const dispatch = useDispatch()
-    const { isNewUser, user, auth_setUser } = useAuth()
+    const { user, auth_syncAndGetUser } = useAuth()
     const { app_setModalLevelUp } = useApp()
     const { skillName, category, subcategory } = useParams()
     const location = useLocation()
@@ -36,6 +38,7 @@ const ScorePage = () => {
     console.log('data', data)
 
     const [xp, setXP] = useState(0)
+    const [diamondEarned, setDiamondEarned] = useState(0)
     const [celebrate, setCelebrate] = useState(false)
 
     const [searchParams, setSearchParams] = useSearchParams()
@@ -82,13 +85,13 @@ const ScorePage = () => {
         }
     }, [celebrate])
 
-    const getSkillBySkillName = isNewUser => {
+    const getSkillBySkillName = newUser => {
         Axios({
             method: 'GET',
             withCredentials: true,
             url: `/server/skills/${skillName}`,
             params: {
-                newUser: isNewUser,
+                newUser: newUser,
             },
         }).then(res => {
             setSkillDetails(res.data.data[0])
@@ -107,44 +110,63 @@ const ScorePage = () => {
         })
     }
 
-    const getAllScores = isNewUser => {
+    const getAllScores = newUser => {
         Axios({
             method: 'GET',
             withCredentials: true,
             url: `/server/allscores`,
             params: {
-                newUser: isNewUser,
+                newUser: newUser,
             },
         }).then(res => {
             // console.log("all scores ", res.data);
         })
     }
 
+    const calculateDiamondEarned = paramsScore => {
+        if (paramsScore && paramsScore.length > 0) {
+            let diamondEarned = 0
+            // sample paramsScore = [1, 0, 1, 0, 1]
+            const correctAnswers = paramsScore.filter(s => s > 0)
+
+            // all correct
+            if (paramsScore.length === correctAnswers.length) {
+                diamondEarned = 3
+            }
+            // upto 2 wrong answers
+            else if (correctAnswers.length + 2 >= paramsScore.length) {
+                diamondEarned = 2
+            }
+            // upto 3 wrong answers
+            else if (correctAnswers.length + 3 >= paramsScore.length) {
+                diamondEarned = 1
+            } else {
+                diamondEarned = 0
+            }
+            setDiamondEarned(diamondEarned)
+        }
+    }
+
     const getUserInfo = async () => {
-        try {
-            const response = await AuthAPI.loginWithEmailAndPassword()
-            if (response.data?.user) {
-                setXP(response.data.user.xp.current)
-                role.current = response.data.user.role
+        auth_syncAndGetUser().then(result => {
+            if (result?._id) {
+                setXP(result?.xp?.current)
+                // setDiamondEarned()
+                role.current = result?.role
                 // Put logic to show modal level up here
                 if (
-                    parseInt(user?.xp?.total) <
-                        parseInt(response.data.user?.xp?.total) &&
-                    parseInt(user?.xp?.level) <
-                        parseInt(response.data.user?.xp?.level)
+                    parseInt(user?.xp?.total) < parseInt(result?.xp?.total) &&
+                    parseInt(user?.xp?.level) < parseInt(result?.xp?.level)
                 ) {
-                    batch(() => {
-                        dispatch(auth_setUser(response.data.user))
-                        dispatch(
-                            app_setModalLevelUp({
-                                open: true,
-                                data: response.data.user?.xp,
-                            })
-                        )
-                    })
+                    dispatch(
+                        app_setModalLevelUp({
+                            open: true,
+                            data: result?.xp,
+                        })
+                    )
                 }
             }
-        } catch (e) {}
+        })
     }
 
     useEffect(() => {
@@ -182,7 +204,8 @@ const ScorePage = () => {
             }
         } else {
             getUserInfo()
-            if (!isNewUser && Boolean(user)) {
+            calculateDiamondEarned(data.score.current)
+            if (!newUser && Boolean(user)) {
                 setCelebrate(true)
                 getSkillBySkillName()
                 getAllScores()
@@ -228,8 +251,8 @@ const ScorePage = () => {
                 <title>Score page</title>
             </Helmet>
             <div>
-                <div class='FingoLessonCompleteHeader'>
-                    <h2 class='text-center'>
+                <div className='FingoLessonCompleteHeader'>
+                    <h2 className='text-center'>
                         {skillName.split('_').join(' ')} {'->'}{' '}
                         {category.split('_').join(' ')} {'->'}{' '}
                         {subcategory.split('_').join(' ')}
@@ -260,7 +283,8 @@ const ScorePage = () => {
                                 </Card.Body>
                             </>
                         ) : (
-                            <div className='FingoLessonComplete'>
+                            <div className='FingoLessonComplete' style={{backgroundImage: `url('${BG}')`}}>
+                                <div className="LessonCompleteOverlay" />
                                 <div className='confetti-container'>
                                     <Confetti
                                         active={celebrate}
@@ -275,6 +299,9 @@ const ScorePage = () => {
                                 <div className='FingoLessonCompleteContent'>
                                     <h2>You earned</h2>
                                     <h6>🍌{xp}</h6>
+                                    <h6 className='ScorePageDiamondText'>
+                                        <DiamondSvg /> {diamondEarned}
+                                    </h6>
                                     <div className='relative flex flex-column mt-4'>
                                         {subCategoryIndex.current + 1 <
                                             totalSubCategories.current && (

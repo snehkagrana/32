@@ -7,7 +7,7 @@ export const XP_LEVEL_COLORS_DEFAULT = [
     '#00DB76',
     '#F326FF',
     '#01C817',
-    '#B2FF02',
+    '#00A26A',
     '#ff7805',
     '#7D5FDB',
 ]
@@ -21,7 +21,7 @@ export const XP_LEVEL_COLORS_LIGHT = [
     '#CAFDD1',
     '#FFDCF5',
     '#D6FCCA',
-    '#F5FFCC',
+    '#C8FAD5',
     '#FFEECD',
     '#EFE6FF',
 ]
@@ -35,7 +35,7 @@ export const XP_LEVEL_COLORS_DARK = [
     '#009D74',
     '#9728B7',
     '#00902A',
-    '#74B701',
+    '#008B68',
     '#B74202',
     '#5A42B7',
 ]

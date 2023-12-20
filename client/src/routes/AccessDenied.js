@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
-import Axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
+import { useAuth } from "src/hooks";
 
 const AccessDenied = () => {
     const navigate = useNavigate();
+    const { auth_syncAndGetUser } = useAuth();
 
     useEffect(() => {
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            if (response.data.redirect == "/login") {
-                // console.log("Please log in");
-                navigate(`/auth/login`);
-            }
-        });
+        ;(async () => {
+            auth_syncAndGetUser().then(result => {
+                if (result?._id) {
+                } else {
+                    navigate(`/auth/login`);
+                }
+            })
+        })()
     }, []);
 
     return (

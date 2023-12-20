@@ -2,11 +2,13 @@
 import { useAuth, useMediaQuery } from 'src/hooks'
 
 import BananaIconSVG from 'src/assets/svg/banana-icon.svg'
+import DiamondIconSVG from 'src/assets/svg/diamond.svg'
 import StreakIcon from 'src/assets/images/fire-on.png'
 import { Overlay, Popover } from 'react-bootstrap'
 import FingoCardDayStreak from './FingoCardDayStreak'
 import FingoCardTotalXP from './FingoCardTotalXP'
 import { useRef, useState } from 'react'
+import FingoCardGiftbox from './FingoCardGiftbox'
 import 'src/styles/FingoWidgetHeader.styles.css'
 
 const MENU_ITEMS = [
@@ -19,6 +21,11 @@ const MENU_ITEMS = [
         icon: BananaIconSVG,
         name: 'total_xp',
         color: '#c89600',
+    },
+    {
+        icon: DiamondIconSVG,
+        name: 'diamond',
+        color: '#1cb0f6',
     },
     // ...another menu menu tab
 ]
@@ -47,6 +54,11 @@ const FingoWidgetHeader = ({ activeTab, setActiveTab }) => {
                     ? String(user.xp.total) ?? '0'
                     : undefined
 
+            case 'diamond':
+                return user?.diamond !== undefined
+                    ? String(user.diamond) ?? '0'
+                    : undefined
+
             default:
                 return undefined
         }
@@ -54,7 +66,7 @@ const FingoWidgetHeader = ({ activeTab, setActiveTab }) => {
 
     return (
         <div id='FingoWidgetHeaderRoot' ref={ref}>
-            <div className='FingoWidgetHeader' ref={ref}>
+            <div className='FingoWidgetHeader'>
                 <div className='FingoWidgetHeaderInner'>
                     <ul>
                         {MENU_ITEMS.map((i, index) => (
@@ -91,6 +103,7 @@ const FingoWidgetHeader = ({ activeTab, setActiveTab }) => {
                     <Popover id='popover-contained'>
                         {activeTab === 'streak' && <FingoCardDayStreak />}
                         {activeTab === 'total_xp' && <FingoCardTotalXP />}
+                        {activeTab === 'diamond' && <FingoCardGiftbox />}
                     </Popover>
                 </Overlay>
             )}

@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import {useParams, useSearchParams} from "react-router-dom";
-import Axios from "axios";
+import Axios from 'src/api/axios'
 import { Link, useNavigate } from "react-router-dom";
 import {
     Badge,
@@ -19,8 +19,17 @@ import { FingoHomeLayout } from "src/components/layouts";
 import FingoWidgetContainer from "src/components/FingoWidgetContainer";
 import { FingoScrollToTop } from "src/components/layouts/FingoHomeLayout";
 import FingoModalLevelUp from "src/components/FingoModalLevelUp";
+import { useAuth } from "src/hooks";
+import ModalListReward from "src/components/reward/ModalListReward";
+import ModalRewardDetail from "src/components/reward/ModalRewardDetail";
+import { ModalFormReward } from "src/components/reward";
+import { ModalVerifyAction } from "src/components/admin";
+import ModalInfoEarnDiamond from "src/components/reward/ModalInfoEarnDiamond";
+import ModalListMyReward from "src/components/reward/ModalListMyReward";
+import ModalClaimReward from "src/components/reward/ModalClaimReward";
 
 const SkillCategoryPage = () => {
+    const { isAuthenticated, user } = useAuth()
     const { skillName } = useParams();
     const { categoryName } = useParams();
     const navigate = useNavigate();
@@ -94,34 +103,23 @@ const SkillCategoryPage = () => {
 
             checkIsCompleted.current = tempCheckIsCompleted;
         } else {
-            Axios({
-                method: "GET",
-                withCredentials: true,
-                url: "/server/login",
-            }).then(function (response) {
-                if (response.data.redirect == "/login") {
-                    // console.log("Please log in");
-                    navigate(`/auth/login`);
-                } else {
-                    // console.log("Already logged in");
-                    getSkillBySkillName();
-                    role.current = response.data.user.role;
-                    var tempCheckIsCompleted = [];
-                    response.data.user.score.forEach((score) => {
-                        if (
-                            score.skill === skillName &&
-                            score.category === categoryName
-                        )
-                            tempCheckIsCompleted = tempCheckIsCompleted.concat(
-                                score.sub_category
-                            );
-                    });
-                    checkIsCompleted.current = tempCheckIsCompleted;
-                    // console.log('checkIsCompleted', checkIsCompleted.current);
-                }
-            });
+            if(isAuthenticated && user) {
+                getSkillBySkillName();
+                role.current = user?.role;
+                var tempCheckIsCompleted = [];
+                user?.score && user.score.forEach((score) => {
+                    if (
+                        score.skill === skillName &&
+                        score.category === categoryName
+                    )
+                        tempCheckIsCompleted = tempCheckIsCompleted.concat(
+                            score.sub_category
+                        );
+                });
+                checkIsCompleted.current = tempCheckIsCompleted;
+            }
         }
-    }, [searchParams]);
+    }, [searchParams, isAuthenticated, user, skillName, categoryName]);
 
     return (
         <FingoHomeLayout>
@@ -198,7 +196,14 @@ const SkillCategoryPage = () => {
                     </div>
                 </Container>
             </div>
+            <ModalFormReward />
             <FingoModalLevelUp />
+            <ModalListReward />
+            <ModalRewardDetail />
+            <ModalVerifyAction />
+            <ModalInfoEarnDiamond />
+            <ModalListMyReward />
+            <ModalClaimReward />
         </FingoHomeLayout>
     );
 };

@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom'
 
 import './App.css'
-import Home from './routes/Home'
+// import Home from './routes/Home'
 import EnterEmail from './routes/EnterEmail'
 import AddQuestions from './routes/AddQuestions'
 import AddChapters from './routes/AddChapters'
@@ -44,115 +44,161 @@ import PrivacyPolicy from './routes/PrivacyPolicy'
 import 'src/styles/FingoGlobal.styles.css'
 import NewProfilePage from './routes/NewProfilePage'
 import DailyQuestPage from './routes/DailyQuestPage'
+import HomePage from './pages/HomePage'
+import AdminRewardPage from './pages/admin/AdminRewardPage'
+import { Toaster, ToastBar } from 'react-hot-toast'
 
 const App = () => {
     return (
-        <Router>
-            <Routes>
-                <Route exact path='/' element={<StartPage />} />
-                <Route exact path='/terms' element={<Terms />} />
-                <Route
-                    exact
-                    path='/privacypolicy'
-                    element={<PrivacyPolicy />}
-                />
-                <Route exact path='/profile' element={<NewProfilePage />} />
-                <Route exact path='/daily-quest' element={<DailyQuestPage />} />
-                <Route exact path='/home' element={<Home />} />
-                <Route exact path='/auth/login' element={<Login />} />
-                <Route exact path='/auth/register' element={<Register />} />
-                <Route
-                    exact
-                    path='/skills/:skillName'
-                    element={<SkillPage />}
-                />
-                <Route
-                    exact
-                    path='/skills/:skillName/:categoryName'
-                    element={<SkillCategoryPage />}
-                />
-                <Route exact path='/updateemail' element={<EnterEmail />} />
-                <Route
-                    exact
-                    path='/skills/:skillName/:category/:subcategory/information/:page'
-                    element={<InformationPage />}
-                />
-                <Route exact path='/addquestions' element={<AddQuestions />} />
-                <Route
-                    exact
-                    path='/addinformation'
-                    element={<AddInformation />}
-                />
-                <Route exact path='/addchapters' element={<AddChapters />} />
-                <Route
-                    exact
-                    path='/skills/:skillName/:category/:subcategory/quiz'
-                    element={<Quiz />}
-                />
-                <Route
-                    exact
-                    path='/skills/:skillName/:category/:subcategory/score'
-                    element={<ScorePage />}
-                />
-                <Route exact path='/accessdenied' element={<AccessDenied />} />
-                <Route exact path='/profilepage' element={<ProfilePage />} />
-                <Route exact path='/allskills' element={<AllSkills />} />
-                <Route
-                    exact
-                    path='/allcategories/:skill'
-                    element={<AllCategories />}
-                />
-                <Route
-                    exact
-                    path='/allsubcategories/:skill/:category'
-                    element={<AllSubCategories />}
-                />
-                <Route
-                    exact
-                    path='/allinformation/:skill/:category/:subcategory'
-                    element={<AllInformation />}
-                />
-                <Route
-                    exact
-                    path='/allquestions/:skill/:category/:subcategory'
-                    element={<AllQuestions />}
-                />
-                <Route
-                    exact
-                    path='/editquestion/:skill/:category/:subcategory/:id'
-                    element={<EditQuestion />}
-                />
-                <Route
-                    exact
-                    path='/editinformation/:skill/:category/:subcategory/:id'
-                    element={<EditInformation />}
-                />
-                <Route
-                    exact
-                    path='/editsubcategory/:skill/:category/:subcategory'
-                    element={<EditSubCategory />}
-                />
-                <Route
-                    exact
-                    path='/editcategory/:skill/:category'
-                    element={<EditCategory />}
-                />
-                <Route exact path='/editskill/:skill' element={<EditSkill />} />
-                <Route
-                    exact
-                    path='/forgotpassword/:email/:token'
-                    element={<ForgotPassword />}
-                />
-                <Route
-                    exact
-                    path='/forgotpasswordmailsent'
-                    element={<ForgotPasswordMailSent />}
-                />
-                <Route exact path='/contactus' element={<ContactUs />} />
-                <Route exact path='/aboutus' element={<AboutUs />} />
-                <Route path='*' element={<NotFound />} />
-            </Routes>
-        </Router>
+        <>
+            <Router>
+                <Routes>
+                    <Route exact path='/' element={<StartPage />} />
+                    <Route exact path='/terms' element={<Terms />} />
+                    <Route
+                        exact
+                        path='/privacypolicy'
+                        element={<PrivacyPolicy />}
+                    />
+                    <Route exact path='/profile' element={<NewProfilePage />} />
+                    <Route
+                        exact
+                        path='/daily-quest'
+                        element={<DailyQuestPage />}
+                    />
+                    <Route exact path='/home' element={<HomePage />} />
+                    <Route exact path='/auth/login' element={<Login />} />
+                    <Route exact path='/auth/register' element={<Register />} />
+                    <Route
+                        exact
+                        path='/skills/:skillName'
+                        element={<SkillPage />}
+                    />
+                    <Route
+                        exact
+                        path='/skills/:skillName/:categoryName'
+                        element={<SkillCategoryPage />}
+                    />
+                    <Route exact path='/updateemail' element={<EnterEmail />} />
+                    <Route
+                        exact
+                        path='/skills/:skillName/:category/:subcategory/information/:page'
+                        element={<InformationPage />}
+                    />
+                    <Route
+                        exact
+                        path='/addquestions'
+                        element={<AddQuestions />}
+                    />
+                    <Route
+                        exact
+                        path='/addinformation'
+                        element={<AddInformation />}
+                    />
+                    <Route
+                        exact
+                        path='/addchapters'
+                        element={<AddChapters />}
+                    />
+                    <Route
+                        exact
+                        path='/skills/:skillName/:category/:subcategory/quiz'
+                        element={<Quiz />}
+                    />
+                    <Route
+                        exact
+                        path='/skills/:skillName/:category/:subcategory/score'
+                        element={<ScorePage />}
+                    />
+                    <Route
+                        exact
+                        path='/accessdenied'
+                        element={<AccessDenied />}
+                    />
+                    <Route
+                        exact
+                        path='/profilepage'
+                        element={<ProfilePage />}
+                    />
+                    <Route exact path='/allskills' element={<AllSkills />} />
+                    <Route
+                        exact
+                        path='/allcategories/:skill'
+                        element={<AllCategories />}
+                    />
+                    <Route
+                        exact
+                        path='/allsubcategories/:skill/:category'
+                        element={<AllSubCategories />}
+                    />
+                    <Route
+                        exact
+                        path='/allinformation/:skill/:category/:subcategory'
+                        element={<AllInformation />}
+                    />
+                    <Route
+                        exact
+                        path='/allquestions/:skill/:category/:subcategory'
+                        element={<AllQuestions />}
+                    />
+                    <Route
+                        exact
+                        path='/editquestion/:skill/:category/:subcategory/:id'
+                        element={<EditQuestion />}
+                    />
+                    <Route
+                        exact
+                        path='/editinformation/:skill/:category/:subcategory/:id'
+                        element={<EditInformation />}
+                    />
+                    <Route
+                        exact
+                        path='/editsubcategory/:skill/:category/:subcategory'
+                        element={<EditSubCategory />}
+                    />
+                    <Route
+                        exact
+                        path='/editcategory/:skill/:category'
+                        element={<EditCategory />}
+                    />
+                    <Route
+                        exact
+                        path='/editskill/:skill'
+                        element={<EditSkill />}
+                    />
+                    <Route
+                        exact
+                        path='/forgotpassword/:email/:token'
+                        element={<ForgotPassword />}
+                    />
+                    <Route
+                        exact
+                        path='/forgotpasswordmailsent'
+                        element={<ForgotPasswordMailSent />}
+                    />
+                    <Route exact path='/contactus' element={<ContactUs />} />
+                    <Route exact path='/aboutus' element={<AboutUs />} />
+
+                    {/* ----- admin routes ----- */}
+                    <Route
+                        exact
+                        path='/admin/reward'
+                        element={<AdminRewardPage />}
+                    />
+                    <Route path='*' element={<NotFound />} />
+                </Routes>
+            </Router>
+            <Toaster>
+                {t => (
+                    <ToastBar
+                        toast={t}
+                        style={{
+                            ...t.style,
+                        }}
+                    />
+                )}
+            </Toaster>
+        </>
     )
 }
 

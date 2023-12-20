@@ -1,0 +1,311 @@
+.FormReward {
+    background-color: #ffffff;
+    width: 100%;
+    padding: 1.4rem 2rem;
+}
+
+@media (min-width: 576px) {
+    .FormReward {
+        padding: 2rem 4rem;
+    }
+    .ModalFormReward .modal-dialog {
+        max-width: 680px;
+    }
+}
+
+.FormReward .valid-feedback,
+.FormReward .invalid-feedback {
+    display: block !important;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.FormReward h2 {
+    font-weight: 700;
+    font-size: 22px;
+}
+
+.FormReward .form-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+[data-theme='dark'] .FormReward {
+    background-color: #333;
+}
+
+@media screen and (min-width: 600px) {
+    .AdminRewardContainer {
+        border: 2px solid transparent !important;
+    }
+}
+
+.AdminRewardHeader {
+    background-color: transparent;
+    padding-left: 40px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (min-width: 576px) {
+    .AdminRewardHeader {
+        padding: 2rem 1rem;
+        background-color: #26a4ff;
+        border-radius: 0.6rem;
+        padding-left: 48px;
+    }
+}
+
+.AdminRewardHeader h2 {
+    font-size: 19px;
+    font-weight: 700;
+}
+
+@media (min-width: 576px) {
+    .AdminRewardHeader h2 {
+        font-size: 22px;
+    }
+    .AdminRewardHeader {
+        color: #fff;
+    }
+}
+
+.AdminRewardContainer .back-arrow {
+    position: absolute;
+    left: 4px;
+    border: none !important;
+    background-color: transparent !important;
+}
+
+.AdminRewardContainer .back-arrow svg {
+    top: 12px;
+    width: 26px;
+    height: auto;
+}
+
+@media (min-width: 576px) {
+    .AdminRewardContainer .back-arrow {
+        left: 20px;
+        top: 15px;
+    }
+    .AdminRewardContainer .back-arrow svg {
+        width: 30px;
+        height: auto;
+    }
+    .AdminRewardContainer .back-arrow svg {
+        color: #fff;
+    }
+}
+
+/* [data-theme='dark'] .sub_category_chapter_ic_circle {
+    background-color: #ffffff;
+} */
+
+.ModalRewardUploadContainer {
+    position: relative;
+}
+
+.ModalRewardUploadContainer input {
+    display: none;
+}
+
+.ModalRewardUploadContainer:hover label {
+    display: flex;
+}
+
+.ModalRewardUploadContainer label {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    background: rgb(255 255 255 / 0%);
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #fff;
+    font-weight: 700;
+}
+
+.ModalRewardUploadContainer label svg {
+    width: 32px;
+    height: auto;
+}
+
+.UploadImageMarker {
+    display: flex;
+    flex-direction: column;
+    background: #0063ff;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    padding: 10px 16px;
+    cursor: pointer;
+}
+
+.ModalRewardUploadImg {
+    border-radius: 12px;
+    overflow: hidden;
+    line-height: 0;
+    border: 2px solid rgb(109 109 109 / 10%);
+}
+
+.ModalRewardUploadImg img {
+    width: 100%;
+    height: auto;
+}
+
+.ModalRewardUploadLoading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(103 103 103 / 30%);
+    border-radius: 12px;
+}
+
+.FormRewardVariantContainer {
+    /* border-radius: 12px;
+    background-color: #eef4ff;
+    padding: 1rem 2rem; */
+    margin-top: 0.8rem;
+    /* border: 2px solid rgb(109 109 109 / 10%); */
+}
+
+.FormRewardVariantContainer hr {
+    margin-top: 0.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.FormRewardVariantHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.FormRewardVariantHeader .TrashBtn {
+    border-radius: 34px;
+    height: 34px;
+    width: 34px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    color: #dc3545;
+}
+
+.FormRewardVariantHeader .TrashBtn:hover {
+    background-color: #dc3545;
+    color: #ffff;
+}
+
+[data-theme='dark'] .FormRewardVariantContainer {
+    background-color: #293340;
+}
+
+.FormRewardVariantContainer .subtitle {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #444;
+}
+
+[data-theme='dark'] .FormRewardVariantContainer .subtitle {
+    color: #ececec;
+}
+
+.ModalFormReward .RadioType {
+    display: inline-flex;
+    padding: 6px 12px;
+    border-radius: 20px;
+    align-items: center;
+    justify-content: center;
+    margin: 0.2rem;
+    cursor: pointer !important;
+}
+
+.ModalFormReward .RadioType:hover {
+    background: #e0eaf9;
+}
+
+[data-theme='dark'] .ModalFormReward .RadioType:hover {
+    background-color: #41516b;
+}
+
+.ModalFormReward .RadioType.active {
+    background: #0063ff;
+}
+
+.ModalFormReward .RadioType.active .RadioTypeLabel p {
+    color: #fff;
+}
+
+.ModalFormReward .RadioType input {
+    display: none;
+}
+
+.ModalFormReward .RadioTypeLabel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ModalFormReward .RadioTypeLabel img {
+    width: 25px;
+    height: auto;
+}
+
+.ModalFormReward .RadioTypeLabel p {
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.FormRewardVariantContent {
+    border-radius: 12px;
+    background-color: #eef4ff;
+    padding: 1rem 2rem;
+    margin-top: 0.8rem;
+    border-radius: 0.5rem;
+    border: 2px dashed #1379ff;
+}
+
+.FormRewardVariantContent.VariantDisabled {
+    background-color: #faeded;
+    border: 2px dashed #ec3030;
+}
+
+[data-theme='dark'] .FormRewardVariantContent {
+    background-color: #545f72;
+}
+
+[data-theme='dark'] .FormRewardVariantContent.VariantDisabled {
+    background-color: #554242;
+}
+
+.FormRewardVariantContent hr {
+    margin-top: 0.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.FormRewardVariantContent .RedeemedBy {
+    border-radius: 2rem;
+    padding: 0.5rem 1rem;
+    background-color: #f5c8c8;
+    font-size: 0.85rem;
+    color: #d11212;
+}
+
+.FormRewardVariantContent .RedeemedBy a {
+    color: #d11212;
+}
+
+.FormRewardVariantContent .RedeemedBy svg {
+    height: 20px;
+    width: auto;
+}

@@ -5,8 +5,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { Row, Form, Button, Col, Image } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
+import { useAuth } from "src/hooks";
 
 const EditQuestion = (props) => {
+    const { user, isAuthenticated } = useAuth();
     const { skill, category, subcategory, id } = useParams();
     const [questionObject, setQuestionObject] = useState({});
     const [question, setQuestion] = useState("");
@@ -114,22 +116,11 @@ const EditQuestion = (props) => {
 
     useEffect(() => {
         // console.log("in use effect");
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            if (response.data.redirect == "/login") {
-                // console.log("Please log in");
-                navigate(`/auth/login`);
-            } else if (response.data.user.role === "basic") {
-                navigate(`/accessdenied`);
-            } else {
-                role.current = response.data.user.role;
-                getQuestion();
-            }
-        });
-    }, []);
+        if(isAuthenticated && user.role === "basic") {
+            navigate(`/accessdenied`);
+        }
+        getQuestion();
+    }, [user, isAuthenticated]);
 
     return (
         <>
@@ -180,7 +171,7 @@ const EditQuestion = (props) => {
                                 {optionsList.map((x, i) => {
                                     return (
                                         <div className="row mb-3">
-                                            <div class="form-group col-md-4">
+                                            <div className="form-group col-md-4">
                                                 <Form.Group>
                                                     <Form.Check
                                                         type="checkbox"
@@ -206,7 +197,7 @@ const EditQuestion = (props) => {
                                                     />
                                                 </Form.Group>
                                             </div>
-                                            <div class="form-group col-md-2 mt-4">
+                                            <div className="form-group col-md-2 mt-4">
                                                 {optionsList.length !== 1 && (
                                                     <button
                                                         className="btn btn-danger mx-1"

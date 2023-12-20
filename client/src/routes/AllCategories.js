@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Axios from "axios";
+import Axios from 'src/api/axios'
 import { Link, useNavigate } from "react-router-dom";
 import {
     Container,
@@ -14,8 +14,10 @@ import {
 } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
+import { useAuth } from "src/hooks";
 
 const AllCategories = () => {
+    const { user } = useAuth()
     const { skill } = useParams();
     const navigate = useNavigate();
     const role = useRef("");
@@ -121,30 +123,18 @@ const AllCategories = () => {
 
     useEffect(() => {
         // console.log("in use effect");
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            if (response.data.redirect == "/login") {
-                // console.log("Please log in");
-                navigate(`/auth/login`);
-            } else if (response.data.user.role === "basic") {
-                navigate(`/accessdenied`);
-            } else {
-                // console.log("Already logged in");
-                getAllCategories();
-                role.current = response.data.user.role;
-            }
-        });
-    }, []);
+        if (user.role === "basic") {
+            navigate(`/accessdenied`);
+        }
+        getAllCategories();
+    }, [user]);
 
     return (
         <>
             <Helmet>
                 <title>{skill} Categories</title>
             </Helmet>
-            <Navbar proprole={role} />
+            <Navbar proprole={user?.role} />
             <Container>
                 <br />
                 <h2 style={{ color: "#000" }} className="text-center">

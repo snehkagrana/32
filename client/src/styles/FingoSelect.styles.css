@@ -1,0 +1,42 @@
+.FingoSelect {
+    border: none !important;
+}
+
+.FingoSelect [class$='-control'] {
+    font-weight: 500;
+    border-radius: 10px;
+    /* border: 2px solid rgb(109 109 109 / 10%); */
+    background-color: #fff;
+}
+
+.FingoSelect [class$='-control']:hover {
+    /* border: 2px solid rgb(109 109 109 / 35%); */
+}
+
+.FingoSelect [class$='-control']:focus {
+}
+
+[data-theme='dark'] .FingoSelect [class$='-control'] {
+    background-color: #181818;
+    color: #fbfbfb !important;
+}
+
+[data-theme='dark'] .FingoSelect [class$='-control'] [class$='-Input'] {
+    color: #fbfbfb !important;
+}
+
+[data-theme='dark'] .FingoSelect [class$='-control'] [class$='-singleValue'] {
+    color: #fbfbfb !important;
+}
+
+[data-theme='dark'] .FingoSelect [class$='-menu'] {
+    background-color: #181818;
+}
+
+[data-theme='dark'] .FingoSelect [class$='-option'] {
+    background-color: #181818;
+}
+
+[data-theme='dark'] .FingoSelect [class$='-option']:hover {
+    background-color: #555555;
+}

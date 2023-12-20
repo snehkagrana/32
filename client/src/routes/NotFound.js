@@ -1,29 +1,23 @@
 import React, { useRef, useState, useEffect } from "react";
-import Axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/NotFound.css";
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
+import { useAuth } from "src/hooks";
 ////404 page of our website
 
 const NotFound = () => {
-    const role = useRef("");
+    const { auth_syncAndGetUser } = useAuth();
+     const role = useRef("");
     const navigate = useNavigate();
 
     useEffect(() => {
         // console.log("in use effect");
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            if (response.data.redirect == "/login") {
-                // console.log("Please log in");
-                navigate(`/auth/login`);
-            } else {
-                role.current = response.data.user.role;
+        auth_syncAndGetUser().then(result => {
+            if (result?._id) {
+                role.current = result?.role;
             }
-        });
+        })
     }, []);
 
     return (

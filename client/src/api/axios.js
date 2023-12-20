@@ -1,5 +1,6 @@
 import _axios from 'axios'
 import { appConfig } from 'src/configs/app.config'
+import { authUtils } from 'src/utils'
 
 // On request rejected
 const onRequestError = axiosError => {
@@ -27,13 +28,20 @@ const Axios = _axios.create({
 // On request
 Axios.interceptors.request.use(
     async config => {
+        try {
+            const idToken = authUtils.getUserAccessToken()
+            if (idToken) {
+                config.headers['Authorization'] = `Bearer ${idToken}`
+            }
+        } catch (e) {
+            console.log(e)
+        }
         return config
     },
     error => {
         return Promise.reject(onRequestError(error))
     }
 )
-
 // On response
 Axios.interceptors.response.use(
     async response => {

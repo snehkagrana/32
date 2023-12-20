@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Axios from "axios";
+import Axios from 'src/api/axios'
 import { useNavigate } from "react-router-dom";
 import Toast from "react-bootstrap/Toast";
 import { Row, Form, Button, Col } from "react-bootstrap";

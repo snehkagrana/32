@@ -1,4 +1,4 @@
-import Axios from 'axios'
+import Axios from 'src/api/axios'
 import { useNavigate } from 'react-router-dom'
 import { useMemo, useState } from 'react'
 
@@ -16,15 +16,15 @@ const FingoUserInfo = () => {
 
     const getGreetingText = useMemo(() => {
         if (time >= 1 && time < 11) {
-            return 'Good morning'
+            return 'Good morning,'
         } else if (time >= 11 && time < 16) {
-            return 'Goog afternoon'
+            return 'Good afternoon,'
         } else if (time >= 16 && time < 19) {
-            return 'Goog afternoon'
+            return 'Good afternoon,'
         } else if (time >= 19 || time < 5) {
-            return 'Good evening'
+            return 'Good evening,'
         } else {
-            return 'Hey'
+            return 'Hey,'
         }
     }, [time])
 

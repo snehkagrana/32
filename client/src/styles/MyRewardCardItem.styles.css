@@ -1,0 +1,69 @@
+.MyRewardCardItem {
+    transition: all 0.2s;
+    background-color: #f4f9fe !important;
+}
+.MyRewardCardItem.card {
+    border: 2px solid rgb(0 138 255) !important;
+}
+
+.MyRewardCardItem .RewardDetailCurrency {
+    background-color: #b5fedb;
+}
+
+.MyRewardCardItem .RewardDetailCurrency p {
+    color: #04160d;
+}
+
+[data-theme='dark'] .MyRewardCardItem .RewardDetailCurrency {
+    background-color: #2b5b44;
+}
+
+[data-theme='dark'] .MyRewardCardItem .RewardDetailCurrency p {
+    color: #fff;
+}
+
+[data-theme='dark'] .MyRewardCardItem {
+    background-color: #1f252c !important;
+    color: #fff !important;
+}
+
+.MyRewardCardItem .card-body {
+    padding: 1rem 1.2rem;
+}
+
+.MyRewardCardItem h4 {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.MyRewardCardItem p {
+    color: #747474;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+[data-theme='dark'] .MyRewardCardItem p {
+    color: #fbfbfb !important;
+}
+
+.MyRewardCardItem .TitleContainer {
+    height: 44px;
+    overflow: hidden;
+}
+
+.MyRewardCardItem .RedeemCodeLabel {
+    color: #fff;
+}
+
+.MyRewardCardItemImg {
+    padding: 10px;
+}
+
+.MyRewardCardItemImg img {
+    border-radius: 10px !important;
+}
+
+.MyRewardCardItemSection h6 {
+    font-size: 0.88rem;
+    font-weight: 700;
+}

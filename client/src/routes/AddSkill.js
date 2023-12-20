@@ -1,11 +1,13 @@
 import React, { useRef, useState, useEffect } from "react";
-import Axios from "axios";
+import Axios from 'src/api/axios'
 import { useNavigate } from "react-router-dom";
 import { Row, Form, Button, Col, Image } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
+import { useAuth } from "src/hooks";
 
 const AddSkill = (props) => {
+    const { user, isAuthenticated } = useAuth();
     const [skill, setSkill] = useState("");
     const [categoriesList, setCategoriesList] = useState([{ category: "" }]);
     const navigate = useNavigate();
@@ -58,28 +60,22 @@ const AddSkill = (props) => {
 
     useEffect(() => {
         // console.log("in use effect");
-        Axios({
-            method: "GET",
-            withCredentials: true,
-            url: "/server/login",
-        }).then(function (response) {
-            if (response.data.redirect == "/login") {
-                // console.log("Please log in");
-                navigate(`/auth/login`);
-            }
-            if (response.data.user.role === "basic") {
+        if(isAuthenticated) {
+            if (user.role === "basic") {
                 navigate(`/accessdenied`);
             }
-            role.current = response.data.user.role;
-        });
-    }, []);
+        } else {
+            navigate(`/accessdenied`);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isAuthenticated, user]);
 
     return (
         <>
             <Helmet>
                 <title>Add Skill</title>
             </Helmet>
-            <Navbar proprole={role} />
+            <Navbar proprole={user?.role} />
             <Row style={{ marginLeft: "0px", marginRight: "0px" }}>
                 <Col>
                     <div>
@@ -106,7 +102,7 @@ const AddSkill = (props) => {
                                 {categoriesList.map((x, i) => {
                                     return (
                                         <div className="row mb-3">
-                                            <div class="form-group col-md-4">
+                                            <div className="form-group col-md-4">
                                                 <Form.Group>
                                                     <Form.Control
                                                         type="string"
@@ -120,7 +116,7 @@ const AddSkill = (props) => {
                                                     />
                                                 </Form.Group>
                                             </div>
-                                            <div class="form-group col-md-2 mt-4">
+                                            <div className="form-group col-md-2 mt-4">
                                                 {categoriesList.length !==
                                                     1 && (
                                                     <button
