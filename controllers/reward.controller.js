@@ -118,3 +118,22 @@ exports.redeem = async (req, res) => {
         return res.status(400).json({ message: 'Item id cannot be empty' })
     }
 }
+
+// Claim reward
+exports.claimReward = async (req, res) => {
+    if (req.user.email && req.body?.type) {
+        const result = await RewardService.claimReward(
+            req.user.email,
+            req.body.type
+        )
+        if (result) {
+            return res.json({
+                message: 'Claim reward successfully.',
+                data: result,
+            })
+        }
+        return res.status(400).json({ message: 'Error' })
+    } else {
+        return res.status(400).json({ message: 'Claim type cannot be empty' })
+    }
+}

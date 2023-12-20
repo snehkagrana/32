@@ -41,4 +41,8 @@ module.exports = {
             notes: Joi.string().allow(null).allow('').optional(),
         })
         .options({ allowUnknown: true }),
+
+    claimReward: Joi.object().keys({
+        type: Joi.string().required(),
+    }),
 }

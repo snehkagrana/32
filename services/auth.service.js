@@ -46,6 +46,7 @@ exports.syncUser = async email => {
                 if (daysDiff !== 0) {
                     doc.xp.current = 0
                     doc.xp.daily = 0
+                    doc.claimedGemsDailyQuest = false
                 }
 
                 // console.log("initializeDiamondUser", initializeDiamondUser(doc.diamond))

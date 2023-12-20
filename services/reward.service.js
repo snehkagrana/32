@@ -218,3 +218,37 @@ exports.redeem = async (email, body) => {
 
     return result
 }
+
+exports.claimReward = async (email, type) => {
+    let DIAMOND_AWARDED = 0
+    let user = await UserModel.findOne({ email })
+    let result = null
+
+    if (type == 'daily quest') {
+        DIAMOND_AWARDED = 1
+        // user no claim daily quest yet
+        if (!user.claimedGemsDailyQuest) {
+            user = await UserModel.findOneAndUpdate(
+                { email },
+                {
+                    $set: {
+                        claimedGemsDailyQuest: true,
+                        diamond: user.diamond + 1,
+                    },
+                },
+                { new: true }
+            ).exec()
+
+            result = {
+                value: DIAMOND_AWARDED,
+            }
+        } else {
+            result = null
+        }
+    }
+    // other type
+    else {
+    }
+
+    return result
+}

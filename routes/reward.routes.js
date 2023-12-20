@@ -69,4 +69,12 @@ router.post(
     ErrorHandler(RewardController.redeem)
 )
 
+// claim reward
+router.post(
+    '/reward/claim',
+    validate(schema.claimReward),
+    AuthGuard,
+    ErrorHandler(RewardController.claimReward)
+)
+
 module.exports = router
