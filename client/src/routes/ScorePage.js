@@ -17,6 +17,7 @@ import 'src/styles/FingoLessonComplete.styles.css'
 import { FingoButton } from 'src/components/core'
 import StartFilled from 'src/assets/images/diamond-filled.png'
 import StartFilledFade from 'src/assets/images/diamond-faded.png'
+import BG from 'src/assets/images/8270289.jpg'
 import { ReactComponent as DiamondSvg } from 'src/assets/svg/diamond.svg'
 import 'src/styles/ScorePage.styles.css'
 
@@ -282,7 +283,8 @@ const ScorePage = () => {
                                 </Card.Body>
                             </>
                         ) : (
-                            <div className='FingoLessonComplete'>
+                            <div className='FingoLessonComplete' style={{backgroundImage: `url('${BG}')`}}>
+                                <div className="LessonCompleteOverlay" />
                                 <div className='confetti-container'>
                                     <Confetti
                                         active={celebrate}

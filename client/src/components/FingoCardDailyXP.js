@@ -24,7 +24,7 @@ const FingoCardDailyXP = () => {
     const dispatch = useDispatch()
     const { dailyXP } = useApp()
     const { openModalClaimReward, reward_setOpenModalClaimReward } = useReward()
-    const { newUser, user } = useAuth()
+    const { newUser, user, isAuthenticated } = useAuth()
 
     const getDailyXp = useMemo(() => {
         if (user) {
@@ -106,11 +106,17 @@ const FingoCardDailyXP = () => {
             />
             <div className='FingoCardDailyXPHeader'>
                 <h2 className='title mb-0'>Daily Quests</h2>
-                {getDailyXp > 0 && !user.claimedGemsDailyQuest && (
-                    <a href='#' onClick={onClickClaimReward} alt='claim reward'>
-                        Claim Reward
-                    </a>
-                )}
+                {isAuthenticated &&
+                    getDailyXp >= 60 &&
+                    !user?.claimedGemsDailyQuest && (
+                        <a
+                            href='#'
+                            onClick={onClickClaimReward}
+                            alt='claim reward'
+                        >
+                            Claim Reward
+                        </a>
+                    )}
             </div>
             <div className='FingoCardDailyXPInner'>
                 <div className='left'>

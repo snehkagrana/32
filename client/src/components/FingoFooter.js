@@ -63,7 +63,7 @@ const FingoFooter = () => {
 
     const renderBadge = useCallback(
         menuName => {
-            if (menuName === 'daily-quest' && user?.xp?.daily > 60) {
+            if (menuName === 'daily-quest' && user?.xp?.daily >= 60) {
                 return <div className='FingoFooterBadge'></div>
             }
             return null
