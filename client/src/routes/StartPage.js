@@ -15,7 +15,7 @@ import {
 import Slider from "react-slick";
 import fingoLogo from '../images/fingo-logo.png';
 import fingoSectionTwo from '../images/fingo-landing-page-section-2.png';
-import fingoSectionThree from '../images/fingo-landing-page-section-3.png';
+import fingoSectionThree from '../images/landingQuiz.png';
 import fingoSectionFiveOne from '../images/fingo-landing-page-5-1.png'
 import fingoSectionFiveTwo from '../images/fingo-landing-page-5-2.png'
 import fingoSectionFiveThree from '../images/fingo-landing-page-5-3.png'
@@ -192,7 +192,7 @@ const StartPage = () => {
                                         />
                                     </MDBContainer>
                                     <div className="flex justify-between w-full">
-                                        <span className={`flex items-center justify-end lg:text-lg text-sm font-bold whitespace-nowrap flex-1 mr-4 ${darkMode ? 'text-gray-500' : 'text-gray-950'} cursor-pointer`} onClick={() => navigate(`/contactus`)}>Contact Us</span>
+                                        <span className={`flex items-center justify-end lg:text-lg text-sm font-bold whitespace-nowrap flex-1 mr-4 ${darkMode ? 'text-gray-300' : 'text-gray-950'} cursor-pointer`} onClick={() => navigate(`/contactus`)}>Contact Us</span>
                                         <Button
                                             style={{
 
@@ -201,7 +201,7 @@ const StartPage = () => {
                                                 margin: "0 auto",
                                                 display: "block",
                                                 padding: "12px",
-                                                borderRadius: "10px",
+                                                borderRadius: "12px",
                                                 boxShadow: "0px 7px #1a5928",
                                                 transition: "0.2s ease",
                                                 fontWeight: "800",
@@ -221,16 +221,18 @@ const StartPage = () => {
                     <div className="pt-40 mx-auto lg:pt-64 lg:pb-28 ">
                         <Reveal motionType={'zoom'}>
 
-                            <h1 className={`text-background-${darkMode ? 'dark' : 'light'} flex justify-center items-center scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-6xl py-4`}>
-                                <span className="font-bold text-[#2cb74c]">
-                                    learn finance the fun way!😎
-                                </span>
-                            </h1>
+                        <h1 className={`text-background-${darkMode ? 'dark' : 'light'} text-center mx-auto lg:flex lg:justify-center lg:items-center scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-6xl py-4`}>
+                        <span className="font-bold text-[#2cb74c]">
+                            learn finance the fun way!😎
+                        </span>
+                        </h1>
 
-                            <div className="flex items-center justify-center">
-                                <h1 className={`scroll-m-20 text-xl font-extrabold tracking-tight lg:text-4xl py-4 ${darkMode ? 'text-gray-500' : 'text-gray-950'}`}>say goodbye to boring finance lessons.</h1>
-                            </div>
 
+                        <div className="flex items-center justify-center">
+                        <h1 className={`text-center mx-auto scroll-m-20 text-xl font-extrabold tracking-tight lg:text-4xl py-4 ${darkMode ? 'text-gray-300' : 'text-gray-950'}`}>
+                            say goodbye to boring finance lessons.
+                        </h1>
+                        </div>
                             
                         </Reveal>
 
@@ -238,7 +240,7 @@ const StartPage = () => {
                             <div className="flex items-center justify-center max-w-md px-3 mx-auto space-x-3 py-8">
                                 <div className="flex flex-col" style={{ width: '50%' }}>
                                     <h6
-                                        className={`${darkMode ? 'text-gray-600' : 'text-gray-600'} text-center py-1`}
+                                        className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} text-center py-1`}
                                     >
                                         (No signup required.)
                                     </h6>
@@ -248,7 +250,7 @@ const StartPage = () => {
                                             backgroundColor: "#28a745",
                                             borderColor: "#28a745",
                                             display: "block",
-                                            borderRadius: "10px",
+                                            borderRadius: "12px",
                                             boxShadow: "0px 7px #1a5928",
                                             transition: "0.2s ease",
                                             fontWeight: "800",
@@ -266,7 +268,7 @@ const StartPage = () => {
                                             padding: '10px',
                                             backgroundColor: "#FFFFFF",
                                             borderColor: "#808080",
-                                            borderRadius: "10px",
+                                            borderRadius: "12px",
                                             boxShadow: "0px 7px #818589",
                                             transition: "0.2s ease",
                                             fontWeight: "800",
@@ -311,12 +313,12 @@ const StartPage = () => {
                                     </div>
                                     <div className="flex-col items-start justify-center flex-1 hidden mx-auto md:flex sm:py-10 lg:py-0 ">
                                         <h2 className="text-3xl font-bold text-[#2cb74c]">short, easy-to-read chapters</h2>
-                                        <h3 className={`my-6 text-xl font-bold w-96 ${darkMode ? 'text-gray-500' : 'text-gray-950'}`}>choose from over 600 chapters, each only 3-4 minutes long</h3>
+                                        <h3 className={`my-6 text-xl font-bold w-96 ${darkMode ? 'text-gray-300' : 'text-gray-950'}`}>choose from over 600 chapters, each only 3-4 minutes long</h3>
 
                                     </div>
                                     <div className="flex flex-col items-center justify-center mx-auto mt-5 lg:py-0 md:hidden">
                                     <h2 className="text-3xl font-bold text-[#2cb74c] w-60">short, easy-to-read chapters</h2>
-                                    <h3 className={`my-6 text-base md:text-xl font-bold w-60 ${darkMode ? 'text-gray-500' : 'text-gray-950 w-60'}`}>choose from over 600 chapters, each only 3-4 minutes long</h3>
+                                    <h3 className={`my-6 text-base md:text-xl font-bold w-60 ${darkMode ? 'text-gray-300' : 'text-gray-950 w-60'}`}>choose from over 600 chapters, each only 3-4 minutes long</h3>
 
                                     </div>
 
@@ -325,7 +327,7 @@ const StartPage = () => {
                             </Reveal>
                             <Reveal motionType={"leftToRight"}>
                                 <div className="flex flex-col w-full py-5 rounded-md lg:flex-row-reverse">
-                                    <img src={fingoSectionThree} alt="" className="start_page_img start_page_img_2 object-cover sm:max-w-lg aspect-auto" height={"450px"} />
+                                    <img src={fingoSectionThree} alt="" className="start_page_img start_page_img_2 object-cover sm:max-w-lg aspect-auto" height={"500px"} />
 
 
 
@@ -342,7 +344,7 @@ const StartPage = () => {
 
                                                 />
                                             </div>
-                                            <h3 className={`-mt-20 text-xl font-bold w-96 ${darkMode ? 'text-gray-500' : 'text-gray-950'}`}>
+                                            <h3 className={`-mt-20 text-xl font-bold w-96 ${darkMode ? 'text-gray-300' : 'text-gray-950'}`}>
                                                 complete quizzes, earn XP points, and increase your daily streak
                                             </h3>
                                         </div>
@@ -352,7 +354,7 @@ const StartPage = () => {
 
                                 <div className="flex flex-col items-center justify-center w-3/4 pb-5 mx-auto my-auto mt-5 lg:hidden ">
                                     <h2 className="text-3xl font-bold text-[#2cb74c] w-60 text-start">fun quizzes</h2>
-                                    <h3 className={`my-1 text-base md:text-xl font-bold  ${darkMode ? 'text-gray-500' : 'text-gray-950 w-60'}`}>
+                                    <h3 className={`my-1 text-base md:text-xl font-bold  ${darkMode ? 'text-gray-300' : 'text-gray-950 w-60'}`}>
                                         complete quizzes, earn XP points, and increase your daily streak
                                     </h3>
                                 </div>
@@ -391,7 +393,7 @@ const StartPage = () => {
                     <Reveal motionType={'zoom'}>
                         <div className="flex items-center justify-center pt-20 md:pb-7">
                             <h1 className="text-2xl font-bold lg:text-4xl">
-                                <span className="text-[#BF5700] font-mono">WARNING:</span> <span className={`${darkMode ? 'text-gray-500' : 'text-gray-950'}`}>You will hate</span>  <span className="text-[#2cb74c]" style={{ letterSpacing: '1.5px' }}>fingo</span> <span className={`${darkMode ? 'text-gray-500' : 'text-gray-950'}`}>if...</span>
+                                <span className="text-[#BF5700] font-mono">WARNING:</span> <span className={`${darkMode ? 'text-gray-300' : 'text-gray-950'}`}>You will hate</span>  <span className="text-[#2cb74c]" style={{ letterSpacing: '1.5px' }}>fingo</span> <span className={`${darkMode ? 'text-gray-300' : 'text-gray-950'}`}>if...</span>
                             </h1>
                         </div>
                         <div style={{ height: '450px', overflowX: 'scroll', overflowY: 'hidden', display: 'flex' }}>

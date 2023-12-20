@@ -124,17 +124,17 @@ const FingoCardDailyXP = () => {
                 </div>
                 <div className='right'>
                     <div>
-                        <p>Earn {getDailyXp} XP</p>
+                        <p>Earn 60 Bananas</p>
                     </div>
                     <div className='FingoCardDailyXPContent'>
                         <div className='progress'>
                             {newUser ? (
                                 <div className='xp-count'>
-                                    {getDailyXp || 0}/60
+                                    {Math.min(getDailyXp, 60) || 0}/60
                                 </div>
                             ) : (
                                 <div className='xp-count'>
-                                    {getDailyXp || 0}/60
+                                    {Math.min(getDailyXp, 60) || 0}/60
                                 </div>
                             )}
                             <div

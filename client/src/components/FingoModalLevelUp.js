@@ -156,7 +156,7 @@ const FingoModalLevelUp = ({ isFormScorePage }) => {
                         </>
                     )}
                 </div>
-                <FingoButton color='white' onClick={onClose}>
+                <FingoButton color='white' style={{borderRadius: '12px'}} onClick={onClose}>
                     Continue
                 </FingoButton>
             </div>
