@@ -82,12 +82,17 @@
 
 .StarContainer > div:nth-child(1) img {
     transform: rotate(-20deg);
-    width: 80%;
+    width: 94%;
 }
 
 .StarContainer > div:nth-child(2) img {
     transform: translateY(-20px);
-    width: 100%;
+    width: 110%;
+}
+
+.StarContainer > div:nth-child(3) img {
+    transform: rotate(20deg);
+    width: 94%;
 }
 
 .FingoLessonCompleteHeader {
