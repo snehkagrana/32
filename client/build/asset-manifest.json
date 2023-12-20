@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.15911c92.css",
-    "main.js": "/static/js/main.18c2988b.js",
+    "main.css": "/static/css/main.02372747.css",
+    "main.js": "/static/js/main.dfb4c74a.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
     "static/media/8.png": "/static/media/8.9daef5f1f68e0fc2fb5f.png",
@@ -29,6 +29,7 @@
     "static/media/72527-purple-symbol-viber-circle-violet-hd-image-free-png.png": "/static/media/72527-purple-symbol-viber-circle-violet-hd-image-free-png.7cbef658b16142a92f38.png",
     "static/media/fingo-landing-page-5-4.png": "/static/media/fingo-landing-page-5-4.fd72553a713b198da19d.png",
     "static/media/101756-career-emoji-download-hq.png": "/static/media/101756-career-emoji-download-hq.ba0d9c6bebd584561b2a.png",
+    "static/media/landingQuiz.png": "/static/media/landingQuiz.5fef5f4066b604914a9a.png",
     "static/media/google-play.jpg": "/static/media/google-play.8436a3c589f7421326a8.jpg",
     "static/media/64983-emoticon-sunglasses-smiley-iphone-go-emoji.png": "/static/media/64983-emoticon-sunglasses-smiley-iphone-go-emoji.731a85f6d4845012f2e8.png",
     "static/media/fingo-landing-page-5-3.png": "/static/media/fingo-landing-page-5-3.38b8cf6ca4397127ab1d.png",
@@ -95,12 +96,12 @@
     "static/media/outline-history.svg": "/static/media/outline-history.e8f18a93d32dd8483d9c94494afbb2e7.svg",
     "static/media/baseline-content-copy.svg": "/static/media/baseline-content-copy.58ba17b96079dd681d38d228fdc7ef61.svg",
     "static/media/info.svg": "/static/media/info.ef876f7b40a92ef036458f95b7e325e2.svg",
-    "main.15911c92.css.map": "/static/css/main.15911c92.css.map",
-    "main.18c2988b.js.map": "/static/js/main.18c2988b.js.map",
+    "main.02372747.css.map": "/static/css/main.02372747.css.map",
+    "main.dfb4c74a.js.map": "/static/js/main.dfb4c74a.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.15911c92.css",
-    "static/js/main.18c2988b.js"
+    "static/css/main.02372747.css",
+    "static/js/main.dfb4c74a.js"
   ]
 }
