@@ -9,7 +9,7 @@ import GiftboxImg from 'src/assets/images/giftbox.png'
 import 'src/styles/FingoCardGiftbox.styles.css'
 
 const FingoCardGiftbox = () => {
-    const { user } = useAuth()
+    const { user, isAuthenticated } = useAuth()
     const dispatch = useDispatch()
     const { app_setOpenModalHowToEarnDiamond } = useApp()
     const {
@@ -42,10 +42,15 @@ const FingoCardGiftbox = () => {
                 <button className='QuestionBtn' onClick={onClickQuestionBtn}>
                     <QuestionSvg />
                 </button>
-                <button className='HistoryBtn' onClick={onClickMyRedeemHistory}>
-                    <InfoIcon />
-                    <p>My Rewards</p>
-                </button>
+                {isAuthenticated && (
+                    <button
+                        className='HistoryBtn'
+                        onClick={onClickMyRedeemHistory}
+                    >
+                        <InfoIcon />
+                        <p>My Rewards</p>
+                    </button>
+                )}
             </div>
             <div className='FingoCardGiftboxImg'>
                 <img src={GiftboxImg} alt='giftbox img' />

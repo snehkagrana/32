@@ -59,7 +59,7 @@ router.post(
 /**
  * Reward routes for user basic
  */
-router.get('/reward', AuthGuard, ErrorHandler(RewardController.findAll))
+router.get('/reward', ErrorHandler(RewardController.findAll))
 
 // redeem
 router.post(
