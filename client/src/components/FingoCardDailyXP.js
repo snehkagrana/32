@@ -1,5 +1,6 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useCallback, useMemo } from 'react'
-import { useApp, useAuth } from 'src/hooks'
+import { useApp, useAuth, useReward } from 'src/hooks'
 import 'src/styles/FingoCardDailyXP.styles.css'
 import { ReactComponent as LightningIcon } from 'src/assets/svg/lightning-fill2.svg'
 import TreasureImg from 'src/assets/images/ic_treasure.png'
@@ -19,7 +20,8 @@ import { useDispatch } from 'react-redux'
 
 const FingoCardDailyXP = () => {
     const dispatch = useDispatch()
-    const { dailyXP, openModalLevelUp, app_setModalLevelUp } = useApp()
+    const { dailyXP } = useApp()
+    const { openModalListReward, reward_setOpenModalListReward } = useReward()
     const { newUser, user } = useAuth()
 
     const getDailyXp = useMemo(() => {
@@ -65,15 +67,14 @@ const FingoCardDailyXP = () => {
         return ImageLevel1
     }
 
-    const onClickLevelInfo = useCallback(() => {
-        dispatch(
-            app_setModalLevelUp({
-                open: true,
-                data: { total: user?.xp?.total, level: user?.xp?.level },
-            })
-        )
+    const onClickClaimReward = useCallback(
+        e => {
+            e.preventDefault()
+            dispatch(reward_setOpenModalListReward(true))
+        },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [openModalLevelUp])
+        [openModalListReward]
+    )
 
     return (
         <div className={`mb-3 FingoCardDailyXP FingoShapeRadius`}>
@@ -86,7 +87,12 @@ const FingoCardDailyXP = () => {
                 }}
             />
             <div className='FingoCardDailyXPHeader'>
-                <h2 className='title'>Daily Quests</h2>
+                <h2 className='title mb-0'>Daily Quests</h2>
+                {getDailyXp > 0 && (
+                    <a href='#' onClick={onClickClaimReward} alt='claim reward'>
+                        Claim Reward
+                    </a>
+                )}
             </div>
             <div className='FingoCardDailyXPInner'>
                 <div className='left'>
