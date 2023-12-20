@@ -1,0 +1,36 @@
+.MyRewardCardItem {
+  transition: all 0.2s;
+}
+
+/* .MyRewardCardItem:hover {
+  transform: translateY(4px);
+  border: 2px solid #58cc02 !important;
+} */
+
+.MyRewardCardItem .RedeemBtn {
+  background-color: #58cc02;
+  color: #fff;
+  border-radius: 2rem;
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.MyRewardCardItem .card-body {
+  padding: 1rem 1.2rem;
+}
+
+.MyRewardCardItem h4 {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.MyRewardCardItem p {
+  color: #747474;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.MyRewardCardItem .TitleContainer {
+  height: 44px;
+  overflow: hidden;
+}

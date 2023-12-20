@@ -56,6 +56,7 @@ import ModalRewardDetail from 'src/components/reward/ModalRewardDetail'
 import { ModalFormReward } from 'src/components/reward'
 import { ModalVerifyAction } from 'src/components/admin'
 import ModalInfoEarnDiamond from 'src/components/reward/ModalInfoEarnDiamond'
+import ModalListMyReward from 'src/components/reward/ModalListMyReward'
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -918,6 +919,7 @@ const HomePage = props => {
             <ModalRewardDetail />
             <ModalVerifyAction />
             <ModalInfoEarnDiamond />
+            <ModalListMyReward />
         </FingoHomeLayout>
     )
 }

@@ -2,10 +2,10 @@ import React, { useCallback, useEffect } from 'react'
 import { Form, Row, Col } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { useReward } from 'src/hooks'
-import { FingoModal } from 'src/components/core'
 import LoadingBox from 'src/components/LoadingBox'
-import RewardCardItem from './RewardCardItem'
-import 'src/styles/ModalListReward.styles.css'
+import MyRewardCardItem from './MyRewardCardItem'
+import 'src/styles/ModalListMyReward.styles.css'
+import { FingoModal } from '../core'
 
 const ModalListMyReward = () => {
     const dispatch = useDispatch()
@@ -21,10 +21,6 @@ const ModalListMyReward = () => {
         dispatch(reward_setOpenModalListMyReward(false))
     }
 
-    const onClickCancel = () => {
-        handleCloseModal()
-    }
-
     useEffect(() => {
         if (openModalListMyReward) {
             dispatch(reward_getListMyRewards())
@@ -37,10 +33,13 @@ const ModalListMyReward = () => {
             open={openModalListMyReward}
             onClose={handleCloseModal}
             centered
-            className='ModalListReward'
+            className='ModalListMyReward'
         >
             <div className='ListRewardContainer FingoShapeRadius'>
-                <h2 className='mb-3'>Reward History</h2>
+                <div className='ListRewardHeader'>
+                    <h2 className='mb-0'>My Rewards</h2>
+                </div>
+                <hr />
                 <div className='ListReward'>
                     <Row>
                         {isLoading ? (
@@ -53,11 +52,10 @@ const ModalListMyReward = () => {
                                     data.map(x => (
                                         <Col
                                             xs={12}
-                                            md={6}
                                             key={x._id}
                                             className='mb-3 px-2'
                                         >
-                                            <RewardCardItem data={x} />
+                                            <MyRewardCardItem data={x} />
                                         </Col>
                                     ))}
                             </>

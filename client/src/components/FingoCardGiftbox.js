@@ -6,7 +6,6 @@ import { ReactComponent as InfoIcon } from 'src/assets/svg/outline-history.svg'
 import { ReactComponent as QuestionSvg } from 'src/assets/svg/question-circle.svg'
 import { ReactComponent as DiamondSvg } from 'src/assets/svg/diamond.svg'
 import GiftboxImg from 'src/assets/images/giftbox.png'
-import toast from 'react-hot-toast'
 import 'src/styles/FingoCardGiftbox.styles.css'
 
 const FingoCardGiftbox = () => {
@@ -24,12 +23,9 @@ const FingoCardGiftbox = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [openModalListReward])
 
-    const notify = () => toast.success('Comming soon.')
-
-    const onClickMyRedeem = e => {
+    const onClickMyRedeemHistory = e => {
         e.stopPropagation()
         dispatch(reward_setOpenModalListMyReward(true))
-        notify()
     }
 
     const onClickQuestionBtn = e => {
@@ -46,7 +42,7 @@ const FingoCardGiftbox = () => {
                 <button className='QuestionBtn' onClick={onClickQuestionBtn}>
                     <QuestionSvg />
                 </button>
-                <button className='HistoryBtn' onClick={onClickMyRedeem}>
+                <button className='HistoryBtn' onClick={onClickMyRedeemHistory}>
                     <InfoIcon />
                     <p>My Rewards</p>
                 </button>
