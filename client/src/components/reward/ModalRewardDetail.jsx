@@ -20,6 +20,8 @@ import { ReactComponent as EyeOff } from 'src/assets/svg/eye-off.svg'
 import { ReactComponent as SadSvg } from 'src/assets/svg/sad.svg'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import toast from 'react-hot-toast'
+import Sound from 'src/sounds/announcement-sound.mp3'
+import { Howl } from 'howler'
 
 const confettiConfig = {
     colors: XP_LEVEL_COLORS_DEFAULT,
@@ -29,6 +31,11 @@ const confettiConfig = {
 const ModalRewardDetail = () => {
     const dispatch = useDispatch()
     const { user, auth_syncAndGetUser } = useAuth()
+
+    const sound = new Howl({
+        src: [Sound],
+    })
+
     const {
         openModalVerifyAction,
         admin_setOpenModalVerifyAction,
@@ -248,6 +255,20 @@ const ModalRewardDetail = () => {
             return (user?.diamond / modalDetail?.data?.diamondValue) * 100
         }
     }, [user, modalDetail.data])
+
+    useEffect(() => {
+        if (redeemSuccess) {
+            sound.once('load', () => {
+                if (celebrate) {
+                    sound.play()
+                }
+            })
+            sound.load()
+            return () => {
+                sound.unload()
+            }
+        }
+    }, [celebrate, redeemSuccess])
 
     return (
         <FingoModal
