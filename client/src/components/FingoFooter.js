@@ -6,8 +6,8 @@ import MenuIcon from 'src/assets/images/10110130.png'
 import IcHome from 'src/assets/images/ic_home.png'
 import IcTreasure from 'src/assets/images/ic_treasure.png'
 import IcUser from 'src/assets/images/ic_user.png'
-import { useRef, useState } from 'react'
-import { useApp, useMediaQuery } from 'src/hooks'
+import { useCallback, useRef, useState } from 'react'
+import { useApp, useAuth, useMediaQuery } from 'src/hooks'
 import { Overlay, Popover } from 'react-bootstrap'
 import FingoCardDailyXP from './FingoCardDailyXP'
 import FingoUserInfo from './FingoUserInfo'
@@ -36,14 +36,13 @@ const FOOTER_ITEMS = [
 const FingoFooter = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const { user } = useAuth()
     const { openSidebar, app_setOpenSidebar } = useApp()
     const matchMobile = useMediaQuery('(max-width: 570px)')
     const [show, setShow] = useState(false)
     const [target, setTarget] = useState(null)
     const ref = useRef(null)
     const [activeTab, setActiveTab] = useState('')
-
-    // const [openSidebar, setOpenSidebar] = useState(false)
 
     const onClickMenu = (e, name) => {
         e.preventDefault()
@@ -62,6 +61,16 @@ const FingoFooter = () => {
         }
     }
 
+    const renderBadge = useCallback(
+        menuName => {
+            if (menuName === 'daily-quest' && user?.xp?.daily > 60) {
+                return <div className='FingoFooterBadge'></div>
+            }
+            return null
+        },
+        [user]
+    )
+
     return (
         <div id='FingoFooterRoot' ref={ref}>
             <div className='FingoFooter'>
@@ -71,9 +80,10 @@ const FingoFooter = () => {
                             <li key={String(index)}>
                                 <a
                                     href='#'
-                                    className={`FingoShapeRadius`}
+                                    className={`FingoShapeRadius relative`}
                                     onClick={e => onClickMenu(e, i.name)}
                                 >
+                                    {renderBadge(i.name)}
                                     <img src={i.icon} alt='footer icon' />
                                 </a>
                             </li>
