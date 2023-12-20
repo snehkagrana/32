@@ -1,0 +1,63 @@
+@media (min-width: 576px) {
+    .ModalClaimReward .modal-dialog {
+        max-width: 320px;
+    }
+}
+
+.ModalClaimRewardContainer {
+    background-color: #ffffff;
+    width: 100%;
+    padding: 1.2rem 2rem;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+@media (min-width: 576px) {
+    .ModalClaimRewardContainer {
+        padding: 2rem 3rem;
+    }
+}
+
+.ModalClaimRewardContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.ModalClaimRewardContent h2 {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.ModalClaimRewardContent h6 {
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.ModalClaimRewardContent svg {
+    width: 28px;
+    margin-top: -2px;
+    height: auto;
+    margin-left: 0.2rem;
+}
+
+[data-theme='dark'] .ModalClaimReward .ModalClaimRewardContent {
+    background-color: #383838;
+}
+
+.ModalClaimRewardContent .Giftbox {
+    width: 50px;
+    height: auto;
+    margin-bottom: 1rem;
+}
+
+.LoadingWrapper {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}

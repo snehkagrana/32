@@ -26,6 +26,7 @@ import { ModalFormReward } from "src/components/reward";
 import { ModalVerifyAction } from "src/components/admin";
 import ModalInfoEarnDiamond from "src/components/reward/ModalInfoEarnDiamond";
 import ModalListMyReward from "src/components/reward/ModalListMyReward";
+import ModalClaimReward from "src/components/reward/ModalClaimReward";
 
 const SkillCategoryPage = () => {
     const { isAuthenticated, user } = useAuth()
@@ -202,6 +203,7 @@ const SkillCategoryPage = () => {
             <ModalVerifyAction />
             <ModalInfoEarnDiamond />
             <ModalListMyReward />
+            <ModalClaimReward />
         </FingoHomeLayout>
     );
 };

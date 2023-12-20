@@ -16,6 +16,13 @@ const initialState = {
     },
     openModalListReward: false,
     openModalListMyReward: false,
+    openModalClaimReward: {
+        open: false,
+        data: {
+            type: null,
+            value: 0,
+        },
+    },
     modalDetail: {
         open: false,
         data: null,
@@ -43,6 +50,9 @@ export const rewardSlice = createSlice({
         },
         reward_setOpenModalListMyReward(state, action) {
             state.openModalListMyReward = action.payload
+        },
+        reward_setOpenModalClaimReward(state, action) {
+            state.openModalClaimReward = action.payload
         },
         reward_setModalDetail(state, action) {
             state.modalDetail = action.payload

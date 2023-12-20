@@ -41,4 +41,8 @@ export const RewardApi = {
         })
         return response?.data
     },
+    claimReward: async body => {
+        const response = await Axios.post('/server/api/reward/claim', body)
+        return response?.data
+    },
 }

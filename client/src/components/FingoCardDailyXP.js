@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useCallback, useMemo } from 'react'
 import { useApp, useAuth, useReward } from 'src/hooks'
@@ -17,11 +18,12 @@ import ImageLevel9 from 'src/assets/images/levels/9.png'
 import ImageLevel10 from 'src/assets/images/levels/10.png'
 
 import { useDispatch } from 'react-redux'
+import { RewardApi } from 'src/api'
 
 const FingoCardDailyXP = () => {
     const dispatch = useDispatch()
     const { dailyXP } = useApp()
-    const { openModalListReward, reward_setOpenModalListReward } = useReward()
+    const { openModalClaimReward, reward_setOpenModalClaimReward } = useReward()
     const { newUser, user } = useAuth()
 
     const getDailyXp = useMemo(() => {
@@ -68,12 +70,28 @@ const FingoCardDailyXP = () => {
     }
 
     const onClickClaimReward = useCallback(
-        e => {
+        async e => {
             e.preventDefault()
-            dispatch(reward_setOpenModalListReward(true))
+            try {
+                const response = await RewardApi.claimReward({
+                    type: 'daily quest',
+                })
+                if (response?.data?.value) {
+                    dispatch(
+                        reward_setOpenModalClaimReward({
+                            open: true,
+                            data: {
+                                type: 'daily quest',
+                                value: response?.data?.value,
+                            },
+                        })
+                    )
+                }
+            } catch (e) {
+                console.log('e', e)
+            }
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [openModalListReward]
+        [openModalClaimReward]
     )
 
     return (
@@ -88,7 +106,7 @@ const FingoCardDailyXP = () => {
             />
             <div className='FingoCardDailyXPHeader'>
                 <h2 className='title mb-0'>Daily Quests</h2>
-                {getDailyXp > 0 && (
+                {getDailyXp > 0 && !user.claimedGemsDailyQuest && (
                     <a href='#' onClick={onClickClaimReward} alt='claim reward'>
                         Claim Reward
                     </a>

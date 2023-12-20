@@ -1,6 +1,6 @@
 .MyRewardCardItem {
     transition: all 0.2s;
-    background-color: #ebf2f9 !important;
+    background-color: #f4f9fe !important;
 }
 .MyRewardCardItem.card {
     border: 2px solid rgb(0 138 255) !important;

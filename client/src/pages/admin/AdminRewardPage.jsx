@@ -15,6 +15,7 @@ import ModalRewardDetail from 'src/components/reward/ModalRewardDetail'
 import { ModalVerifyAction } from 'src/components/admin'
 import ModalInfoEarnDiamond from 'src/components/reward/ModalInfoEarnDiamond'
 import ModalListMyReward from 'src/components/reward/ModalListMyReward'
+import ModalClaimReward from 'src/components/reward/ModalClaimReward'
 
 const AdminRewardPage = () => {
     const dispatch = useDispatch()
@@ -111,6 +112,7 @@ const AdminRewardPage = () => {
             <ModalVerifyAction />
             <ModalInfoEarnDiamond />
             <ModalListMyReward />
+            <ModalClaimReward />
         </FingoHomeLayout>
     )
 }
