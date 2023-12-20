@@ -1,6 +1,6 @@
 @media (min-width: 576px) {
     .ModalListMyReward .modal-dialog {
-        max-width: 500px;
+        max-width: 520px;
     }
 }
 
@@ -12,7 +12,7 @@
 
 @media (min-width: 576px) {
     .ListRewardContainer {
-        padding: 2rem 3rem;
+        padding: 2rem 4rem;
     }
 }
 
