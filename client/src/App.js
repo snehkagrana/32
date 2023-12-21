@@ -56,7 +56,6 @@ const App = () => {
                 <Routes>
                     <Route exact path='/' element={<StartPage />} />
                     <Route exact path='/terms' element={<Terms />} />
-                    {/* its should be the same with config url callback on google console */}
                     <Route exact path='/auth/google/callback' element={<AuthCallback />} />
                     <Route
                         exact
