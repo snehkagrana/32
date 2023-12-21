@@ -47,6 +47,7 @@ import DailyQuestPage from './routes/DailyQuestPage'
 import HomePage from './pages/HomePage'
 import AdminRewardPage from './pages/admin/AdminRewardPage'
 import { Toaster, ToastBar } from 'react-hot-toast'
+import AuthCallback from './pages/AuthCallback'
 
 const App = () => {
     return (
@@ -55,6 +56,7 @@ const App = () => {
                 <Routes>
                     <Route exact path='/' element={<StartPage />} />
                     <Route exact path='/terms' element={<Terms />} />
+                    <Route exact path='/auth/google/callback' element={<AuthCallback />} />
                     <Route
                         exact
                         path='/privacypolicy'
