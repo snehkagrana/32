@@ -1,5 +1,6 @@
 import _axios from 'axios'
 import { appConfig } from 'src/configs/app.config'
+import { PERSIST_ROOT_KEY } from 'src/constants/app.constant'
 import { authUtils } from 'src/utils'
 
 // On request rejected
@@ -14,6 +15,13 @@ const onResponseSuccess = axiosResponse => {
 
 // On response rejected
 const onResponseError = axiosError => {
+    if (axiosError?.response?.status === 401) {
+        authUtils.removeUserAccessToken()
+        localStorage.removeItem(`persist:${PERSIST_ROOT_KEY}`)
+        setTimeout(() => {
+            window.location.href = '/home'
+        }, 250)
+    }
     return Promise.reject(axiosError)
 }
 
@@ -34,6 +42,7 @@ Axios.interceptors.request.use(
                 config.headers['Authorization'] = `Bearer ${idToken}`
             }
         } catch (e) {
+            console.log('EEE .>>', e)
             console.log(e)
         }
         return config

@@ -1,19 +1,18 @@
-import Cookies from 'js-cookie'
+// import Cookies from 'js-cookie'
 
 const KEY = 'FingoUserToken'
 
 const saveUserAccessToken = token => {
-    var expires = new Date()
-    expires.setTime(expires.getTime() + 604800000)
-
-    // prettier-ignore
-    document.cookie = KEY + '=' + token + ';expires=' + expires.toUTCString() + ';path=/'
+    // var expires = new Date()
+    // expires.setTime(expires.getTime() + 604800000)
+    // document.cookie = KEY + '=' + token + ';expires=' + expires.toUTCString() + ';path=/'
+    localStorage.setItem(KEY, token)
 }
 const getUserAccessToken = () => {
-    return Cookies.get(KEY)
+    return localStorage.getItem(KEY)
 }
 const removeUserAccessToken = () => {
-    Cookies.remove(KEY)
+    localStorage.removeItem(KEY)
 }
 
 export const authUtils = {
