@@ -5,7 +5,9 @@ const KEY = 'FingoUserToken'
 const saveUserAccessToken = token => {
     var expires = new Date()
     expires.setTime(expires.getTime() + 604800000)
-    document.cookie = KEY + '=' + token + ';expires=' + expires.toUTCString()
+
+    // prettier-ignore
+    document.cookie = KEY + '=' + token + ';expires=' + expires.toUTCString() + ';path=/'
 }
 const getUserAccessToken = () => {
     return Cookies.get(KEY)
