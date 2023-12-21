@@ -318,7 +318,7 @@ const ModalRewardDetail = () => {
                                                 {redeemedItem?.name}
                                             </h6>
                                             <p className='mb-3'>
-                                                Here's is the code for your{' '}
+                                                Here is your gift card code worth{' '}
                                                 {redeemedItem?.currencyValue}{' '}
                                                 {redeemedItem?.currencyCode}{' '}
                                             </p>

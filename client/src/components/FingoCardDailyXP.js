@@ -124,7 +124,7 @@ const FingoCardDailyXP = () => {
                 </div>
                 <div className='right'>
                     <div>
-                        <p>Earn 60 Bananas</p>
+                        <p>Earn 60 bananas</p>
                     </div>
                     <div className='FingoCardDailyXPContent'>
                         <div className='progress'>
