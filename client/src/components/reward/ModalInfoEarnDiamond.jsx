@@ -8,9 +8,9 @@ import { ReactComponent as DiamondSvg } from 'src/assets/svg/diamond.svg'
 import 'src/styles/ModalInfoEarnDiamond.styles.css'
 
 const ITEMS = [
-    'Complete more lessons.',
+    'Learn more lessons.',
     'Answer the quizzes correctly.',
-    'Maintain daily streak.',
+    'Complete daily quests.',
 ]
 
 const ModalInfoEarnDiamond = () => {

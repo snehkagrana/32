@@ -47,7 +47,7 @@ const ModalListReward = () => {
             <div className='relative ListRewardContainer FingoShapeRadius'>
                 <div className='ListRewardHeader relative'>
                     <h2 className='mb-1'>Redeem your gems</h2>
-                    <p>Select the gift card you would like to redeem</p>
+                    <p>Select the gift card you would like to redeem.</p>
                     {isAuthenticated && (
                         <div className='ListRewardHeaderDiamondEarned'>
                             <p>

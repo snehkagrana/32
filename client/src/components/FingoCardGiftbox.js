@@ -58,18 +58,18 @@ const FingoCardGiftbox = () => {
             <div className='FingoCardGiftboxContent'>
                 {user?.diamond >= 50 ? (
                     <a href='#' className='font-bold'>
-                        Claim your Gift Card
+                        Claim your Gift Card.
                     </a>
                 ) : (
                     <div className='text-center'>
                         {user?.diamond < 50 ? (
                             <p className='mb-0 text-center'>
                                 Earn {50 - user.diamond} more <DiamondSvg /> to
-                                claim your Gift
+                                claim your Gift Card.
                             </p>
                         ) : (
                             <p className='mb-0 text-center'>
-                                Earn 50 <DiamondSvg /> to claim your gift
+                                Earn 50 <DiamondSvg /> to claim your Gift Card.
                             </p>
                         )}
                     </div>
