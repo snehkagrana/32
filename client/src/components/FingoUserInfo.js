@@ -14,6 +14,8 @@ const FingoUserInfo = () => {
     const now = new Date()
     const time = now.getHours()
 
+    const { isAuthenticated } = useAuth()
+
     const getGreetingText = useMemo(() => {
         if (time >= 1 && time < 11) {
             return 'Good morning,'
@@ -59,7 +61,7 @@ const FingoUserInfo = () => {
         <div className='FingoUserInfo'>
             <div className='FingoUserInfoInner d-flex align-items-center'>
                 <div className='profile-picture'>
-                    {!newUser && Boolean(user) && (
+                    {isAuthenticated && Boolean(user) && (
                         <div
                             className='FingoCardDailyXPHeaderLevel'
                             style={{
@@ -73,7 +75,7 @@ const FingoUserInfo = () => {
                         </div>
                     )}
                     <label htmlFor='profile-picture-upload'>
-                        {newUser ? (
+                        {!isAuthenticated ? (
                             <img
                                 src={nonSignedUp}
                                 alt='Profile'
