@@ -18,12 +18,12 @@ import { rootReducer } from './reducers'
 
 import { unauthenticatedMiddleware } from './middlewares'
 import { authPersistedSlice } from './auth/auth.persisted.slice'
-// import { appSlice } from 'src/redux/app'
+import { PERSIST_ROOT_KEY } from 'src/constants/app.constant'
 
 // Config for Redux Persist
 const persistConfig = {
-    key: 'root',
-    version: 1,
+    key: PERSIST_ROOT_KEY,
+    version: 2,
     storage,
     whitelist: [authPersistedSlice.name],
 }
