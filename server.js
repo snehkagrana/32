@@ -110,13 +110,15 @@ const isImage = (req, file, callback) => {
 app.get(
     "/auth/login-google",
     (req, res, next) => {
+        // console.log("--------->", req);
         req.session.google_oauth2_state = Math.random()
             .toString(36)
             .substring(2);
         next();
     },
     passport.authenticate("google", {
-        scope: ["profile", "email"],
+        session: false,
+        scope: ['openid', 'profile', 'email'],
         prompt: "select_account",
         state: true,
     })
@@ -127,16 +129,17 @@ app.get(
     "/auth/login-google/callback",
     passport.authenticate("google", { failureRedirect: "/auth/login" }),
     function (req, res) {
-        // // Successful authentication, redirect home.
-
-        ///// redir is the redirect information passed to front end react app.
-        var redir = {
-            redirect: "/home",
-            message: "Login Successfully",
-            email: req?.user?.email,
+        /**
+         * Sample res.req.user
+         * {
+                access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTZjYTU0YTA5NjZhYzgxYzU4YjRlMzUiLCJlbWFpbCI6ImhpLnJpc2tpLm1lQGdtYWlsLmNvbSIsImlhdCI6MTcwMzEzMTQyMCwiZXhwIjoxNzAzNzM2MjIwfQ.TfcphSiwoJkazzwHZoeC26XyktujOavow9QKjLfUMWs',
+                token_type: 'Bearer',
+                expires_in: '7d'
+            }
+         */
+        if(res.req?.user?.access_token) {
+            return res.redirect(`/auth/google/callback?token=${res.req.user.access_token}`)
         };
-        return res.redirect("/home");
-        // return res.json(redir);
     }
 );
 

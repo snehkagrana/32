@@ -2,6 +2,9 @@ const User = require("./models/user");
 const bcrypt = require("bcryptjs");
 const localStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const jwtUtil = require('./utils/jwt.util')
+const jwtConfig = require('./configs/jwt.config')
+const AuthService = require('./services/auth.service')
 require("dotenv").config();
 
 module.exports = function (passport) {
@@ -31,70 +34,70 @@ module.exports = function (passport) {
     passport.use(
         new GoogleStrategy(
             {
-                // options for google strategy
+            // options for google strategy
                 clientID: process.env.GOOGLE_CLIENT_ID,
                 clientSecret: process.env.GOOGLE_CLIENT_SECRET,
                 callbackURL: "https://tryfingo.com/auth/login-google/callback", //google callback url, same as the one added in Google API page
             },
-            function (accessToken, refreshToken, profile, done) {
-                // passport callback function
-                // Eg: Register user here.
-
-                // console.log("profile", profile);
-                const email = profile.emails[0].value;
-                const displayName = profile.displayName;
-                const profileImageUrl = profile.photos[0].value;
-                ////checking if another user with same email already exists
-                User.findOne({ email: email }, async (err, doc) => {
-                    if (err) throw err;
-                    if (doc) {
-                        return done(null, doc);
-                    }
-
-                    if (!doc) {
-                        User.findOne({ email: email }, async (err, doc) => {
-                            if (err) throw err;
-                            if (doc) {
-                                return done(null, doc);
-                            } else {
-                                const newUser = new User({
-                                    displayName: displayName,
-                                    imgPath: profileImageUrl,
-                                    email: email,
-                                    role: "basic",
-                                });
-                                await newUser.save();
-                                console.log("user", newUser);
-                                return done(null, newUser);
-                            }
-                        });
-                    }
+            async function (accessToken, refreshToken, profile, done) {
+            // passport callback function
+    
+            // console.log("profile", profile);
+            const email = profile.emails[0].value;
+            const displayName = profile.displayName;
+            const profileImageUrl = profile.photos[0].value;
+    
+            ////checking if another user with same email already exists
+            let user = await User.findOne({ email }).exec();
+            if (user) {
+                const token = await jwtUtil.createToken({
+                    _id: user._id,
+                    email: user.email,
                 });
+                return done(false, {
+                    access_token: token,
+                    token_type: "Bearer",
+                    expires_in: jwtConfig.ttl,
+                });
+            } else {
+                const newUserData = {
+                    displayName: displayName,
+                    email: email,
+                    password: "",
+                    role: "basic",
+                    streak: 0,
+                    lastCompletedDay: null,
+                    imgPath: profileImageUrl || null,
+                    diamond: 0,
+                    xp: {
+                        current: 0,
+                        daily: 0,
+                        total: 0,
+                        level: 1,
+                    },
+                };
+                const newUser = await AuthService.createUser(newUserData);
+                const token = await jwtUtil.createToken({
+                    _id: newUser._id,
+                    email: newUser.email,
+                });
+                return done(false, {
+                    access_token: token,
+                    token_type: "Bearer",
+                    expires_in: jwtConfig.ttl,
+                    message: "Success.",
+                });
+            }
             }
         )
     );
 
-    passport.serializeUser((user, cb) => {
+    passport.serializeUser((user, done) => {
         // stores a cookie inside the browser
-        cb(null, user.id);
+        done(null, user);
     });
 
-    passport.deserializeUser((id, cb) => {
-        // takes the cookie and return the user
-        User.findOne({ _id: id }, (err, user) => {
-            const userInformation = {
-                displayName: user.displayName,
-                email: user.email,
-                imgPath: user.imgPath,
-                score: user.score,
-                last_played: user.last_played,
-                role: user.role,
-                streak: user.streak,
-                lastCompletedDay: user.lastCompletedDay,
-                completedDays: user.completedDays,
-                xp: user.xp,
-            };
-            cb(err, userInformation);
-        });
+    passport.deserializeUser(function(user, done) {
+        done(null, user);
     });
 };
