@@ -132,8 +132,8 @@ exports.claimReward = async (req, res) => {
                 data: result,
             })
         }
-        return res.status(400).json({ message: 'Error' })
+        return res.status(400).json({ message: 'Failed to claim reward.' })
     } else {
-        return res.status(400).json({ message: 'Claim type cannot be empty' })
+        return res.status(400).json({ message: 'Claim type cannot be empty.' })
     }
 }

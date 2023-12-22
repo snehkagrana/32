@@ -86,8 +86,11 @@ exports.getUser = async (req, res) => {
 }
 
 exports.syncUser = async (req, res) => {
-    await AuthService.syncUser(req.user.email)
-    return res.json({ message: 'Sync successfully.' })
+    const result = await AuthService.syncUser(req.user.email)
+    if (result) {
+        return res.json({ message: 'Sync successfully.' })
+    }
+    return res.status(400).json({ message: 'Failed to sync.' })
 }
 
 exports.logout = async (req, res) => {
