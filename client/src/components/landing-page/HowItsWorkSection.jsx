@@ -7,6 +7,9 @@ import './HowItsWorkSection.styles.css'
 import { Element, Events, scrollSpy, scroller } from 'react-scroll'
 
 import Img1 from 'src/assets/images/img1.png'
+import Img2 from 'src/assets/images/img2.png'
+import Img3 from 'src/assets/images/img3.png'
+import Img4 from 'src/assets/images/img4.png'
 
 const ITEMS = [
     {
@@ -20,29 +23,20 @@ const ITEMS = [
         title: 'Answer Quizzes',
         content:
             'Practice what to learned and challenge yourself with fun quizzes.',
-        imageUrl: Img1,
+        imageUrl: Img2,
         position: 'right',
     },
     {
-        title: 'Answer Quizzes',
-        content:
-            'Practice what to learned and challenge yourself with fun quizzes.',
-        imageUrl: Img1,
+        title: 'Earn Gems',
+        content: 'Complete quizzes, daily quest to earn bananas and gems.',
+        imageUrl: Img3,
         position: 'left',
     },
     {
-        title: 'Answer Quizzes',
-        content:
-            'Practice what to learned and challenge yourself with fun quizzes.',
-        imageUrl: Img1,
+        title: 'Get your Gift Card',
+        content: 'Redeem your gems to get gift cards of your choice.',
+        imageUrl: Img4,
         position: 'right',
-    },
-    {
-        title: 'Answer Quizzes',
-        content:
-            'Practice what to learned and challenge yourself with fun quizzes.',
-        imageUrl: Img1,
-        position: 'left',
     },
 ]
 

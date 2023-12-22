@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.85068f0c.css",
-    "main.js": "/static/js/main.3f0cfe71.js",
+    "main.css": "/static/css/main.72c73312.css",
+    "main.js": "/static/js/main.7fd9d5f0.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
     "static/media/8.png": "/static/media/8.9daef5f1f68e0fc2fb5f.png",
@@ -9,6 +9,7 @@
     "static/media/5-money-bag-png-image.png": "/static/media/5-money-bag-png-image.67e6560665949337f935.png",
     "static/media/64997-emoticon-on-money-keep-bag-carving-emoji.png": "/static/media/64997-emoticon-on-money-keep-bag-carving-emoji.e6508e91da874d588355.png",
     "static/media/71577-recycling-recycle-symbol-paper-emoji-free-hq-image.png": "/static/media/71577-recycling-recycle-symbol-paper-emoji-free-hq-image.bb0c629f08aa81cdc510.png",
+    "static/media/img3.png": "/static/media/img3.9ee8dc7bbcf01c6f9ec0.png",
     "static/media/103717-blue-photos-sky-emoji-free-transparent-image-hq.png": "/static/media/103717-blue-photos-sky-emoji-free-transparent-image-hq.fb2ac5a8fec49bf25e26.png",
     "static/media/64998-money-dollar-sign-currency-android-emoji.png": "/static/media/64998-money-dollar-sign-currency-android-emoji.87721f50d5e086eb5098.png",
     "static/media/harshit.jpg": "/static/media/harshit.649b34921f593ef2488d.jpg",
@@ -17,6 +18,7 @@
     "static/media/64926-emoticon-domain-network-sticker-graphics-emoji-portable.png": "/static/media/64926-emoticon-domain-network-sticker-graphics-emoji-portable.a781d79f3a0b8120acdd.png",
     "static/media/fingo-landing-page-section-2.png": "/static/media/fingo-landing-page-section-2.dc5b0293218f63747cc2.png",
     "static/media/announcement-sound.mp3": "/static/media/announcement-sound.c200e530c68e3e64a443.mp3",
+    "static/media/img4.png": "/static/media/img4.57da34ba32d2119eeef6.png",
     "static/media/65025-emoticon-like-signal-emoji-button-thumb.png": "/static/media/65025-emoticon-like-signal-emoji-button-thumb.1e0ed28749aec5bf73b3.png",
     "static/media/102587-funny-picture-emoji-boy-free-download-png-hq.png": "/static/media/102587-funny-picture-emoji-boy-free-download-png-hq.99b9a5203d392b524466.png",
     "static/media/fingo-landing-page-5-5.png": "/static/media/fingo-landing-page-5-5.cafa699fff7cf808ffc3.png",
@@ -55,6 +57,7 @@
     "static/media/fingo-logo.png": "/static/media/fingo-logo.a49d4dbf80aacb5a6e7d.png",
     "static/media/pepe.jpg": "/static/media/pepe.20a506243a1ccdcce95e.jpg",
     "static/media/house.png": "/static/media/house.557bca33d436d0b59a0c.png",
+    "static/media/img2.png": "/static/media/img2.550eb1e6e0c167a562f3.png",
     "static/media/celebrate-badge-2.png": "/static/media/celebrate-badge-2.f72ad5ac596c22e7602a.png",
     "static/media/robot_face.png": "/static/media/robot_face.ea412ab15d3a628b0b2f.png",
     "static/media/5.png": "/static/media/5.bd1568e2e58d0301a6e5.png",
@@ -97,12 +100,12 @@
     "static/media/outline-history.svg": "/static/media/outline-history.e8f18a93d32dd8483d9c94494afbb2e7.svg",
     "static/media/baseline-content-copy.svg": "/static/media/baseline-content-copy.58ba17b96079dd681d38d228fdc7ef61.svg",
     "static/media/info.svg": "/static/media/info.ef876f7b40a92ef036458f95b7e325e2.svg",
-    "main.85068f0c.css.map": "/static/css/main.85068f0c.css.map",
-    "main.3f0cfe71.js.map": "/static/js/main.3f0cfe71.js.map",
+    "main.72c73312.css.map": "/static/css/main.72c73312.css.map",
+    "main.7fd9d5f0.js.map": "/static/js/main.7fd9d5f0.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.85068f0c.css",
-    "static/js/main.3f0cfe71.js"
+    "static/css/main.72c73312.css",
+    "static/js/main.7fd9d5f0.js"
   ]
 }
