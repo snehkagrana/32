@@ -16,11 +16,13 @@ import ImageLevel7 from 'src/assets/images/levels/7.png'
 import ImageLevel8 from 'src/assets/images/levels/8.png'
 import ImageLevel9 from 'src/assets/images/levels/9.png'
 import ImageLevel10 from 'src/assets/images/levels/10.png'
+import dayjs from 'dayjs'
 
 import { useDispatch } from 'react-redux'
 import { RewardApi } from 'src/api'
 
 const FingoCardDailyXP = () => {
+    const today = new Date()
     const dispatch = useDispatch()
     const { dailyXP } = useApp()
     const { openModalClaimReward, reward_setOpenModalClaimReward } = useReward()
@@ -94,6 +96,19 @@ const FingoCardDailyXP = () => {
         [openModalClaimReward]
     )
 
+    // prettier-ignore
+    const isAbleToClaimDailyReward = useMemo(() => {
+        if(isAuthenticated) {
+            if (!user?.lastClaimedGemsDailyQuest && user?.xp?.daily >= 60) {
+                return true
+            } else if (user?.lastClaimedGemsDailyQuest && dayjs(today).isBefore(dayjs(user.lastClaimedGemsDailyQuest), 'day') ) {
+                return false
+            }
+        } else {
+            return false;
+        }
+    }, [today, user, isAuthenticated])
+
     return (
         <div className={`mb-3 FingoCardDailyXP FingoShapeRadius`}>
             <div
@@ -106,17 +121,11 @@ const FingoCardDailyXP = () => {
             />
             <div className='FingoCardDailyXPHeader'>
                 <h2 className='title mb-0'>Daily Quests</h2>
-                {isAuthenticated &&
-                    getDailyXp >= 60 &&
-                    !user?.claimedGemsDailyQuest && (
-                        <a
-                            href='#'
-                            onClick={onClickClaimReward}
-                            alt='claim reward'
-                        >
-                            Claim Reward
-                        </a>
-                    )}
+                {isAbleToClaimDailyReward && (
+                    <a href='#' onClick={onClickClaimReward} alt='claim reward'>
+                        Claim Reward
+                    </a>
+                )}
             </div>
             <div className='FingoCardDailyXPInner'>
                 <div className='left'>
