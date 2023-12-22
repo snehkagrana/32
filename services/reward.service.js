@@ -1,6 +1,7 @@
 const reward = require('../models/reward')
 const RewardModel = require('../models/reward')
 const UserModel = require('../models/user')
+const dayjs = require('dayjs')
 
 var ObjectId = require('mongoose').Types.ObjectId
 
@@ -221,19 +222,25 @@ exports.redeem = async (email, body) => {
 
 exports.claimReward = async (email, type) => {
     let DIAMOND_AWARDED = 0
-    let user = await UserModel.findOne({ email })
+    let user = await UserModel.findOne({ email }).exec()
+    const today = new Date().toISOString()
     let result = null
 
     if (type == 'daily quest') {
         DIAMOND_AWARDED = 1
-        // user no claim daily quest yet
-        if (!user.claimedGemsDailyQuest) {
+
+        // check claimed gems from daily quest
+        // prettier-ignore
+        if (
+            !user.lastClaimedGemsDailyQuest ||
+            (user.lastClaimedGemsDailyQuest && dayjs(today).isBefore(dayjs(user.lastClaimedGemsDailyQuest), 'day'))
+        ) {
             user = await UserModel.findOneAndUpdate(
                 { email },
                 {
                     $set: {
-                        claimedGemsDailyQuest: true,
-                        diamond: user.diamond + 1,
+                        lastClaimedGemsDailyQuest: new Date(),
+                        diamond: user.diamond + DIAMOND_AWARDED,
                     },
                 },
                 { new: true }

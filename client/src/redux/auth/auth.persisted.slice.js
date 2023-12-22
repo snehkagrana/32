@@ -50,6 +50,7 @@ export const authPersistedSlice = createSlice({
                 state.user = {
                     ...state.user,
                     ...action.payload.data,
+                    lastClaimedGemsDailyQuest: !action.payload?.data?.lastClaimedGemsDailyQuest ? null : action.payload?.data?.lastClaimedGemsDailyQuest
                 }
             }
         })
