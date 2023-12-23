@@ -300,7 +300,11 @@ const LandingPage = () => {
                         ref={scrollTargetRef}
                         className='LandingPageScrollTarget'
                     />
-                    <ThrustedBySection />
+
+                    <Reveal motionType={'zoom'}>
+                        <ThrustedBySection />
+                    </Reveal>
+
                     <HowItsWorkSection />
 
                     <Reveal motionType={'zoom'}>

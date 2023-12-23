@@ -66,7 +66,7 @@ const Item = ({ data, index, activeIndex, setActiveIndex, isLastItem }) => {
 
     const { ref, inView, entry } = useInView({
         threshold: 0,
-        rootMargin: `-${screenHeight / 2.5}px`,
+        rootMargin: matchMobile ? '-60px' : `-${screenHeight / 2.5}px`,
     })
 
     useEffect(() => {
