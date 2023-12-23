@@ -1,13 +1,13 @@
 .HowItsWorkSection {
 }
 
-.HowItsWorkSection .HowItsWorkItemContainer:nth-child(2n + 2) {
-    flex-direction: row-reverse;
+.HowItsWorkSection .HowItsWorkItemContainer.left {
+    flex-direction: row;
 }
 
-/* .HowItsWorkSection .HowItsWorkItemContainer:nth-child(odd) {
-    flex-direction: row;
-} */
+.HowItsWorkSection .HowItsWorkItemContainer.right {
+    flex-direction: row-reverse;
+}
 
 .HowItsWorkItemContainer {
     display: flex;
@@ -18,11 +18,20 @@
 
 .HowItsWorkTextContainer {
     width: 45%;
-    padding: 2rem;
     display: flex;
     align-items: flex-start;
     justify-content: center;
     flex-direction: column;
+}
+
+.HowItsWorkItemContainer .HowItsWorkTextContainer.left {
+    padding-right: 100px;
+    padding-left: 40px;
+}
+
+.HowItsWorkItemContainer .HowItsWorkTextContainer.right {
+    padding-left: 100px;
+    padding-right: 40px;
 }
 
 .HowItsWorkTextContainer h2 {
@@ -34,18 +43,33 @@
 
 .HowItsWorkTextContainer h6 {
     font-size: 1.25rem;
-    line-height: 1.75rem;
+    line-height: 1.65;
     font-weight: 700;
 }
 
 .HowItsWorkItemImage {
     width: 45%;
-    padding: 2rem;
+    padding-left: 100px;
+}
+
+.HowItsWorkItemContainer .HowItsWorkItemImage.left {
+    padding-left: 100px;
+    padding-right: 40px;
+}
+
+.HowItsWorkItemContainer .HowItsWorkItemImage.right {
+    padding-right: 100px;
+    padding-left: 40px;
 }
 
 .HowItsWorkItemImage img {
     width: 100%;
     height: auto;
+}
+
+.HowItsWorkItemImage.active img {
+    border: 2px solid #00cd9c;
+    border-radius: 12px;
 }
 
 .HowItsWorkItemIcon {
@@ -55,26 +79,35 @@
     justify-content: center;
 }
 
-.HowItsWorkLine {
-    height: 65%;
-    transform: translateY(50%);
-    width: 5px;
-    background-color: #f44336;
+.FirstLine {
+    height: 45%;
+    transform: translateY(-45%);
+    width: 4px;
+    background-color: #c8c8c8;
     display: flex;
-    flex: 1;
+    position: absolute;
+    left: 49%;
+    transition: all 0.2s;
+}
+
+.FirstLine.active {
+    background-color: #00cd9c;
+}
+
+.FirstLineInner {
+}
+
+.SecondLine {
+    height: 60%;
+    transform: translateY(50%);
+    width: 4px;
+    background-color: #c8c8c8;
     position: absolute;
     left: 49%;
 }
 
-.HowItsWorkLine2 {
-    height: 40%;
-    transform: translateY(-50%);
-    width: 5px;
-    background-color: #f44336;
-    display: flex;
-    flex: 1;
-    position: absolute;
-    left: 49%;
+.SecondLine.active {
+    background-color: #00cd9c;
 }
 
 .MarkerIcon {
@@ -94,7 +127,7 @@
     border-radius: 100px;
 }
 
-.MarkerIcon.incomplete:after {
+.MarkerIcon.inactive:after {
     background: #cacaca;
     box-shadow:
         0 10px 0 #9e9e9e,
@@ -158,8 +191,8 @@
 
 .HowItsWorkIcon- {
     position: absolute;
-    left: 23px;
-    top: 8px;
+    left: 22px;
+    top: 7px;
 }
 
 div[class^='HowItsWorkIcon'] svg {
