@@ -2,14 +2,15 @@
 import { useEffect, useState } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import './HowItsWorkSection.styles.css'
-
 import { Element, Events, scrollSpy, scroller } from 'react-scroll'
+import './HowItsWorkSection.styles.css'
 
 import Img1 from 'src/assets/images/img1.png'
 import Img2 from 'src/assets/images/img2.png'
 import Img3 from 'src/assets/images/img3.png'
 import Img4 from 'src/assets/images/img4.png'
+
+import { useMediaQuery } from 'src/hooks'
 
 const ITEMS = [
     {
@@ -40,7 +41,7 @@ const ITEMS = [
     },
 ]
 
-const animationVariantImage = {
+const framerAnimationVariants = {
     hidden: { opacity: 0, y: 200, scale: 0.5 },
     visible: {
         opacity: 1,
@@ -50,12 +51,18 @@ const animationVariantImage = {
     },
 }
 
+const framerAnimationVariantsMobile = {
+    hidden: {},
+    visible: {},
+}
+
 const Item = ({ data, index, activeIndex, setActiveIndex, isLastItem }) => {
     const screenHeight = window.innerHeight
 
+    const matchMobile = useMediaQuery('(max-width: 576px)')
+
     const control = useAnimation()
     const [isScrollClickable, setIsScrollClickable] = useState(false)
-    const [lastScroll, setLastScroll] = useState(0)
 
     const { ref, inView, entry } = useInView({
         threshold: 0,
@@ -112,8 +119,6 @@ const Item = ({ data, index, activeIndex, setActiveIndex, isLastItem }) => {
         }
     }, [])
 
-    console.log('activeIndex', activeIndex)
-
     return (
         <Element name={`scroll-to-element-${index}`}>
             <div
@@ -124,8 +129,12 @@ const Item = ({ data, index, activeIndex, setActiveIndex, isLastItem }) => {
                     className={`HowItsWorkItemImage ${
                         activeIndex === index ? 'active' : ''
                     } ${data.position}`}
-                    variants={animationVariantImage}
-                    initial='hidden'
+                    variants={
+                        matchMobile
+                            ? framerAnimationVariantsMobile
+                            : framerAnimationVariants
+                    }
+                    initial={matchMobile ? 'visible' : 'hidden'}
                     animate={control}
                 >
                     <img src={data.imageUrl} alt='img' />
@@ -170,8 +179,12 @@ const Item = ({ data, index, activeIndex, setActiveIndex, isLastItem }) => {
                 </div>
                 <motion.div
                     className={`HowItsWorkTextContainer ${data.position}`}
-                    variants={animationVariantImage}
-                    initial='hidden'
+                    variants={
+                        matchMobile
+                            ? framerAnimationVariantsMobile
+                            : framerAnimationVariants
+                    }
+                    initial={matchMobile ? 'visible' : 'hidden'}
                     animate={control}
                 >
                     <h2>{data.title}</h2>
@@ -183,7 +196,6 @@ const Item = ({ data, index, activeIndex, setActiveIndex, isLastItem }) => {
 }
 
 const HowItsWorkSection = () => {
-    const screenHeight = window.innerHeight
     const [activeIndex, setActiveIndex] = useState(0)
 
     return (

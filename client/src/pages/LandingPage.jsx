@@ -31,6 +31,7 @@ import { useAuth } from 'src/hooks'
 import ModalLogin from 'src/components/auth/ModalLogin'
 import ModalRegister from 'src/components/auth/ModalRegister'
 import HowItsWorkSection from 'src/components/landing-page/HowItsWorkSection'
+import ThrustedBySection from 'src/components/landing-page/ThrustedBySection'
 
 const skills = [
     { skill: 'Investment', color: 'red' },

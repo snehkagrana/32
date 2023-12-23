@@ -1,4 +1,5 @@
 .HowItsWorkSection {
+    padding-bottom: 3rem;
 }
 
 .HowItsWorkSection .HowItsWorkItemContainer.left {
@@ -22,6 +23,15 @@
     align-items: flex-start;
     justify-content: center;
     flex-direction: column;
+}
+
+@media (max-width: 576px) {
+    .HowItsWorkTextContainer {
+        order: 2;
+    }
+    .HowItsWorkTextContainer {
+        order: 3;
+    }
 }
 
 .HowItsWorkItemContainer .HowItsWorkTextContainer.left {
@@ -81,6 +91,12 @@
     justify-content: center;
 }
 
+@media (max-width: 576px) {
+    .HowItsWorkItemIcon {
+        order: -1;
+    }
+}
+
 .FirstLine {
     height: 45%;
     transform: translateY(-45%);
@@ -89,7 +105,7 @@
     display: flex;
     position: absolute;
     left: 49%;
-    transition: all 1.25s cubic-bezier(0.65, 0.02, 0.44, 1.14);
+    transition: all 0.95s cubic-bezier(0.65, 0.02, 0.44, 1.14);
 }
 
 .FirstLine.active {
@@ -106,7 +122,7 @@
     background-color: #c8c8c8;
     position: absolute;
     left: 49%;
-    transition: all 1.25s cubic-bezier(0.65, 0.02, 0.44, 1.14);
+    transition: all 0.95s cubic-bezier(0.65, 0.02, 0.44, 1.14);
 }
 
 .SecondLine.active {
@@ -175,14 +191,14 @@
         0 10px 0 rgb(0 0 0);
     height: 60px;
     top: 0;
-    transition: all 0.75s cubic-bezier(0.65, 0.02, 0.44, 1.14);
+    transition: all 0.25 cubic-bezier(0.65, 0.02, 0.44, 1.14);
 }
 
 .MarkerIcon::before {
     background: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.2));
     height: 10px;
     top: 28.5px;
-    transition: all 0.75s cubic-bezier(0.65, 0.02, 0.44, 1.14);
+    transition: all 0.25 cubic-bezier(0.65, 0.02, 0.44, 1.14);
 }
 
 .MarkerIcon::after,
@@ -192,7 +208,7 @@
     position: absolute;
     width: 100%;
     z-index: -1;
-    transition: all 0.75s cubic-bezier(0.65, 0.02, 0.44, 1.14);
+    transition: all 0.25 cubic-bezier(0.65, 0.02, 0.44, 1.14);
 }
 
 .HowItsWorkIcon- {
@@ -206,4 +222,56 @@ div[class^='HowItsWorkIcon'] svg {
     width: 32px;
     height: auto;
     margin-top: 6px;
+}
+
+@media (max-width: 576px) {
+    .HowItsWorkItemIcon {
+        position: absolute;
+        height: 100%;
+    }
+    .HowItsWorkSection .HowItsWorkItemContainer {
+        flex-direction: column !important;
+        position: relative;
+    }
+    .HowItsWorkSection .HowItsWorkTextContainer {
+        width: 100%;
+        padding-left: 90px !important;
+        padding-right: 14px !important;
+        margin-bottom: 40px;
+    }
+    .HowItsWorkSection .HowItsWorkItemImage {
+        width: 100%;
+        padding-left: 90px !important;
+        padding-right: 14px !important;
+        margin-bottom: 24px;
+    }
+    .HowItsWorkTextContainer h2 {
+        margin-bottom: 1rem;
+        font-size: 1.65rem;
+    }
+    .HowItsWorkTextContainer h6 {
+        font-size: 1rem;
+    }
+    .MarkerIcon::after {
+        height: 42px;
+        width: 58px;
+    }
+    .MarkerIcon {
+        height: 48px;
+        width: 74px;
+    }
+    div[class^='HowItsWorkIcon'] svg {
+        width: 27px;
+    }
+    .HowItsWorkIcon- {
+        left: 15px;
+        top: 2px;
+    }
+
+    .FirstLine {
+        left: 77%;
+    }
+    .SecondLine {
+        left: 77%;
+    }
 }
