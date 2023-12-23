@@ -75,13 +75,13 @@
 .HowItsWorkItemImage img {
     width: 100%;
     height: auto;
-    border: 3px solid #c8c8c8;
-    border-radius: 12px;
-    background-color: #fff;
+    border: 4px solid #c8c8c8;
+    border-radius: 24px;
+    background-color: #f7fcf7;
 }
 
 .HowItsWorkItemImage.active img {
-    border: 3px solid #00cd9c;
+    border: 4px solid #00cd9c;
 }
 
 .HowItsWorkItemIcon {

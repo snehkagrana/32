@@ -23,7 +23,7 @@ const ITEMS = [
 const ThrustedBySection = () => {
     return (
         <div className='ThrustedBySection'>
-            <h2 initial='hidden'>TRUSTED BY PEOPLE WHO WATCH</h2>
+            <h2 initial='hidden'>trusted by people who watch</h2>
             <div className='ThrustedBySectionLogoContainer'>
                 {ITEMS.map((x, index) => (
                     <div className='ThrustedBySectionItem'>

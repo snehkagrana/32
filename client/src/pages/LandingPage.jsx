@@ -33,6 +33,7 @@ import ModalRegister from 'src/components/auth/ModalRegister'
 import HowItsWorkSection from 'src/components/landing-page/HowItsWorkSection'
 import ThrustedBySection from 'src/components/landing-page/ThrustedBySection'
 
+
 const skills = [
     { skill: 'Investment', color: 'red' },
     { skill: 'Fixed Income', color: 'blue' },

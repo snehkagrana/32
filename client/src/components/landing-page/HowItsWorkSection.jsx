@@ -14,28 +14,28 @@ import { useMediaQuery } from 'src/hooks'
 
 const ITEMS = [
     {
-        title: 'Learn new topic',
+        title: 'learn new topics',
         content:
-            'Short, easy-to-read chapters. Choose from over 600 chapters, each only 3-4 minutes long.',
+            'short, easy-to-read chapters. choose from over 600 chapters, each only 3-4 minutes long.',
         imageUrl: Img1,
         position: 'left',
     },
     {
-        title: 'Answer Quizzes',
+        title: 'answer quizzes',
         content:
-            'Practice what to learned and challenge yourself with fun quizzes.',
+            'practice what you learned and challenge yourself with fun quizzes.',
         imageUrl: Img2,
         position: 'right',
     },
     {
-        title: 'Earn Gems',
-        content: 'Complete quizzes, daily quest to earn bananas and gems.',
+        title: 'earn gems',
+        content: 'complete quizzes, daily quest to earn bananas and gems.',
         imageUrl: Img3,
         position: 'left',
     },
     {
-        title: 'Get your Gift Card',
-        content: 'Redeem your gems to get gift cards of your choice.',
+        title: 'get your gift card',
+        content: 'redeem your gems to get gift cards of your choice.',
         imageUrl: Img4,
         position: 'right',
     },
