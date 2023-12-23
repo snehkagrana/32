@@ -296,110 +296,11 @@ const LandingPage = () => {
                         </Reveal>
                     </div>
 
-                    <section className='lg:py-10 mt-10' ref={scrollTargetRef}>
-                        <div className='flex flex-col justify-between space-y-0 '>
-                            <Reveal motionType={'rightToLeft'}>
-                                <div className='flex flex-col py-5 overflow-hidden rounded-md lg:flex-row '>
-                                    <img
-                                        src={fingoSectionTwo}
-                                        alt=''
-                                        className='start_page_img start_page_img_1 object-cover sm:mx-auto sm:max-w-lg aspect-auto'
-                                        height={'450px'}
-                                    />
-                                    <div className='items-end justify-end hidden lg:ml-16 xl:ml-18 lg:flex '>
-                                        <img
-                                            src={arrow2}
-                                            alt=''
-                                            className='text-end lg:w-32 lg:h-32 xl:w-36 xl:h-36 lg:flex'
-                                        />
-                                    </div>
-                                    <div className='flex-col items-start justify-center flex-1 hidden mx-auto md:flex sm:py-10 lg:py-0 '>
-                                        <h2 className='text-3xl font-bold text-[#2cb74c]'>
-                                            short, easy-to-read chapters
-                                        </h2>
-                                        <h3
-                                            className={`my-6 text-xl font-bold w-96 ${
-                                                darkMode
-                                                    ? 'text-gray-300'
-                                                    : 'text-gray-950'
-                                            }`}
-                                        >
-                                            choose from over 600 chapters, each
-                                            only 3-4 minutes long
-                                        </h3>
-                                    </div>
-                                    <div className='flex flex-col items-center justify-center mx-auto mt-5 lg:py-0 md:hidden'>
-                                        <h2 className='text-3xl font-bold text-[#2cb74c] w-60'>
-                                            short, easy-to-read chapters
-                                        </h2>
-                                        <h3
-                                            className={`my-6 text-base md:text-xl font-bold w-60 ${
-                                                darkMode
-                                                    ? 'text-gray-300'
-                                                    : 'text-gray-950 w-60'
-                                            }`}
-                                        >
-                                            choose from over 600 chapters, each
-                                            only 3-4 minutes long
-                                        </h3>
-                                    </div>
-                                </div>
-                            </Reveal>
-                            <Reveal motionType={'leftToRight'}>
-                                <div className='flex flex-col w-full py-5 rounded-md lg:flex-row-reverse'>
-                                    <img
-                                        src={fingoSectionThree}
-                                        alt=''
-                                        className='start_page_img start_page_img_2 object-cover sm:max-w-lg aspect-auto'
-                                        height={'500px'}
-                                    />
-
-                                    <div className='flex-col justify-center items-center hidden lg:flex sm:py-10 lg:py-0'>
-                                        <div className='flex flex-col items-start justify-start'>
-                                            <div className='flex items-center justify-center space-x-28'>
-                                                <h2 className='text-3xl font-bold text-[#2cb74c] '>
-                                                    fun quizzes
-                                                </h2>
-                                                <img
-                                                    src={arrow}
-                                                    alt=''
-                                                    className='w-64 h-64'
-                                                />
-                                            </div>
-                                            <h3
-                                                className={`-mt-20 text-xl font-bold w-96 ${
-                                                    darkMode
-                                                        ? 'text-gray-300'
-                                                        : 'text-gray-950'
-                                                }`}
-                                            >
-                                                complete quizzes, earn XP
-                                                points, and increase your daily
-                                                streak
-                                            </h3>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className='flex flex-col items-center justify-center w-3/4 pb-5 mx-auto my-auto mt-5 lg:hidden '>
-                                    <h2 className='text-3xl font-bold text-[#2cb74c] w-60 text-start'>
-                                        fun quizzes
-                                    </h2>
-                                    <h3
-                                        className={`my-1 text-base md:text-xl font-bold  ${
-                                            darkMode
-                                                ? 'text-gray-300'
-                                                : 'text-gray-950 w-60'
-                                        }`}
-                                    >
-                                        complete quizzes, earn XP points, and
-                                        increase your daily streak
-                                    </h3>
-                                </div>
-                            </Reveal>
-                        </div>
-                    </section>
-
+                    <section
+                        ref={scrollTargetRef}
+                        className='LandingPageScrollTarget'
+                    />
+                    <ThrustedBySection />
                     <HowItsWorkSection />
 
                     <Reveal motionType={'zoom'}>

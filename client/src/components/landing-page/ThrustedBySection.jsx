@@ -6,6 +6,7 @@ import NetflixLogo from 'src/assets/images/logos/netflix-logo.png'
 import AmazonPrimeLogo from 'src/assets/images/logos/amazon-prime-logo.png'
 import YoutubeLogo from 'src/assets/images/logos/youtube-logo.png'
 import './ThrustedBySection.styles.css'
+import { useMediaQuery } from 'src/hooks'
 
 const ITEMS = [
     {
@@ -34,6 +35,7 @@ const variants = {
 
 const ThrustedBySection = () => {
     const control = useAnimation()
+    const matchMobile = useMediaQuery('(max-width: 576px)')
 
     const { inView, ref } = useInView({
         threshold: 0,
@@ -41,12 +43,16 @@ const ThrustedBySection = () => {
     })
 
     useEffect(() => {
-        if (inView) {
-            control.start('visible')
+        if (!matchMobile) {
+            if (inView) {
+                control.start('visible')
+            } else {
+                control.start('hidden')
+            }
         } else {
-            control.start('hidden')
+            control.start('visible')
         }
-    }, [control, inView])
+    }, [control, inView, matchMobile])
 
     return (
         <div className='ThrustedBySection' ref={ref}>

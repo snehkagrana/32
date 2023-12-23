@@ -70,14 +70,18 @@ const Item = ({ data, index, activeIndex, setActiveIndex, isLastItem }) => {
     })
 
     useEffect(() => {
-        if (inView) {
-            control.start('visible')
-        } else if (activeIndex > index) {
-            control.start('visible')
+        if (!matchMobile) {
+            if (inView) {
+                control.start('visible')
+            } else if (activeIndex > index) {
+                control.start('visible')
+            } else {
+                // control.start('hidden')
+            }
         } else {
-            control.start('hidden')
+            control.start('visible')
         }
-    }, [control, inView, index, activeIndex, isScrollClickable])
+    }, [control, inView, index, activeIndex, isScrollClickable, matchMobile])
 
     useEffect(() => {
         if (inView) {
