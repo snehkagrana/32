@@ -23,7 +23,6 @@ import NotFound from './routes/NotFound'
 import Login from './routes/Login'
 import Register from './routes/Register'
 import Quiz from './routes/Quiz'
-import StartPage from './routes/StartPage'
 import ScorePage from './routes/ScorePage'
 import AccessDenied from './routes/AccessDenied'
 import ProfilePage from './routes/ProfilePage'
@@ -48,13 +47,14 @@ import HomePage from './pages/HomePage'
 import AdminRewardPage from './pages/admin/AdminRewardPage'
 import { Toaster, ToastBar } from 'react-hot-toast'
 import AuthCallback from './pages/AuthCallback'
+import LandingPage from './pages/LandingPage'
 
 const App = () => {
     return (
         <>
             <Router>
                 <Routes>
-                    <Route exact path='/' element={<StartPage />} />
+                    <Route exact path='/' element={<LandingPage />} />
                     <Route exact path='/terms' element={<Terms />} />
                     <Route exact path='/auth/google/callback' element={<AuthCallback />} />
                     <Route

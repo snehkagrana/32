@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.02372747.css",
-    "main.js": "/static/js/main.a7138683.js",
+    "main.css": "/static/css/main.756ac087.css",
+    "main.js": "/static/js/main.23ab6fd7.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
     "static/media/8.png": "/static/media/8.9daef5f1f68e0fc2fb5f.png",
@@ -9,6 +9,7 @@
     "static/media/5-money-bag-png-image.png": "/static/media/5-money-bag-png-image.67e6560665949337f935.png",
     "static/media/64997-emoticon-on-money-keep-bag-carving-emoji.png": "/static/media/64997-emoticon-on-money-keep-bag-carving-emoji.e6508e91da874d588355.png",
     "static/media/71577-recycling-recycle-symbol-paper-emoji-free-hq-image.png": "/static/media/71577-recycling-recycle-symbol-paper-emoji-free-hq-image.bb0c629f08aa81cdc510.png",
+    "static/media/img3.png": "/static/media/img3.9ee8dc7bbcf01c6f9ec0.png",
     "static/media/103717-blue-photos-sky-emoji-free-transparent-image-hq.png": "/static/media/103717-blue-photos-sky-emoji-free-transparent-image-hq.fb2ac5a8fec49bf25e26.png",
     "static/media/64998-money-dollar-sign-currency-android-emoji.png": "/static/media/64998-money-dollar-sign-currency-android-emoji.87721f50d5e086eb5098.png",
     "static/media/harshit.jpg": "/static/media/harshit.649b34921f593ef2488d.jpg",
@@ -17,6 +18,7 @@
     "static/media/64926-emoticon-domain-network-sticker-graphics-emoji-portable.png": "/static/media/64926-emoticon-domain-network-sticker-graphics-emoji-portable.a781d79f3a0b8120acdd.png",
     "static/media/fingo-landing-page-section-2.png": "/static/media/fingo-landing-page-section-2.dc5b0293218f63747cc2.png",
     "static/media/announcement-sound.mp3": "/static/media/announcement-sound.c200e530c68e3e64a443.mp3",
+    "static/media/img4.png": "/static/media/img4.57da34ba32d2119eeef6.png",
     "static/media/65025-emoticon-like-signal-emoji-button-thumb.png": "/static/media/65025-emoticon-like-signal-emoji-button-thumb.1e0ed28749aec5bf73b3.png",
     "static/media/102587-funny-picture-emoji-boy-free-download-png-hq.png": "/static/media/102587-funny-picture-emoji-boy-free-download-png-hq.99b9a5203d392b524466.png",
     "static/media/fingo-landing-page-5-5.png": "/static/media/fingo-landing-page-5-5.cafa699fff7cf808ffc3.png",
@@ -35,8 +37,10 @@
     "static/media/fingo-landing-page-5-3.png": "/static/media/fingo-landing-page-5-3.38b8cf6ca4397127ab1d.png",
     "static/media/fingo-landing-page-5-1.png": "/static/media/fingo-landing-page-5-1.488577cc13e1636f23df.png",
     "static/media/103498-party-picture-hard-emoji-free-download-image.png": "/static/media/103498-party-picture-hard-emoji-free-download-image.9ec8218a08d44d570034.png",
+    "static/media/img1.png": "/static/media/img1.749e127c9fa06e907964.png",
     "static/media/success-1.mp3": "/static/media/success-1.fd2c2fea27379cbc44da.mp3",
     "static/media/game-level-complete.mp3": "/static/media/game-level-complete.f65684e8e91f5683f947.mp3",
+    "static/media/amazon-prime-logo.png": "/static/media/amazon-prime-logo.fd3112711a9f6f8a90e5.png",
     "static/media/103180-hobby-emoji-free-transparent-image-hd.png": "/static/media/103180-hobby-emoji-free-transparent-image-hd.3d1cfd70ac61c855df7e.png",
     "static/media/other.jpg": "/static/media/other.f7665c436dc952b5db8f.jpg",
     "static/media/73728-emoticon-smiley-peace-emojis-laughter-emoji.png": "/static/media/73728-emoticon-smiley-peace-emojis-laughter-emoji.cd609439bc553160bdf1.png",
@@ -49,11 +53,13 @@
     "static/media/giftbox.png": "/static/media/giftbox.d5c164ac356fd9ab7d91.png",
     "static/media/67366-hamburger-fries-cheeseburger-veggie-french-burger-emoji.png": "/static/media/67366-hamburger-fries-cheeseburger-veggie-french-burger-emoji.a0e26891f0e9de50f815.png",
     "static/media/65000-hunter_-monster-language-meaning-speech-world-emoji.png": "/static/media/65000-hunter_-monster-language-meaning-speech-world-emoji.eea0526ac38e64f2fe60.png",
+    "static/media/youtube-logo.png": "/static/media/youtube-logo.656319030df29b2bd011.png",
     "static/media/3.png": "/static/media/3.2d8ec3ec53ebab3d88a0.png",
     "static/media/ghost.png": "/static/media/ghost.25ea9d1093784bb4d214.png",
     "static/media/fingo-logo.png": "/static/media/fingo-logo.a49d4dbf80aacb5a6e7d.png",
     "static/media/pepe.jpg": "/static/media/pepe.20a506243a1ccdcce95e.jpg",
     "static/media/house.png": "/static/media/house.557bca33d436d0b59a0c.png",
+    "static/media/img2.png": "/static/media/img2.550eb1e6e0c167a562f3.png",
     "static/media/celebrate-badge-2.png": "/static/media/celebrate-badge-2.f72ad5ac596c22e7602a.png",
     "static/media/robot_face.png": "/static/media/robot_face.ea412ab15d3a628b0b2f.png",
     "static/media/5.png": "/static/media/5.bd1568e2e58d0301a6e5.png",
@@ -62,6 +68,7 @@
     "static/media/moneybag.png": "/static/media/moneybag.0c289347979e20774190.png",
     "static/media/logo.jpeg": "/static/media/logo.c36004afa72a10d2e3ba.jpeg",
     "static/media/turtle.png": "/static/media/turtle.82cd73c53ac378ceab4b.png",
+    "static/media/netflix-logo.png": "/static/media/netflix-logo.4bc03ff0aac6d4a37aa9.png",
     "static/media/sneh.jpg": "/static/media/sneh.f9ee79a2259e5e5a0ac8.jpg",
     "static/media/wrong-audio.mp3": "/static/media/wrong-audio.52e80b0ac4001d1e740d.mp3",
     "static/media/loudly-crying-face.svg": "/static/media/loudly-crying-face.33a7333119b0b78f74c07dcc8af4ac1d.svg",
@@ -96,12 +103,12 @@
     "static/media/outline-history.svg": "/static/media/outline-history.e8f18a93d32dd8483d9c94494afbb2e7.svg",
     "static/media/baseline-content-copy.svg": "/static/media/baseline-content-copy.58ba17b96079dd681d38d228fdc7ef61.svg",
     "static/media/info.svg": "/static/media/info.ef876f7b40a92ef036458f95b7e325e2.svg",
-    "main.02372747.css.map": "/static/css/main.02372747.css.map",
-    "main.a7138683.js.map": "/static/js/main.a7138683.js.map",
+    "main.756ac087.css.map": "/static/css/main.756ac087.css.map",
+    "main.23ab6fd7.js.map": "/static/js/main.23ab6fd7.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.02372747.css",
-    "static/js/main.a7138683.js"
+    "static/css/main.756ac087.css",
+    "static/js/main.23ab6fd7.js"
   ]
 }
