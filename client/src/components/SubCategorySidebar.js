@@ -1,12 +1,14 @@
 import { Card, Dropdown, DropdownButton } from 'react-bootstrap'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import '../styles/SubCategorySidebar.styles.css'
+import { useAuth } from 'src/hooks'
 
 const SubCategorySidebar = props => {
     const { data, dropdownHeadingList } = props
     const navigate = useNavigate()
+    const { user } = useAuth()
 
     const [searchParams] = useSearchParams()
     const { skillName, category, subcategory } = useParams()
@@ -15,6 +17,19 @@ const SubCategorySidebar = props => {
 
     const getIsCurrent = subcategoryParams => {
         return subcategoryParams === subcategory
+    }
+
+    const isCompleted = item => {
+        if (user && user.score?.length > 0) {
+            return Boolean(
+                user.score.find(
+                    x =>
+                        x.sub_category === item.sub_category &&
+                        x.category === item.category
+                )
+            )
+        }
+        return false
     }
 
     const onClickItem = (subcategoryParams, isLocked) => {
@@ -150,40 +165,41 @@ const SubCategorySidebar = props => {
                                                     )
                                                 )}
                                             </DropdownButton>
-                                            {getIsCurrent(item.sub_category) ? (
-                                                <svg
-                                                    className='bookIcon'
-                                                    xmlns='http://www.w3.org/2000/svg'
-                                                    width='24'
-                                                    height='24'
-                                                    viewBox='0 0 24 24'
-                                                >
-                                                    <path
-                                                        fill='none'
-                                                        stroke='currentColor'
-                                                        stroke-linecap='round'
-                                                        stroke-linejoin='round'
-                                                        stroke-width='2'
-                                                        d='M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0M3 6v13m9-13v13m9-13v13'
-                                                    />
-                                                </svg>
-                                            ) : (
-                                                <>
-                                                    {index < currentIndex && (
-                                                        <svg
-                                                            xmlns='http://www.w3.org/2000/svg'
-                                                            width='24'
-                                                            height='24'
-                                                            viewBox='0 0 24 24'
-                                                        >
-                                                            <path
-                                                                fill='currentColor'
-                                                                d='m9.55 18l-5.7-5.7l1.425-1.425L9.55 15.15l9.175-9.175L20.15 7.4L9.55 18Z'
-                                                            />
-                                                        </svg>
-                                                    )}
-                                                </>
-                                            )}
+                                            <div className='IconContainer'>
+                                                {getIsCurrent(
+                                                    item.sub_category
+                                                ) && (
+                                                    <svg
+                                                        className='bookIcon mr-1'
+                                                        xmlns='http://www.w3.org/2000/svg'
+                                                        width='24'
+                                                        height='24'
+                                                        viewBox='0 0 24 24'
+                                                    >
+                                                        <path
+                                                            fill='none'
+                                                            stroke='currentColor'
+                                                            stroke-linecap='round'
+                                                            stroke-linejoin='round'
+                                                            stroke-width='2'
+                                                            d='M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0M3 6v13m9-13v13m9-13v13'
+                                                        />
+                                                    </svg>
+                                                )}
+                                                {isCompleted(item) && (
+                                                    <svg
+                                                        xmlns='http://www.w3.org/2000/svg'
+                                                        width='24'
+                                                        height='24'
+                                                        viewBox='0 0 24 24'
+                                                    >
+                                                        <path
+                                                            fill='currentColor'
+                                                            d='m9.55 18l-5.7-5.7l1.425-1.425L9.55 15.15l9.175-9.175L20.15 7.4L9.55 18Z'
+                                                        />
+                                                    </svg>
+                                                )}
+                                            </div>
                                         </div>
                                     )
                                 } else {
@@ -205,7 +221,9 @@ const SubCategorySidebar = props => {
                                                 .split('_')
                                                 .join(' ')}`}</p>
 
-                                            {getIsCurrent(item.sub_category) ? (
+                                            {getIsCurrent(
+                                                item.sub_category
+                                            ) && (
                                                 <svg
                                                     className='bookIcon'
                                                     xmlns='http://www.w3.org/2000/svg'
@@ -222,22 +240,20 @@ const SubCategorySidebar = props => {
                                                         d='M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0M3 6v13m9-13v13m9-13v13'
                                                     />
                                                 </svg>
-                                            ) : (
-                                                <>
-                                                    {index < currentIndex && (
-                                                        <svg
-                                                            xmlns='http://www.w3.org/2000/svg'
-                                                            width='24'
-                                                            height='24'
-                                                            viewBox='0 0 24 24'
-                                                        >
-                                                            <path
-                                                                fill='currentColor'
-                                                                d='m9.55 18l-5.7-5.7l1.425-1.425L9.55 15.15l9.175-9.175L20.15 7.4L9.55 18Z'
-                                                            />
-                                                        </svg>
-                                                    )}
-                                                </>
+                                            )}
+
+                                            {isCompleted(item) && (
+                                                <svg
+                                                    xmlns='http://www.w3.org/2000/svg'
+                                                    width='24'
+                                                    height='24'
+                                                    viewBox='0 0 24 24'
+                                                >
+                                                    <path
+                                                        fill='currentColor'
+                                                        d='m9.55 18l-5.7-5.7l1.425-1.425L9.55 15.15l9.175-9.175L20.15 7.4L9.55 18Z'
+                                                    />
+                                                </svg>
                                             )}
                                         </div>
                                     )
