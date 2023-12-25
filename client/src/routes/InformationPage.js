@@ -247,36 +247,11 @@ const InformationPage = () => {
                             <LoadingBox spinnerSize={52} height={300} />
                         ) : (
                             <Card.Body>
-                                {dropdownHeadingList.length > 0 ? (
-                                    <DropdownButton
-                                        className='DropdownHeadingInformationPage'
-                                        title={information.heading}
-                                    >
-                                        {dropdownHeadingList.map((x, index) => (
-                                            <Dropdown.Item
-                                                onClick={() =>
-                                                    onChangeDropdownHeading(
-                                                        index
-                                                    )
-                                                }
-                                                eventKey={String(index)}
-                                                disabled={
-                                                    x.heading ===
-                                                    information.heading
-                                                }
-                                                href='#'
-                                            >
-                                                {x.heading}
-                                            </Dropdown.Item>
-                                        ))}
-                                    </DropdownButton>
-                                ) : (
-                                    <Card.Title>
-                                        <span style={{ fontWeight: 'bold' }}>
-                                            {information.heading}
-                                        </span>
-                                    </Card.Title>
-                                )}
+                                <Card.Title>
+                                    <span style={{ fontWeight: 'bold' }}>
+                                        {information.heading}
+                                    </span>
+                                </Card.Title>
                                 {imageURL && (
                                     <div className='d-flex'>
                                         <Card.Img
@@ -424,7 +399,10 @@ const InformationPage = () => {
                     <div className='page-dots'>{renderPageDots()}</div>
                 </Col>
                 <Col xs={12} md={5}>
-                    <SubCategorySidebar data={subCategories} />
+                    <SubCategorySidebar
+                        data={subCategories}
+                        dropdownHeadingList={dropdownHeadingList}
+                    />
                 </Col>
             </Row>
         </FingoHomeLayout>

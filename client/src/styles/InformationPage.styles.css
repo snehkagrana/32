@@ -1,13 +1,13 @@
 .DropdownHeadingInformationPage {
     border: none !important;
-    margin-bottom: 1.2rem;
+    margin-bottom: 0;
     text-align: left;
     background-color: transparent;
 }
 
 .DropdownHeadingInformationPage .btn {
     background-color: transparent !important;
-    font-size: 1.25rem;
+    font-size: 1rem;
     color: inherit !important;
     font-weight: bold;
     border: none !important;
@@ -40,6 +40,7 @@
     .dropdown-item {
     color: #fff !important;
 }
+
 [data-theme='dark']
     .DropdownHeadingInformationPage
     .dropdown-menu
