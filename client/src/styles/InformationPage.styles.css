@@ -16,12 +16,16 @@
     box-shadow: none;
     text-align: left;
 }
+.DropdownHeadingInformationPage .dropdown-item:hover {
+    background-color: transparent !important;
+}
 
 .DropdownHeadingInformationPage .btn:active,
 .DropdownHeadingInformationPage .btn:hover,
 .DropdownHeadingInformationPage .btn:focus {
     border: none !important;
     box-shadow: none !important;
+    background-color: transparent !important;
 }
 
 .DropdownHeadingInformationPage .dropdown-toggle::after {
@@ -30,7 +34,7 @@
 }
 
 [data-theme='dark'] .DropdownHeadingInformationPage .dropdown-menu {
-    background-color: #121212;
+    background-color: #252323;
     color: #fff !important;
 }
 
