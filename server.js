@@ -33,6 +33,7 @@ const rewardRoutes = require('./routes/reward.routes')
 const accountRoutes = require('./routes/account.routes')
 const userRoutes = require('./routes/user.routes')
 const adminRoutes = require('./routes/admin.routes')
+const informationRoutes = require('./routes/information.routes')
 const AuthGuard = require('./middlewares/auth.middleware');
 const { initializeDiamondUser, calculateDiamondUser } = require("./utils/reward.util");
 
@@ -81,6 +82,7 @@ app.use('/server/api/auth', authRoutes);
 app.use('/server/api', rewardRoutes);  
 app.use('/server/api', accountRoutes);  
 app.use('/server/api', userRoutes);  
+app.use('/server/api', informationRoutes);  
 
 app.use(
     session({

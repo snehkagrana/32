@@ -1,0 +1,57 @@
+.DropdownHeadingInformationPage {
+    border: none !important;
+    margin-bottom: 1.2rem;
+    text-align: left;
+    background-color: transparent;
+}
+
+.DropdownHeadingInformationPage .btn {
+    background-color: transparent !important;
+    font-size: 1.25rem;
+    color: inherit !important;
+    font-weight: bold;
+    border: none !important;
+    padding: 0;
+    outline: none !important;
+    box-shadow: none;
+    text-align: left;
+}
+
+.DropdownHeadingInformationPage .btn:active,
+.DropdownHeadingInformationPage .btn:hover,
+.DropdownHeadingInformationPage .btn:focus {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.DropdownHeadingInformationPage .dropdown-toggle::after {
+    margin-right: 0.5em;
+    vertical-align: 0.15em;
+}
+
+[data-theme='dark'] .DropdownHeadingInformationPage .dropdown-menu {
+    background-color: #121212;
+    color: #fff !important;
+}
+
+[data-theme='dark']
+    .DropdownHeadingInformationPage
+    .dropdown-menu
+    .dropdown-item {
+    color: #fff !important;
+}
+[data-theme='dark']
+    .DropdownHeadingInformationPage
+    .dropdown-menu
+    .dropdown-item.disabled {
+    color: #8a8a8a !important;
+}
+
+[data-theme='dark'] .DropdownHeadingInformationPage .dropdown-item:hover,
+[data-theme='dark'] .DropdownHeadingInformationPage .dropdown-item:focus {
+    background-color: #333;
+}
+
+.DropdownHeadingInformationPage .dropdown-menu.show {
+    border: 2px solid rgb(109 109 109 / 10%);
+}
