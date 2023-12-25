@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import Axios from 'src/api/axios'
 import { useNavigate } from 'react-router-dom'
-import { Row, Button, Col } from 'react-bootstrap'
+import { Row, Button, Col, DropdownButton, Dropdown } from 'react-bootstrap'
 import { Helmet } from 'react-helmet'
 import Card from 'react-bootstrap/Card'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
@@ -12,6 +13,8 @@ import LoadingBox from '../components/LoadingBox'
 import { FingoHomeLayout } from 'src/components/layouts'
 import '../index.css'
 import { useAuth } from 'src/hooks'
+import { InformationAPI } from 'src/api'
+import 'src/styles/InformationPage.styles.css'
 
 const InformationPage = () => {
     const { user, isAuthenticated } = useAuth()
@@ -30,6 +33,7 @@ const InformationPage = () => {
     const [searchParams, setSearchParams] = useSearchParams()
     const [subCategories, setSubCategories] = useState([])
     const [isLoadingInformation, setIsLoadingInformation] = useState(false)
+    const [dropdownHeadingList, setDropdownHeadingList] = useState([])
 
     const getInformation = isNewUser => {
         setIsLoadingInformation(true)
@@ -190,6 +194,35 @@ const InformationPage = () => {
         }
     }, [page])
 
+    useEffect(() => {
+        ;(async () => {
+            if (skillName && category && subcategory) {
+                try {
+                    const response = await InformationAPI.getDropdown({
+                        skillName,
+                        category,
+                        subcategory,
+                    })
+                    setDropdownHeadingList(response.data?.data || [])
+                } catch (e) {
+                    console.log('e', e.response)
+                }
+            }
+        })()
+    }, [skillName, category, subcategory])
+
+    const onChangeDropdownHeading = useCallback(
+        paramPageNumber => {
+            const newUserQueryParam = searchParams.get('newUser')
+                ? '?newUser=true'
+                : ''
+            navigate(
+                `/skills/${skillName}/${category}/${subcategory}/information/${paramPageNumber}${newUserQueryParam}`
+            )
+        },
+        [searchParams, pageNumber, page, dropdownHeadingList]
+    )
+
     return (
         <FingoHomeLayout>
             <Helmet>
@@ -264,7 +297,12 @@ const InformationPage = () => {
                                         {pageNumber > 0 && (
                                             <Button
                                                 variant='secondary'
-                                                style={{ minWidth: '20%', boxShadow: "0px 7px #303030", borderRadius: "12px" }}
+                                                style={{
+                                                    minWidth: '20%',
+                                                    boxShadow:
+                                                        '0px 7px #303030',
+                                                    borderRadius: '12px',
+                                                }}
                                                 onClick={prev}
                                             >
                                                 Prev
@@ -274,7 +312,12 @@ const InformationPage = () => {
                                     <div>
                                         {pageNumber + 1 < maxInfoPages && (
                                             <Button
-                                                style={{ minWidth: '20%', boxShadow: "0px 7px #1a5928", borderRadius: "12px" }}
+                                                style={{
+                                                    minWidth: '20%',
+                                                    boxShadow:
+                                                        '0px 7px #1a5928',
+                                                    borderRadius: '12px',
+                                                }}
                                                 variant='success'
                                                 onClick={next}
                                             >
@@ -287,7 +330,13 @@ const InformationPage = () => {
                                                 <>
                                                     <Button
                                                         variant='success'
-                                                        style={{ minWidth: '20%', boxShadow: "0px 7px #1a5928", borderRadius: "10px" }}
+                                                        style={{
+                                                            minWidth: '20%',
+                                                            boxShadow:
+                                                                '0px 7px #1a5928',
+                                                            borderRadius:
+                                                                '10px',
+                                                        }}
                                                         onClick={() => {
                                                             const newUserQueryParam =
                                                                 searchParams.get(
@@ -350,7 +399,10 @@ const InformationPage = () => {
                     <div className='page-dots'>{renderPageDots()}</div>
                 </Col>
                 <Col xs={12} md={5}>
-                    <SubCategorySidebar data={subCategories} />
+                    <SubCategorySidebar
+                        data={subCategories}
+                        dropdownHeadingList={dropdownHeadingList}
+                    />
                 </Col>
             </Row>
         </FingoHomeLayout>
