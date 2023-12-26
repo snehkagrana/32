@@ -9,6 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import { AuthAPI } from 'src/api'
 import { useNavigate, useParams } from 'react-router-dom'
+import toast from 'react-hot-toast'
 
 const schema = Yup.object().shape({
     password: Yup.string().required('Password is required'),
@@ -44,17 +45,17 @@ const ResetPasswordForm = () => {
 
     const onValidSubmit = async values => {
         try {
-            console.log('onValidSubmit => values =>', values)
             const response = await AuthAPI.resetPassword({
                 ...values,
                 token,
                 email,
             })
             if (response?.message) {
-                navigate('/home?success=reset-password')
+                toast.success('Reset password success!')
+                navigate('/home?modalLogin=true')
             }
-            console.log('response', response)
         } catch (e) {
+            toast.error('Failed to reset password!')
             console.log('e', e)
         }
     }

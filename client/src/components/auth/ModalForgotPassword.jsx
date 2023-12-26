@@ -27,6 +27,7 @@ export default function ModalForgotPassword() {
 
     const [email, setEmail] = useState(false)
     const [forgotSuccess, setForgotSuccess] = useState(false)
+    const [isError, setIsError] = useState(false)
 
     const {
         control,
@@ -46,11 +47,13 @@ export default function ModalForgotPassword() {
                 baseUrl,
             })
             if (response?.message) {
+                setIsError(false)
                 setForgotSuccess(true)
                 setEmail(values.email)
             }
         } catch (e) {
             console.log('e', e)
+            setIsError(true)
             setForgotSuccess(false)
             setEmail('')
         }
@@ -76,6 +79,7 @@ export default function ModalForgotPassword() {
     useEffect(() => {
         if (!auth_openModalForgotPassword) {
             setForgotSuccess(false)
+            setIsError(false)
             setEmail('')
             reset({ email: '' })
         }
@@ -93,6 +97,12 @@ export default function ModalForgotPassword() {
                 onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
                 className='ForgotPasswordForm FingoShapeRadius'
             >
+                {isError && (
+                    <div className='text-center mb-1'>
+                        <p className='font-bold text-danger'>Account not found</p>
+                    </div>
+                )}
+
                 {forgotSuccess ? (
                     <div className='ForgotPasswordFormSuccess'>
                         <UnreadEmailSvg className='ForgotIcon' />
