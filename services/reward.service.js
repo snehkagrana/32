@@ -2,6 +2,7 @@ const reward = require('../models/reward')
 const RewardModel = require('../models/reward')
 const UserModel = require('../models/user')
 const dayjs = require('dayjs')
+const { mailTransporter } = require('../utils/mail.util')
 
 var ObjectId = require('mongoose').Types.ObjectId
 
@@ -209,6 +210,30 @@ exports.redeem = async (email, body) => {
             },
             { new: true }
         ).exec()
+
+        /**
+         * Send email notification to admin
+         */
+        var maillist = [
+            process.env.CONTACT_EMAIL_1,
+            process.env.CONTACT_EMAIL_2,
+        ]
+
+        let details = {
+            from: process.env.MAIL,
+            to: maillist,
+            subject: 'User redeem gift card',
+            // text: `${user.displayName}, please contact me at this email - ${req.body.emailAddress}. My concern is ${req.body.emailMessage}`,
+            html: `<p><strong>${user.displayName}</strong> redeem gift card:<br/>Gift card name : ${reward.name} </br>CODE : ${rewardVariantStillExists.claimCode} </br>PIN : ${rewardVariantStillExists.pin} </br></p>`,
+        }
+
+        mailTransporter
+            .sendMail(details)
+            .then(() => {})
+            .catch(err => {
+                console.log('Failed to send email')
+                console.error(err)
+            })
 
         result = user.rewards.find(
             x => x.rewardId == body.itemId && x.variantId == body.variantId

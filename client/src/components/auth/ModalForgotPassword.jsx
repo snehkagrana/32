@@ -28,6 +28,7 @@ export default function ModalForgotPassword() {
     const [email, setEmail] = useState(false)
     const [forgotSuccess, setForgotSuccess] = useState(false)
     const [isError, setIsError] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     const {
         control,
@@ -40,12 +41,16 @@ export default function ModalForgotPassword() {
     })
 
     const onValidSubmit = async values => {
+        setIsError(false)
+        setForgotSuccess(false)
+        setIsLoading(true)
         try {
             const baseUrl = `${window.location.protocol}//${window.location.hostname}`
             const response = await AuthAPI.sendLinkResetPassword({
                 email: values.email,
                 baseUrl,
             })
+            setIsLoading(false)
             if (response?.message) {
                 setIsError(false)
                 setForgotSuccess(true)
@@ -56,6 +61,7 @@ export default function ModalForgotPassword() {
             setIsError(true)
             setForgotSuccess(false)
             setEmail('')
+            setIsLoading(false)
         }
     }
 
@@ -82,6 +88,7 @@ export default function ModalForgotPassword() {
             setIsError(false)
             setEmail('')
             reset({ email: '' })
+            setIsLoading(false)
         }
     }, [auth_openModalForgotPassword])
 
@@ -99,7 +106,9 @@ export default function ModalForgotPassword() {
             >
                 {isError && (
                     <div className='text-center mb-1'>
-                        <p className='font-bold text-danger'>Account not found</p>
+                        <p className='font-bold text-danger'>
+                            Account not found
+                        </p>
                     </div>
                 )}
 
@@ -155,6 +164,7 @@ export default function ModalForgotPassword() {
                                     size='large'
                                     type='submit'
                                     color='success'
+                                    isLoading={isLoading}
                                 >
                                     Submit
                                 </FingoButton>

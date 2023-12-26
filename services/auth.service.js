@@ -7,6 +7,7 @@ const { getLevelByXpPoints } = require('../utils/xp.utils')
 const base64url = require('base64url')
 const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
+const { sendEmailForgotPassword } = require('../email/send-email')
 
 exports.createUser = user => {
     return UserModel.create(user)
@@ -94,19 +95,13 @@ exports.sendLinkForgotPassword = async (email, baseUrl) => {
         ).exec()
 
         const recoveryLink = `${baseUrl}/reset-password/${user.email}/${token}`
-        let mailOptions = {
+
+        await sendEmailForgotPassword({
+            link: recoveryLink,
             from: process.env.MAIL,
             to: user.email,
-            subject: 'Forgot Password Link',
-            text: 'Click on this link to reset you password: ' + recoveryLink,
-        }
-        mailTransporter
-            .sendMail(mailOptions)
-            .then(() => {})
-            .catch(err => {
-                console.log('Failed to send email')
-                console.error(err)
-            })
+            name: user?.displayName ? user.displayName : user?.username ?? '',
+        })
 
         result = true
     } else {
@@ -116,7 +111,6 @@ exports.sendLinkForgotPassword = async (email, baseUrl) => {
 }
 
 exports.resetPassword = async (email, password, token) => {
-    console.log('email', email, password, token)
     let result = false
     let user = await UserModel.findOne({ email }).exec()
 
@@ -128,7 +122,6 @@ exports.resetPassword = async (email, password, token) => {
         )
         result = true
     } else {
-        console.log('masuk else')
         result = false
     }
     return result
