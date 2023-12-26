@@ -5,7 +5,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Row, Form, Button, Col } from 'react-bootstrap'
 import CustomGoogleSignInButton from '../CustomGoogleSignInButton'
 import '../../styles/auth.styles.css'
-import { useAuth } from 'src/hooks'
+import { useAuth, usePersistedGuest } from 'src/hooks'
 import { batch, useDispatch } from 'react-redux'
 import { FingoModal } from 'src/components/core'
 
@@ -20,6 +20,8 @@ export default function ModalLogin() {
         auth_loginWithEmailAndPassword,
         auth_setOpenModalForgotPassword,
     } = useAuth()
+
+    const { persistedGuest_reset } = usePersistedGuest();
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -60,6 +62,9 @@ export default function ModalLogin() {
                             if (result?.payload?.redirect == '/updateemail') {
                                 navigate('/updateemail')
                             } else {
+
+                                dispatch(persistedGuest_reset())
+
                                 /**
                                  * After login success
                                  * Get user info, xp, and other info belongs to user
