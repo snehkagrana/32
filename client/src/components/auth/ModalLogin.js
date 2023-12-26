@@ -17,6 +17,7 @@ export default function ModalLogin() {
         auth_setOpenModalLogin,
         auth_setOpenModalRegister,
         auth_loginWithEmailAndPassword,
+        auth_setOpenModalForgotPassword
     } = useAuth()
 
     const [email, setEmail] = useState('')
@@ -160,29 +161,10 @@ export default function ModalLogin() {
         }
     }
 
-    const forgotPassword = () => {
-        setIsForgotPasswordLoading(true)
-        var link = window.location.href.substring(
-            0,
-            window.location.href.length - 11
-        )
-        console.log('link is', link)
-        Axios({
-            method: 'POST',
-            data: {
-                email: email,
-                link: link,
-            },
-            withCredentials: true,
-            url: '/server/forgotpasswordform',
-        }).then(function (response) {
-            setAuthMsg(response.data.message)
-            setShowAuthMsg(true)
-            if (response.data.redirect == '/forgotpasswordmailsent') {
-                navigate(`/forgotpasswordmailsent`)
-            }
-            setIsForgotPasswordLoading(false)
-        })
+    const forgotPassword = (e) => {
+        e.preventDefault()
+        handleCloseModal()
+        dispatch(auth_setOpenModalForgotPassword(true))
     }
 
     const onClickRegister = () => {
@@ -334,7 +316,7 @@ export default function ModalLogin() {
                                     onClick={forgotPassword}
                                     style={{
                                         marginTop: '10px',
-                                        fontSize: '0.8rem',
+                                        fontSize: '0.85rem',
                                     }}
                                 >
                                     Forgot Password?🤐

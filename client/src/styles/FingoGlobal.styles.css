@@ -154,3 +154,7 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
     padding: 0.4rem 1rem !important;
     font-weight: 500 !important;
 }
+
+.form-control-lg {
+    font-size: 1.05rem !important;
+}

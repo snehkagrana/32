@@ -20,5 +20,15 @@ router.post(
 router.get('/user', AuthGuard, ErrorHandler(AuthController.getUser))
 router.get('/sync', AuthGuard, ErrorHandler(AuthController.syncUser))
 router.get('/logout', AuthGuard, ErrorHandler(AuthController.logout))
+router.post(
+    '/forgot-password/send-link',
+    validate(schema.sendLinkForgotPassword),
+    ErrorHandler(AuthController.sendLinkForgotPassword)
+)
+router.post(
+    '/reset-password',
+    validate(schema.resetPassword),
+    ErrorHandler(AuthController.resetPassword)
+)
 
 module.exports = router
