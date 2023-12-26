@@ -10,10 +10,6 @@
     background-position: bottom left;
     background-repeat: no-repeat;
     color: #fff;
-    animation:
-        fadeIn 2s forwards 1s,
-        zoomIn 1s 1s forwards,
-        zoomInOut 1s 1s forwards;
 }
 
 .LessonCompleteOverlay {
