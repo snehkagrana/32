@@ -3,6 +3,10 @@ const RewardModel = require('../models/reward')
 const UserModel = require('../models/user')
 const dayjs = require('dayjs')
 const { mailTransporter } = require('../utils/mail.util')
+const {
+    sendEmailUserRedeemGiftCard,
+    sendEmailGiftCardRunOut,
+} = require('../email/send-email')
 
 var ObjectId = require('mongoose').Types.ObjectId
 
@@ -146,6 +150,11 @@ exports.redeem = async (email, body) => {
         x => x._id == body.variantId
     )
 
+    const remainingGiftCard = reward.variants.filter(
+        x => x._id != body.variantId && x.isAvailable
+    )
+    // console.log('remainingGiftCard->>>>', remainingGiftCard)
+
     // variant reward still exist & user diamond greater than diamond value can be to redeem
     if (
         rewardVariantStillExists?.isAvailable &&
@@ -214,26 +223,26 @@ exports.redeem = async (email, body) => {
         /**
          * Send email notification to admin
          */
-        var maillist = [
-            process.env.CONTACT_EMAIL_1,
-            process.env.CONTACT_EMAIL_2,
-        ]
-
-        let details = {
+        await sendEmailUserRedeemGiftCard({
+            to: [process.env.CONTACT_EMAIL_1, process.env.CONTACT_EMAIL_2],
             from: process.env.MAIL,
-            to: maillist,
-            subject: 'User redeem gift card',
-            // text: `${user.displayName}, please contact me at this email - ${req.body.emailAddress}. My concern is ${req.body.emailMessage}`,
-            html: `<p><strong>${user.displayName}</strong> redeem gift card:<br/>Gift card name : ${reward.name} </br>CODE : ${rewardVariantStillExists.claimCode} </br>PIN : ${rewardVariantStillExists.pin} </br></p>`,
-        }
+            name: user.displayName || user.email,
+            giftCardName: reward.name,
+            code: rewardVariantStillExists.claimCode,
+            pin: rewardVariantStillExists.pin,
+            time: dayjs(new Date()).format('DD MMM, YYYY, HH:mm'),
+        })
 
-        mailTransporter
-            .sendMail(details)
-            .then(() => {})
-            .catch(err => {
-                console.log('Failed to send email')
-                console.error(err)
+        /**
+         * Send email notification gift card run out
+         */
+        if (remainingGiftCard.length === 0) {
+            await sendEmailGiftCardRunOut({
+                to: [process.env.CONTACT_EMAIL_1, process.env.CONTACT_EMAIL_2],
+                from: process.env.MAIL,
+                name: reward.name,
             })
+        }
 
         result = user.rewards.find(
             x => x.rewardId == body.itemId && x.variantId == body.variantId
