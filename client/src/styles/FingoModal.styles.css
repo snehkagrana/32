@@ -1,4 +1,5 @@
-.FingoModal {
+.FingoModal,
+.modal.show {
     z-index: 1061;
 }
 

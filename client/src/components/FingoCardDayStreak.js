@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useMemo } from 'react'
 import { useAuth } from 'src/hooks'
@@ -80,18 +81,17 @@ const FingoCardDayStreak = () => {
         </svg>
     )
 
+    // prettier-ignore
+    const isStreakBoxHighlighted = useMemo(() => {
+        if (user?.streak > 0 && user?.lastCompletedDay && dayjs(user?.lastCompletedDay).isSame(dayjs(today).toISOString(), 'day')) {
+            return true
+        }
+    }, [user, dayOfWeek, today])
+
     return (
         <div
             className={`mb-3 FingoCardDayStreak FingoShapeRadius ${
-                user?.streak > 0 &&
-                dayOfWeek > 0 &&
-                user?.lastCompletedDay &&
-                dayjs(user?.lastCompletedDay).isSame(
-                    dayjs(today).toISOString(),
-                    'day'
-                )
-                    ? 'highlight'
-                    : ''
+                isStreakBoxHighlighted ? 'highlight' : ''
             }`}
         >
             <div className='col-12 FingoCardDayStreakInner'>
@@ -99,7 +99,6 @@ const FingoCardDayStreak = () => {
                     <img
                         src={
                             user?.streak > 0 &&
-                            dayOfWeek > 0 &&
                             user?.lastCompletedDay &&
                             dayjs(user?.lastCompletedDay).isSame(
                                 dayjs(today).toISOString(),
