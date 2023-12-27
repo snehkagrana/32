@@ -119,7 +119,7 @@ export default function ModalForgotPassword() {
                         <UnreadEmailSvg className='ForgotIcon' />
                         <h2 className='text-center mb-2'>Check your email</h2>
                         <p className='text-center'>
-                            We've send instructions on how to reset your
+                            We have sent instructions on how to reset your
                             password to <strong>{email}</strong>
                         </p>
                     </div>
