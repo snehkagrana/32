@@ -20,6 +20,7 @@ import dayjs from 'dayjs'
 
 import { useDispatch } from 'react-redux'
 import { RewardApi } from 'src/api'
+import { DAILY_XP_TARGET } from 'src/constants'
 
 const FingoCardDailyXP = () => {
     const today = new Date()
@@ -99,15 +100,23 @@ const FingoCardDailyXP = () => {
     // prettier-ignore
     const isAbleToClaimDailyReward = useMemo(() => {
         if(isAuthenticated) {
-            if (!user?.lastClaimedGemsDailyQuest && user?.xp?.daily >= 60) {
-                return true
-            } else if (user?.lastClaimedGemsDailyQuest && dayjs(today).isBefore(dayjs(user.lastClaimedGemsDailyQuest), 'day') ) {
+            if(user?.xp?.daily >= DAILY_XP_TARGET) {
+                if (!user?.lastClaimedGemsDailyQuest) {
+                    return true
+                } else if (dayjs(user.lastClaimedGemsDailyQuest).isBefore(dayjs(today).toISOString(), 'day') ) {
+                    return true
+                } else {
+                    return false
+                }
+            } else {
                 return false
             }
         } else {
             return false;
         }
     }, [today, user, isAuthenticated])
+
+    // console.log("user?.lastClaimedGemsDailyQuest",user?.lastClaimedGemsDailyQuest)
 
     return (
         <div className={`mb-3 FingoCardDailyXP FingoShapeRadius`}>
