@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.d9f6aef3.css",
-    "main.js": "/static/js/main.d9f4196b.js",
+    "main.css": "/static/css/main.2569b246.css",
+    "main.js": "/static/js/main.be7935a8.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
     "static/media/8.png": "/static/media/8.9daef5f1f68e0fc2fb5f.png",
@@ -79,7 +79,7 @@
     "static/media/diamond-faded.png": "/static/media/diamond-faded.ba1f4740a3ddea133e23.png",
     "static/media/diamond-filled.png": "/static/media/diamond-filled.1c7dcc63f2f0b89595a3.png",
     "static/media/correct-audio.mp3": "/static/media/correct-audio.2944938830ac5d97fe17.mp3",
-    "static/media/arrow-2.svg": "/static/media/arrow-2.98d9806fc08dd27e4453c7561d0a89ef.svg",
+    "static/media/arrow-2.svg": "/static/media/arrow-2.3ed5e3b2e67cbbf4da6dc3d3f6ef0a05.svg",
     "static/media/banana-icon.svg": "/static/media/banana-icon.8417494552c51ccbaeb17168958af1f9.svg",
     "static/media/user-cirlce-add.svg": "/static/media/user-cirlce-add.525e2dd061b7de0ae838afb9bd43ddcc.svg",
     "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
@@ -95,20 +95,21 @@
     "static/media/triangle-danger.svg": "/static/media/triangle-danger.060aa6ed42fc6afa2be77a1213a55d49.svg",
     "static/media/trash-bin-trash-linear.svg": "/static/media/trash-bin-trash-linear.e6576df2e2fb7e865b458a3e31d7c916.svg",
     "static/media/eye-off.svg": "/static/media/eye-off.34141a6abb28a5b9d9a0b6b5e655d958.svg",
-    "static/media/enter.svg": "/static/media/enter.2b2db0a88e9d8150b0f69824a2137236.svg",
+    "static/media/enter.svg": "/static/media/enter.03b9d4ce8bcb86a794c21affed1e1b40.svg",
     "static/media/redeem.svg": "/static/media/redeem.89df62d10e052180396295da83cb1558.svg",
     "static/media/sad.svg": "/static/media/sad.a73777fcee698490c31308361d464354.svg",
     "static/media/back.svg": "/static/media/back.8df8af3ad26403b254bc0570d34a1c44.svg",
+    "static/media/outline-mark-email-unread.svg": "/static/media/outline-mark-email-unread.a35ce39ca3a4c73ddaacaa9d8bf4b310.svg",
     "static/media/eye.svg": "/static/media/eye.075e88773568f93cd4445aae25a34387.svg",
     "static/media/outline-history.svg": "/static/media/outline-history.e8f18a93d32dd8483d9c94494afbb2e7.svg",
     "static/media/baseline-content-copy.svg": "/static/media/baseline-content-copy.58ba17b96079dd681d38d228fdc7ef61.svg",
     "static/media/info.svg": "/static/media/info.ef876f7b40a92ef036458f95b7e325e2.svg",
-    "main.d9f6aef3.css.map": "/static/css/main.d9f6aef3.css.map",
-    "main.d9f4196b.js.map": "/static/js/main.d9f4196b.js.map",
+    "main.2569b246.css.map": "/static/css/main.2569b246.css.map",
+    "main.be7935a8.js.map": "/static/js/main.be7935a8.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d9f6aef3.css",
-    "static/js/main.d9f4196b.js"
+    "static/css/main.2569b246.css",
+    "static/js/main.be7935a8.js"
   ]
 }
