@@ -48,6 +48,7 @@ import AdminRewardPage from './pages/admin/AdminRewardPage'
 import { Toaster, ToastBar } from 'react-hot-toast'
 import AuthCallback from './pages/AuthCallback'
 import LandingPage from './pages/LandingPage'
+import ResetPasswordPage from './pages/ResetPasswordPage'
 
 const App = () => {
     return (
@@ -56,7 +57,11 @@ const App = () => {
                 <Routes>
                     <Route exact path='/' element={<LandingPage />} />
                     <Route exact path='/terms' element={<Terms />} />
-                    <Route exact path='/auth/google/callback' element={<AuthCallback />} />
+                    <Route
+                        exact
+                        path='/auth/google/callback'
+                        element={<AuthCallback />}
+                    />
                     <Route
                         exact
                         path='/privacypolicy'
@@ -180,6 +185,9 @@ const App = () => {
                     />
                     <Route exact path='/contactus' element={<ContactUs />} />
                     <Route exact path='/aboutus' element={<AboutUs />} />
+
+                    {/* auth routes */}
+                    <Route exact path='/reset-password/:email/:token' element={<ResetPasswordPage />} />
 
                     {/* ----- admin routes ----- */}
                     <Route

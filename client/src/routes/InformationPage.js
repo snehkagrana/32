@@ -354,33 +354,33 @@ const InformationPage = () => {
                                                 </>
                                             )}
                                     </div>
+                                    {isQuiz &&
+                                        pageNumber + 1 === maxInfoPages &&
+                                        isCompleted.current === true && (
+                                            <>
+                                                <OverlayTrigger
+                                                    overlay={
+                                                        <Tooltip id='tooltip-disabled'>
+                                                            Your score is {score}
+                                                        </Tooltip>
+                                                    }
+                                                >
+                                                    <span className='d-inline-block'>
+                                                        <Button
+                                                            variant='success'
+                                                            disabled
+                                                            style={{
+                                                                pointerEvents:
+                                                                    'none',
+                                                            }}
+                                                        >
+                                                            Start Quiz
+                                                        </Button>
+                                                    </span>
+                                                </OverlayTrigger>
+                                            </>
+                                        )}
                                 </div>
-                                {isQuiz &&
-                                    pageNumber + 1 === maxInfoPages &&
-                                    isCompleted.current === true && (
-                                        <>
-                                            <OverlayTrigger
-                                                overlay={
-                                                    <Tooltip id='tooltip-disabled'>
-                                                        Your score is {score}
-                                                    </Tooltip>
-                                                }
-                                            >
-                                                <span className='d-inline-block'>
-                                                    <Button
-                                                        variant='success'
-                                                        disabled
-                                                        style={{
-                                                            pointerEvents:
-                                                                'none',
-                                                        }}
-                                                    >
-                                                        Start Quiz
-                                                    </Button>
-                                                </span>
-                                            </OverlayTrigger>
-                                        </>
-                                    )}
                                 {!isQuiz && pageNumber + 1 === maxInfoPages && (
                                     <Button
                                         variant='success'

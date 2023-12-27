@@ -47,7 +47,7 @@ import { useSnapCarousel } from 'react-snap-carousel'
 import { FingoHomeLayout } from 'src/components/layouts'
 import FingoWidgetContainer from 'src/components/FingoWidgetContainer'
 import { useDispatch } from 'react-redux'
-import { useAuth } from 'src/hooks'
+import { useAuth, usePersistedGuest } from 'src/hooks'
 import { FingoScrollToTop } from 'src/components/layouts/FingoHomeLayout'
 import FingoModalLevelUp from 'src/components/FingoModalLevelUp'
 import { authUtils } from 'src/utils'
@@ -68,6 +68,7 @@ import ModalClaimReward from 'src/components/reward/ModalClaimReward'
 const HomePage = props => {
     const dispatch = useDispatch()
     const token = authUtils.getUserAccessToken()
+    const { guestState } = usePersistedGuest()
     const {
         auth_setOpenModalRegister,
         auth_syncAndGetUser,
@@ -311,7 +312,8 @@ const HomePage = props => {
                 setLastPlayed(result.last_played)
                 getSkills(result.last_played)
             } else {
-                getSkills({})
+                getSkills(guestState.last_played)
+                setLastPlayed(guestState.last_played)
             }
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -407,7 +409,7 @@ const HomePage = props => {
                                 <div className='col-12 px-0'>
                                     <Card className='welcome-card homePage-welcome-card'>
                                         <Card.Body>
-                                            {newUser ? (
+                                            {newUser && !guestState.last_played ? (
                                                 <Card.Text
                                                     className='welcome-card-text'
                                                     style={{

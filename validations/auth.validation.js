@@ -20,4 +20,15 @@ module.exports = {
         email: Joi.string().email().required(),
         password: Joi.string().required(),
     }),
+    sendLinkForgotPassword: Joi.object().keys({
+        email: Joi.string().email().required(),
+        baseUrl: Joi.string().required(),
+    }),
+    resetPassword: Joi.object()
+        .keys({
+            email: Joi.string().email().required(),
+            password: Joi.string().required(),
+            token: Joi.string().required(),
+        })
+        .options({ allowUnknown: true }),
 }

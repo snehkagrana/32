@@ -36,6 +36,7 @@ const adminRoutes = require('./routes/admin.routes')
 const informationRoutes = require('./routes/information.routes')
 const AuthGuard = require('./middlewares/auth.middleware');
 const { initializeDiamondUser, calculateDiamondUser } = require("./utils/reward.util");
+const { mailTransporter } = require("./utils/mail.util");
 
 aws.config.update({
     secretAccessKey: process.env.ACCESS_SECRET_KEY,
@@ -428,21 +429,25 @@ app.post("/server/updateemail", AuthGuard, async (req, res) => {
     });
 });
 
-const mailTransporter = nodemailer.createTransport({
-    host: "smtpout.secureserver.net",
-    secure: true,
-    secureConnection: false, // TLS requires secureConnection to be false
-    tls: {
-        ciphers: "SSLv3",
-    },
-    requireTLS: true,
-    port: 465,
-    debug: true,
-    auth: {
-        user: process.env.MAIL,
-        pass: process.env.PASSWORD_MAIL,
-    },
-});
+
+/**
+ * use mailTransporter from utils
+ */
+// const mailTransporter = nodemailer.createTransport({
+//     host: "smtpout.secureserver.net",
+//     secure: true,
+//     secureConnection: false, // TLS requires secureConnection to be false
+//     tls: {
+//         ciphers: "SSLv3",
+//     },
+//     requireTLS: true,
+//     port: 465,
+//     debug: true,
+//     auth: {
+//         user: process.env.MAIL,
+//         pass: process.env.PASSWORD_MAIL,
+//     },
+// });
 
 app.post("/server/forgotpasswordform", (req, res) => {
     // console.log('fp',req.body);

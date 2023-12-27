@@ -1,28 +1,31 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable eqeqeq */
 import React, { useState, useEffect, useCallback } from 'react'
-import Axios from 'src/api/axios'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Row, Form, Button, Col } from 'react-bootstrap'
 import CustomGoogleSignInButton from '../CustomGoogleSignInButton'
 import '../../styles/auth.styles.css'
-import { useAuth } from 'src/hooks'
+import { useAuth, usePersistedGuest } from 'src/hooks'
 import { batch, useDispatch } from 'react-redux'
 import { FingoModal } from 'src/components/core'
 
 export default function ModalLogin() {
     const dispatch = useDispatch()
+    const [searchParams] = useSearchParams()
     const {
         auth_getUser,
         auth_openModalLogin,
         auth_setOpenModalLogin,
         auth_setOpenModalRegister,
         auth_loginWithEmailAndPassword,
+        auth_setOpenModalForgotPassword,
     } = useAuth()
+
+    const { persistedGuest_reset } = usePersistedGuest();
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [authMsg, setAuthMsg] = useState('')
-    const [showAuthMsg, setShowAuthMsg] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [validEmail, setValidEmail] = useState(false)
     const [hasInteractedWithEmail, setHasInteractedWithEmail] = useState(false)
@@ -32,8 +35,6 @@ export default function ModalLogin() {
     const [passwordTooltipMessage, setPasswordTooltipMessage] = useState('')
     const [isForgotPasswordLoading, setIsForgotPasswordLoading] =
         useState(false)
-
-    const [hasInteracted, setHasInteracted] = useState(false)
 
     const handleCloseModal = () => {
         dispatch(auth_setOpenModalLogin(false))
@@ -45,9 +46,11 @@ export default function ModalLogin() {
         setShowPassword(!showPassword)
     }
 
-    const handleClick = () => {
-        navigate('/home')
-    }
+    useEffect(() => {
+        if (searchParams.get('modalLogin') === 'true') {
+            dispatch(auth_setOpenModalLogin(true))
+        }
+    }, [searchParams])
 
     const handleLogin = useCallback(() => {
         if (email && password) {
@@ -59,6 +62,9 @@ export default function ModalLogin() {
                             if (result?.payload?.redirect == '/updateemail') {
                                 navigate('/updateemail')
                             } else {
+
+                                dispatch(persistedGuest_reset())
+
                                 /**
                                  * After login success
                                  * Get user info, xp, and other info belongs to user
@@ -160,29 +166,10 @@ export default function ModalLogin() {
         }
     }
 
-    const forgotPassword = () => {
-        setIsForgotPasswordLoading(true)
-        var link = window.location.href.substring(
-            0,
-            window.location.href.length - 11
-        )
-        console.log('link is', link)
-        Axios({
-            method: 'POST',
-            data: {
-                email: email,
-                link: link,
-            },
-            withCredentials: true,
-            url: '/server/forgotpasswordform',
-        }).then(function (response) {
-            setAuthMsg(response.data.message)
-            setShowAuthMsg(true)
-            if (response.data.redirect == '/forgotpasswordmailsent') {
-                navigate(`/forgotpasswordmailsent`)
-            }
-            setIsForgotPasswordLoading(false)
-        })
+    const forgotPassword = e => {
+        e.preventDefault()
+        handleCloseModal()
+        dispatch(auth_setOpenModalForgotPassword(true))
     }
 
     const onClickRegister = () => {
@@ -334,7 +321,7 @@ export default function ModalLogin() {
                                     onClick={forgotPassword}
                                     style={{
                                         marginTop: '10px',
-                                        fontSize: '0.8rem',
+                                        fontSize: '0.85rem',
                                     }}
                                 >
                                     Forgot Password?🤐

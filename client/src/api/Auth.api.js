@@ -29,4 +29,18 @@ export const AuthAPI = {
         const response = await Axios.get('/server/api/auth/logout')
         return response?.data
     },
+    sendLinkResetPassword: async body => {
+        const response = await Axios.post(
+            '/server/api/auth/forgot-password/send-link',
+            body
+        )
+        return response?.data
+    },
+    resetPassword: async body => {
+        const response = await Axios.post(
+            '/server/api/auth/reset-password',
+            body
+        )
+        return response?.data
+    },
 }

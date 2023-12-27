@@ -97,3 +97,28 @@ exports.logout = async (req, res) => {
     await AuthService.logoutUser(req.token, req.user.exp)
     return res.json({ message: 'Logged out successfully.' })
 }
+
+exports.sendLinkForgotPassword = async (req, res) => {
+    const result = await AuthService.sendLinkForgotPassword(
+        req.body.email,
+        req.body.baseUrl
+    )
+    if (result) {
+        return res.json({ message: 'Send link successfully.' })
+    }
+    return res
+        .status(400)
+        .json({ message: 'Failed to send forgot password link.' })
+}
+
+exports.resetPassword = async (req, res) => {
+    const result = await AuthService.resetPassword(
+        req.body.email,
+        req.body.password,
+        req.body.token
+    )
+    if (result) {
+        return res.json({ message: 'Reset Password successfully.' })
+    }
+    return res.status(400).json({ message: 'Failed to reset password.' })
+}

@@ -1,8 +1,13 @@
 const UserModel = require('../models/user')
 const cacheUtil = require('../utils/cache.util')
 const { daysDifference } = require('../utils/common.util')
+const { mailTransporter } = require('../utils/mail.util')
 const { initializeDiamondUser } = require('../utils/reward.util')
 const { getLevelByXpPoints } = require('../utils/xp.utils')
+const base64url = require('base64url')
+const crypto = require('crypto')
+const bcrypt = require('bcryptjs')
+const { sendEmailForgotPassword } = require('../email/send-email')
 
 exports.createUser = user => {
     return UserModel.create(user)
@@ -76,5 +81,48 @@ exports.syncUser = async email => {
         result = false
     }
 
+    return result
+}
+
+exports.sendLinkForgotPassword = async (email, baseUrl) => {
+    let result = false
+    let user = await UserModel.findOne({ email }).exec()
+    if (user) {
+        const token = base64url(crypto.randomBytes(20))
+        await UserModel.findOneAndUpdate(
+            { email },
+            { $set: { password_reset_token: token } }
+        ).exec()
+
+        const recoveryLink = `${baseUrl}/reset-password/${user.email}/${token}`
+
+        await sendEmailForgotPassword({
+            link: recoveryLink,
+            from: process.env.MAIL,
+            to: user.email,
+            name: user?.displayName ? user.displayName : user?.username ?? '',
+        })
+
+        result = true
+    } else {
+        result = false
+    }
+    return result
+}
+
+exports.resetPassword = async (email, password, token) => {
+    let result = false
+    let user = await UserModel.findOne({ email }).exec()
+
+    if (user && token === user.password_reset_token) {
+        const hashedPassword = await bcrypt.hash(password, 10)
+        user = await UserModel.findOneAndUpdate(
+            { email: user.email },
+            { $set: { password: hashedPassword, password_reset_token: '' } }
+        )
+        result = true
+    } else {
+        result = false
+    }
     return result
 }

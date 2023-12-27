@@ -10,10 +10,13 @@ import "../styles/QuizPage.styles.css";
 import WrongAudio from "../sounds/wrong-audio.mp3"
 import CorrectAudio from "../sounds/correct-audio.mp3"
 import { FingoHomeLayout } from "src/components/layouts";
-import { useAuth } from "src/hooks";
+import { useAuth, usePersistedGuest } from "src/hooks";
+import { useDispatch } from "react-redux";
 
 const Quiz = () => {
+  const dispatch = useDispatch();
   const { isAuthenticated, user } = useAuth()
+  const { persistedGuest_setScore, persistedGuest_setLastPlayed, guestState } = usePersistedGuest()
   const [imageURL, setImageURL] = useState("");
   const { skillName, subcategory, category } = useParams();
   const navigate = useNavigate();
@@ -159,7 +162,7 @@ const Quiz = () => {
         skill: skillName,
         category: category,
         sub_category: subcategory,
-        points: points, // Assuming `points` is already the updated value you want to store
+        points: points?.current || 0, // Assuming `points` is already the updated value you want to store
       });
       // Save the updated array back to localStorage
       sessionStorage.setItem("scores", JSON.stringify(scores));
@@ -171,6 +174,23 @@ const Quiz = () => {
           sub_category: subcategory,
         })
       );
+
+      dispatch(persistedGuest_setLastPlayed({
+        skill: skillName,
+        category: category,
+        sub_category: subcategory
+      }))
+
+      dispatch(persistedGuest_setScore([
+        ...guestState.score,
+        {
+          skill: skillName,
+          category: category,
+          sub_category: subcategory,
+          points: points,
+        }
+      ]))
+
       // Directly navigate to score page without waiting for server response
       navigate(
         `/skills/${skillName}/${category}/${subcategory}/score?newUser=true`,

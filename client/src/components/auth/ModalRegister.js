@@ -5,7 +5,7 @@ import { Form, Button } from 'react-bootstrap'
 import CustomGoogleSignInButton from '../CustomGoogleSignInButton'
 import '../../styles/auth.styles.css'
 import { batch, useDispatch } from 'react-redux'
-import { useAuth } from 'src/hooks'
+import { useAuth, usePersistedGuest } from 'src/hooks'
 import { FingoModal } from 'src/components/core'
 
 export default function ModalRegister() {
@@ -15,6 +15,7 @@ export default function ModalRegister() {
         auth_setOpenModalLogin,
         auth_setOpenModalRegister,
     } = useAuth()
+    const { persistedGuest_reset } = usePersistedGuest();
 
     const [registerFirstName, setRegisterFirstName] = useState('')
     const [registerLastName, setRegisterLastName] = useState('')
@@ -74,6 +75,8 @@ export default function ModalRegister() {
         }).then(function (response) {
             setAuthMsg(response.data.message)
             setShowAuthMsg(true)
+
+            dispatch(persistedGuest_reset())
 
             batch(() => {
                 dispatch(auth_setOpenModalRegister(false))

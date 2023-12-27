@@ -5,6 +5,7 @@ import ModalLogin from '../auth/ModalLogin'
 import ModalRegister from '../auth/ModalRegister'
 import 'src/styles/FingoHomeLayout.styles.css'
 import 'src/styles/FingoBackToTop.styles.css'
+import ModalForgotPassword from '../auth/ModalForgotPassword'
 
 export const FingoScrollToTop = ({ fixed }) => {
     const [position, setPosition] = useState({ scrollX: 0, scrollY: 0 })
@@ -64,6 +65,7 @@ const FingoHomeLayout = ({ children }) => {
             <FingoFooter />
             <ModalLogin />
             <ModalRegister />
+            <ModalForgotPassword />
         </div>
     )
 }

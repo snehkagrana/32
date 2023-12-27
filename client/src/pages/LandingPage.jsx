@@ -32,6 +32,7 @@ import ModalLogin from 'src/components/auth/ModalLogin'
 import ModalRegister from 'src/components/auth/ModalRegister'
 import HowItsWorkSection from 'src/components/landing-page/HowItsWorkSection'
 import ThrustedBySection from 'src/components/landing-page/ThrustedBySection'
+import ModalForgotPassword from 'src/components/auth/ModalForgotPassword'
 
 
 const skills = [
@@ -145,6 +146,7 @@ const LandingPage = () => {
         >
             <ModalLogin />
             <ModalRegister />
+            <ModalForgotPassword />
             <div className='w-full max-w-7xl'>
                 <div className='md:pb-12 '>
                     <div

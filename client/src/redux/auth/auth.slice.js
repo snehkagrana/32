@@ -5,6 +5,7 @@ import { auth_loginWithEmailAndPassword } from './auth.thunk'
 const initialState = {
     auth_openModalLogin: false,
     auth_openModalRegister: false,
+    auth_openModalForgotPassword: false,
     loginIsLoading: false,
     loginIsError: false,
 }
@@ -19,6 +20,9 @@ export const authSlice = createSlice({
         },
         auth_setOpenModalRegister(state, action) {
             state.auth_openModalRegister = action.payload
+        },
+        auth_setOpenModalForgotPassword(state, action) {
+            state.auth_openModalForgotPassword = action.payload
         },
         auth_reset: () => initialState,
     },
