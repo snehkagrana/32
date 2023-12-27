@@ -13,7 +13,9 @@ import { ReactComponent as UnreadEmailSvg } from 'src/assets/svg/outline-mark-em
 import 'src/styles/ForgotPasswordForm.styles.css'
 
 const schema = Yup.object().shape({
-    email: Yup.string().required('Please enter email address'),
+    email: Yup.string()
+        .email('Please input valid email')
+        .required('Please enter email address'),
 })
 
 export default function ModalForgotPassword() {

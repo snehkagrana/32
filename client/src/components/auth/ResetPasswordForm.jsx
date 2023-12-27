@@ -12,10 +12,13 @@ import { useNavigate, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
 const schema = Yup.object().shape({
-    password: Yup.string().required('Password is required'),
+    password: Yup.string()
+        .required('Password is required')
+        .matches(/^(\S+$)/g, 'Spaces not allowed'),
     passwordConfirmation: Yup.string()
         .required('Please retype your password.')
-        .oneOf([Yup.ref('password')], 'Your passwords do not match.'),
+        .oneOf([Yup.ref('password')], 'Your passwords do not match.')
+        .matches(/^(\S+$)/g, 'Spaces not allowed'),
 })
 
 const initialValues = {
