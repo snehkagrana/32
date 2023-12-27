@@ -267,7 +267,7 @@ exports.claimReward = async (email, type) => {
         // prettier-ignore
         if (
             !user.lastClaimedGemsDailyQuest ||
-            (user.lastClaimedGemsDailyQuest && dayjs(today).isBefore(dayjs(user.lastClaimedGemsDailyQuest), 'day'))
+            (user.lastClaimedGemsDailyQuest && dayjs(user.lastClaimedGemsDailyQuest).isBefore(dayjs(today).toISOString(), 'day'))
         ) {
             user = await UserModel.findOneAndUpdate(
                 { email },
