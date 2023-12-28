@@ -34,6 +34,8 @@ const accountRoutes = require('./routes/account.routes')
 const userRoutes = require('./routes/user.routes')
 const adminRoutes = require('./routes/admin.routes')
 const informationRoutes = require('./routes/information.routes')
+const batchRoutes = require('./routes/batch.routes')
+const heartRoutes = require('./routes/heart.routes')
 const AuthGuard = require('./middlewares/auth.middleware');
 const { initializeDiamondUser, calculateDiamondUser } = require("./utils/reward.util");
 const { mailTransporter } = require("./utils/mail.util");
@@ -84,6 +86,8 @@ app.use('/server/api', rewardRoutes);
 app.use('/server/api', accountRoutes);  
 app.use('/server/api', userRoutes);  
 app.use('/server/api', informationRoutes);  
+app.use('/server/api', batchRoutes);  
+app.use('/server/api', heartRoutes);  
 
 app.use(
     session({

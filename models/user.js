@@ -126,6 +126,11 @@ const UserSchema = new mongoose.Schema({
             },
         },
     ],
+    heart: {
+        type: Number,
+        required: true,
+    },
+    lastHeartAccruedAt: Date,
 })
 
 UserSchema.set('toJSON', {

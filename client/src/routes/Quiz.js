@@ -10,16 +10,19 @@ import "../styles/QuizPage.styles.css";
 import WrongAudio from "../sounds/wrong-audio.mp3"
 import CorrectAudio from "../sounds/correct-audio.mp3"
 import { FingoHomeLayout } from "src/components/layouts";
-import { useAuth, usePersistedGuest } from "src/hooks";
+import { useApp, useAuth, usePersistedGuest } from "src/hooks";
 import { useDispatch } from "react-redux";
+import { BATCH_EVENT_TIME_SPENT } from "src/constants/app.constant";
 
 const Quiz = () => {
   const dispatch = useDispatch();
+  const { appBatch } = useApp();
   const { isAuthenticated, user } = useAuth()
   const { persistedGuest_setScore, persistedGuest_setLastPlayed, guestState } = usePersistedGuest()
   const [imageURL, setImageURL] = useState("");
   const { skillName, subcategory, category } = useParams();
   const navigate = useNavigate();
+  const [itemId, setItemId] = useState(null)
 
   const skillDetails = useRef({});
   const questionSet = useRef([]);
@@ -75,6 +78,12 @@ const Quiz = () => {
       } else {
         wrongAudio.play()
         setCurrentIsCorrect(false);
+        appBatch({
+          eventType: BATCH_EVENT_TIME_SPENT,
+          eventTimestamp: new Date().getTime(),
+          isCorrect: true,
+          itemId
+        })
       }
     } else {
       if (
@@ -92,6 +101,12 @@ const Quiz = () => {
         setCurrentIsWrongIndex(currentSelectedIndex ?? null);
         setCurrentIsCorrectIndex(correctAnswers?.current?.[0] ?? null);
       }
+      appBatch({
+          eventType: BATCH_EVENT_TIME_SPENT,
+          eventTimestamp: new Date().getTime(),
+          isCorrect: false,
+          itemId
+      })
     }
 
     setIsSubmittedAnswer(true);
@@ -113,6 +128,8 @@ const Quiz = () => {
     setCurrentQuestion(questionSet.current[newQuestionIndex].question);
     setCurrentExplaination(questionSet.current[newQuestionIndex].explaination);
     setOptionSet(questionSet.current[newQuestionIndex].options);
+
+    setItemId(questionSet.current[newQuestionIndex]._id)
 
     correctAnswers.current =
       questionSet.current[newQuestionIndex].correct_answers;
@@ -281,6 +298,7 @@ const Quiz = () => {
       setCurrentQuestion(res.data.data[0].question);
       setCurrentExplaination(res.data.data[0].explaination);
       setOptionSet(res.data.data[0].options);
+      setItemId(res.data.data[0]._id);
       if (res.data.data[0].imgpath != undefined) {
         setCurrentImageName(res.data.data[0].imgpath);
         const key = res.data.data[0].imgpath;
@@ -392,7 +410,7 @@ const Quiz = () => {
     >
       <path
         fill="#039027"
-        fill-rule="evenodd"
+        fillRule="evenodd"
         d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18Zm-.232-5.36l5-6l-1.536-1.28l-4.3 5.159l-2.225-2.226l-1.414 1.414l3 3l.774.774l.701-.84Z"
         clip-rule="evenodd"
       />
@@ -408,7 +426,7 @@ const Quiz = () => {
     >
       <path
         fill="#e00000"
-        fill-rule="evenodd"
+        fillRule="evenodd"
         d="M21 12a9 9 0 1 1-18 0a9 9 0 0 1 18 0ZM7.293 16.707a1 1 0 0 1 0-1.414L10.586 12L7.293 8.707a1 1 0 0 1 1.414-1.414L12 10.586l3.293-3.293a1 1 0 1 1 1.414 1.414L13.414 12l3.293 3.293a1 1 0 0 1-1.414 1.414L12 13.414l-3.293 3.293a1 1 0 0 1-1.414 0Z"
         clip-rule="evenodd"
       />

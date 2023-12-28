@@ -25,7 +25,7 @@
 
 .FingoWidgetHeader li {
     display: flex;
-    width: 33.3%;
+    width: 25%;
     align-items: center;
     justify-content: center;
     flex-direction: column;
@@ -35,7 +35,7 @@
     text-decoration: none;
     user-select: none;
     height: 42px;
-    width: 92%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -57,12 +57,12 @@
     margin-top: 0.1rem;
 }
 
-/* @media (min-width: 360px) {
+@media (min-width: 576px) {
     .FingoWidgetHeader li a {
-        height: 60px;
-        width: 60px;
+        height: 44px;
+        width: 90%;
     }
-} */
+}
 
 .FingoWidgetHeader li a img {
     height: 26px;

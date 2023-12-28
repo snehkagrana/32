@@ -2,6 +2,7 @@ const AuthService = require('../services/auth.service')
 const jwtConfig = require('../configs/jwt.config')
 const bcryptUtil = require('../utils/bcrypt.util')
 const jwtUtil = require('../utils/jwt.util')
+const { appConfig } = require('../configs/app.config')
 
 exports.register = async (req, res) => {
     const isExist = await AuthService.findUserByEmail(req.body.email)
@@ -27,6 +28,8 @@ exports.register = async (req, res) => {
             total: 0,
             level: 1,
         },
+        heart: appConfig.defaultHeart,
+        lastHeartAccruedAt: new Date(),
     }
 
     const user = await AuthService.createUser(newUser)

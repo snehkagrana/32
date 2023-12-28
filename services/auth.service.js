@@ -8,6 +8,7 @@ const base64url = require('base64url')
 const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
 const { sendEmailForgotPassword } = require('../email/send-email')
+const { appConfig } = require('../configs/app.config')
 
 exports.createUser = user => {
     return UserModel.create(user)
@@ -71,6 +72,8 @@ exports.syncUser = async email => {
                             user?.xp?.total ? parseInt(user.xp.total, 10) : 0
                         ),
                     },
+                    heart: user?.heart ? user.heart : appConfig.defaultHeart,
+                    // lastHeartAccruedAt: new Date(),
                 },
             }
         )
