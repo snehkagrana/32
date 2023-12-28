@@ -35,7 +35,7 @@ const MENU_ITEMS = [
         icon: HeartIconSVG,
         name: 'heart',
         color: '#ff4b4b',
-        iconHeight: 19,
+        iconHeight: 18,
     },
     // ...another menu menu tab
 ]

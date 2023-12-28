@@ -1,8 +1,8 @@
-.FingoWidgetHeaderInner {
+.QuizPageHeaderInner {
     height: 100%;
 }
 
-.FingoWidgetHeader {
+.QuizPageHeader {
     display: block;
     width: 100%;
     z-index: 3;
@@ -12,7 +12,7 @@
 @media (min-width: 576px) {
 }
 
-.FingoWidgetHeader ul {
+.QuizPageHeader ul {
     height: 100%;
     padding-left: 0;
     margin: 0;
@@ -20,10 +20,10 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
 }
 
-.FingoWidgetHeader li {
+.QuizPageHeader li {
     display: flex;
     width: 25%;
     align-items: center;
@@ -31,7 +31,7 @@
     flex-direction: column;
 }
 
-.FingoWidgetHeader li a {
+.QuizPageHeader li a {
     text-decoration: none;
     user-select: none;
     height: 42px;
@@ -42,15 +42,15 @@
     border-radius: 0.5rem;
 }
 
-.FingoWidgetHeader li a.active {
+.QuizPageHeader li a.active {
     background-color: #f0f0f0;
 }
 
-[data-theme='dark'] .FingoWidgetHeader li a.active {
+[data-theme='dark'] .QuizPageHeader li a.active {
     background-color: #1e1e1e;
 }
 
-.FingoWidgetHeader li a span {
+.QuizPageHeader li a span {
     font-weight: 700;
     font-size: 1rem;
     margin-left: 0.35rem;
@@ -58,24 +58,13 @@
 }
 
 @media (min-width: 576px) {
-    .FingoWidgetHeader li a {
+    .QuizPageHeader li a {
         height: 44px;
         width: 90%;
     }
 }
 
-.FingoWidgetHeader li a img {
+.QuizPageHeader li a img {
     height: 26px;
     width: auto;
-}
-
-#FingoWidgetHeaderRoot .popover {
-    max-width: 100%;
-    width: 100%;
-    left: 0 !important;
-    transform: translate3d(0px, 46.5px, 0px) !important;
-    background-color: transparent;
-    border: none;
-    box-shadow: none;
-    padding: 0 1rem;
 }

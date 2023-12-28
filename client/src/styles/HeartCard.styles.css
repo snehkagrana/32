@@ -1,0 +1,95 @@
+.HeartCard {
+    padding: 1rem;
+    background-color: #fff;
+    border: 2px solid rgb(109 109 109 / 10%);
+}
+
+[data-theme='dark'] .HeartCard:not(.highlight) {
+    background-color: #303030;
+}
+
+.HeartCardHeader svg {
+    color: #bdbdbd;
+    width: 27px;
+    height: auto;
+}
+
+[data-theme='dark'] .HeartCardHeader svg {
+    color: #616161;
+}
+
+.HeartCardHeader svg.active {
+    color: #ff4b4b;
+}
+
+.HeartCardHeader h2 {
+    font-weight: 700;
+    font-size: 22px;
+}
+
+.HeartCardHeader h4 {
+    font-weight: 700;
+    font-size: 17px;
+}
+
+.HeartCardHeader h6 {
+    font-size: 14px;
+    color: #444;
+}
+
+[data-theme='dark'] .HeartCardHeader h6 {
+    color: #ececec;
+}
+
+.HeartCardHeader ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.HeartCardBtn {
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 14px;
+    background-color: #fff;
+    border: 2px solid rgb(109 109 109 / 10%);
+    box-shadow: rgb(13 13 13 / 20%) 0px 4px;
+    transition: all 0.2s ease 0s;
+}
+
+[data-theme='dark'] .HeartCardBtn {
+    background-color: #1b1b1b;
+    border: 2px solid rgb(109 109 109 / 10%);
+    box-shadow: rgba(214, 214, 214, 0.2) 0px 4px;
+    color: #fbfbfb;
+}
+
+.HeartCardBtn:hover {
+    background-color: rgb(13 13 13 / 5%);
+}
+
+.HeartCardBtn svg {
+    width: 35px;
+    height: auto;
+    margin-right: 0.5rem;
+}
+.HeartCardBtn .EndContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: 0.3rem;
+}
+.HeartCardBtn .EndContent svg {
+    width: 18px;
+    height: auto;
+    margin-right: 0.2rem;
+}
