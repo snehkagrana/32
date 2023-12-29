@@ -133,15 +133,13 @@ const FingoWidgetHeader = () => {
                                                     src={i.icon}
                                                     alt='icon'
                                                 />
-                                                {getTabLabel(i.name) && (
-                                                    <span
-                                                        style={{
-                                                            color: i.color,
-                                                        }}
-                                                    >
-                                                        {getTabLabel(i.name)}
-                                                    </span>
-                                                )}
+                                                <span
+                                                    style={{
+                                                        color: i.color,
+                                                    }}
+                                                >
+                                                    {getTabLabel(i.name)}
+                                                </span>
                                             </a>
                                         </Popover>
                                     </li>
@@ -162,15 +160,13 @@ const FingoWidgetHeader = () => {
                                                 src={i.icon}
                                                 alt='icon'
                                             />
-                                            {getTabLabel(i.name) && (
-                                                <span
-                                                    style={{
-                                                        color: i.color,
-                                                    }}
-                                                >
-                                                    {getTabLabel(i.name)}
-                                                </span>
-                                            )}
+                                            <span
+                                                style={{
+                                                    color: i.color,
+                                                }}
+                                            >
+                                                {getTabLabel(i.name)}
+                                            </span>
                                         </a>
                                     </li>
                                 )
