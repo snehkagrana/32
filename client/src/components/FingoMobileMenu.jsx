@@ -9,7 +9,7 @@ import { ReactComponent as EnterIcon } from 'src/assets/svg/enter.svg'
 import { ReactComponent as SignUpIcon } from 'src/assets/svg/user-cirlce-add.svg'
 import FingoSwitchTheme from './FingoSwitchTheme'
 import { batch, useDispatch } from 'react-redux'
-import { useApp, useAuth } from 'src/hooks'
+import { useApp, useAuth, usePersistedGuest } from 'src/hooks'
 
 import FingoLogo from 'src/images/fingo-logo.png'
 import IcHome from 'src/assets/images/ic_home.png'
@@ -35,6 +35,8 @@ const FingoMobileMenu = ({ open }) => {
         app_setOpenSidebar,
     } = useApp()
 
+    const { persistedGuest_reset } = usePersistedGuest()
+
     const handleLogOut = () => {
         Swal.fire({
             title: 'Are you sure want to logout ?',
@@ -53,6 +55,7 @@ const FingoMobileMenu = ({ open }) => {
                             dispatch(app_setSkills([]))
                             dispatch(app_setDailyXP(0))
                             dispatch(app_setTotalXP(0))
+                            dispatch(persistedGuest_reset())
                         })
                         setTimeout(() => {
                             navigate('/home')

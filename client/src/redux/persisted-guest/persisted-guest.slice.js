@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { MAX_HEARTS } from 'src/constants/app.constant'
 
 // Initial state
 const initialState = {
@@ -21,6 +22,8 @@ const initialState = {
     imgPath: null,
     diamond: 0,
     lastClaimedGemsDailyQuest: null,
+    heart: MAX_HEARTS,
+    lastHeartAccruedAt: new Date().toISOString(),
 }
 
 // Actual Slice
