@@ -13,7 +13,8 @@ const initialState = {
     },
     openModalHowToEarnDiamond: false,
     openModalHeartRunOut: false,
-    openModalConfirmCloseHeartRunOut: false,
+    openModalKeepLearning: false,
+    openModalConfirmRefill: false,
 }
 
 // Actual Slice
@@ -49,8 +50,11 @@ export const appSlice = createSlice({
         app_setOpenModalHeartRunOut(state, action) {
             state.openModalHeartRunOut = action.payload
         },
-        app_setOpenModalConfirmCloseHeartRunOut(state, action) {
-            state.openModalConfirmCloseHeartRunOut = action.payload
+        app_setOpenModalKeepLearning(state, action) {
+            state.openModalKeepLearning = action.payload
+        },
+        app_setOpenModalConfirmRefill(state, action) {
+            state.openModalConfirmRefill = action.payload
         },
     },
 })

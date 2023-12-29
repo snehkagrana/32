@@ -24,45 +24,51 @@ const HeartCard = () => {
     }, [user])
 
     const isAbleToRefill = useMemo(() => {
-        return user.heart === 0
+        return Boolean(
+            user?.heart === 0 &&
+                user?.diamond >= AMOUNT_OF_GEMS_REDEEM_TO_HEARTS
+        )
     }, [user])
 
     return (
-        <div className='HeartCard FingoShapeRadius mb-3'>
-            <div className='HeartCardContainer'>
-                <div className='HeartCardHeader flex align-items-center flex-column mb-3'>
-                    <h2 className='mb-2'>Hearts</h2>
-                    <ul className='flex align-items-center mb-3'>
-                        {Array.from({ length: 5 }, (_, index) => (
-                            <li className='mx-1'>
-                                {renderHeartIcon(
-                                    user.heart >= index + 1 ? true : false
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                    <h4 className='mb-1'>{getMessage}</h4>
-                    <h6>{getSubMessage}</h6>
-                </div>
+        <div className='HeartCard'>
+            <div className='HeartCardHeader flex align-items-center flex-column mb-3'>
+                <h2 className='mb-2'>Hearts</h2>
+                <ul className='flex align-items-center mb-3'>
+                    {Array.from({ length: 5 }, (_, index) => (
+                        <li className='mx-1'>
+                            {renderHeartIcon(
+                                user?.heart >= index + 1 ? true : false
+                            )}
+                        </li>
+                    ))}
+                </ul>
+                <h4 className='mb-1'>{getMessage}</h4>
+                <h6>{getSubMessage}</h6>
+            </div>
 
-                <div className='HeaderCardContent'>
-                    <button className='HeartCardBtn mb-3'>
-                        <UnlimitedHeartIcon />
-                        <span> Unlimited Hearts</span>
-                        <div className='EndContent'></div>
-                    </button>
-                    <button
-                        className='HeartCardBtn mb-3'
-                        disabled={!isAbleToRefill}
-                    >
-                        <RefillHeartIcon />
-                        <span> Refill Hearts</span>
-                        <div className='EndContent'>
-                            <DiamondIcon />
-                            <span>{AMOUNT_OF_GEMS_REDEEM_TO_HEARTS}</span>
-                        </div>
-                    </button>
-                </div>
+            <div className='HeaderCardContent'>
+                <button className='HeartCardBtn mb-3'>
+                    <UnlimitedHeartIcon />
+                    <span> Unlimited Hearts</span>
+                    <div className='EndContent'></div>
+                </button>
+                <button
+                    className='HeartCardBtn mb-3'
+                    disabled={!isAbleToRefill}
+                >
+                    <RefillHeartIcon />
+                    <span> Refill Hearts</span>
+                    <div className='EndContent'>
+                        <DiamondIcon />
+                        <span>{AMOUNT_OF_GEMS_REDEEM_TO_HEARTS}</span>
+                    </div>
+                </button>
+                {user?.diamond < AMOUNT_OF_GEMS_REDEEM_TO_HEARTS && (
+                    <p className='text-center text-sm mb-0'>
+                        Your gems are not enough
+                    </p>
+                )}
             </div>
         </div>
     )

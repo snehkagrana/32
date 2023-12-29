@@ -35,7 +35,7 @@ const FingoCardGiftbox = () => {
 
     return (
         <div
-            className={`mb-3 FingoCardGiftbox FingoShapeRadius`}
+            className={`FingoCardGiftbox FingoShapeRadius`}
             onClick={onClickCard}
         >
             <div className='HeaderBtn'>

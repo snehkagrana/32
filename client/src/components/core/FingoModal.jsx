@@ -1,9 +1,9 @@
 import React from 'react'
-import 'src/styles/FingoModal.styles.css'
 import { Modal as BootstrapModal } from 'react-bootstrap'
+import 'src/styles/FingoModal.styles.css'
 
 export const FingoModal = props => {
-    const { open, onClose, children, className, rest } = props
+    const { open, onClose, children, className, showCloseButton, rest } = props
     return (
         <BootstrapModal
             {...rest}
@@ -13,7 +13,7 @@ export const FingoModal = props => {
             aria-labelledby='contained-modal-title-vcenter'
             centered
         >
-            {open && (
+            {open && showCloseButton && (
                 <button className='FingoModalClose' onClick={onClose}>
                     <svg
                         xmlns='http://www.w3.org/2000/svg'
@@ -31,4 +31,8 @@ export const FingoModal = props => {
             <div className='FingoShapeRadius'>{children}</div>
         </BootstrapModal>
     )
+}
+
+FingoModal.defaultProps = {
+    showCloseButton: true,
 }

@@ -72,7 +72,10 @@ exports.syncUser = async email => {
                             user?.xp?.total ? parseInt(user.xp.total, 10) : 0
                         ),
                     },
-                    heart: user?.heart ? user.heart : appConfig.defaultHeart,
+                    heart:
+                        typeof user?.heart === 'number'
+                            ? user.heart
+                            : appConfig.defaultHeart,
                     // lastHeartAccruedAt: new Date(),
                 },
             }

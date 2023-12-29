@@ -76,7 +76,7 @@ const FingoCardTotalXP = () => {
 
     return (
         <div
-            className={`mb-3 FingoCardTotalXP FingoShapeRadius Level-${user?.xp?.level}`}
+            className={`FingoCardTotalXP FingoShapeRadius Level-${user?.xp?.level}`}
         >
             <div
                 className='FingoCardTotalXPImg'

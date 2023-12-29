@@ -119,7 +119,7 @@ const FingoCardDailyXP = () => {
     // console.log("user?.lastClaimedGemsDailyQuest",user?.lastClaimedGemsDailyQuest)
 
     return (
-        <div className={`mb-3 FingoCardDailyXP FingoShapeRadius`}>
+        <div className={`FingoCardDailyXP FingoShapeRadius`}>
             <div
                 className='FingoCardDailyXPImg'
                 style={{

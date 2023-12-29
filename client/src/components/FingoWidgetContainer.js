@@ -8,25 +8,32 @@ import { useMediaQuery } from 'src/hooks'
 import { useLocation } from 'react-router-dom'
 import FingoCardGiftbox from './FingoCardGiftbox'
 import HeartCard from './hearts/HeartCard'
+import { FingoCard } from './core'
 
 const FingoWidgetContainer = () => {
     const location = useLocation()
-    const [activeTab, setActiveTab] = useState('')
     const matchMobile = useMediaQuery('(max-width: 570px)')
 
     return (
         <>
-            <FingoWidgetHeader
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-            />
+            <FingoWidgetHeader />
             {!matchMobile && (
                 <>
-                    <HeartCard />
-                    <FingoCardDayStreak />
-                    <FingoCardDailyXP />
-                    <FingoCardTotalXP />
-                    <FingoCardGiftbox />
+                    <FingoCard className='mb-3'>
+                        <HeartCard />
+                    </FingoCard>
+                    <FingoCard className='mb-3'>
+                        <FingoCardDayStreak />
+                    </FingoCard>
+                    <FingoCard className='mb-3'>
+                        <FingoCardDailyXP />
+                    </FingoCard>
+                    <FingoCard className='mb-3'>
+                        <FingoCardTotalXP />
+                    </FingoCard>
+                    <FingoCard className='mb-3'>
+                        <FingoCardGiftbox />
+                    </FingoCard>
                 </>
             )}
 

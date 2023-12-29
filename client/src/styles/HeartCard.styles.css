@@ -1,11 +1,5 @@
 .HeartCard {
     padding: 1rem;
-    background-color: #fff;
-    border: 2px solid rgb(109 109 109 / 10%);
-}
-
-[data-theme='dark'] .HeartCard:not(.highlight) {
-    background-color: #303030;
 }
 
 .HeartCardHeader svg {

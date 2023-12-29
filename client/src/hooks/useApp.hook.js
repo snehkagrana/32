@@ -23,8 +23,10 @@ export const useApp = () => {
             if (response?.status !== 200) {
                 toast.error('Something went wrong')
             }
+            return response.data
         } catch (err) {
             toast.error('Something went wrong')
+            return false
         }
     }
 

@@ -14,11 +14,19 @@ import { useApp, useAuth, usePersistedGuest } from 'src/hooks'
 import { useDispatch } from 'react-redux'
 import { BATCH_EVENT_TIME_SPENT } from 'src/constants/app.constant'
 import { QuizPageHeader } from 'src/components/quiz'
+import { motion, useAnimation } from 'framer-motion'
+import { FingoSnackBar } from 'src/components/core'
+import {
+    ModalKeepLearning,
+    ModalHeartRunOut,
+    ModalConfirmRefillHearts,
+} from 'src/components/hearts'
 
 const Quiz = () => {
     const dispatch = useDispatch()
-    const { appBatch } = useApp()
-    const { isAuthenticated, user } = useAuth()
+    const { appBatch, app_setOpenModalHeartRunOut } = useApp()
+    const { isAuthenticated, user, auth_syncAndGetUser } = useAuth()
+
     const {
         persistedGuest_setScore,
         persistedGuest_setLastPlayed,
@@ -28,6 +36,9 @@ const Quiz = () => {
     const { skillName, subcategory, category } = useParams()
     const navigate = useNavigate()
     const [itemId, setItemId] = useState(null)
+    const [showAlert, setShowAlert] = useState(null)
+
+    const control = useAnimation()
 
     const skillDetails = useRef({})
     const questionSet = useRef([])
@@ -71,6 +82,12 @@ const Quiz = () => {
     }
 
     const handleCheck = () => {
+        // control.start('visible').then(result => {
+        //     setTimeout(() => {
+        //         control.start('hidden')
+        //     }, 2000)
+        // })
+
         if (isMultipleChoice) {
             if (
                 JSON.stringify(answersList) ===
@@ -80,14 +97,28 @@ const Quiz = () => {
                 points.current = points.current + 1
                 setCurrentIsCorrect(true)
                 correctAudio.play()
+                appBatch({
+                    eventType: BATCH_EVENT_TIME_SPENT,
+                    eventTimestamp: new Date().getTime(),
+                    isCorrect: true,
+                    itemId,
+                }).then(result => {
+                    if (result) {
+                        auth_syncAndGetUser()
+                    }
+                })
             } else {
                 wrongAudio.play()
                 setCurrentIsCorrect(false)
                 appBatch({
                     eventType: BATCH_EVENT_TIME_SPENT,
                     eventTimestamp: new Date().getTime(),
-                    isCorrect: true,
+                    isCorrect: false,
                     itemId,
+                }).then(result => {
+                    if (result) {
+                        auth_syncAndGetUser()
+                    }
                 })
             }
         } else {
@@ -100,24 +131,40 @@ const Quiz = () => {
                 setCurrentIsCorrect(true)
                 setCurrentIsCorrectIndex(currentSelectedIndex ?? null)
                 correctAudio.play()
+                appBatch({
+                    eventType: BATCH_EVENT_TIME_SPENT,
+                    eventTimestamp: new Date().getTime(),
+                    isCorrect: true,
+                    itemId,
+                }).then(result => {
+                    if (result) {
+                        auth_syncAndGetUser()
+                    }
+                })
             } else {
                 wrongAudio.play()
                 setCurrentIsCorrect(false)
                 setCurrentIsCorrect(true)
                 setCurrentIsWrongIndex(currentSelectedIndex ?? null)
                 setCurrentIsCorrectIndex(correctAnswers?.current?.[0] ?? null)
+                appBatch({
+                    eventType: BATCH_EVENT_TIME_SPENT,
+                    eventTimestamp: new Date().getTime(),
+                    isCorrect: false,
+                    itemId,
+                }).then(result => {
+                    if (result) {
+                        auth_syncAndGetUser()
+                    }
+                })
             }
-            appBatch({
-                eventType: BATCH_EVENT_TIME_SPENT,
-                eventTimestamp: new Date().getTime(),
-                isCorrect: false,
-                itemId,
-            })
         }
 
         setIsSubmittedAnswer(true)
         setAnswersList([])
         setCorrectOptionsText([])
+
+        // console.log('score-_-->>', score)
     }
 
     const next = () => {
@@ -463,240 +510,275 @@ const Quiz = () => {
         }
     }, [])
 
+    const getMessage = useMemo(() => {
+        return 'No problem. Let’s keep going!'
+        // "Careful! One more mistake and it’s over."
+    }, [])
+
+    useEffect(() => {
+        if (showAlert) {
+            setTimeout(() => {
+                setShowAlert(false)
+            }, [3000])
+        }
+    }, [showAlert])
+
+    const variants = {
+        hidden: { opacity: 0, y: '-400px' },
+        visible: { opacity: 1, y: 0 },
+    }
+
+    useEffect(() => {
+        if ((!isAuthenticated && guestState?.heart < 1) || user?.heart < 1) {
+            dispatch(app_setOpenModalHeartRunOut(true))
+        }
+        return () => {
+            dispatch(app_setOpenModalHeartRunOut(false))
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isAuthenticated, user, guestState])
+
     return (
         <FingoHomeLayout>
             <Helmet>
                 <title>Quiz</title>
             </Helmet>
 
-            <QuizPageHeader />
-
             <div className='QuizPageRoot'>
-                <Card className='d-flex flex-column FingoShapeRadius'>
-                    <Card.Body>
-                        <Card.Title>
-                            Question {currentQuestionIndex.current + 1}
-                        </Card.Title>
-                        <Card.Text>
-                            <span style={{ fontWeight: 'bold' }}>
-                                {currentQuestion}
-                            </span>
-                        </Card.Text>
-                        {imageURL && (
-                            <div className='d-flex'>
-                                <Card.Img
-                                    variant='top'
-                                    src={imageURL}
-                                    className='zoomImage mt-2'
+                <div className='QuizPageContainer'>
+                    <QuizPageHeader />
+                    <Card className='d-flex flex-column FingoShapeRadius'>
+                        <Card.Body>
+                            <Card.Title>
+                                Question {currentQuestionIndex.current + 1}
+                            </Card.Title>
+                            <Card.Text>
+                                <span style={{ fontWeight: 'bold' }}>
+                                    {currentQuestion}
+                                </span>
+                            </Card.Text>
+                            {imageURL && (
+                                <div className='d-flex'>
+                                    <Card.Img
+                                        variant='top'
+                                        src={imageURL}
+                                        className='zoomImage mt-2'
+                                        style={{
+                                            maxWidth: '80%',
+                                            maxHeight: '300px',
+                                            marginBottom: '10px',
+                                        }}
+                                        alt='Responsive image'
+                                    />
+                                </div>
+                            )}
+                        </Card.Body>
+                        <ListGroup className='option_quiz_container list-group-flush fix'>
+                            {optionSet.map((option, i) => (
+                                <ListGroup.Item
+                                    key={i}
                                     style={{
-                                        maxWidth: '80%',
-                                        maxHeight: '300px',
-                                        marginBottom: '10px',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
                                     }}
-                                    alt='Responsive image'
-                                />
-                            </div>
-                        )}
-                    </Card.Body>
-                    <ListGroup className='option_quiz_container list-group-flush fix'>
-                        {optionSet.map((option, i) => (
-                            <ListGroup.Item
-                                key={i}
-                                style={{
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                }}
-                                onClick={() => {
-                                    if (!isDisabledAnswer) {
-                                        correctAnswers.current.length === 1
-                                            ? handleAnswerRadio(i)
-                                            : handleAnswer(i)
-                                    }
-                                }}
-                            >
-                                {isMultipleChoice ? (
-                                    <div
-                                        className={`option_quiz_item ${
-                                            answersList.includes(i)
-                                                ? 'selected'
-                                                : ''
-                                        } ${
-                                            isSubmittedAnswer
+                                    onClick={() => {
+                                        if (!isDisabledAnswer) {
+                                            correctAnswers.current.length === 1
+                                                ? handleAnswerRadio(i)
+                                                : handleAnswer(i)
+                                        }
+                                    }}
+                                >
+                                    {isMultipleChoice ? (
+                                        <div
+                                            className={`option_quiz_item ${
+                                                answersList.includes(i)
+                                                    ? 'selected'
+                                                    : ''
+                                            } ${
+                                                isSubmittedAnswer
+                                                    ? correctAnswers?.current?.includes(
+                                                          i
+                                                      )
+                                                        ? 'correct'
+                                                        : currentIsCorrect
+                                                          ? ''
+                                                          : 'incorrect'
+                                                    : ''
+                                            }`}
+                                        >
+                                            <input
+                                                type={
+                                                    correctAnswers.current
+                                                        .length === 1
+                                                        ? 'radio'
+                                                        : 'checkbox'
+                                                }
+                                                style={{ marginRight: '10px' }} // Add space between the radio button and text
+                                                checked={answersList.includes(
+                                                    i
+                                                )}
+                                            />
+                                            <label
+                                                style={{
+                                                    margin: '0',
+                                                    cursor: 'pointer',
+                                                }}
+                                            >
+                                                {option}
+                                            </label>
+                                            {isSubmittedAnswer
                                                 ? correctAnswers?.current?.includes(
                                                       i
                                                   )
-                                                    ? 'correct'
+                                                    ? renderCorrectIcon()
                                                     : currentIsCorrect
-                                                      ? ''
-                                                      : 'incorrect'
-                                                : ''
-                                        }`}
-                                    >
-                                        <input
-                                            type={
-                                                correctAnswers.current
-                                                    .length === 1
-                                                    ? 'radio'
-                                                    : 'checkbox'
-                                            }
-                                            style={{ marginRight: '10px' }} // Add space between the radio button and text
-                                            checked={answersList.includes(i)}
-                                        />
-                                        <label
-                                            style={{
-                                                margin: '0',
-                                                cursor: 'pointer',
-                                            }}
+                                                      ? null
+                                                      : renderIncorrectIcon()
+                                                : null}
+                                        </div>
+                                    ) : (
+                                        <div
+                                            className={`option_quiz_item ${
+                                                answersList.includes(i)
+                                                    ? 'selected'
+                                                    : ''
+                                            } ${
+                                                currentIsWrongIndex === i
+                                                    ? 'incorrect'
+                                                    : ''
+                                            } ${
+                                                currentIsCorrectIndex === i
+                                                    ? 'correct'
+                                                    : ''
+                                            }`}
                                         >
-                                            {option}
-                                        </label>
-                                        {isSubmittedAnswer
-                                            ? correctAnswers?.current?.includes(
-                                                  i
-                                              )
-                                                ? renderCorrectIcon()
-                                                : currentIsCorrect
-                                                  ? null
-                                                  : renderIncorrectIcon()
-                                            : null}
-                                    </div>
-                                ) : (
-                                    <div
-                                        className={`option_quiz_item ${
-                                            answersList.includes(i)
-                                                ? 'selected'
-                                                : ''
-                                        } ${
-                                            currentIsWrongIndex === i
-                                                ? 'incorrect'
-                                                : ''
-                                        } ${
-                                            currentIsCorrectIndex === i
-                                                ? 'correct'
-                                                : ''
-                                        }`}
-                                    >
-                                        <input
-                                            type={
-                                                correctAnswers.current
-                                                    .length === 1
-                                                    ? 'radio'
-                                                    : 'checkbox'
-                                            }
-                                            style={{ marginRight: '10px' }} // Add space between the radio button and text
-                                            checked={answersList.includes(i)}
-                                        />
-                                        <label
-                                            style={{
-                                                margin: '0',
-                                                cursor: 'pointer',
-                                            }}
-                                        >
-                                            {option}
-                                        </label>
-                                        {currentIsCorrectIndex !== null && (
-                                            <>
-                                                {currentSelectedIndex ===
-                                                    currentIsCorrectIndex &&
-                                                currentIsCorrectIndex === i ? (
-                                                    renderCorrectIcon()
-                                                ) : (
-                                                    <>
-                                                        {currentIsCorrectIndex ===
-                                                            i &&
-                                                            renderCorrectIcon()}
-                                                    </>
+                                            <input
+                                                type={
+                                                    correctAnswers.current
+                                                        .length === 1
+                                                        ? 'radio'
+                                                        : 'checkbox'
+                                                }
+                                                style={{ marginRight: '10px' }} // Add space between the radio button and text
+                                                checked={answersList.includes(
+                                                    i
                                                 )}
-                                            </>
-                                        )}
-                                        {currentIsWrongIndex !== null && (
-                                            <>
-                                                {currentSelectedIndex ===
-                                                    currentIsWrongIndex &&
-                                                    currentIsWrongIndex === i &&
-                                                    renderIncorrectIcon()}
-                                            </>
-                                        )}
-                                    </div>
+                                            />
+                                            <label
+                                                style={{
+                                                    margin: '0',
+                                                    cursor: 'pointer',
+                                                }}
+                                            >
+                                                {option}
+                                            </label>
+                                            {currentIsCorrectIndex !== null && (
+                                                <>
+                                                    {currentSelectedIndex ===
+                                                        currentIsCorrectIndex &&
+                                                    currentIsCorrectIndex ===
+                                                        i ? (
+                                                        renderCorrectIcon()
+                                                    ) : (
+                                                        <>
+                                                            {currentIsCorrectIndex ===
+                                                                i &&
+                                                                renderCorrectIcon()}
+                                                        </>
+                                                    )}
+                                                </>
+                                            )}
+                                            {currentIsWrongIndex !== null && (
+                                                <>
+                                                    {currentSelectedIndex ===
+                                                        currentIsWrongIndex &&
+                                                        currentIsWrongIndex ===
+                                                            i &&
+                                                        renderIncorrectIcon()}
+                                                </>
+                                            )}
+                                        </div>
+                                    )}
+                                </ListGroup.Item>
+                            ))}
+                        </ListGroup>
+                        <Card.Body>
+                            <Row className='px-3 align-items-center justify-content-between'>
+                                {isSubmittedAnswer ? (
+                                    <a
+                                        href='#'
+                                        className='explanation_btn'
+                                        onClick={onClickExplanation}
+                                    >
+                                        Explanation
+                                    </a>
+                                ) : (
+                                    <div />
                                 )}
-                            </ListGroup.Item>
-                        ))}
-                    </ListGroup>
-                    <Card.Body>
-                        <Row className='px-3 align-items-center justify-content-between'>
-                            {isSubmittedAnswer ? (
-                                <a
-                                    href='#'
-                                    className='explanation_btn'
-                                    onClick={onClickExplanation}
-                                >
-                                    Explanation
-                                </a>
-                            ) : (
-                                <div />
-                            )}
-                            {isSubmittedAnswer ? (
-                                <>
-                                    {currentQuestionIndex.current + 1 <
-                                        maxQuestions.current && (
+                                {isSubmittedAnswer ? (
+                                    <>
+                                        {currentQuestionIndex.current + 1 <
+                                            maxQuestions.current && (
+                                            <>
+                                                <Button
+                                                    variant='success'
+                                                    style={{
+                                                        boxShadow:
+                                                            '0px 7px #1a5928',
+                                                        minWidth: 100,
+                                                        borderRadius: '12px',
+                                                    }}
+                                                    onClick={next}
+                                                >
+                                                    Next
+                                                </Button>{' '}
+                                            </>
+                                        )}
+                                    </>
+                                ) : (
+                                    <Button
+                                        variant='success'
+                                        style={{
+                                            width: '100%', // Make the button take full width on smaller screens
+                                            maxWidth: '28%', // Set a maximum width to prevent excessive stretching
+                                            whiteSpace: 'nowrap', // Prevent text from wrapping
+                                            textAlign: 'center',
+                                            boxShadow: '0px 7px #1a5928',
+                                            borderRadius: '12px',
+                                        }}
+                                        onClick={handleCheck}
+                                        disabled={answersList.length === 0}
+                                    >
+                                        Submit
+                                    </Button>
+                                )}
+                                {currentQuestionIndex.current + 1 ===
+                                    maxQuestions.current &&
+                                    isSubmittedAnswer && (
                                         <>
                                             <Button
-                                                variant='success'
                                                 style={{
-                                                    boxShadow:
-                                                        '0px 7px #1a5928',
-                                                    minWidth: 100,
                                                     borderRadius: '12px',
+                                                    boxShadow:
+                                                        '0px 7px #212121',
                                                 }}
-                                                onClick={next}
+                                                onClick={() => {
+                                                    saveXP()
+                                                }}
                                             >
-                                                Next
-                                            </Button>{' '}
+                                                End Quiz
+                                            </Button>
                                         </>
                                     )}
-                                </>
-                            ) : (
-                                <Button
-                                    variant='success'
-                                    style={{
-                                        width: '100%', // Make the button take full width on smaller screens
-                                        maxWidth: '28%', // Set a maximum width to prevent excessive stretching
-                                        whiteSpace: 'nowrap', // Prevent text from wrapping
-                                        textAlign: 'center',
-                                        boxShadow: '0px 7px #1a5928',
-                                        borderRadius: '12px',
-                                    }}
-                                    onClick={handleCheck}
-                                    disabled={answersList.length === 0}
-                                >
-                                    Submit
-                                </Button>
-                            )}
-                            {currentQuestionIndex.current + 1 ===
-                                maxQuestions.current &&
-                                isSubmittedAnswer && (
-                                    <>
-                                        <Button
-                                            style={{
-                                                borderRadius: '12px',
-                                                boxShadow: '0px 7px #212121',
-                                            }}
-                                            onClick={() => {
-                                                saveXP()
-                                            }}
-                                        >
-                                            End Quiz
-                                        </Button>
-                                    </>
-                                )}
-                        </Row>
+                            </Row>
 
-                        <Modal
-                            show={showExplaination}
-                            style={{ marginTop: '40px' }}
-                        >
-                            {/* <Modal.Header
+                            <Modal
+                                show={showExplaination}
+                                style={{ marginTop: '40px' }}
+                            >
+                                {/* <Modal.Header
               style={{
                 backgroundColor: currentIsCorrect ? "#3CB043" : "lightcoral",
               }}
@@ -708,57 +790,76 @@ const Quiz = () => {
               </Modal.Title>
             </Modal.Header> */}
 
-                            <Modal.Body>
-                                <div>
-                                    Correct Answer: {currentCorrectOptions}
-                                </div>
-                                <br />
-                                <div>Explanation: {currentExplaination}</div>
-                            </Modal.Body>
-                            <Modal.Footer>
-                                {currentQuestionIndex.current + 1 ===
-                                    maxQuestions.current && (
-                                    <>
-                                        <Button
-                                            onClick={() => {
-                                                saveXP()
-                                            }}
-                                        >
-                                            End Quiz
-                                        </Button>{' '}
-                                    </>
-                                )}
-                                {currentQuestionIndex.current + 1 <
-                                    maxQuestions.current && (
-                                    <>
-                                        <Button
-                                            variant='success'
-                                            style={{
-                                                boxShadow: '0px 7px #1a5928',
-                                                borderRadius: '12px',
-                                            }}
-                                            onClick={next}
-                                        >
-                                            Next
-                                        </Button>{' '}
-                                    </>
-                                )}
-                            </Modal.Footer>
-                        </Modal>
-                    </Card.Body>
-                </Card>
+                                <Modal.Body>
+                                    <div>
+                                        Correct Answer: {currentCorrectOptions}
+                                    </div>
+                                    <br />
+                                    <div>
+                                        Explanation: {currentExplaination}
+                                    </div>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    {currentQuestionIndex.current + 1 ===
+                                        maxQuestions.current && (
+                                        <>
+                                            <Button
+                                                onClick={() => {
+                                                    saveXP()
+                                                }}
+                                            >
+                                                End Quiz
+                                            </Button>{' '}
+                                        </>
+                                    )}
+                                    {currentQuestionIndex.current + 1 <
+                                        maxQuestions.current && (
+                                        <>
+                                            <Button
+                                                variant='success'
+                                                style={{
+                                                    boxShadow:
+                                                        '0px 7px #1a5928',
+                                                    borderRadius: '12px',
+                                                }}
+                                                onClick={next}
+                                            >
+                                                Next
+                                            </Button>{' '}
+                                        </>
+                                    )}
+                                </Modal.Footer>
+                            </Modal>
+                        </Card.Body>
+                    </Card>
+                    <div className='page-dots'>
+                        {Array.from(
+                            { length: maxQuestions.current },
+                            (_, i) => (
+                                <span
+                                    key={i}
+                                    className={`dot ${
+                                        i === currentQuestionIndex.current
+                                            ? 'active'
+                                            : ''
+                                    }`}
+                                ></span>
+                            )
+                        )}
+                    </div>
+                    <motion.div
+                        initial='hidden'
+                        variants={variants}
+                        animate={control}
+                        className='mb-3'
+                    >
+                        <FingoSnackBar severity='success' text={getMessage} />
+                    </motion.div>
+                </div>
             </div>
-
-            <div className='page-dots'>
-                {Array.from({ length: maxQuestions.current }, (_, i) => (
-                    <span
-                        key={i}
-                        className={`dot ${
-                            i === currentQuestionIndex.current ? 'active' : ''
-                        }`}
-                    ></span>
-                ))}
-            </div>
+            <ModalHeartRunOut />
+            <ModalKeepLearning />
+            <ModalConfirmRefillHearts />
         </FingoHomeLayout>
     )
 }

@@ -1,16 +1,16 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import { useState } from 'react'
 import { useAuth, useMediaQuery } from 'src/hooks'
-
 import BananaIconSVG from 'src/assets/svg/banana-icon.svg'
 import DiamondIconSVG from 'src/assets/svg/diamond.svg'
 import StreakIcon from 'src/assets/images/fire-on.png'
 import HeartIconSVG from 'src/assets/svg/heart.svg'
-import { Overlay, Popover } from 'react-bootstrap'
 import FingoCardDayStreak from './FingoCardDayStreak'
 import FingoCardTotalXP from './FingoCardTotalXP'
-import { useRef, useState } from 'react'
 import FingoCardGiftbox from './FingoCardGiftbox'
 import 'src/styles/FingoWidgetHeader.styles.css'
+import { HeartCard } from './hearts'
+import { Popover } from './core'
 
 const MENU_ITEMS = [
     {
@@ -40,18 +40,26 @@ const MENU_ITEMS = [
     // ...another menu menu tab
 ]
 
-const FingoWidgetHeader = ({ activeTab, setActiveTab }) => {
+console.log('MENU_ITEMS', Object.keys(MENU_ITEMS))
+
+const initialShowState = {
+    streak: false,
+    total_xp: false,
+    diamond: false,
+    heart: false,
+}
+
+const FingoWidgetHeader = () => {
     const { user } = useAuth()
-    const [show, setShow] = useState(false)
+    const [show, setShow] = useState(initialShowState)
     const matchMobile = useMediaQuery('(max-width: 570px)')
-    const [target, setTarget] = useState(null)
-    const ref = useRef(null)
 
     const onClickItem = (e, name) => {
+        setShow({
+            ...initialShowState,
+            [name]: !show[name],
+        })
         e.preventDefault()
-        setShow(name === activeTab ? false : true)
-        setTarget(e.target)
-        setActiveTab(name === activeTab ? '' : name)
     }
 
     const getTabLabel = name => {
@@ -79,82 +87,92 @@ const FingoWidgetHeader = ({ activeTab, setActiveTab }) => {
         }
     }
 
+    const getContent = paramsName => {
+        if (paramsName === 'streak') return <FingoCardDayStreak />
+        else if (paramsName === 'total_xp') return <FingoCardTotalXP />
+        else if (paramsName === 'diamond') return <FingoCardGiftbox />
+        else if (paramsName === 'heart') return <HeartCard />
+    }
+
     return (
-        <div id='FingoWidgetHeaderRoot' ref={ref}>
+        <div id='FingoWidgetHeaderRoot'>
             <div className='FingoWidgetHeader'>
                 <div className='FingoWidgetHeaderInner'>
                     <ul>
-                        {MENU_ITEMS.map((i, index) => (
-                            <li key={String(index)}>
-                                <a
-                                    href='#'
-                                    onClick={e => onClickItem(e, i.name)}
-                                    className={
-                                        activeTab === i.name ? 'active' : ''
-                                    }
-                                >
-                                    <img
-                                        style={{ height: i.iconHeight }}
-                                        src={i.icon}
-                                        alt='footer icon'
-                                    />
-                                    {getTabLabel(i.name) && (
-                                        <span style={{ color: i.color }}>
-                                            {getTabLabel(i.name)}
-                                        </span>
-                                    )}
-                                </a>
-                            </li>
-                        ))}
+                        {MENU_ITEMS.map((i, index) => {
+                            if (matchMobile) {
+                                return (
+                                    <li key={String(index)}>
+                                        <Popover
+                                            isOpen={show[i.name]}
+                                            positions={['bottom', 'right']}
+                                            align='center'
+                                            padding={5}
+                                            reposition={true}
+                                            onClickOutside={() =>
+                                                setShow(initialShowState)
+                                            }
+                                            renderContent={getContent(i.name)}
+                                        >
+                                            <a
+                                                href='#'
+                                                onClick={e =>
+                                                    onClickItem(e, i.name)
+                                                }
+                                            >
+                                                <img
+                                                    style={{
+                                                        height: i.iconHeight,
+                                                    }}
+                                                    src={i.icon}
+                                                    alt='icon'
+                                                />
+                                                {getTabLabel(i.name) && (
+                                                    <span
+                                                        style={{
+                                                            color: i.color,
+                                                        }}
+                                                    >
+                                                        {getTabLabel(i.name)}
+                                                    </span>
+                                                )}
+                                            </a>
+                                        </Popover>
+                                    </li>
+                                )
+                            } else {
+                                return (
+                                    <li key={String(index)}>
+                                        <a
+                                            href='#'
+                                            onClick={e =>
+                                                onClickItem(e, i.name)
+                                            }
+                                        >
+                                            <img
+                                                style={{
+                                                    height: i.iconHeight,
+                                                }}
+                                                src={i.icon}
+                                                alt='icon'
+                                            />
+                                            {getTabLabel(i.name) && (
+                                                <span
+                                                    style={{
+                                                        color: i.color,
+                                                    }}
+                                                >
+                                                    {getTabLabel(i.name)}
+                                                </span>
+                                            )}
+                                        </a>
+                                    </li>
+                                )
+                            }
+                        })}
                     </ul>
                 </div>
             </div>
-
-            {matchMobile && (
-                <>
-                    <Popover
-                        isOpen={show}
-                        positions={['top', 'left']} // if you'd like, you can limit the positions
-                        padding={10} // adjust padding here!
-                        reposition={false} // prevents automatic readjustment of content position that keeps your popover content within its parent's bounds
-                        onClickOutside={() => setShow(false)} // handle click events outside of the popover/target here!
-                        content={(
-                            { position, nudgedLeft, nudgedTop } // you can also provide a render function that injects some useful stuff!
-                        ) => (
-                            <div>
-                                <div>
-                                    Hi! I'm popover content. Here's my current
-                                    position: {position}.
-                                </div>
-                                <div>
-                                    I'm {` ${nudgedLeft} `} pixels beyond my
-                                    boundary horizontally!
-                                </div>
-                                <div>
-                                    I'm {` ${nudgedTop} `} pixels beyond my
-                                    boundary vertically!
-                                </div>
-                            </div>
-                        )}
-                    >
-                        <div onClick={() => setShow(!show)}>Click me!</div>
-                    </Popover>
-                    <Overlay
-                        show={show}
-                        target={target}
-                        placement='bottom'
-                        container={ref}
-                        containerPadding={0}
-                        className='FingoPopover'
-                    >
-                        <Popover id='popover-contained'>
-                            {activeTab === 'streak' && <FingoCardDayStreak />}
-                            {activeTab === 'total_xp' && <FingoCardTotalXP />}
-                            {activeTab === 'diamond' && <FingoCardGiftbox />}
-                        </Popover>
-                    </Overlay>
-                </>
-            )}
         </div>
     )
 }

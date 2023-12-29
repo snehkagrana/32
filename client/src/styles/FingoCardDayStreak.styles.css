@@ -1,7 +1,6 @@
 .FingoCardDayStreak {
     padding: 0.75rem;
     background-color: #fff5d4;
-    border: 2px solid rgb(109 109 109 / 10%);
 }
 
 [data-theme='dark'] .FingoCardDayStreak:not(.highlight) {

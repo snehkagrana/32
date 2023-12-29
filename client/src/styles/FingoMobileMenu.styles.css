@@ -2,12 +2,6 @@
     z-index: 1;
     background-color: #ffffff;
     padding: 1.2rem 0;
-    border: 2px solid rgb(109 109 109 / 10%);
-    transform: translateY(-14px);
-}
-
-[data-theme='dark'] .FingoMobileMenu {
-    border-right: 2px solid #333;
 }
 
 [data-theme='dark'] .FingoMobileMenu {

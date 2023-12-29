@@ -229,6 +229,7 @@ const InformationPage = () => {
                 <title>Let's Learn</title>
             </Helmet>
             <Row
+                className='pt-4'
                 style={{
                     marginLeft: 'auto',
                     marginRight: 'auto',
@@ -361,7 +362,8 @@ const InformationPage = () => {
                                                 <OverlayTrigger
                                                     overlay={
                                                         <Tooltip id='tooltip-disabled'>
-                                                            Your score is {score}
+                                                            Your score is{' '}
+                                                            {score}
                                                         </Tooltip>
                                                     }
                                                 >

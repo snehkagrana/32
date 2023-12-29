@@ -25,7 +25,7 @@
 
 .QuizPageHeader li {
     display: flex;
-    width: 25%;
+    width: 66px;
     align-items: center;
     justify-content: center;
     flex-direction: column;
@@ -42,6 +42,7 @@
     border-radius: 0.5rem;
 }
 
+.QuizPageHeader li a:focus,
 .QuizPageHeader li a.active {
     background-color: #f0f0f0;
 }
@@ -60,7 +61,7 @@
 @media (min-width: 576px) {
     .QuizPageHeader li a {
         height: 44px;
-        width: 90%;
+        width: 64px;
     }
 }
 

@@ -42,11 +42,13 @@
     border-radius: 0.5rem;
 }
 
-.FingoWidgetHeader li a.active {
+.FingoWidgetHeader li a.active,
+.FingoWidgetHeader li a:focus {
     background-color: #f0f0f0;
 }
 
-[data-theme='dark'] .FingoWidgetHeader li a.active {
+[data-theme='dark'] .FingoWidgetHeader li a.active,
+[data-theme='dark'] .FingoWidgetHeader li a:focus {
     background-color: #1e1e1e;
 }
 
@@ -69,7 +71,7 @@
     width: auto;
 }
 
-#FingoWidgetHeaderRoot .popover {
+/* #FingoWidgetHeaderRoot .popover {
     max-width: 100%;
     width: 100%;
     left: 0 !important;
@@ -78,4 +80,4 @@
     border: none;
     box-shadow: none;
     padding: 0 1rem;
-}
+} */

@@ -27,6 +27,7 @@ import { ModalVerifyAction } from "src/components/admin";
 import ModalInfoEarnDiamond from "src/components/reward/ModalInfoEarnDiamond";
 import ModalListMyReward from "src/components/reward/ModalListMyReward";
 import ModalClaimReward from "src/components/reward/ModalClaimReward";
+import { ModalConfirmRefillHearts, ModalHeartRunOut, ModalKeepLearning } from "src/components/hearts";
 
 const SkillCategoryPage = () => {
     const { isAuthenticated, user } = useAuth()
@@ -130,7 +131,7 @@ const SkillCategoryPage = () => {
                         {categoryName.split("_").join(" ")}
                     </title>
                 </Helmet>
-                <Container>
+                <Container className='pt-4'>
                     <div className="row h-auto">
                         <div className="col-md-8 order-md-1 order-2">
                             <Row className="justify-content-md-center">
@@ -204,6 +205,9 @@ const SkillCategoryPage = () => {
             <ModalInfoEarnDiamond />
             <ModalListMyReward />
             <ModalClaimReward />
+            <ModalHeartRunOut />
+            <ModalKeepLearning />
+            <ModalConfirmRefillHearts />
         </FingoHomeLayout>
     );
 };

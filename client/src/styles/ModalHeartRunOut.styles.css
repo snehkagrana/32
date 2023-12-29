@@ -1,0 +1,140 @@
+@media (min-width: 576px) {
+    .ModalHeartRunOut .modal-dialog {
+        max-width: 420px;
+    }
+}
+
+.ModalHeartRunOutContainer {
+    background-color: #ffffff;
+    width: 100%;
+    padding: 1.75rem 1.8rem;
+}
+
+[data-theme='dark'] .ModalHeartRunOutContainer {
+    background-color: #2b2b2b;
+}
+
+@media (min-width: 576px) {
+    .ModalHeartRunOutContainer {
+        padding: 2rem 2rem;
+    }
+}
+
+@media (min-width: 576px) {
+    .ModalHeartRunOut .ListReward {
+    }
+}
+
+.ModalHeartRunOutContainer .UserGems {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: 0.3rem;
+}
+.ModalHeartRunOutContainer .UserGems span {
+    color: rgb(28, 176, 246);
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.ModalHeartRunOutContainer .UserGems svg {
+    width: 18px;
+    height: auto;
+    margin-right: 0.2rem;
+}
+.HeartRunOut {
+}
+
+.HeartRunOutHeader svg {
+    color: #bdbdbd;
+    width: 27px;
+    height: auto;
+}
+
+[data-theme='dark'] .HeartRunOutHeader svg {
+    color: #616161;
+}
+
+.HeartRunOutHeader svg.active {
+    color: #ff4b4b;
+}
+
+.HeartRunOutHeader h2 {
+    font-weight: 700;
+    font-size: 22px;
+}
+
+.HeartRunOutHeader h4 {
+    font-size: 16px;
+    color: #444;
+}
+
+[data-theme='dark'] .HeartRunOutHeader h4 {
+    color: #ececec;
+}
+
+.HeartRunOutHeader ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.HeartRunOutContent {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+.HeartRunOutBtn {
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 14px;
+    background-color: #fff;
+    border: 2px solid rgb(109 109 109 / 10%);
+    box-shadow: rgb(13 13 13 / 20%) 0px 4px;
+    transition: all 0.2s ease 0s;
+}
+
+[data-theme='dark'] .HeartRunOutBtn {
+    background-color: #1b1b1b;
+    border: 2px solid rgb(109 109 109 / 10%);
+    box-shadow: rgba(214, 214, 214, 0.2) 0px 4px;
+    color: #fbfbfb;
+}
+
+.HeartRunOutBtn:hover {
+    background-color: rgb(13 13 13 / 5%);
+}
+
+.HeartRunOutBtn svg {
+    width: 35px;
+    height: auto;
+    margin-right: 0.5rem;
+}
+.HeartRunOutBtn .EndContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: 0.3rem;
+}
+.HeartRunOutBtn .EndContent svg {
+    width: 18px;
+    height: auto;
+    margin-right: 0.2rem;
+}
+
+.HeartRunOutTextBtn {
+    font-weight: 700;
+    text-transform: uppercase;
+}

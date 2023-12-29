@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     BrowserRouter as Router,
     Route,
@@ -49,8 +49,22 @@ import { Toaster, ToastBar } from 'react-hot-toast'
 import AuthCallback from './pages/AuthCallback'
 import LandingPage from './pages/LandingPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
+import { useAuth } from './hooks'
 
 const App = () => {
+    const { isAuthenticated, auth_syncAndGetUser } = useAuth()
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            let interval = setInterval(() => {
+                auth_syncAndGetUser().then(res => console.log('res ->', res))
+            }, 5000)
+            return () => {
+                clearInterval(interval)
+            }
+        }
+    }, [auth_syncAndGetUser, isAuthenticated])
+
     return (
         <>
             <Router>
@@ -187,7 +201,11 @@ const App = () => {
                     <Route exact path='/aboutus' element={<AboutUs />} />
 
                     {/* auth routes */}
-                    <Route exact path='/reset-password/:email/:token' element={<ResetPasswordPage />} />
+                    <Route
+                        exact
+                        path='/reset-password/:email/:token'
+                        element={<ResetPasswordPage />}
+                    />
 
                     {/* ----- admin routes ----- */}
                     <Route

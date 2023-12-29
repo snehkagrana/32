@@ -1,7 +1,7 @@
 const Joi = require('joi')
 
 module.exports = {
-    fillHeart: Joi.object()
+    refillHearts: Joi.object()
         .keys({
             gemsAmount: Joi.number().required(),
         })

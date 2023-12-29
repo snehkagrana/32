@@ -9,10 +9,10 @@ const AuthGuard = require('../middlewares/auth.middleware')
 
 // Fill heart routes
 router.post(
-    '/heart/fill',
-    validate(schema.fillHeart),
+    '/heart/refill',
+    validate(schema.refillHearts),
     AuthGuard,
-    ErrorHandler(HeartController.fillHeart)
+    ErrorHandler(HeartController.refillHearts)
 )
 
 module.exports = router

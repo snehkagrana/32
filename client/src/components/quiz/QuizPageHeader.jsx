@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useAuth, useMediaQuery, usePersistedGuest } from 'src/hooks'
+import { useAuth, usePersistedGuest } from 'src/hooks'
 
 import HeartIconSVG from 'src/assets/svg/heart.svg'
 import { useState } from 'react'
-import { ArrowContainer, Popover } from 'react-tiny-popover'
+import { HeartCard } from '../hearts'
+import { Popover } from 'src/components/core'
 import 'src/styles/QuizPageHeader.styles.css'
 
 const MENU_ITEMS = [
@@ -24,7 +25,6 @@ const QuizPageHeader = () => {
     const onClickItem = (e, name) => {
         setShow(!show)
         e.preventDefault()
-        // setShow(name === activeTab ? false : true)
     }
 
     const getTabLabel = name => {
@@ -60,38 +60,12 @@ const QuizPageHeader = () => {
                             <li key={String(index)}>
                                 <Popover
                                     isOpen={show}
-                                    positions={['bottom', 'left']}
-                                    // align='center'
-                                    padding={10}
-                                    reposition={false}
+                                    positions={['bottom', 'right']}
+                                    align='center'
+                                    padding={0}
+                                    reposition={true}
                                     onClickOutside={() => setShow(false)}
-                                    content={({
-                                        position,
-                                        childRect,
-                                        popoverRect,
-                                    }) => (
-                                        <ArrowContainer
-                                            position={position}
-                                            childRect={childRect}
-                                            popoverRect={popoverRect}
-                                            arrowColor={'blue'}
-                                            arrowSize={10}
-                                            arrowStyle={{ opacity: 0.7 }}
-                                            className='popover-arrow-container'
-                                            arrowClassName='popover-arrow'
-                                        >
-                                            <div
-                                                style={{
-                                                    backgroundColor: 'blue',
-                                                    opacity: 0.7,
-                                                }}
-                                                onClick={() => setShow(!show)}
-                                            >
-                                                Hi! I'm popover content. Here's
-                                                my position: {position}.
-                                            </div>
-                                        </ArrowContainer>
-                                    )}
+                                    renderContent={<HeartCard />}
                                 >
                                     <a
                                         href='#'

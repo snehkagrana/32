@@ -1,6 +1,7 @@
 .FingoButton {
     font-weight: 700;
     border-radius: 7px;
+    letter-spacing: 0.65px;
 }
 
 .FingoButton.success {

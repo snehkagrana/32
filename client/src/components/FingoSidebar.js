@@ -101,7 +101,9 @@ const FingoSidebar = ({ open }) => {
                         />
                     </MDBNavbarBrand>
 
-                    <FingoUserInfo />
+                    <div className='mb-3'>
+                        <FingoUserInfo />
+                    </div>
 
                     <ul>
                         <li>

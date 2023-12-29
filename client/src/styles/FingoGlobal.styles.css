@@ -17,6 +17,18 @@ body {
     border-radius: 12px !important;
 }
 
+.FingoBorders {
+    border: 2px solid #e8e8e8;
+}
+
+.FingoPrimaryBorders {
+    border: 2px solid #57cc00;
+}
+
+[data-theme='dark'] .FingoBorders {
+    border: 2px solid #616161;
+}
+
 @media (min-width: 576px) {
     .FingoShapeRadius {
         border-radius: 16px !important;
@@ -87,7 +99,7 @@ div:where(.swal2-container) button:where(.swal2-styled) {
     font-size: 13px !important;
     font-weight: 700 !important;
     margin-top: 4px !important;
-    padding: 5px 10px !important;
+    /* padding: 5px 10px !important; */
     min-width: 100px !important;
     transition: all 0.2s ease 0s !important;
 }
@@ -157,4 +169,48 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
 
 .form-control-lg {
     font-size: 1.05rem !important;
+}
+
+/* popover */
+.PopoverContentContainer {
+    background-color: #fff;
+}
+
+[data-theme='dark'] .PopoverContentContainer {
+    background-color: #131313;
+}
+
+#react-tiny-popover-container {
+    z-index: 1062;
+}
+
+.FingoAlert {
+    color: #fbfbfb;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 14px 12px;
+    font-weight: 500;
+}
+
+.FingoSnackBar svg {
+    width: 24px;
+    height: auto;
+    margin-right: 0.8rem;
+}
+
+.FingoSnackBar.FingoSnackBarSuccess {
+    background: #03a856;
+}
+
+.FingoSnackBar.FingoSnackBarWarning {
+    background: #ffab18;
+}
+
+.FingoSnackBar.FingoSnackBarError {
+    background: #f84848;
+}
+
+[data-theme='dark'] .modal-backdrop.show {
+    opacity: 0.7;
 }
