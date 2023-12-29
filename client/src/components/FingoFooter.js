@@ -1,20 +1,18 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useNavigate } from 'react-router-dom'
-import 'src/styles/FingoFooter.styles.css'
-
 import SidebarBtn from 'src/assets/images/sidebar-trigger-btn.png'
 import IcHome from 'src/assets/images/ic_home.png'
 import IcTreasure from 'src/assets/images/ic_treasure.png'
 import IcUser from 'src/assets/images/ic_user.png'
-import { useCallback, useMemo, useRef, useState } from 'react'
-import { useApp, useAuth, useMediaQuery } from 'src/hooks'
-// import { Overlay, Popover } from 'react-bootstrap'
+import { useCallback, useMemo, useState } from 'react'
+import { useAuth } from 'src/hooks'
 import FingoCardDailyXP from './FingoCardDailyXP'
 import FingoUserInfo from './FingoUserInfo'
 import signedUp from 'src/images/pepe.jpg'
 import { getLevelColor } from 'src/utils'
 import FingoMobileMenu from './FingoMobileMenu'
 import { Popover } from './core'
+import 'src/styles/FingoFooter.styles.css'
 
 const FOOTER_ITEMS = [
     {
@@ -44,19 +42,12 @@ const initialShowState = {
 const FingoFooter = () => {
     const navigate = useNavigate()
     const { user, isAuthenticated } = useAuth()
-    const { openSidebar } = useApp()
-    const matchMobile = useMediaQuery('(max-width: 570px)')
     const [show, setShow] = useState(initialShowState)
-    const [target, setTarget] = useState(null)
-    const ref = useRef(null)
-    const [activeTab, setActiveTab] = useState('')
 
     const onClickMenu = (e, name) => {
         e.preventDefault()
         if (name === 'home') {
             navigate('/home')
-            setShow(false)
-            setTarget(null)
         } else {
             setShow({
                 ...initialShowState,
@@ -98,7 +89,7 @@ const FingoFooter = () => {
                                             isOpen={show[i.name]}
                                             positions={['top', 'center']}
                                             align='center'
-                                            padding={5}
+                                            padding={0}
                                             reposition={true}
                                             onClickOutside={() =>
                                                 setShow(initialShowState)

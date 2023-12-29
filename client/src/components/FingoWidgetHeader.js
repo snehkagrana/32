@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState } from 'react'
-import { useAuth, useMediaQuery } from 'src/hooks'
+import { useAuth, useMediaQuery, usePersistedGuest } from 'src/hooks'
 import BananaIconSVG from 'src/assets/svg/banana-icon.svg'
 import DiamondIconSVG from 'src/assets/svg/diamond.svg'
 import StreakIcon from 'src/assets/images/fire-on.png'
@@ -50,7 +50,8 @@ const initialShowState = {
 }
 
 const FingoWidgetHeader = () => {
-    const { user } = useAuth()
+    const { user, isAuthenticated } = useAuth()
+    const { guestState } = usePersistedGuest()
     const [show, setShow] = useState(initialShowState)
     const matchMobile = useMediaQuery('(max-width: 570px)')
 
@@ -78,9 +79,14 @@ const FingoWidgetHeader = () => {
                     : undefined
 
             case 'heart':
-                return user?.heart !== undefined
-                    ? String(user.heart) ?? '0'
-                    : undefined
+                if (isAuthenticated && user) {
+                    return user?.heart || 0
+                } else {
+                    return guestState?.heart || 0
+                }
+            // return user?.heart !== undefined
+            //     ? String(user.heart) ?? '0'
+            //     : undefined
 
             default:
                 return undefined

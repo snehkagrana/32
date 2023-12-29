@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo } from 'react'
-import { useAuth } from 'src/hooks'
+import { useAuth, usePersistedGuest } from 'src/hooks'
 import 'src/styles/HeartCard.styles.css'
 import { ReactComponent as HeartAnimatedIcon } from 'src/assets/svg/heart-filled-animated.svg'
 import { ReactComponent as DiamondIcon } from 'src/assets/svg/diamond.svg'
@@ -9,7 +9,8 @@ import { ReactComponent as RefillHeartIcon } from 'src/assets/svg/refill-heart.s
 import { AMOUNT_OF_GEMS_REDEEM_TO_HEARTS } from 'src/constants/app.constant'
 
 const HeartCard = () => {
-    const { user } = useAuth()
+    const { user, isAuthenticated } = useAuth()
+    const { guestState } = usePersistedGuest()
 
     const renderHeartIcon = active => (
         <HeartAnimatedIcon className={active ? 'active' : ''} />
@@ -30,6 +31,14 @@ const HeartCard = () => {
         )
     }, [user])
 
+    const hearts = useMemo(() => {
+        if (isAuthenticated && user) {
+            return user?.heart || 0
+        } else {
+            return guestState?.heart || 0
+        }
+    }, [isAuthenticated, user, guestState])
+
     return (
         <div className='HeartCard'>
             <div className='HeartCardHeader flex align-items-center flex-column mb-3'>
@@ -38,7 +47,7 @@ const HeartCard = () => {
                     {Array.from({ length: 5 }, (_, index) => (
                         <li className='mx-1'>
                             {renderHeartIcon(
-                                user?.heart >= index + 1 ? true : false
+                                hearts >= index + 1 ? true : false
                             )}
                         </li>
                     ))}
