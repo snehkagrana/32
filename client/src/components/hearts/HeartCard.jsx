@@ -125,7 +125,7 @@ const HeartCard = () => {
                 </button>
                 {user?.diamond < AMOUNT_OF_GEMS_REDEEM_TO_HEARTS && (
                     <p className='text-center text-sm mb-0'>
-                        Your gems are not enough
+                        You do not have enough gems.
                     </p>
                 )}
             </div>

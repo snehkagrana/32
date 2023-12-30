@@ -55,18 +55,12 @@ import { useDispatch } from 'react-redux'
 
 const App = () => {
     const dispatch = useDispatch()
-    const { isAuthenticated, auth_syncAndGetUser } = useAuth()
+    const { isAuthenticated } = useAuth()
     const { persistedGuest_reset } = usePersistedGuest()
 
     useEffect(() => {
         if (isAuthenticated) {
             dispatch(persistedGuest_reset())
-            // let interval = setInterval(() => {
-            //     auth_syncAndGetUser().then(res => console.log('res ->', res))
-            // }, 5000)
-            // return () => {
-            //     clearInterval(interval)
-            // }
         }
     }, [isAuthenticated])
 

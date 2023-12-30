@@ -77,11 +77,11 @@ const ModalHeartRunOut = () => {
                         </div>
                         <img src={SadImg} alt='img' className='mb-3' />
                         <h2 className='mb-2 text-center'>
-                            You run out of hearts!
+                            You run out of hearts.
                         </h2>
                         <h4 className='text-center'>
-                            Get Super for unlimited Hearts, or use gems to buy
-                            hearts.
+                            Refer your friends for unlimited hearts or use gems
+                            to get hearts.
                         </h4>
                     </div>
                     <div className='HeartRunOutContent'>
@@ -104,7 +104,7 @@ const ModalHeartRunOut = () => {
                         </button>
                         {user?.diamond < AMOUNT_OF_GEMS_REDEEM_TO_HEARTS && (
                             <p className='text-center text-sm mb-0'>
-                                Your gems are not enough
+                                You do not have enough gems.
                             </p>
                         )}
                         <a

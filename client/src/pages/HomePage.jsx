@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react'
 import Axios from 'src/api/axios'
@@ -58,7 +59,11 @@ import { ModalVerifyAction } from 'src/components/admin'
 import ModalInfoEarnDiamond from 'src/components/reward/ModalInfoEarnDiamond'
 import ModalListMyReward from 'src/components/reward/ModalListMyReward'
 import ModalClaimReward from 'src/components/reward/ModalClaimReward'
-import { ModalConfirmRefillHearts, ModalHeartRunOut, ModalKeepLearning } from 'src/components/hearts'
+import {
+    ModalConfirmRefillHearts,
+    ModalHeartRunOut,
+    ModalKeepLearning,
+} from 'src/components/hearts'
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -396,6 +401,17 @@ const HomePage = props => {
         }
     }
 
+    useEffect(() => {
+        if (isAuthenticated) {
+            let interval = setInterval(() => {
+                auth_syncAndGetUser().then(res => console.log('res ->', res))
+            }, 5000)
+            return () => {
+                clearInterval(interval)
+            }
+        }
+    }, [isAuthenticated])
+
     return (
         <FingoHomeLayout>
             <Helmet>
@@ -410,7 +426,8 @@ const HomePage = props => {
                                 <div className='col-12 px-0'>
                                     <Card className='welcome-card homePage-welcome-card'>
                                         <Card.Body>
-                                            {newUser && !guestState.last_played ? (
+                                            {newUser &&
+                                            !guestState.last_played ? (
                                                 <Card.Text
                                                     className='welcome-card-text'
                                                     style={{
