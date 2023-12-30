@@ -76,7 +76,7 @@ exports.syncUser = async email => {
                         typeof user?.heart === 'number'
                             ? user.heart
                             : appConfig.defaultHeart,
-                    // lastHeartAccruedAt: new Date(),
+                    // lastHeartAccruedAt: null,
                 },
             }
         )

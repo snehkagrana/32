@@ -130,7 +130,10 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    lastHeartAccruedAt: Date,
+    lastHeartAccruedAt: {
+        type: Date,
+        default: undefined,
+    },
 })
 
 UserSchema.set('toJSON', {

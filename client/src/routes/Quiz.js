@@ -501,6 +501,7 @@ const Quiz = () => {
     )
 
     useEffect(() => {
+        auth_syncAndGetUser().then(result => {})
         return () => {
             // Clean up audio elements
             correctAudio.pause()
@@ -515,13 +516,13 @@ const Quiz = () => {
         // "Careful! One more mistake and it’s over."
     }, [])
 
-    useEffect(() => {
-        if (showAlert) {
-            setTimeout(() => {
-                setShowAlert(false)
-            }, [3000])
-        }
-    }, [showAlert])
+    // useEffect(() => {
+    //     if (showAlert) {
+    //         setTimeout(() => {
+    //             setShowAlert(false)
+    //         }, [3000])
+    //     }
+    // }, [showAlert])
 
     const variants = {
         hidden: { opacity: 0, y: '-400px' },

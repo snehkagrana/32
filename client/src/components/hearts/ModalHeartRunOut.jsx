@@ -19,10 +19,14 @@ const ModalHeartRunOut = () => {
         openModalHeartRunOut,
         app_setOpenModalHeartRunOut,
         app_setOpenModalKeepLearning,
+        app_setOpenModalConfirmRefill,
     } = useApp()
 
     const handleCloseModal = () => {
-        if ((isAuthenticated && user?.heart > 0) || guestState?.heart > 0) {
+        if (
+            (!isAuthenticated && guestState?.heart > 0) ||
+            (isAuthenticated && user?.heart > 0)
+        ) {
             dispatch(app_setOpenModalHeartRunOut(false))
         }
     }
@@ -47,6 +51,11 @@ const ModalHeartRunOut = () => {
         }
         return user?.diamond || 0
     }, [isAuthenticated, user, guestState])
+
+    const onClickRefillHearts = () => {
+        dispatch(app_setOpenModalHeartRunOut(false))
+        dispatch(app_setOpenModalConfirmRefill(true))
+    }
 
     return (
         <FingoModal
@@ -80,8 +89,9 @@ const ModalHeartRunOut = () => {
                             <div className='EndContent'></div>
                         </button>
                         <button
-                            className='HeartRunOutBtn'
+                            className='HeartRunOutBtn mb-3'
                             disabled={!isAbleToRefill}
+                            onClick={onClickRefillHearts}
                         >
                             <RefillHeartIcon />
                             <span> Refill Hearts</span>
@@ -91,7 +101,7 @@ const ModalHeartRunOut = () => {
                             </div>
                         </button>
                         {user?.diamond < AMOUNT_OF_GEMS_REDEEM_TO_HEARTS && (
-                            <p className='text-center text-sm'>
+                            <p className='text-center text-sm mb-0'>
                                 Your gems are not enough
                             </p>
                         )}

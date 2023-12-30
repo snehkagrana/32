@@ -40,6 +40,8 @@ const AuthGuard = require('./middlewares/auth.middleware');
 const { initializeDiamondUser, calculateDiamondUser } = require("./utils/reward.util");
 const { mailTransporter } = require("./utils/mail.util");
 
+require('./cronjob/hearts')
+
 aws.config.update({
     secretAccessKey: process.env.ACCESS_SECRET_KEY,
     accessKeyId: process.env.ACCESS_KEY,

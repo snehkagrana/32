@@ -43,6 +43,7 @@
         "multer-s3": "^2.10.0",
         "mustache": "^4.2.0",
         "nanoid": "^4.0.2",
+        "node-cron": "^3.0.3",
         "nodemailer": "^6.9.1",
         "passport": "^0.6.0",
         "passport-google-oauth20": "^2.0.0",

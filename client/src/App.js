@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react'
 import {
     BrowserRouter as Router,
@@ -49,21 +50,25 @@ import { Toaster, ToastBar } from 'react-hot-toast'
 import AuthCallback from './pages/AuthCallback'
 import LandingPage from './pages/LandingPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
-import { useAuth } from './hooks'
+import { useAuth, usePersistedGuest } from './hooks'
+import { useDispatch } from 'react-redux'
 
 const App = () => {
+    const dispatch = useDispatch()
     const { isAuthenticated, auth_syncAndGetUser } = useAuth()
+    const { persistedGuest_reset } = usePersistedGuest()
 
     useEffect(() => {
         if (isAuthenticated) {
-            let interval = setInterval(() => {
-                auth_syncAndGetUser().then(res => console.log('res ->', res))
-            }, 5000)
-            return () => {
-                clearInterval(interval)
-            }
+            dispatch(persistedGuest_reset())
+            // let interval = setInterval(() => {
+            //     auth_syncAndGetUser().then(res => console.log('res ->', res))
+            // }, 5000)
+            // return () => {
+            //     clearInterval(interval)
+            // }
         }
-    }, [auth_syncAndGetUser, isAuthenticated])
+    }, [isAuthenticated])
 
     return (
         <>

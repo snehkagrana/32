@@ -11,7 +11,7 @@ exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
             {
                 $set: {
                     heart:
-                        !isCorrect && user.heart > 0
+                        !isCorrect && user?.heart > 0
                             ? user.heart - 1
                             : user.heart,
                     lastHeartAccruedAt: new Date(),

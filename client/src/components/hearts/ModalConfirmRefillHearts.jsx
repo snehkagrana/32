@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/anchor-has-content */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { batch, useDispatch } from 'react-redux'
 import { useApp, useAuth } from 'src/hooks'
 import { FingoButton, FingoModal } from 'src/components/core'
@@ -28,11 +28,14 @@ const ModalConfirmRefill = () => {
         openModalConfirmRefill,
     } = useApp()
 
+    const [isLoading, setIsLoading] = useState(false)
+
     const handleCloseModal = () => {
         dispatch(app_setOpenModalConfirmRefill(false))
     }
 
     const onClickConfirm = async () => {
+        setIsLoading(true)
         // handleCloseModal()
         // dispatch(app_setOpenModalHeartRunOut(true))
         try {
@@ -47,12 +50,15 @@ const ModalConfirmRefill = () => {
                         dispatch(app_setOpenModalKeepLearning(false))
                         dispatch(app_setOpenModalConfirmRefill(false))
                     })
+                    setIsLoading(false)
                 })
             } else {
                 toast.error('Failed to refill hearts')
+                setIsLoading(false)
             }
         } catch (e) {
             toast.error('Failed to refill hearts')
+            setIsLoading(false)
         }
     }
 
@@ -61,7 +67,12 @@ const ModalConfirmRefill = () => {
         handleCloseModal()
         dispatch(app_setOpenModalHeartRunOut(false))
         navigate('/home')
+        setIsLoading(false)
     }
+
+    useEffect(() => {
+        if (!openModalConfirmRefill) setIsLoading(false)
+    }, [openModalConfirmRefill])
 
     return (
         <FingoModal
@@ -84,6 +95,8 @@ const ModalConfirmRefill = () => {
                         color='success'
                         size='xl'
                         onClick={onClickConfirm}
+                        disabled={isLoading}
+                        isLoading={isLoading}
                     >
                         CONFIRM
                     </FingoButton>
