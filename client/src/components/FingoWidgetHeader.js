@@ -1,10 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useAuth, useMediaQuery, usePersistedGuest } from 'src/hooks'
 import BananaIconSVG from 'src/assets/svg/banana-icon.svg'
 import DiamondIconSVG from 'src/assets/svg/diamond.svg'
 import StreakIcon from 'src/assets/images/fire-on.png'
 import HeartIconSVG from 'src/assets/svg/heart.svg'
+import HeartFadedIconSVG from 'src/assets/svg/heart-faded.svg'
 import FingoCardDayStreak from './FingoCardDayStreak'
 import FingoCardTotalXP from './FingoCardTotalXP'
 import FingoCardGiftbox from './FingoCardGiftbox'
@@ -15,24 +16,28 @@ import { Popover } from './core'
 const MENU_ITEMS = [
     {
         icon: StreakIcon,
+        disabledIcon: StreakIcon,
         name: 'streak',
         color: '#ff9600',
         iconHeight: 24,
     },
     {
         icon: BananaIconSVG,
+        disabledIcon: BananaIconSVG,
         name: 'total_xp',
         color: '#c89600',
         iconHeight: 22,
     },
     {
         icon: DiamondIconSVG,
+        disabledIcon: DiamondIconSVG,
         name: 'diamond',
         color: '#1cb0f6',
         iconHeight: 26,
     },
     {
         icon: HeartIconSVG,
+        disabledIcon: HeartFadedIconSVG,
         name: 'heart',
         color: '#ff4b4b',
         iconHeight: 18,
@@ -100,6 +105,10 @@ const FingoWidgetHeader = () => {
         else if (paramsName === 'heart') return <HeartCard />
     }
 
+    const getIcon = (icon, disabledIcon, name) => {
+        return icon
+    }
+
     return (
         <div id='FingoWidgetHeaderRoot'>
             <div className='FingoWidgetHeader'>
@@ -157,7 +166,11 @@ const FingoWidgetHeader = () => {
                                                 style={{
                                                     height: i.iconHeight,
                                                 }}
-                                                src={i.icon}
+                                                src={getIcon(
+                                                    i.icon,
+                                                    i.disabledIcon,
+                                                    i.name
+                                                )}
                                                 alt='icon'
                                             />
                                             <span
