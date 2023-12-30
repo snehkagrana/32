@@ -8,13 +8,13 @@ import { ReactComponent as UnlimitedHeartIcon } from 'src/assets/svg/unlimited-h
 import { ReactComponent as RefillHeartIcon } from 'src/assets/svg/refill-heart.svg'
 import { AMOUNT_OF_GEMS_REDEEM_TO_HEARTS } from 'src/constants/app.constant'
 import { useDispatch } from 'react-redux'
-import toast from 'react-hot-toast'
 
 const HeartCard = () => {
     const dispatch = useDispatch()
     const { user, isAuthenticated } = useAuth()
     const { guestState } = usePersistedGuest()
-    const { app_setOpenModalConfirmRefill } = useApp()
+    const { app_setOpenModalConfirmRefill, app_setOpenModalUnlimitedHearts } =
+        useApp()
 
     const renderHeartIcon = active => (
         <HeartIcon className={active ? 'active' : ''} />
@@ -69,6 +69,11 @@ const HeartCard = () => {
         )
     }, [isAuthenticated, user, guestState])
 
+    const isAbleToGetUnlimitedHearts = useMemo(() => {
+        // logic here
+        return true
+    }, [isAuthenticated, user, guestState])
+
     const hearts = useMemo(() => {
         if (isAuthenticated && user) {
             return user?.heart || 0
@@ -82,7 +87,7 @@ const HeartCard = () => {
     }
 
     const onClickUnlimitedHearts = () => {
-        toast.success('Do something')
+        dispatch(app_setOpenModalUnlimitedHearts(true))
     }
 
     return (
@@ -106,13 +111,14 @@ const HeartCard = () => {
                 <button
                     className='HeartCardBtn mb-3'
                     onClick={onClickUnlimitedHearts}
+                    disabled={!isAbleToGetUnlimitedHearts}
                 >
                     <UnlimitedHeartIcon />
                     <span> Unlimited Hearts</span>
                     <div className='EndContent'></div>
                 </button>
                 <button
-                    className='HeartCardBtn mb-3'
+                    className='HeartCardBtn'
                     disabled={!isAbleToRefill}
                     onClick={onClickRefillHearts}
                 >
@@ -124,7 +130,7 @@ const HeartCard = () => {
                     </div>
                 </button>
                 {user?.diamond < AMOUNT_OF_GEMS_REDEEM_TO_HEARTS && (
-                    <p className='text-center text-sm mb-0'>
+                    <p className='text-center text-sm mb-0 mt-2'>
                         You do not have enough gems.
                     </p>
                 )}

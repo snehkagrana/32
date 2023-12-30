@@ -21,6 +21,7 @@ const ModalHeartRunOut = () => {
         app_setOpenModalHeartRunOut,
         app_setOpenModalKeepLearning,
         app_setOpenModalConfirmRefill,
+        app_setOpenModalUnlimitedHearts,
     } = useApp()
 
     const handleCloseModal = () => {
@@ -58,6 +59,16 @@ const ModalHeartRunOut = () => {
         dispatch(app_setOpenModalConfirmRefill(true))
     }
 
+    const onClickUnlimitedHearts = () => {
+        batch(() => {
+            dispatch(app_setOpenModalUnlimitedHearts(true))
+            dispatch(app_setOpenModalHeartRunOut(false))
+            dispatch(app_setOpenModalKeepLearning(false))
+            dispatch(app_setOpenModalConfirmRefill(false))
+            dispatch(app_setOpenModalConfirmRefill(false))
+        })
+    }
+
     return (
         <FingoModal
             open={openModalHeartRunOut}
@@ -85,7 +96,10 @@ const ModalHeartRunOut = () => {
                         </h4>
                     </div>
                     <div className='HeartRunOutContent'>
-                        <button className='HeartRunOutBtn mb-4'>
+                        <button
+                            onClick={onClickUnlimitedHearts}
+                            className='HeartRunOutBtn mb-3'
+                        >
                             <UnlimitedHeartIcon />
                             <span> Unlimited Hearts</span>
                             <div className='EndContent'></div>

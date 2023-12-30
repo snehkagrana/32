@@ -63,7 +63,9 @@ import {
     ModalConfirmRefillHearts,
     ModalHeartRunOut,
     ModalKeepLearning,
+    ModalUnlimitedHearts,
 } from 'src/components/hearts'
+import ModalInviteFriends from 'src/components/ModalInviteFriends'
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -404,8 +406,8 @@ const HomePage = props => {
     useEffect(() => {
         if (isAuthenticated) {
             let interval = setInterval(() => {
-                auth_syncAndGetUser().then(res => console.log('res ->', res))
-            }, 5000)
+                auth_syncAndGetUser()
+            }, 10000)
             return () => {
                 clearInterval(interval)
             }
@@ -945,6 +947,8 @@ const HomePage = props => {
             <ModalHeartRunOut />
             <ModalKeepLearning />
             <ModalConfirmRefillHearts />
+            <ModalUnlimitedHearts />
+            <ModalInviteFriends />
         </FingoHomeLayout>
     )
 }

@@ -20,9 +20,20 @@ import {
     ModalKeepLearning,
     ModalHeartRunOut,
     ModalConfirmRefillHearts,
+    ModalUnlimitedHearts,
 } from 'src/components/hearts'
+import ModalInviteFriends from 'src/components/ModalInviteFriends'
 
-const RenderBlockQuiz = () => <div className='RenderBlockQuiz' />
+const RenderBlockQuiz = () => {
+    const dispatch = useDispatch()
+    const {  app_setOpenModalHeartRunOut } = useApp()
+    return (
+        <div
+            onClick={() => dispatch(app_setOpenModalHeartRunOut(true))}
+            className='RenderBlockQuiz'
+        />
+    )
+}
 
 const Quiz = () => {
     const dispatch = useDispatch()
@@ -869,6 +880,8 @@ const Quiz = () => {
             <ModalHeartRunOut />
             <ModalKeepLearning />
             <ModalConfirmRefillHearts />
+            <ModalUnlimitedHearts />
+            <ModalInviteFriends />
         </FingoHomeLayout>
     )
 }

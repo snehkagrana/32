@@ -15,6 +15,8 @@ const initialState = {
     openModalHeartRunOut: false,
     openModalKeepLearning: false,
     openModalConfirmRefill: false,
+    openModalUnlimitedHearts: false,
+    openModalInviteFriends: false,
 }
 
 // Actual Slice
@@ -55,6 +57,12 @@ export const appSlice = createSlice({
         },
         app_setOpenModalConfirmRefill(state, action) {
             state.openModalConfirmRefill = action.payload
+        },
+        app_setOpenModalUnlimitedHearts(state, action) {
+            state.openModalUnlimitedHearts = action.payload
+        },
+        app_setOpenModalInviteFriends(state, action) {
+            state.openModalInviteFriends = action.payload
         },
     },
 })

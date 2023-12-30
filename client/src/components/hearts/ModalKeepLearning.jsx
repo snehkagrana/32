@@ -5,7 +5,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useApp } from 'src/hooks'
 import { FingoButton, FingoModal } from 'src/components/core'
-import SadImg from 'src/assets/images/sad.png'
+import CryImg from 'src/assets/images/crying.png'
 import 'src/styles/ModalKeepLearning.styles.css'
 import { useNavigate } from 'react-router-dom'
 
@@ -46,7 +46,7 @@ const ModalKeepLearning = () => {
                 <div className='KeepLearning'>
                     <img
                         className='KeepLearningImg mb-4'
-                        src={SadImg}
+                        src={CryImg}
                         alt='icon'
                     />
                     <h2 className='mb-3 text-center'>Wait, don't go!</h2>

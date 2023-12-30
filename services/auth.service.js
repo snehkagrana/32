@@ -1,6 +1,6 @@
 const UserModel = require('../models/user')
 const cacheUtil = require('../utils/cache.util')
-const { daysDifference } = require('../utils/common.util')
+const { daysDifference, generateReferralCode } = require('../utils/common.util')
 const { mailTransporter } = require('../utils/mail.util')
 const { initializeDiamondUser } = require('../utils/reward.util')
 const { getLevelByXpPoints } = require('../utils/xp.utils')
@@ -31,6 +31,7 @@ exports.logoutUser = (token, exp) => {
 }
 
 exports.syncUser = async email => {
+    const refCode = generateReferralCode()
     let result = false
     let user = await UserModel.findOne({ email }).exec()
 
@@ -72,11 +73,12 @@ exports.syncUser = async email => {
                             user?.xp?.total ? parseInt(user.xp.total, 10) : 0
                         ),
                     },
-                    heart:
-                        typeof user?.heart === 'number'
-                            ? user.heart
-                            : appConfig.defaultHeart,
-                    // lastHeartAccruedAt: null,
+                    // prettier-ignore
+                    heart: typeof user?.heart === 'number' ? user.heart : appConfig.defaultHeart,
+                    // prettier-ignore
+                    referralCode: !user?.referralCode ? refCode : user.referralCode,
+                    // prettier-ignore
+                    // registeredAt: !user?.registeredAt ? new Date() : user.registeredAt,
                 },
             }
         )

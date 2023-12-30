@@ -44,6 +44,7 @@
 }
 
 .FingoWidgetHeader li a.active,
+.FingoWidgetHeader li a:hover,
 .FingoWidgetHeader li a:focus {
     background-color: #f0f0f0;
 }

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useAuth, useMediaQuery, usePersistedGuest } from 'src/hooks'
 import BananaIconSVG from 'src/assets/svg/banana-icon.svg'
 import DiamondIconSVG from 'src/assets/svg/diamond.svg'
@@ -160,14 +160,14 @@ const FingoWidgetHeader = () => {
                 <div className='FingoWidgetHeaderInner'>
                     <ul>
                         {MENU_ITEMS.map((i, index) => {
-                            if (matchMobile) {
+                            if (matchMobile || i.name === 'heart') {
                                 return (
-                                    <li key={String(index)}>
+                                    <li key={String(index) + i.name}>
                                         <Popover
                                             isOpen={show[i.name]}
                                             positions={['bottom', 'right']}
                                             align='center'
-                                            padding={5}
+                                            padding={matchMobile ? 5 : 0}
                                             reposition={true}
                                             onClickOutside={() =>
                                                 setShow(initialShowState)
@@ -176,6 +176,15 @@ const FingoWidgetHeader = () => {
                                         >
                                             <a
                                                 href='#'
+                                                onMouseEnter={() =>
+                                                    onClickItem(
+                                                        undefined,
+                                                        i.name
+                                                    )
+                                                }
+                                                // onMouseLeave={() =>
+                                                //     onMouseLeave(i.name)
+                                                // }
                                                 onClick={e =>
                                                     onClickItem(e, i.name)
                                                 }
@@ -208,15 +217,9 @@ const FingoWidgetHeader = () => {
                                 )
                             } else {
                                 return (
-                                    <li key={String(index)}>
+                                    <li key={String(index) + i.name}>
                                         <a
                                             href='#'
-                                            onMouseEnter={() =>
-                                                onClickItem(undefined, i.name)
-                                            }
-                                            onMouseLeave={() =>
-                                                onMouseLeave(i.name)
-                                            }
                                             onClick={e =>
                                                 onClickItem(e, i.name)
                                             }

@@ -3,8 +3,10 @@ const jwtConfig = require('../configs/jwt.config')
 const bcryptUtil = require('../utils/bcrypt.util')
 const jwtUtil = require('../utils/jwt.util')
 const { appConfig } = require('../configs/app.config')
+const { generateReferralCode } = require('../utils/common.util')
 
 exports.register = async (req, res) => {
+    const refCode = generateReferralCode()
     const isExist = await AuthService.findUserByEmail(req.body.email)
     if (isExist) {
         return res.status(400).json({
@@ -30,6 +32,8 @@ exports.register = async (req, res) => {
         },
         heart: appConfig.defaultHeart,
         lastHeartAccruedAt: new Date(),
+        referralCode: refCode,
+        registeredAt: new Date(),
     }
 
     const user = await AuthService.createUser(newUser)

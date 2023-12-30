@@ -60,6 +60,13 @@
     border: 2px solid rgb(109 109 109 / 10%);
     box-shadow: rgb(13 13 13 / 20%) 0px 4px;
     transition: all 0.2s ease 0s;
+    min-width: 100%;
+}
+
+@media (min-width: 576px) {
+    .HeartCardBtn {
+        min-width: 320px;
+    }
 }
 
 [data-theme='dark'] .HeartCardBtn {
@@ -85,6 +92,7 @@
     margin-left: auto;
     margin-right: 0.3rem;
 }
+
 .HeartCardBtn .EndContent svg {
     width: 18px;
     height: auto;

@@ -1,0 +1,96 @@
+@media (min-width: 576px) {
+    .ModalUnlimitedHearts .modal-dialog {
+        max-width: 400px;
+    }
+}
+
+.ModalUnlimitedHeartsContainer {
+    color: #fbfbfb;
+    background: rgb(25, 32, 77);
+    background: -moz-linear-gradient(
+        157deg,
+        rgba(25, 32, 77, 1) 0%,
+        rgba(14, 68, 201, 1) 100%
+    );
+    background: -webkit-linear-gradient(
+        157deg,
+        rgba(25, 32, 77, 1) 0%,
+        rgba(14, 68, 201, 1) 100%
+    );
+    background: linear-gradient(
+        157deg,
+        rgba(25, 32, 77, 1) 0%,
+        rgba(14, 68, 201, 1) 100%
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#19204d",endColorstr="#0e44c9",GradientType=1);
+    width: 100%;
+    padding: 1.75rem 1.8rem;
+}
+
+@media (min-width: 576px) {
+    .ModalUnlimitedHeartsContainer {
+        padding: 2rem 3rem;
+    }
+}
+
+.UnlimitedHeartsHeader h2 {
+    font-weight: 700;
+    font-size: 23px;
+}
+
+.UnlimitedHeartsHeader h4 {
+    font-size: 16px;
+    line-height: 1.45;
+}
+
+.UnlimitedHeartsHeader ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.UnlimitedHeartsHeader img {
+    width: 132px;
+    height: auto;
+}
+
+.UnlimitedHeartsContent {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+.UnlimitedHeartsBtn {
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 14px;
+    background-color: #fff;
+    border: 2px solid rgb(221 221 221 / 66%);
+    box-shadow: rgb(166 166 166 / 70%) 0px 4px;
+}
+
+.UnlimitedHeartsBtn svg {
+    width: 35px;
+    height: auto;
+    margin-right: 0.5rem;
+}
+
+/* .UnlimitedHeartsTextBtn {
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: #eee;
+}
+
+.UnlimitedHeartsTextBtn:hover {
+    color: #ececec;
+} */

@@ -19,9 +19,9 @@ const FingoWidgetContainer = () => {
             <FingoWidgetHeader />
             {!matchMobile && (
                 <>
-                    <FingoCard className='mb-3'>
+                    {/* <FingoCard className='mb-3'>
                         <HeartCard />
-                    </FingoCard>
+                    </FingoCard> */}
                     <FingoCard className='mb-3'>
                         <FingoCardDayStreak />
                     </FingoCard>
