@@ -104,7 +104,7 @@ const FingoSidebar = ({ open }) => {
                         />
                     </MDBNavbarBrand>
 
-                    <div className='mb-3'>
+                    <div className='mb-3 FingoShapeRadius FingoBorders overflow-hidden'>
                         <FingoUserInfo />
                     </div>
 
