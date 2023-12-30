@@ -347,6 +347,7 @@ const Quiz = () => {
     }
 
     const getAllQuestions = isNewUser => {
+        console.log('CALL ME---->>')
         Axios({
             method: 'GET',
             withCredentials: true,
@@ -453,13 +454,13 @@ const Quiz = () => {
                 getAllQuestions(newUser)
             }
         } else {
-            if (isAuthenticated && user) {
+            if (isAuthenticated) {
                 getSkillBySkillName()
                 getAllQuestions()
                 role.current = user?.role
             }
         }
-    }, [searchParams, isAuthenticated, user])
+    }, [searchParams, isAuthenticated])
 
     const isDisabledAnswer = useMemo(() => {
         return (
@@ -848,14 +849,14 @@ const Quiz = () => {
                             )
                         )}
                     </div>
-                    <motion.div
+                    {/* <motion.div
                         initial='hidden'
                         variants={variants}
                         animate={control}
                         className='mb-3'
                     >
                         <FingoSnackBar severity='success' text={getMessage} />
-                    </motion.div>
+                    </motion.div> */}
                 </div>
             </div>
             <ModalHeartRunOut />

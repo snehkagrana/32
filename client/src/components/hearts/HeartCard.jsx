@@ -20,19 +20,53 @@ const HeartCard = () => {
     )
 
     const getMessage = useMemo(() => {
-        return 'You have full hearts'
-    }, [user])
+        const message1 = 'You have full hearts'
+        const message2 = 'Next heart in 1 hours'
+        if (isAuthenticated) {
+            if (user?.heart === 5) {
+                return message1
+            } else if (user?.heart < 5) {
+                return message2
+            }
+            return message1
+        } else {
+            if (guestState?.heart === 5) {
+                return message1
+            } else if (guestState?.heart < 5) {
+                return message2
+            }
+        }
+    }, [isAuthenticated, user, guestState])
 
     const getSubMessage = useMemo(() => {
-        return 'Keep on learning'
-    }, [user])
+        const subMessage1 = 'Keep on learning'
+        const subMessage2 = 'You still have hearts left! Keep on learning'
+        const subMessage3 = 'You have no hearts left! Try an option below'
+        if (isAuthenticated) {
+            if (user?.heart === 5) {
+                return subMessage1
+            } else if (user?.heart < 5 && user?.heart !== 0) {
+                return subMessage2
+            } else {
+                return subMessage3
+            }
+        } else {
+            if (guestState?.heart === 5) {
+                return subMessage1
+            } else if (guestState?.heart < 5 && guestState?.heart !== 0) {
+                return subMessage2
+            } else {
+                return subMessage3
+            }
+        }
+    }, [isAuthenticated, user, guestState])
 
     const isAbleToRefill = useMemo(() => {
         return Boolean(
             user?.heart === 0 &&
                 user?.diamond >= AMOUNT_OF_GEMS_REDEEM_TO_HEARTS
         )
-    }, [user])
+    }, [isAuthenticated, user, guestState])
 
     const hearts = useMemo(() => {
         if (isAuthenticated && user) {
