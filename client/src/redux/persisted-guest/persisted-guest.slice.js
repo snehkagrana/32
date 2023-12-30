@@ -37,6 +37,11 @@ export const persistedGuestSlice = createSlice({
         persistedGuest_setLastPlayed(state, action) {
             state.last_played = action.payload
         },
+        persistedGuest_set(state, action) {
+            if (action.payload?.property && action.payload?.value) {
+                state[action.payload.property] = action.payload.value
+            }
+        },
         persistedGuest_reset: () => initialState,
     },
 })
