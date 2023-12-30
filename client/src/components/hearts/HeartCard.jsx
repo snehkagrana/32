@@ -2,12 +2,13 @@
 import { useMemo } from 'react'
 import { useApp, useAuth, usePersistedGuest } from 'src/hooks'
 import 'src/styles/HeartCard.styles.css'
-import { ReactComponent as HeartAnimatedIcon } from 'src/assets/svg/heart-filled-animated.svg'
+import { ReactComponent as HeartIcon } from 'src/assets/svg/heart.svg'
 import { ReactComponent as DiamondIcon } from 'src/assets/svg/diamond.svg'
 import { ReactComponent as UnlimitedHeartIcon } from 'src/assets/svg/unlimited-hearts.svg'
 import { ReactComponent as RefillHeartIcon } from 'src/assets/svg/refill-heart.svg'
 import { AMOUNT_OF_GEMS_REDEEM_TO_HEARTS } from 'src/constants/app.constant'
 import { useDispatch } from 'react-redux'
+import toast from 'react-hot-toast'
 
 const HeartCard = () => {
     const dispatch = useDispatch()
@@ -16,7 +17,7 @@ const HeartCard = () => {
     const { app_setOpenModalConfirmRefill } = useApp()
 
     const renderHeartIcon = active => (
-        <HeartAnimatedIcon className={active ? 'active' : ''} />
+        <HeartIcon className={active ? 'active' : ''} />
     )
 
     const getMessage = useMemo(() => {
@@ -80,6 +81,10 @@ const HeartCard = () => {
         dispatch(app_setOpenModalConfirmRefill(true))
     }
 
+    const onClickUnlimitedHearts = () => {
+        toast.success('Do something')
+    }
+
     return (
         <div className='HeartCard'>
             <div className='HeartCardHeader flex align-items-center flex-column mb-3'>
@@ -98,7 +103,10 @@ const HeartCard = () => {
             </div>
 
             <div className='HeaderCardContent'>
-                <button className='HeartCardBtn mb-3'>
+                <button
+                    className='HeartCardBtn mb-3'
+                    onClick={onClickUnlimitedHearts}
+                >
                     <UnlimitedHeartIcon />
                     <span> Unlimited Hearts</span>
                     <div className='EndContent'></div>

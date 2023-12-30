@@ -22,6 +22,8 @@ import {
     ModalConfirmRefillHearts,
 } from 'src/components/hearts'
 
+const RenderBlockQuiz = () => <div className='RenderBlockQuiz' />
+
 const Quiz = () => {
     const dispatch = useDispatch()
     const { appBatch, app_setOpenModalHeartRunOut } = useApp()
@@ -540,6 +542,10 @@ const Quiz = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAuthenticated, user, guestState])
 
+    const isRunOutOfHearts = useMemo(() => {
+        return (isAuthenticated && user?.heart === 0) || guestState?.heart === 0
+    }, [user, isAuthenticated, guestState])
+
     return (
         <FingoHomeLayout>
             <Helmet>
@@ -549,7 +555,8 @@ const Quiz = () => {
             <div className='QuizPageRoot'>
                 <div className='QuizPageContainer'>
                     <QuizPageHeader />
-                    <Card className='d-flex flex-column FingoShapeRadius'>
+                    <Card className='d-flex flex-column FingoShapeRadius relative'>
+                        {isRunOutOfHearts && <RenderBlockQuiz />}
                         <Card.Body>
                             <Card.Title>
                                 Question {currentQuestionIndex.current + 1}

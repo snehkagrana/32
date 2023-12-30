@@ -80,6 +80,11 @@
     list-style: none;
 }
 
+.HeartRunOutHeader img {
+    width: 88px;
+    height: auto;
+}
+
 .HeartRunOutContent {
     display: flex;
     width: 100%;

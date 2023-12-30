@@ -64,7 +64,7 @@ const ModalKeepLearning = () => {
                     </FingoButton>
                     <a
                         href='#'
-                        className='KeepLearningImgEnd'
+                        className='ModalRefillCancelBtn'
                         onClick={onClickEndSession}
                     >
                         End session

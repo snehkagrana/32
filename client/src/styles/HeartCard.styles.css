@@ -3,17 +3,20 @@
 }
 
 .HeartCardHeader svg {
-    color: #bdbdbd;
     width: 27px;
     height: auto;
 }
 
-[data-theme='dark'] .HeartCardHeader svg {
-    color: #616161;
+.HeartCardHeader svg path.HeartFullPath {
+    fill: #d7d7d7;
 }
 
-.HeartCardHeader svg.active {
-    color: #ff4b4b;
+[data-theme='dark'] .HeartCardHeader svg path.HeartFullPath {
+    fill: #616161;
+}
+
+.HeartCardHeader svg.active path.HeartFullPath {
+    fill: #ff4b4b;
 }
 
 .HeartCardHeader h2 {

@@ -8,6 +8,7 @@ import { ReactComponent as DiamondIcon } from 'src/assets/svg/diamond.svg'
 import { ReactComponent as UnlimitedHeartIcon } from 'src/assets/svg/unlimited-hearts.svg'
 import { ReactComponent as RefillHeartIcon } from 'src/assets/svg/refill-heart.svg'
 import { AMOUNT_OF_GEMS_REDEEM_TO_HEARTS } from 'src/constants/app.constant'
+import SadImg from 'src/assets/images/sad.png'
 import 'src/styles/ModalHeartRunOut.styles.css'
 
 const ModalHeartRunOut = () => {
@@ -74,7 +75,8 @@ const ModalHeartRunOut = () => {
                                 <span>{getGemsAmount}</span>
                             </div>
                         </div>
-                        <h2 className='mb-3 text-center'>
+                        <img src={SadImg} alt='img' className='mb-3' />
+                        <h2 className='mb-2 text-center'>
                             You run out of hearts!
                         </h2>
                         <h4 className='text-center'>
@@ -108,7 +110,7 @@ const ModalHeartRunOut = () => {
                         <a
                             href='#'
                             onClick={onClickNoThanks}
-                            className='HeartRunOutTextBtn mt-4'
+                            className='HeartRunOutTextBtn mt-2'
                         >
                             No Thanks
                         </a>
