@@ -40,6 +40,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 0.5rem;
+    position: relative;
 }
 
 .FingoWidgetHeader li a.active,
@@ -54,9 +55,14 @@
 
 .FingoWidgetHeader li a span {
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 0.9rem;
     margin-left: 0.35rem;
     margin-top: 0.1rem;
+    color: #d4d4d4;
+}
+
+[data-theme='dark'] .FingoWidgetHeader li a span {
+    color: #727272;
 }
 
 @media (min-width: 576px) {
@@ -81,3 +87,13 @@
     box-shadow: none;
     padding: 0 1rem;
 } */
+
+.FingoWidgetHeaderBadge {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    height: 12px;
+    width: 12px;
+    border-radius: 12px;
+    background-color: red;
+}

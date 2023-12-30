@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useAuth, useMediaQuery, usePersistedGuest } from 'src/hooks'
 import BananaIconSVG from 'src/assets/svg/banana-icon.svg'
 import DiamondIconSVG from 'src/assets/svg/diamond.svg'
@@ -45,8 +45,6 @@ const MENU_ITEMS = [
     // ...another menu menu tab
 ]
 
-console.log('MENU_ITEMS', Object.keys(MENU_ITEMS))
-
 const initialShowState = {
     streak: false,
     total_xp: false,
@@ -65,7 +63,13 @@ const FingoWidgetHeader = () => {
             ...initialShowState,
             [name]: !show[name],
         })
-        e.preventDefault()
+        if (e) {
+            e.preventDefault()
+        }
+    }
+
+    const onMouseLeave = () => {
+        setShow(initialShowState)
     }
 
     const getTabLabel = name => {
@@ -106,8 +110,49 @@ const FingoWidgetHeader = () => {
     }
 
     const getIcon = (icon, disabledIcon, name) => {
-        return icon
+        if (name === 'heart') {
+            if (
+                (isAuthenticated && user?.heart === 0) ||
+                guestState?.heart === 0
+            ) {
+                return disabledIcon
+            } else {
+                return icon
+            }
+        } else {
+            return icon
+        }
     }
+
+    const getLabelColor = (name, color) => {
+        if (name === 'heart') {
+            if (
+                (isAuthenticated && user?.heart === 0) ||
+                guestState?.heart === 0
+            ) {
+                return undefined
+            } else {
+                return color
+            }
+        } else {
+            return color
+        }
+    }
+
+    const renderBadge = useCallback(
+        menuName => {
+            if (
+                (menuName === 'heart' &&
+                    isAuthenticated &&
+                    user?.heart === 0) ||
+                guestState?.heart === 0
+            ) {
+                return <div className='FingoWidgetHeaderBadge'></div>
+            }
+            return null
+        },
+        [guestState?.heart, isAuthenticated, user?.heart]
+    )
 
     return (
         <div id='FingoWidgetHeaderRoot'>
@@ -139,16 +184,24 @@ const FingoWidgetHeader = () => {
                                                     style={{
                                                         height: i.iconHeight,
                                                     }}
-                                                    src={i.icon}
+                                                    src={getIcon(
+                                                        i.icon,
+                                                        i.disabledIcon,
+                                                        i.name
+                                                    )}
                                                     alt='icon'
                                                 />
                                                 <span
                                                     style={{
-                                                        color: i.color,
+                                                        color: getLabelColor(
+                                                            i.name,
+                                                            i.color
+                                                        ),
                                                     }}
                                                 >
                                                     {getTabLabel(i.name)}
                                                 </span>
+                                                {renderBadge(i.name)}
                                             </a>
                                         </Popover>
                                     </li>
@@ -158,6 +211,12 @@ const FingoWidgetHeader = () => {
                                     <li key={String(index)}>
                                         <a
                                             href='#'
+                                            onMouseEnter={() =>
+                                                onClickItem(undefined, i.name)
+                                            }
+                                            onMouseLeave={() =>
+                                                onMouseLeave(i.name)
+                                            }
                                             onClick={e =>
                                                 onClickItem(e, i.name)
                                             }
@@ -175,11 +234,15 @@ const FingoWidgetHeader = () => {
                                             />
                                             <span
                                                 style={{
-                                                    color: i.color,
+                                                    color: getLabelColor(
+                                                        i.name,
+                                                        i.color
+                                                    ),
                                                 }}
                                             >
                                                 {getTabLabel(i.name)}
                                             </span>
+                                            {renderBadge(i.name)}
                                         </a>
                                     </li>
                                 )
