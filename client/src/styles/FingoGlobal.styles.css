@@ -181,7 +181,7 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
 }
 
 #react-tiny-popover-container {
-    z-index: 1062;
+    z-index: 1060;
 }
 
 .FingoAlert {
