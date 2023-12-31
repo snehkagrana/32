@@ -52,6 +52,7 @@ import LandingPage from './pages/LandingPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
 import { useAuth, usePersistedGuest } from './hooks'
 import { useDispatch } from 'react-redux'
+import InvitationPage from './pages/InvitationPage'
 
 const App = () => {
     const dispatch = useDispatch()
@@ -74,6 +75,11 @@ const App = () => {
                         exact
                         path='/auth/google/callback'
                         element={<AuthCallback />}
+                    />
+                    <Route
+                        exact
+                        path='/invite/:referralCode'
+                        element={<InvitationPage />}
                     />
                     <Route
                         exact

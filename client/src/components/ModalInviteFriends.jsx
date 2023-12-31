@@ -142,7 +142,6 @@ const ModalInviteFriends = () => {
                             <div className='SocialShareItem'>
                                 <TelegramShareButton
                                     url={getReferralLink}
-                                    title={appConfig.appName}
                                     className='SocialShareItem__share-button'
                                 >
                                     <TelegramIcon size={32} round />

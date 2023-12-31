@@ -15,6 +15,7 @@ module.exports = {
         email: Joi.string().email().required(),
         password: Joi.string().min(6).max(100).required(),
         role: Joi.string().optional(),
+        referralCode: Joi.string().optional().allow(null),
     }),
     login: Joi.object().keys({
         email: Joi.string().email().required(),
