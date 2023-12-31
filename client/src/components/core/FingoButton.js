@@ -42,11 +42,13 @@ const renderLoadingIcon = size => (
 )
 
 export const FingoButton = props => {
-    const { isLoading, color, className } = props
+    const { isLoading, color, className, enableHoverEffect } = props
     return (
         <Button
             {...props}
-            className={`FingoButton ${color ?? 'primary'} ${className || ''}`}
+            className={`FingoButton ${color ?? 'primary'} ${className || ''} ${
+                enableHoverEffect ? 'HoverEffect' : ''
+            }`}
             onClick={props.onClick}
         >
             {isLoading ? (
@@ -60,4 +62,5 @@ export const FingoButton = props => {
 
 FingoButton.defaultProps = {
     color: 'primary',
+    enableHoverEffect: true,
 }
