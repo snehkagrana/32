@@ -50,6 +50,7 @@
 }
 
 [data-theme='dark'] .FingoWidgetHeader li a.active,
+[data-theme='dark'] .FingoWidgetHeader li a:hover,
 [data-theme='dark'] .FingoWidgetHeader li a:focus {
     background-color: #1e1e1e;
 }

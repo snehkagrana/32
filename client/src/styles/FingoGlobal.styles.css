@@ -234,6 +234,12 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
     background-color: #ffffff;
 }
 
+[data-theme='dark'] .InputReferralCode {
+    border: 2px solid #101010;
+    background-color: #1e1e1e;
+    color: #fff;
+}
+
 .InputReferralCode:focus {
     border: 2px solid #007bff;
 }
@@ -252,6 +258,11 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
     font-size: 0.85rem;
 }
 
+[data-theme='dark'] .InputReferralCopyBtn {
+    background-color: #2d2d2d;
+    color: #fff;
+}
+
 .InputReferralCopyBtn.active,
 .InputReferralCopyBtn:hover {
     background-color: #007bff;
@@ -267,5 +278,12 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
 }
 
 .SocialShareItem {
-    margin: 0.5rem;
+    width: 16.6%;
+    text-align: center;
+    padding: 0.5rem;
+}
+
+.SocialShareItem button svg {
+    width: 36px;
+    height: auto;
 }

@@ -14,6 +14,8 @@ import {
     FacebookShareCount,
     LineIcon,
     LineShareButton,
+    LinkedinIcon,
+    LinkedinShareButton,
     TelegramIcon,
     TelegramShareButton,
     TwitterShareButton,
@@ -35,12 +37,7 @@ const ModalInviteFriends = () => {
     const { openModalInviteFriends, app_setOpenModalInviteFriends } = useApp()
 
     const handleCloseModal = () => {
-        if (
-            (!isAuthenticated && guestState?.heart > 0) ||
-            (isAuthenticated && user?.heart > 0)
-        ) {
-            dispatch(app_setOpenModalInviteFriends(false))
-        }
+        dispatch(app_setOpenModalInviteFriends(false))
     }
 
     const onClickCopy = () => {
@@ -182,6 +179,14 @@ const ModalInviteFriends = () => {
                                 >
                                     <LineIcon size={32} round />
                                 </LineShareButton>
+                            </div>
+                            <div className='SocialShareItem'>
+                                <LinkedinShareButton
+                                    url={getReferralLink}
+                                    className='Demo__some-network__share-button'
+                                >
+                                    <LinkedinIcon size={32} round />
+                                </LinkedinShareButton>
                             </div>
                         </div>
                     </div>
