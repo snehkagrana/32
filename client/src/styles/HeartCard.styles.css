@@ -98,3 +98,19 @@
     height: auto;
     margin-right: 0.2rem;
 }
+
+.UnlimitedHearts {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    min-width: 240px;
+    margin: 10px 0;
+}
+
+.UnlimitedHearts img {
+    margin-bottom: 1rem;
+    width: 82px;
+    height: auto;
+}

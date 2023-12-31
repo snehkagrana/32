@@ -9,6 +9,7 @@ const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
 const { sendEmailForgotPassword } = require('../email/send-email')
 const { appConfig } = require('../configs/app.config')
+const dayjs = require('dayjs')
 
 exports.createUser = user => {
     return UserModel.create(user)
@@ -31,6 +32,7 @@ exports.logoutUser = (token, exp) => {
 }
 
 exports.syncUser = async email => {
+    const today = new Date()
     const refCode = generateReferralCode()
     let result = false
     let user = await UserModel.findOne({ email }).exec()
@@ -53,6 +55,16 @@ exports.syncUser = async email => {
             user.xp.current = 0
             user.xp.daily = 0
         }
+
+        console.log(
+            "dayjs(user.unlimitedHeart).isAfter(dayjs(today).toISOString(), 'minute')",
+            dayjs(user.unlimitedHeart).isAfter(
+                dayjs(today).toISOString(),
+                'second'
+            )
+        )
+
+        console.log(new Date().toISOString())
 
         const updateUserResult = await UserModel.findOneAndUpdate(
             { email },
@@ -77,9 +89,9 @@ exports.syncUser = async email => {
                     heart: typeof user?.heart === 'number' ? user.heart : appConfig.defaultHeart,
                     // prettier-ignore
                     referralCode: !user?.referralCode ? refCode : user.referralCode,
-                    unlimitedHeart: !user?.unlimitedHeart ? null : user.unlimitedHeart,
+
                     // prettier-ignore
-                    // registeredAt: !user?.registeredAt ? new Date() : user.registeredAt,
+                    unlimitedHeart: user?.unlimitedHeart && dayjs(user.unlimitedHeart).isAfter(dayjs(today).toISOString(), 'second') ? user.unlimitedHeart : null,
                 },
             }
         )

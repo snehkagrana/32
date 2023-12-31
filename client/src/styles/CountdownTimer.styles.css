@@ -1,0 +1,47 @@
+.CountdownCounter {
+    display: flex;
+    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    font-family: Roboto, system-ui, 'Segoe UI', Tahoma, Geneva, Verdana,
+        Helvetica, Arial, sans-serif;
+    color: rgb(18, 86, 212);
+    background-color: #f1f8ff;
+    border-radius: 8px;
+    padding: 4px 6px;
+    border: 2px solid rgb(196 217 254);
+}
+
+[data-theme='dark'] .CountdownCounter {
+    color: #aecaff;
+    background-color: #1a283c;
+    border: 2px solid #2f3d54;
+}
+
+.CountdownCounterTime {
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.CountdownCounterSeparator {
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-block;
+    margin: 0 0.2rem;
+    display: none;
+}
+
+.CountdownCounterItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 56px;
+}
+
+.CountdownCounterItemLabel {
+    margin-bottom: 0;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    font-weight: 500;
+}

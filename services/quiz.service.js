@@ -10,8 +10,9 @@ exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
             { email: user.email },
             {
                 $set: {
+                    // prettier-ignore
                     heart:
-                        !isCorrect && user?.heart > 0
+                        !isCorrect && user?.unlimitedHeart && user?.heart > 0
                             ? user.heart - 1
                             : user.heart,
                     lastHeartAccruedAt: new Date(),

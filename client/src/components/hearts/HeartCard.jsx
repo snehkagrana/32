@@ -7,9 +7,13 @@ import { ReactComponent as DiamondIcon } from 'src/assets/svg/diamond.svg'
 import { ReactComponent as UnlimitedHeartIcon } from 'src/assets/svg/unlimited-hearts.svg'
 import { ReactComponent as RefillHeartIcon } from 'src/assets/svg/refill-heart.svg'
 import { AMOUNT_OF_GEMS_REDEEM_TO_HEARTS } from 'src/constants/app.constant'
+import UnlimitedHeartImg from 'src/assets/images/unlimited-hearts.png'
 import { useDispatch } from 'react-redux'
+import dayjs from 'dayjs'
+import CountdownTimer from '../CountdownTimer'
 
 const HeartCard = () => {
+    const today = new Date()
     const dispatch = useDispatch()
     const { user, isAuthenticated } = useAuth()
     const { guestState } = usePersistedGuest()
@@ -90,51 +94,73 @@ const HeartCard = () => {
         dispatch(app_setOpenModalUnlimitedHearts(true))
     }
 
+    // prettier-ignore
+    const isActiveUnlimitedHearts = useMemo(() => {
+        return isAuthenticated && user?.unlimitedHeart && dayjs(user.unlimitedHeart).isAfter(dayjs(today).toISOString(), 'minute')
+    }, [user, isAuthenticated])
+
     return (
         <div className='HeartCard'>
-            <div className='HeartCardHeader flex align-items-center flex-column mb-3'>
-                <h2 className='mb-2'>Hearts</h2>
-                <ul className='flex align-items-center mb-3'>
-                    {Array.from({ length: 5 }, (_, index) => (
-                        <li className='mx-1'>
-                            {renderHeartIcon(
-                                hearts >= index + 1 ? true : false
-                            )}
-                        </li>
-                    ))}
-                </ul>
-                <h4 className='mb-1'>{getMessage}</h4>
-                <h6>{getSubMessage}</h6>
-            </div>
+            <div className='HeartCardHeader flex align-items-center flex-column'>
+                {isActiveUnlimitedHearts ? (
+                    <div className='UnlimitedHearts'>
+                        <h2 className='mb-3'>Unlimited Hearts</h2>
+                        <img
+                            src={UnlimitedHeartImg}
+                            alt='UnlimitedHeartImg'
+                            className='UnlimitedHeartImg'
+                        />
 
-            <div className='HeaderCardContent'>
-                <button
-                    className='HeartCardBtn mb-3'
-                    onClick={onClickUnlimitedHearts}
-                    disabled={!isAbleToGetUnlimitedHearts}
-                >
-                    <UnlimitedHeartIcon />
-                    <span> Unlimited Hearts</span>
-                    <div className='EndContent'></div>
-                </button>
-                <button
-                    className='HeartCardBtn'
-                    disabled={!isAbleToRefill}
-                    onClick={onClickRefillHearts}
-                >
-                    <RefillHeartIcon />
-                    <span> Refill Hearts</span>
-                    <div className='EndContent'>
-                        <DiamondIcon />
-                        <span>{AMOUNT_OF_GEMS_REDEEM_TO_HEARTS}</span>
+                        <CountdownTimer targetDate={user.unlimitedHeart} />
                     </div>
-                </button>
-                {user?.diamond < AMOUNT_OF_GEMS_REDEEM_TO_HEARTS && (
-                    <p className='text-center text-sm mb-0 mt-2'>
-                        You do not have enough gems.
-                    </p>
+                ) : (
+                    <>
+                        <h2 className='mb-2'>Hearts</h2>
+                        <ul className='flex align-items-center mb-3'>
+                            {Array.from({ length: 5 }, (_, index) => (
+                                <li className='mx-1'>
+                                    {renderHeartIcon(
+                                        hearts >= index + 1 ? true : false
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                        <h4 className='mb-1'>{getMessage}</h4>
+                        <h6>{getSubMessage}</h6>
+                    </>
                 )}
             </div>
+
+            {!isActiveUnlimitedHearts && (
+                <div className='HeaderCardContent mt-3'>
+                    <button
+                        className='HeartCardBtn mb-3'
+                        onClick={onClickUnlimitedHearts}
+                        disabled={!isAbleToGetUnlimitedHearts}
+                    >
+                        <UnlimitedHeartIcon />
+                        <span> Unlimited Hearts</span>
+                        <div className='EndContent'></div>
+                    </button>
+                    <button
+                        className='HeartCardBtn'
+                        disabled={!isAbleToRefill}
+                        onClick={onClickRefillHearts}
+                    >
+                        <RefillHeartIcon />
+                        <span> Refill Hearts</span>
+                        <div className='EndContent'>
+                            <DiamondIcon />
+                            <span>{AMOUNT_OF_GEMS_REDEEM_TO_HEARTS}</span>
+                        </div>
+                    </button>
+                    {user?.diamond < AMOUNT_OF_GEMS_REDEEM_TO_HEARTS && (
+                        <p className='text-center text-sm mb-0 mt-2'>
+                            You do not have enough gems.
+                        </p>
+                    )}
+                </div>
+            )}
         </div>
     )
 }
