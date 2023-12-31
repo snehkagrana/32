@@ -27,6 +27,8 @@ import FingoEnvelopeImg from 'src/assets/images/fingo-envelope.png'
 import 'src/styles/ModalInviteFriends.styles.css'
 import { appConfig } from 'src/configs/app.config'
 import CopyToClipboard from 'react-copy-to-clipboard'
+import { Alert } from 'react-bootstrap'
+import { ReactComponent as InfoOutlineSVG } from 'src/assets/svg/info-outline.svg'
 
 const ModalInviteFriends = () => {
     const dispatch = useDispatch()
@@ -80,22 +82,32 @@ const ModalInviteFriends = () => {
                     </div>
                     <div className='InviteFriendsContent'>
                         {getReferralLink && (
-                            <div className='InputReferralCodeWrapper'>
-                                <input
-                                    className='InputReferralCode'
-                                    value={getReferralLink}
-                                />
-                                <CopyToClipboard text={getReferralLink}>
-                                    <button
-                                        className={`InputReferralCopyBtn ${
-                                            copied && 'active'
-                                        }`}
-                                        onClick={onClickCopy}
-                                    >
-                                        <>{copied ? 'COPIED' : 'COPY'}</>
-                                    </button>
-                                </CopyToClipboard>
-                            </div>
+                            <>
+                                <div className='InputReferralCodeWrapper'>
+                                    <input
+                                        className='InputReferralCode'
+                                        value={getReferralLink}
+                                    />
+                                    <CopyToClipboard text={getReferralLink}>
+                                        <button
+                                            className={`InputReferralCopyBtn ${
+                                                copied && 'active'
+                                            }`}
+                                            onClick={onClickCopy}
+                                        >
+                                            <>{copied ? 'COPIED' : 'COPY'}</>
+                                        </button>
+                                    </CopyToClipboard>
+                                </div>
+
+                                <div className='InputReferralCodeInfo mt-2'>
+                                    <InfoOutlineSVG />
+                                    <p className='mb-0'>
+                                        Your referral will be counted when your
+                                        friend completes at least one chapter
+                                    </p>
+                                </div>
+                            </>
                         )}
 
                         <p className='mb-1 text-sm mt-4'>Or share on...</p>
@@ -117,16 +129,6 @@ const ModalInviteFriends = () => {
                                         {count => count}
                                     </FacebookShareCount>
                                 </div>
-                            </div>
-
-                            <div className='SocialShareItem'>
-                                <FacebookMessengerShareButton
-                                    url={getReferralLink}
-                                    appId='521270401588372'
-                                    className='SocialShareItem__share-button'
-                                >
-                                    <FacebookMessengerIcon size={32} round />
-                                </FacebookMessengerShareButton>
                             </div>
 
                             <div className='SocialShareItem'>
@@ -159,26 +161,6 @@ const ModalInviteFriends = () => {
                                 </WhatsappShareButton>
                             </div>
 
-                            <div className='SocialShareItem'>
-                                <EmailShareButton
-                                    url={getReferralLink}
-                                    title={appConfig.appName}
-                                    body='body'
-                                    className='SocialShareItem__share-button'
-                                >
-                                    <EmailIcon size={32} round />
-                                </EmailShareButton>
-                            </div>
-
-                            <div className='SocialShareItem'>
-                                <LineShareButton
-                                    url={getReferralLink}
-                                    title={appConfig.appName}
-                                    className='SocialShareItem__share-button'
-                                >
-                                    <LineIcon size={32} round />
-                                </LineShareButton>
-                            </div>
                             <div className='SocialShareItem'>
                                 <LinkedinShareButton
                                     url={getReferralLink}

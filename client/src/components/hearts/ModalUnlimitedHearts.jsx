@@ -41,7 +41,7 @@ const ModalUnlimitedHearts = () => {
         >
             <div className='ModalUnlimitedHeartsContainer FingoShapeRadius'>
                 <div className='UnlimitedHearts'>
-                    <div className='UnlimitedHeartsHeader flex align-items-center flex-column mb-4'>
+                    <div className='UnlimitedHeartsHeader flex align-items-center flex-column mb-3'>
                         <img src={RockerImage} alt='img' className='mb-3' />
                         <h2 className='mb-2 text-center'>Unlimited Hearts</h2>
                         <h4 className='text-center'>
@@ -60,8 +60,8 @@ const ModalUnlimitedHearts = () => {
                                     <span>Get Unlimited Hearts</span>
                                 </button>
                                 <p className='mb-0 text-center text-sm'>
-                                    Get 72 hours of unlimited hearts by invite
-                                    friends
+                                    Get 72 hours of unlimited hearts by inviting
+                                    your friends.
                                 </p>
                             </>
                         ) : (
