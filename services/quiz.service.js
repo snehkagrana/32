@@ -19,8 +19,6 @@ exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
             },
             { new: true }
         ).exec()
-
-        console.log('user-->>', user)
     }
 
     return result

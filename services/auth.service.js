@@ -77,6 +77,7 @@ exports.syncUser = async email => {
                     heart: typeof user?.heart === 'number' ? user.heart : appConfig.defaultHeart,
                     // prettier-ignore
                     referralCode: !user?.referralCode ? refCode : user.referralCode,
+                    unlimitedHeart: !user?.unlimitedHeart ? null : user.unlimitedHeart,
                     // prettier-ignore
                     // registeredAt: !user?.registeredAt ? new Date() : user.registeredAt,
                 },

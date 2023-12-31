@@ -5,3 +5,5 @@ export const BATCH_EVENT_TIME_SPENT = 'time_spent'
 export const AMOUNT_OF_GEMS_REDEEM_TO_HEARTS = 15
 
 export const MAX_HEARTS = 5
+
+export const HOUR_OF_UNLIMITED_HEARTS = 72

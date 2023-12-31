@@ -97,7 +97,6 @@ const HomePage = props => {
     const [completedCategories, setCompletedCategories] = useState([])
     const navigate = useNavigate()
 
-
     // const [xp, setXP] = useState({ dailyXP: 0, totalXP: 0 })
 
     const { scrollRef, next, prev } = useSnapCarousel()

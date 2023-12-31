@@ -134,6 +134,7 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default: undefined,
     },
+    unlimitedHeart: Date,
     referralCode: String,
     registeredAt: Date,
 })

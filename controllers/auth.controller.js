@@ -34,6 +34,7 @@ exports.register = async (req, res) => {
         },
         heart: appConfig.defaultHeart || 5,
         lastHeartAccruedAt: new Date(),
+        unlimitedHeart: null,
         referralCode: refCode,
         registeredAt: new Date(),
     }

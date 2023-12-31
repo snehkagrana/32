@@ -39,6 +39,7 @@ const heartRoutes = require('./routes/heart.routes')
 const AuthGuard = require('./middlewares/auth.middleware');
 const { initializeDiamondUser, calculateDiamondUser } = require("./utils/reward.util");
 const { mailTransporter } = require("./utils/mail.util");
+const ReferralService = require('./services/referral.service')
 
 require('./cronjob/hearts')
 
@@ -2132,6 +2133,8 @@ app.post("/server/savexp", AuthGuard, (req, res) => {
                     },
                 }
             );
+
+            ReferralService.validateReferral({ userId: doc._id })
 
             return res.json({});
         }
