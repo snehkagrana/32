@@ -23,10 +23,11 @@ import {
     ModalUnlimitedHearts,
 } from 'src/components/hearts'
 import ModalInviteFriends from 'src/components/ModalInviteFriends'
+import dayjs from 'dayjs'
 
 const RenderBlockQuiz = () => {
     const dispatch = useDispatch()
-    const {  app_setOpenModalHeartRunOut } = useApp()
+    const { app_setOpenModalHeartRunOut } = useApp()
     return (
         <div
             onClick={() => dispatch(app_setOpenModalHeartRunOut(true))}
@@ -36,6 +37,7 @@ const RenderBlockQuiz = () => {
 }
 
 const Quiz = () => {
+    const today = new Date()
     const dispatch = useDispatch()
     const { appBatch, app_setOpenModalHeartRunOut } = useApp()
     const { isAuthenticated, user, auth_syncAndGetUser } = useAuth()
@@ -544,7 +546,12 @@ const Quiz = () => {
     }
 
     useEffect(() => {
-        if ((!isAuthenticated && guestState?.heart < 1) || user?.heart < 1) {
+        // prettier-ignore
+        if(isAuthenticated && user?.unlimitedHeart && dayjs(user.unlimitedHeart).isBefore(dayjs(today).toISOString(), 'minute')) {
+            dispatch(app_setOpenModalHeartRunOut(true))
+        }
+        // prettier-ignore
+        if ((!isAuthenticated && guestState?.heart < 1) || (!user?.unlimitedHeart && user?.heart < 1)) {
             dispatch(app_setOpenModalHeartRunOut(true))
         }
         return () => {
@@ -554,7 +561,10 @@ const Quiz = () => {
     }, [isAuthenticated, user, guestState])
 
     const isRunOutOfHearts = useMemo(() => {
-        return (isAuthenticated && user?.heart === 0) || guestState?.heart === 0
+        return (
+            (isAuthenticated && !user?.unlimitedHeart && user?.heart === 0) ||
+            guestState?.heart === 0
+        )
     }, [user, isAuthenticated, guestState])
 
     return (

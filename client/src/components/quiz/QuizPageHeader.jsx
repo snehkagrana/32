@@ -2,10 +2,12 @@
 import { useAuth, usePersistedGuest } from 'src/hooks'
 
 import HeartIconSVG from 'src/assets/svg/heart.svg'
+import UnlimitedHeartIcon from 'src/assets/images/unlimited-hearts.png'
 import { useState } from 'react'
 import { HeartCard } from '../hearts'
 import { Popover } from 'src/components/core'
 import 'src/styles/QuizPageHeader.styles.css'
+import dayjs from 'dayjs'
 
 const MENU_ITEMS = [
     {
@@ -18,6 +20,7 @@ const MENU_ITEMS = [
 ]
 
 const QuizPageHeader = () => {
+    const today = new Date()
     const [show, setShow] = useState(false)
     const { isAuthenticated, user } = useAuth()
     const { guestState } = usePersistedGuest()
@@ -30,10 +33,16 @@ const QuizPageHeader = () => {
     const getTabLabel = name => {
         if (isAuthenticated) {
             switch (name) {
+                // prettier-ignore
                 case 'heart':
-                    return user?.heart !== undefined
-                        ? String(user.heart) ?? '0'
-                        : undefined
+                if (isAuthenticated && user?.unlimitedHeart && dayjs(user.unlimitedHeart).isAfter(dayjs(today).toISOString(), 'minute')) {
+                    return undefined 
+                }
+                else if (isAuthenticated && user) {
+                    return user?.heart || 0
+                } else {
+                    return guestState?.heart || 0
+                }
 
                 default:
                     return undefined
@@ -48,6 +57,22 @@ const QuizPageHeader = () => {
                 default:
                     return undefined
             }
+        }
+    }
+
+    const getIcon = (icon, disabledIcon, name) => {
+        if (name === 'heart') {
+            // prettier-ignore
+            if (isAuthenticated && user?.unlimitedHeart && dayjs(user.unlimitedHeart).isAfter(dayjs(today).toISOString(), 'minute')) {
+                return UnlimitedHeartIcon 
+            }
+            else if ((isAuthenticated && user?.heart === 0) || guestState?.heart === 0) {
+                return disabledIcon
+            } else {
+                return icon
+            }
+        } else {
+            return icon
         }
     }
 
@@ -73,7 +98,11 @@ const QuizPageHeader = () => {
                                     >
                                         <img
                                             style={{ height: i.iconHeight }}
-                                            src={i.icon}
+                                            src={getIcon(
+                                                i.icon,
+                                                i.disabledIcon,
+                                                i.name
+                                            )}
                                             alt='icon'
                                         />
                                         {getTabLabel(i.name) && (
