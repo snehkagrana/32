@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.e1987607.css",
-    "main.js": "/static/js/main.7d5a2e97.js",
+    "main.css": "/static/css/main.a2721851.css",
+    "main.js": "/static/js/main.da42b33c.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
     "static/media/8.png": "/static/media/8.9daef5f1f68e0fc2fb5f.png",
@@ -47,6 +47,7 @@
     "static/media/8270289.jpg": "/static/media/8270289.855b860d93d9f9988c34.jpg",
     "static/media/paytm.png": "/static/media/paytm.a2264342bcf4a1298672.png",
     "static/media/flipkart.png": "/static/media/flipkart.b0bf34b825744779be8f.png",
+    "static/media/crying.png": "/static/media/crying.77741ad49290b30d6a54.png",
     "static/media/1.png": "/static/media/1.5ceda60411368d78de6c.png",
     "static/media/amazon.png": "/static/media/amazon.1ecf87dd5b47c7791fda.png",
     "static/media/2.png": "/static/media/2.64a35b48f8872484d0f3.png",
@@ -54,6 +55,7 @@
     "static/media/67366-hamburger-fries-cheeseburger-veggie-french-burger-emoji.png": "/static/media/67366-hamburger-fries-cheeseburger-veggie-french-burger-emoji.a0e26891f0e9de50f815.png",
     "static/media/65000-hunter_-monster-language-meaning-speech-world-emoji.png": "/static/media/65000-hunter_-monster-language-meaning-speech-world-emoji.eea0526ac38e64f2fe60.png",
     "static/media/youtube-logo.png": "/static/media/youtube-logo.656319030df29b2bd011.png",
+    "static/media/fingo-envelope.png": "/static/media/fingo-envelope.d8efff896f59f23db21e.png",
     "static/media/3.png": "/static/media/3.2d8ec3ec53ebab3d88a0.png",
     "static/media/ghost.png": "/static/media/ghost.25ea9d1093784bb4d214.png",
     "static/media/fingo-logo.png": "/static/media/fingo-logo.a49d4dbf80aacb5a6e7d.png",
@@ -71,6 +73,7 @@
     "static/media/turtle.png": "/static/media/turtle.82cd73c53ac378ceab4b.png",
     "static/media/netflix-logo.png": "/static/media/netflix-logo.4bc03ff0aac6d4a37aa9.png",
     "static/media/sneh.jpg": "/static/media/sneh.f9ee79a2259e5e5a0ac8.jpg",
+    "static/media/unlimited-hearts.png": "/static/media/unlimited-hearts.4a2ea3407c5b2d0d68f6.png",
     "static/media/wrong-audio.mp3": "/static/media/wrong-audio.52e80b0ac4001d1e740d.mp3",
     "static/media/loudly-crying-face.svg": "/static/media/loudly-crying-face.33a7333119b0b78f74c07dcc8af4ac1d.svg",
     "static/media/amazon.jpg": "/static/media/amazon.b40e9d47b8b4b7a3a797.jpg",
@@ -80,7 +83,8 @@
     "static/media/diamond-faded.png": "/static/media/diamond-faded.ba1f4740a3ddea133e23.png",
     "static/media/diamond-filled.png": "/static/media/diamond-filled.1c7dcc63f2f0b89595a3.png",
     "static/media/correct-audio.mp3": "/static/media/correct-audio.2944938830ac5d97fe17.mp3",
-    "static/media/arrow-2.svg": "/static/media/arrow-2.3ed5e3b2e67cbbf4da6dc3d3f6ef0a05.svg",
+    "static/media/rocket.png": "/static/media/rocket.21c8fc99aea09a4509e1.png",
+    "static/media/arrow-2.svg": "/static/media/arrow-2.98d9806fc08dd27e4453c7561d0a89ef.svg",
     "static/media/banana-icon.svg": "/static/media/banana-icon.8417494552c51ccbaeb17168958af1f9.svg",
     "static/media/user-cirlce-add.svg": "/static/media/user-cirlce-add.525e2dd061b7de0ae838afb9bd43ddcc.svg",
     "static/media/unlimited-hearts.svg": "/static/media/unlimited-hearts.d0e4fff5405c2bb919ad677e1aec9ad5.svg",
@@ -94,14 +98,15 @@
     "static/media/seal-check-fill.svg": "/static/media/seal-check-fill.3acb1032a7ce5312b2f1bd434188bbaf.svg",
     "static/media/lightning-fill2.svg": "/static/media/lightning-fill2.2b5a211d830a24fab92e291d50f65d1d.svg",
     "static/media/diamond.svg": "/static/media/diamond.a4e720d299892c058c2b5e75830bdcc1.svg",
-    "static/media/heart.svg": "/static/media/heart.735df7c1e69cbadd542cd47604dd02d2.svg",
+    "static/media/heart-faded.svg": "/static/media/heart-faded.729636ee3d921af516fb7e5e7be3a2a1.svg",
+    "static/media/heart.svg": "/static/media/heart.1199b111694fe831b8e49b353528426b.svg",
     "static/media/brightness-alert-rounded.svg": "/static/media/brightness-alert-rounded.2944559362f739ce9f1c71605fb9be81.svg",
     "static/media/question-circle.svg": "/static/media/question-circle.c808fbd1b8df8858f2c58357a86333c9.svg",
     "static/media/cloud-upload-sharp.svg": "/static/media/cloud-upload-sharp.46dca20eace9acf508c0cfc0b6699374.svg",
     "static/media/triangle-danger.svg": "/static/media/triangle-danger.060aa6ed42fc6afa2be77a1213a55d49.svg",
     "static/media/trash-bin-trash-linear.svg": "/static/media/trash-bin-trash-linear.e6576df2e2fb7e865b458a3e31d7c916.svg",
     "static/media/eye-off.svg": "/static/media/eye-off.34141a6abb28a5b9d9a0b6b5e655d958.svg",
-    "static/media/enter.svg": "/static/media/enter.03b9d4ce8bcb86a794c21affed1e1b40.svg",
+    "static/media/enter.svg": "/static/media/enter.2b2db0a88e9d8150b0f69824a2137236.svg",
     "static/media/redeem.svg": "/static/media/redeem.89df62d10e052180396295da83cb1558.svg",
     "static/media/sad.svg": "/static/media/sad.a73777fcee698490c31308361d464354.svg",
     "static/media/back.svg": "/static/media/back.8df8af3ad26403b254bc0570d34a1c44.svg",
@@ -111,12 +116,12 @@
     "static/media/error-fill.svg": "/static/media/error-fill.6114b542c23f4aba9607540cc338bae3.svg",
     "static/media/baseline-content-copy.svg": "/static/media/baseline-content-copy.58ba17b96079dd681d38d228fdc7ef61.svg",
     "static/media/info.svg": "/static/media/info.ef876f7b40a92ef036458f95b7e325e2.svg",
-    "main.e1987607.css.map": "/static/css/main.e1987607.css.map",
-    "main.7d5a2e97.js.map": "/static/js/main.7d5a2e97.js.map",
+    "main.a2721851.css.map": "/static/css/main.a2721851.css.map",
+    "main.da42b33c.js.map": "/static/js/main.da42b33c.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e1987607.css",
-    "static/js/main.7d5a2e97.js"
+    "static/css/main.a2721851.css",
+    "static/js/main.da42b33c.js"
   ]
 }
