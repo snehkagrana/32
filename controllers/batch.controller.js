@@ -16,7 +16,7 @@ exports.invoke = async (req, res) => {
 
     switch (eventType) {
         case BATCH_EVENT_TIME_SPENT:
-            QuizService.answerQuestion({
+            await QuizService.answerQuestion({
                 userId,
                 guestId,
                 itemId,

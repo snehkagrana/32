@@ -1,5 +1,4 @@
 const UserModel = require('../models/user')
-const dayjs = require('dayjs')
 
 exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
     let user = await UserModel.findById(userId).exec()
@@ -12,7 +11,7 @@ exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
                 $set: {
                     // prettier-ignore
                     heart:
-                        !isCorrect && user?.unlimitedHeart && user?.heart > 0
+                        Boolean(!isCorrect) && Boolean(!user?.unlimitedHeart) && user?.heart > 0
                             ? user.heart - 1
                             : user.heart,
                     lastHeartAccruedAt: new Date(),

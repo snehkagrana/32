@@ -56,16 +56,6 @@ exports.syncUser = async email => {
             user.xp.daily = 0
         }
 
-        console.log(
-            "dayjs(user.unlimitedHeart).isAfter(dayjs(today).toISOString(), 'minute')",
-            dayjs(user.unlimitedHeart).isAfter(
-                dayjs(today).toISOString(),
-                'second'
-            )
-        )
-
-        console.log(new Date().toISOString())
-
         const updateUserResult = await UserModel.findOneAndUpdate(
             { email },
             {

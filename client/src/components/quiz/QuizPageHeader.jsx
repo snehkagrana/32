@@ -3,6 +3,7 @@ import { useAuth, usePersistedGuest } from 'src/hooks'
 
 import HeartIconSVG from 'src/assets/svg/heart.svg'
 import UnlimitedHeartIcon from 'src/assets/images/unlimited-hearts.png'
+import HeartFadedIconSVG from 'src/assets/svg/heart-faded.svg'
 import { useState } from 'react'
 import { HeartCard } from '../hearts'
 import { Popover } from 'src/components/core'
@@ -12,6 +13,7 @@ import dayjs from 'dayjs'
 const MENU_ITEMS = [
     {
         icon: HeartIconSVG,
+        disabledIcon: HeartFadedIconSVG,
         name: 'heart',
         color: '#ff4b4b',
         iconHeight: 18,
@@ -105,7 +107,7 @@ const QuizPageHeader = () => {
                                             )}
                                             alt='icon'
                                         />
-                                        {getTabLabel(i.name) && (
+                                        {getTabLabel(i.name) !== undefined && (
                                             <span style={{ color: i.color }}>
                                                 {getTabLabel(i.name)}
                                             </span>
