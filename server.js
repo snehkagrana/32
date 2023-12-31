@@ -41,7 +41,7 @@ const { initializeDiamondUser, calculateDiamondUser } = require("./utils/reward.
 const { mailTransporter } = require("./utils/mail.util");
 const ReferralService = require('./services/referral.service')
 
-require('./cronjob/hearts')
+require('./cronjob/hearts.cronjob')
 
 aws.config.update({
     secretAccessKey: process.env.ACCESS_SECRET_KEY,

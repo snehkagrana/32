@@ -9,10 +9,13 @@ const MAX_HEARTS = 5
 
 const HOUR_OF_UNLIMITED_HEARTS = 72
 
+const HEARTS_REFILL_RATE = 60 // refill rate in minutes
+
 module.exports = {
     DEFAULT_HEART,
     BATCH_EVENT_TIME_SPENT,
     AMOUNT_OF_GEMS_REDEEM_TO_HEARTS,
     MAX_HEARTS,
     HOUR_OF_UNLIMITED_HEARTS,
+    HEARTS_REFILL_RATE,
 }
