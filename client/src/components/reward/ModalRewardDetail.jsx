@@ -239,7 +239,7 @@ const ModalRewardDetail = () => {
 
     const isLimitRedeem = useMemo(() => {
         const previousRewards =
-            user.rewards.filter(x => {
+            user?.rewards.filter(x => {
                 // prettier-ignore
                 if(x?.redeemedAt && dayjs(x.redeemedAt).isSame(dayjs(today).toISOString(), 'month')) {
                     return true
