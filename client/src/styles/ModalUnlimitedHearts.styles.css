@@ -24,7 +24,7 @@
     );
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#19204d",endColorstr="#0e44c9",GradientType=1);
     width: 100%;
-    padding: 1.75rem 1.8rem;
+    padding: 1.2rem 1.3rem;
 }
 
 @media (min-width: 576px) {
@@ -64,6 +64,7 @@
 .UnlimitedHeartsBtn {
     display: flex;
     align-items: center;
+    justify-content: center;
     justify-self: center;
     width: 100%;
     border: none;
@@ -76,12 +77,19 @@
     background-color: #fff;
     border: 2px solid rgb(221 221 221 / 66%);
     box-shadow: rgb(166 166 166 / 70%) 0px 4px;
+    transform: scale(0.9);
+}
+
+@media (min-width: 576px) {
+    .UnlimitedHeartsBtn {
+        transform: scale(1);
+    }
 }
 
 .UnlimitedHeartsBtn svg {
     width: 35px;
     height: auto;
-    margin-right: 0.5rem;
+    margin-right: 0.3rem;
 }
 
 /* .UnlimitedHeartsTextBtn {
