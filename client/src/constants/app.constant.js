@@ -1,4 +1,5 @@
 export const PERSIST_ROOT_KEY = 'fingo_persist:root'
+export const PERSIST_ROOT_VERSION = 2
 
 export const BATCH_EVENT_TIME_SPENT = 'time_spent'
 
