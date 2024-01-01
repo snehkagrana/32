@@ -1,7 +1,10 @@
 const dayjs = require('dayjs')
 const ReferralModel = require('../models/referral')
 const UserModel = require('../models/user')
-const { HOUR_OF_UNLIMITED_HEARTS } = require('../constants/app.constant')
+const {
+    HOUR_OF_UNLIMITED_HEARTS,
+    NUMBER_OF_SUCCESS_REFERRALS,
+} = require('../constants/app.constant')
 
 exports.create = async ({ referralCode, userId }) => {
     let result = false
@@ -55,13 +58,33 @@ exports.validateReferral = async ({ userId }) => {
                 }
             ).exec()
 
+            const getUnlimitedHearts = totalOfSuccessReferral => {
+                // prettier-ignore
+                if (totalOfSuccessReferral === NUMBER_OF_SUCCESS_REFERRALS) {
+                    return !referralOwner?.unlimitedHeart ? dayjs(new Date()).add(HOUR_OF_UNLIMITED_HEARTS, 'hour').toISOString() : referralOwner?.unlimitedHeart || null
+                }
+                else if(totalOfSuccessReferral > NUMBER_OF_SUCCESS_REFERRALS) {
+                    const prevSuccessRef = Math.floor(totalOfSuccessReferral / NUMBER_OF_SUCCESS_REFERRALS);
+                    if(totalOfSuccessReferral - (prevSuccessRef * NUMBER_OF_SUCCESS_REFERRALS) === 0) {
+                        return !referralOwner?.unlimitedHeart ? dayjs(new Date()).add(HOUR_OF_UNLIMITED_HEARTS, 'hour').toISOString() : referralOwner?.unlimitedHeart || null
+                    } else {
+                        return referralOwner?.unlimitedHeart || null
+                    }
+                } else {
+                    return referralOwner?.unlimitedHeart || null
+                }
+            }
+
             // Give unlimited heart to referral owner
             await UserModel.findOneAndUpdate(
                 { email: referralOwner.email },
                 {
                     $set: {
                         // prettier-ignore
-                        unlimitedHeart: !referralOwner?.unlimitedHeart ? dayjs(new Date()).add(HOUR_OF_UNLIMITED_HEARTS, 'hour').toISOString() : referralOwner?.unlimitedHeart || null,
+                        unlimitedHeart: getUnlimitedHearts(!referralOwner?.numberOfSuccessReferrals ? 1 : referralOwner.numberOfSuccessReferrals + 1),
+
+                        // prettier-ignore
+                        numberOfSuccessReferrals: !referralOwner?.numberOfSuccessReferrals ? 1 : referralOwner.numberOfSuccessReferrals + 1,
                     },
                 }
             ).exec()
