@@ -24,6 +24,7 @@ const ModalUnlimitedHearts = () => {
     }
 
     const onClickGetUnlimitedHears = () => {
+        handleCloseModal()
         dispatch(app_setOpenModalInviteFriends(true))
     }
 
