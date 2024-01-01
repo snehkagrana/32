@@ -9,3 +9,5 @@ export const MAX_HEARTS = 5
 export const HOUR_OF_UNLIMITED_HEARTS = 72
 
 export const HEARTS_REFILL_RATE = 60 // refill rate in minutes
+
+export const MAX_REDEEM_GIFT_CARD_PER_MONTH = 3

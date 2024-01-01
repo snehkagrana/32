@@ -11,6 +11,8 @@ const HOUR_OF_UNLIMITED_HEARTS = 72
 
 const HEARTS_REFILL_RATE = 60 // refill rate in minutes
 
+const MAX_REDEEM_GIFT_CARD_PER_MONTH = 3
+
 module.exports = {
     DEFAULT_HEART,
     BATCH_EVENT_TIME_SPENT,
@@ -18,4 +20,5 @@ module.exports = {
     MAX_HEARTS,
     HOUR_OF_UNLIMITED_HEARTS,
     HEARTS_REFILL_RATE,
+    MAX_REDEEM_GIFT_CARD_PER_MONTH,
 }

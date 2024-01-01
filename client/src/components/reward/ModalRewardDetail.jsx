@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Row, Col, ProgressBar, Alert } from 'react-bootstrap'
@@ -22,6 +23,8 @@ import CopyToClipboard from 'react-copy-to-clipboard'
 import toast from 'react-hot-toast'
 import Sound from 'src/sounds/announcement-sound.mp3'
 import { Howl } from 'howler'
+import { MAX_REDEEM_GIFT_CARD_PER_MONTH } from 'src/constants/app.constant'
+import dayjs from 'dayjs'
 
 const confettiConfig = {
     colors: XP_LEVEL_COLORS_DEFAULT,
@@ -29,8 +32,9 @@ const confettiConfig = {
 }
 
 const ModalRewardDetail = () => {
+    const today = new Date()
     const dispatch = useDispatch()
-    const { user, auth_syncAndGetUser } = useAuth()
+    const { user, isAuthenticated, auth_syncAndGetUser } = useAuth()
 
     const sound = new Howl({
         src: [Sound],
@@ -113,7 +117,7 @@ const ModalRewardDetail = () => {
 
     const getGiftCardImage = useMemo(() => {
         if (modalDetail.data) {
-            console.log('modalDetail.data', modalDetail.data)
+            // console.log('modalDetail.data', modalDetail.data)
             if (modalDetail.data?.imageURL) {
                 return modalDetail.data.imageURL
             } else {
@@ -233,12 +237,24 @@ const ModalRewardDetail = () => {
         }
     }
 
+    const isLimitRedeem = useMemo(() => {
+        const previousRewards =
+            user.rewards.filter(x => {
+                // prettier-ignore
+                if(x?.redeemedAt && dayjs(x.redeemedAt).isSame(dayjs(today).toISOString(), 'month')) {
+                    return true
+                }
+            }) || []
+        return previousRewards.length >= MAX_REDEEM_GIFT_CARD_PER_MONTH
+    }, [user, isAuthenticated, modalDetail.data, today])
+
     const isAbleToRedeem = useMemo(() => {
-        return (
-            Boolean(user?.diamond >= modalDetail?.data?.diamondValue) &&
-            modalDetail?.data?.variants?.length > 0
-        )
+        return Boolean(user?.diamond >= modalDetail?.data?.diamondValue)
     }, [user, modalDetail.data])
+
+    const isAvailable = useMemo(() => {
+        return modalDetail?.data?.variants?.length > 0
+    }, [modalDetail.data])
 
     const getProgressBarColor = useMemo(() => {
         if (user?.diamond >= modalDetail?.data?.diamondValue) {
@@ -318,7 +334,8 @@ const ModalRewardDetail = () => {
                                                 {redeemedItem?.name}
                                             </h6>
                                             <p className='mb-3'>
-                                                Here is your gift card code worth{' '}
+                                                Here is your gift card code
+                                                worth{' '}
                                                 {redeemedItem?.currencyValue}{' '}
                                                 {redeemedItem?.currencyCode}{' '}
                                             </p>
@@ -388,8 +405,7 @@ const ModalRewardDetail = () => {
                                         </div>
                                     ) : (
                                         <div>
-                                            {modalDetail?.data?.variants
-                                                ?.length < 1 && (
+                                            {!isAvailable && (
                                                 <Alert variant='danger text-center mb-2'>
                                                     This gift card is not
                                                     available
@@ -478,11 +494,38 @@ const ModalRewardDetail = () => {
                                                         {modalDetail.data
                                                             .brandUrl ?? '-'}
                                                     </p>
-                                                    <hr />
                                                 </Col>
                                                 <Col xs={12}>
-                                                    {!isAbleToRedeem ? (
+                                                    <hr />
+                                                    {isAbleToRedeem &&
+                                                        !isLimitRedeem &&
+                                                        isAvailable && (
+                                                            <FingoButton
+                                                                className='mb-4 w-100'
+                                                                size='lg'
+                                                                color='success'
+                                                                disabled={
+                                                                    !isAbleToRedeem
+                                                                }
+                                                                onClick={
+                                                                    onClickRedeem
+                                                                }
+                                                            >
+                                                                Redeem
+                                                            </FingoButton>
+                                                        )}
+
+                                                    {!isAbleToRedeem && (
                                                         <>
+                                                            <FingoButton
+                                                                className='mb-3 w-100'
+                                                                color='primary'
+                                                                onClick={
+                                                                    onClickEarnGems
+                                                                }
+                                                            >
+                                                                Earn Gems
+                                                            </FingoButton>
                                                             <div className='GemsNotEnough mb-3'>
                                                                 <SadSvg />
                                                                 <div>
@@ -503,30 +546,18 @@ const ModalRewardDetail = () => {
                                                                     </p>
                                                                 </div>
                                                             </div>
-                                                            <FingoButton
-                                                                className='mb-4 w-100'
-                                                                color='primary'
-                                                                onClick={
-                                                                    onClickEarnGems
-                                                                }
-                                                            >
-                                                                Earn Gems
-                                                            </FingoButton>
                                                         </>
-                                                    ) : (
-                                                        <FingoButton
-                                                            className='mb-4 w-100'
-                                                            size='lg'
-                                                            color='success'
-                                                            disabled={
-                                                                !isAbleToRedeem
-                                                            }
-                                                            onClick={
-                                                                onClickRedeem
-                                                            }
-                                                        >
-                                                            Redeem
-                                                        </FingoButton>
+                                                    )}
+
+                                                    {isLimitRedeem && (
+                                                        <p className='text-center mb-0 text-danger'>
+                                                            You can only claim{' '}
+                                                            {
+                                                                MAX_REDEEM_GIFT_CARD_PER_MONTH
+                                                            }{' '}
+                                                            gift cards per
+                                                            month.
+                                                        </p>
                                                     )}
 
                                                     {user?.role === 'admin' && (
