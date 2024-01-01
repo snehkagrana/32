@@ -157,20 +157,6 @@ const FingoMobileMenu = ({ open }) => {
                                 <li>
                                     <a
                                         href='#'
-                                        className='FingoShapeRadius'
-                                        onClick={e =>
-                                            onClickSidebarItem(e, 'logout')
-                                        }
-                                    >
-                                        <div className='icon'>
-                                            <LogoutIcon />
-                                        </div>
-                                        <span>Logout</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href='#'
                                         className='FingoShapeRadius FingoSidebarInviteBtn'
                                         onClick={e =>
                                             onClickSidebarItem(e, 'invite')
@@ -183,6 +169,20 @@ const FingoMobileMenu = ({ open }) => {
                                             />
                                         </div>
                                         <span>Invite Friends</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href='#'
+                                        className='FingoShapeRadius'
+                                        onClick={e =>
+                                            onClickSidebarItem(e, 'logout')
+                                        }
+                                    >
+                                        <div className='icon'>
+                                            <LogoutIcon />
+                                        </div>
+                                        <span>Logout</span>
                                     </a>
                                 </li>
                             </>

@@ -74,8 +74,9 @@ const ModalInviteFriends = () => {
                         />
                         <h2 className='mb-2 text-center'>Invite Friends.</h2>
                         <h4 className='text-center'>
-                            Tell your friends it's a free and fun to learn on
-                            Fingo
+                            Tell your friends it's free and fun to learn on
+                            Fingo. Refer 3 friends and get unlimited hearts for
+                            3 days.
                         </h4>
                     </div>
                     <div className='InviteFriendsContent'>
@@ -102,7 +103,7 @@ const ModalInviteFriends = () => {
                                     <InfoOutlineSVG />
                                     <p className='mb-0'>
                                         Your referral will be counted when your
-                                        friend completes at least one chapter
+                                        friend completes at least one chapter.
                                     </p>
                                 </div>
                             </>
