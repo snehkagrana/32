@@ -13,6 +13,7 @@ import { useApp, useAuth, usePersistedGuest } from 'src/hooks'
 
 import FingoLogo from 'src/images/fingo-logo.png'
 import IcHome from 'src/assets/images/ic_home.png'
+import IcFingoEnvelope from 'src/assets/images/fingo-envelope.png'
 
 import Swal from 'sweetalert2'
 import FingoUserInfo from './FingoUserInfo'
@@ -34,6 +35,7 @@ const FingoSidebar = ({ open }) => {
         app_setDailyXP,
         app_setTotalXP,
         app_setOpenSidebar,
+        app_setOpenModalInviteFriends,
     } = useApp()
 
     const { persistedGuest_reset } = usePersistedGuest()
@@ -81,6 +83,9 @@ const FingoSidebar = ({ open }) => {
                 break
             case 'logout':
                 handleLogOut()
+                break
+            case 'invite':
+                dispatch(app_setOpenModalInviteFriends(true))
                 break
             default:
                 // do nothing
@@ -154,20 +159,39 @@ const FingoSidebar = ({ open }) => {
                             </>
                         )}
                         {isAuthenticated && (
-                            <li>
-                                <a
-                                    href='#'
-                                    className='FingoShapeRadius'
-                                    onClick={e =>
-                                        onClickSidebarItem(e, 'logout')
-                                    }
-                                >
-                                    <div className='icon'>
-                                        <LogoutIcon />
-                                    </div>
-                                    <span>Logout</span>
-                                </a>
-                            </li>
+                            <>
+                                <li>
+                                    <a
+                                        href='#'
+                                        className='FingoShapeRadius'
+                                        onClick={e =>
+                                            onClickSidebarItem(e, 'logout')
+                                        }
+                                    >
+                                        <div className='icon'>
+                                            <LogoutIcon />
+                                        </div>
+                                        <span>Logout</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href='#'
+                                        className='FingoShapeRadius FingoSidebarInviteBtn'
+                                        onClick={e =>
+                                            onClickSidebarItem(e, 'invite')
+                                        }
+                                    >
+                                        <div className='icon'>
+                                            <img
+                                                src={IcFingoEnvelope}
+                                                alt='invite icon'
+                                            />
+                                        </div>
+                                        <span>Invite Friends</span>
+                                    </a>
+                                </li>
+                            </>
                         )}
                         {isAuthenticated && user?.role === 'admin' && (
                             <>
