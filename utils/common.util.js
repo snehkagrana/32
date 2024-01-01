@@ -1,3 +1,6 @@
+const { default: ShortUniqueId } = require('short-unique-id')
+const shortUniqueId = require('short-unique-id')
+
 const getToday = () => {
     const now = new Date()
     const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
@@ -23,4 +26,10 @@ exports.daysDifference = lastDate => {
     )
 
     return Math.floor((todayUTC - lastCompletedDayUTC) / (1000 * 60 * 60 * 24))
+}
+
+exports.generateReferralCode = () => {
+    // do logic there
+    const uid = new ShortUniqueId({ length: 12 })
+    return uid.rnd()
 }

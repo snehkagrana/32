@@ -1,19 +1,18 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useNavigate } from 'react-router-dom'
-import 'src/styles/FingoFooter.styles.css'
-
 import SidebarBtn from 'src/assets/images/sidebar-trigger-btn.png'
 import IcHome from 'src/assets/images/ic_home.png'
 import IcTreasure from 'src/assets/images/ic_treasure.png'
 import IcUser from 'src/assets/images/ic_user.png'
-import { useCallback, useMemo, useRef, useState } from 'react'
-import { useApp, useAuth, useMediaQuery } from 'src/hooks'
-import { Overlay, Popover } from 'react-bootstrap'
+import { useCallback, useMemo, useState } from 'react'
+import { useAuth } from 'src/hooks'
 import FingoCardDailyXP from './FingoCardDailyXP'
 import FingoUserInfo from './FingoUserInfo'
 import signedUp from 'src/images/pepe.jpg'
 import { getLevelColor } from 'src/utils'
 import FingoMobileMenu from './FingoMobileMenu'
+import { Popover } from './core'
+import 'src/styles/FingoFooter.styles.css'
 
 const FOOTER_ITEMS = [
     {
@@ -34,26 +33,26 @@ const FOOTER_ITEMS = [
     },
 ]
 
+const initialShowState = {
+    menu: false,
+    'daily-quest': false,
+    profile: false,
+}
+
 const FingoFooter = () => {
     const navigate = useNavigate()
     const { user, isAuthenticated } = useAuth()
-    const { openSidebar } = useApp()
-    const matchMobile = useMediaQuery('(max-width: 570px)')
-    const [show, setShow] = useState(false)
-    const [target, setTarget] = useState(null)
-    const ref = useRef(null)
-    const [activeTab, setActiveTab] = useState('')
+    const [show, setShow] = useState(initialShowState)
 
     const onClickMenu = (e, name) => {
         e.preventDefault()
         if (name === 'home') {
             navigate('/home')
-            setShow(false)
-            setTarget(null)
         } else {
-            setShow(name === activeTab ? false : true)
-            setTarget(e.target)
-            setActiveTab(name === activeTab ? '' : name)
+            setShow({
+                ...initialShowState,
+                [name]: !show[name],
+            })
         }
     }
 
@@ -71,8 +70,14 @@ const FingoFooter = () => {
         return user?.imgPath ? user.imgPath : signedUp
     }, [user])
 
+    const getContent = paramsName => {
+        if (paramsName === 'menu') return <FingoMobileMenu />
+        else if (paramsName === 'daily-quest') return <FingoCardDailyXP />
+        else if (paramsName === 'profile') return <FingoUserInfo />
+    }
+
     return (
-        <div id='FingoFooterRoot' ref={ref}>
+        <div id='FingoFooterRoot'>
             <div className='FingoFooter'>
                 <div className='FingoFooterInner'>
                     <ul>
@@ -80,49 +85,73 @@ const FingoFooter = () => {
                             if (i.name === 'profile' && isAuthenticated) {
                                 return (
                                     <li key={String(index)}>
-                                        <div
-                                            className='FooterProfileBtn'
-                                            onClick={e =>
-                                                onClickMenu(e, i.name)
+                                        <Popover
+                                            isOpen={show[i.name]}
+                                            positions={['top', 'center']}
+                                            align='center'
+                                            padding={0}
+                                            reposition={true}
+                                            onClickOutside={() =>
+                                                setShow(initialShowState)
                                             }
+                                            renderContent={getContent(i.name)}
                                         >
-                                            <div className='FooterProfileWrapper'>
-                                                <img
-                                                    src={getAvatarUrl}
-                                                    alt='Avatar img'
-                                                />
-                                            </div>
                                             <div
-                                                className='FooterUserLevel'
-                                                style={{
-                                                    backgroundColor:
-                                                        getLevelColor(
-                                                            'default',
-                                                            user?.xp?.level
-                                                        ),
-                                                }}
+                                                className='FooterProfileBtn'
+                                                onClick={e =>
+                                                    onClickMenu(e, i.name)
+                                                }
                                             >
-                                                Lvl {user?.xp?.level ?? 1}
+                                                <div className='FooterProfileWrapper'>
+                                                    <img
+                                                        src={getAvatarUrl}
+                                                        alt='Avatar img'
+                                                    />
+                                                </div>
+                                                <div
+                                                    className='FooterUserLevel'
+                                                    style={{
+                                                        backgroundColor:
+                                                            getLevelColor(
+                                                                'default',
+                                                                user?.xp?.level
+                                                            ),
+                                                    }}
+                                                >
+                                                    Lvl {user?.xp?.level ?? 1}
+                                                </div>
                                             </div>
-                                        </div>
+                                        </Popover>
                                     </li>
                                 )
                             } else {
                                 return (
                                     <li key={String(index)}>
-                                        <a
-                                            href='#'
-                                            className={`FingoShapeRadius relative`}
-                                            onClick={e =>
-                                                onClickMenu(e, i.name)
+                                        <Popover
+                                            isOpen={show[i.name]}
+                                            positions={['top', 'center']}
+                                            align='center'
+                                            padding={5}
+                                            reposition={true}
+                                            onClickOutside={() =>
+                                                setShow(initialShowState)
                                             }
+                                            renderContent={getContent(i.name)}
                                         >
-                                            {renderBadge(i.name)}
-                                            <img
-                                                src={i.icon}
-                                                alt='footer icon'
-                                            />
-                                        </a>
+                                            <a
+                                                href='#'
+                                                className={`FingoShapeRadius relative`}
+                                                onClick={e =>
+                                                    onClickMenu(e, i.name)
+                                                }
+                                            >
+                                                {renderBadge(i.name)}
+                                                <img
+                                                    src={i.icon}
+                                                    alt='footer icon'
+                                                />
+                                            </a>
+                                        </Popover>
                                     </li>
                                 )
                             }
@@ -131,7 +160,7 @@ const FingoFooter = () => {
                 </div>
             </div>
 
-            {matchMobile && (
+            {/* {matchMobile && (
                 <Overlay
                     show={show}
                     target={target}
@@ -146,7 +175,7 @@ const FingoFooter = () => {
                         {activeTab === 'profile' && <FingoUserInfo />}
                     </Popover>
                 </Overlay>
-            )}
+            )} */}
         </div>
     )
 }

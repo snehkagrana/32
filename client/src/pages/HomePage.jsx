@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react'
 import Axios from 'src/api/axios'
@@ -58,6 +59,13 @@ import { ModalVerifyAction } from 'src/components/admin'
 import ModalInfoEarnDiamond from 'src/components/reward/ModalInfoEarnDiamond'
 import ModalListMyReward from 'src/components/reward/ModalListMyReward'
 import ModalClaimReward from 'src/components/reward/ModalClaimReward'
+import {
+    ModalConfirmRefillHearts,
+    ModalHeartRunOut,
+    ModalKeepLearning,
+    ModalUnlimitedHearts,
+} from 'src/components/hearts'
+import ModalInviteFriends from 'src/components/ModalInviteFriends'
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -395,13 +403,24 @@ const HomePage = props => {
         }
     }
 
+    useEffect(() => {
+        if (isAuthenticated && user) {
+            let interval = setInterval(() => {
+                auth_syncAndGetUser()
+            }, 10000)
+            return () => {
+                clearInterval(interval)
+            }
+        }
+    }, [isAuthenticated, user])
+
     return (
         <FingoHomeLayout>
             <Helmet>
                 <title>Home</title>
             </Helmet>
             {/* <Navbar proprole={role} newUser={newUser}/> */}
-            <div className='container-fluid px-2'>
+            <div className='container-fluid px-2 pt-3 pt-md-4'>
                 <div className='row h-auto'>
                     <div className='FingoHomeMainContent relative col-md-8 order-md-1 order-2'>
                         <div className='container'>
@@ -409,7 +428,8 @@ const HomePage = props => {
                                 <div className='col-12 px-0'>
                                     <Card className='welcome-card homePage-welcome-card'>
                                         <Card.Body>
-                                            {newUser && !guestState.last_played ? (
+                                            {newUser &&
+                                            !guestState.last_played ? (
                                                 <Card.Text
                                                     className='welcome-card-text'
                                                     style={{
@@ -924,6 +944,11 @@ const HomePage = props => {
             <ModalInfoEarnDiamond />
             <ModalListMyReward />
             <ModalClaimReward />
+            <ModalHeartRunOut />
+            <ModalKeepLearning />
+            <ModalConfirmRefillHearts />
+            <ModalUnlimitedHearts />
+            <ModalInviteFriends />
         </FingoHomeLayout>
     )
 }

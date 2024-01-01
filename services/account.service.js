@@ -1,5 +1,4 @@
 const UserModel = require('../models/user')
-const RewardModel = require('../models//reward')
 
 exports.getMyRewards = async email => {
     const user = await UserModel.findOne({ email })

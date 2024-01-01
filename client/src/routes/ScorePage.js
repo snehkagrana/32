@@ -110,40 +110,40 @@ const ScorePage = () => {
         })
     }
 
-    const getAllScores = newUser => {
-        Axios({
-            method: 'GET',
-            withCredentials: true,
-            url: `/server/allscores`,
-            params: {
-                newUser: newUser,
-            },
-        }).then(res => {
-            // console.log("all scores ", res.data);
-        })
-    }
+    // const getAllScores = newUser => {
+    //     Axios({
+    //         method: 'GET',
+    //         withCredentials: true,
+    //         url: `/server/allscores`,
+    //         params: {
+    //             newUser: newUser,
+    //         },
+    //     }).then(res => {
+    //         // console.log("all scores ", res.data);
+    //     })
+    // }
 
     const calculateDiamondEarned = paramsScore => {
         if (paramsScore && paramsScore.length > 0) {
-            let diamondEarned = 0
+            let _diamondEarned = 0
             // sample paramsScore = [1, 0, 1, 0, 1]
             const correctAnswers = paramsScore.filter(s => s > 0)
 
             // all correct
             if (paramsScore.length === correctAnswers.length) {
-                diamondEarned = 3
+                _diamondEarned = 3
             }
             // upto 2 wrong answers
             else if (correctAnswers.length + 2 >= paramsScore.length) {
-                diamondEarned = 2
+                _diamondEarned = 2
             }
             // upto 3 wrong answers
             else if (correctAnswers.length + 3 >= paramsScore.length) {
-                diamondEarned = 1
+                _diamondEarned = 1
             } else {
-                diamondEarned = 0
+                _diamondEarned = 0
             }
-            setDiamondEarned(diamondEarned)
+            setDiamondEarned(_diamondEarned)
         }
     }
 
@@ -195,7 +195,7 @@ const ScorePage = () => {
             } else {
                 setCelebrate(true)
                 getSkillBySkillName(newUser)
-                getAllScores(newUser)
+                // getAllScores(newUser)
 
                 const storedXp = sessionStorage.getItem('xp')
                 if (storedXp) {
@@ -208,13 +208,13 @@ const ScorePage = () => {
             if (!newUser && Boolean(user)) {
                 setCelebrate(true)
                 getSkillBySkillName()
-                getAllScores()
+                // getAllScores()
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchParams])
 
-    const renderStarImg = activeCount => {
+    const renderStar = paramsDiamondEarned => {
         return (
             <>
                 {Array(3)
@@ -223,7 +223,7 @@ const ScorePage = () => {
                         <div key={String(index)}>
                             <img
                                 src={
-                                    activeCount > index
+                                    paramsDiamondEarned > index
                                         ? StartFilled
                                         : StartFilledFade
                                 }
@@ -233,16 +233,13 @@ const ScorePage = () => {
                     ))}
             </>
         )
-    }
-
-    const renderStar = _score => {
-        const correctAnswers = _score.filter(i => i > 0)
-        if (_score.length === correctAnswers.length) return renderStarImg(3)
-        else if (_score.length === correctAnswers.length + 1)
-            return renderStarImg(2)
-        else if (_score.length === correctAnswers.length + 2)
-            return renderStarImg(1)
-        else return renderStarImg()
+        // const correctAnswers = _score.filter(i => i > 0)
+        // if (_score.length === correctAnswers.length) return renderStarImg(3)
+        // else if (_score.length === correctAnswers.length + 1)
+        //     return renderStarImg(2)
+        // else if (_score.length === correctAnswers.length + 2)
+        //     return renderStarImg(1)
+        // else return renderStarImg()
     }
 
     return (
@@ -283,8 +280,11 @@ const ScorePage = () => {
                                 </Card.Body>
                             </>
                         ) : (
-                            <div className='FingoLessonComplete' style={{backgroundImage: `url('${BG}')`}}>
-                                <div className="LessonCompleteOverlay" />
+                            <div
+                                className='FingoLessonComplete'
+                                style={{ backgroundImage: `url('${BG}')` }}
+                            >
+                                <div className='LessonCompleteOverlay' />
                                 <div className='confetti-container'>
                                     <Confetti
                                         active={celebrate}
@@ -293,7 +293,8 @@ const ScorePage = () => {
                                 </div>
                                 <div className={`StarContainer count-3`}>
                                     {data?.score?.current &&
-                                        renderStar(data.score.current)}
+                                        diamondEarned &&
+                                        renderStar(diamondEarned)}
                                 </div>
 
                                 <div className='FingoLessonCompleteContent'>
@@ -308,7 +309,9 @@ const ScorePage = () => {
                                             <>
                                                 <FingoButton
                                                     color='white'
-                                                    style={{borderRadius: '12px'}}
+                                                    style={{
+                                                        borderRadius: '12px',
+                                                    }}
                                                     onClick={() => {
                                                         const newUserQueryParam =
                                                             searchParams.get(

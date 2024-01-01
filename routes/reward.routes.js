@@ -14,7 +14,7 @@ router.post(
     '/admin/reward/update',
     validate(schema.create),
     AuthGuard,
-    ErrorHandler(RewardController.admin_update)
+    ErrorHandler(RewardController.admin_update) 
 )
 
 // Create reward

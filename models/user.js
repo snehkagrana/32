@@ -126,6 +126,18 @@ const UserSchema = new mongoose.Schema({
             },
         },
     ],
+    heart: {
+        type: Number,
+        required: true,
+    },
+    lastHeartAccruedAt: {
+        type: Date,
+        default: undefined,
+    },
+    unlimitedHeart: Date,
+    referralCode: String,
+    registeredAt: Date,
+    numberOfSuccessReferrals: Number,
 })
 
 UserSchema.set('toJSON', {

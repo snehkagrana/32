@@ -17,7 +17,7 @@ import { InformationAPI } from 'src/api'
 import 'src/styles/InformationPage.styles.css'
 
 const InformationPage = () => {
-    const { user, isAuthenticated } = useAuth()
+    const { user, isAuthenticated, auth_syncAndGetUser } = useAuth()
     const [imageURL, setImageURL] = useState('')
     const { skillName, category, subcategory, page } = useParams()
     const navigate = useNavigate()
@@ -196,6 +196,7 @@ const InformationPage = () => {
 
     useEffect(() => {
         ;(async () => {
+            auth_syncAndGetUser().then(result => {})
             if (skillName && category && subcategory) {
                 try {
                     const response = await InformationAPI.getDropdown({
@@ -229,6 +230,7 @@ const InformationPage = () => {
                 <title>Let's Learn</title>
             </Helmet>
             <Row
+                className='pt-4'
                 style={{
                     marginLeft: 'auto',
                     marginRight: 'auto',
@@ -361,7 +363,8 @@ const InformationPage = () => {
                                                 <OverlayTrigger
                                                     overlay={
                                                         <Tooltip id='tooltip-disabled'>
-                                                            Your score is {score}
+                                                            Your score is{' '}
+                                                            {score}
                                                         </Tooltip>
                                                     }
                                                 >

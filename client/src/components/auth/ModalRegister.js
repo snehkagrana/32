@@ -1,12 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react'
 import Axios from 'src/api/axios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
 import CustomGoogleSignInButton from '../CustomGoogleSignInButton'
 import '../../styles/auth.styles.css'
 import { batch, useDispatch } from 'react-redux'
 import { useAuth, usePersistedGuest } from 'src/hooks'
 import { FingoModal } from 'src/components/core'
+import { AuthAPI } from 'src/api'
 
 export default function ModalRegister() {
     const dispatch = useDispatch()
@@ -14,8 +16,11 @@ export default function ModalRegister() {
         auth_openModalRegister,
         auth_setOpenModalLogin,
         auth_setOpenModalRegister,
+        isAuthenticated,
     } = useAuth()
-    const { persistedGuest_reset } = usePersistedGuest();
+    const { persistedGuest_reset } = usePersistedGuest()
+
+    const [searchParams] = useSearchParams()
 
     const [registerFirstName, setRegisterFirstName] = useState('')
     const [registerLastName, setRegisterLastName] = useState('')
@@ -61,35 +66,40 @@ export default function ModalRegister() {
 
     ////function to register user from the server after he has entered the information
     //// if all the information is valid redirect him to login page else display the flash message
-    const handleRegister = () => {
-        Axios({
-            method: 'POST',
-            data: {
+    const handleRegister = async () => {
+        try {
+            const response = await AuthAPI.register({
                 displayName: `${registerFirstName} ${registerLastName}`,
                 email: registerEmail,
                 password: registerPassword,
                 role: 'basic',
-            },
-            withCredentials: true,
-            url: '/server/register',
-        }).then(function (response) {
-            setAuthMsg(response.data.message)
-            setShowAuthMsg(true)
-
-            dispatch(persistedGuest_reset())
-
-            batch(() => {
-                dispatch(auth_setOpenModalRegister(false))
-                dispatch(auth_setOpenModalLogin(true))
+                referralCode: searchParams.get('referralCode')
+                    ? searchParams.get('referralCode')
+                    : null,
             })
+            if (response) {
+                setAuthMsg(response?.message)
+                setShowAuthMsg(true)
+                dispatch(persistedGuest_reset())
+                batch(() => {
+                    dispatch(auth_setOpenModalRegister(false))
+                    dispatch(auth_setOpenModalLogin(true))
+                })
 
-            if (response.data.redirect == '/') {
-                navigate(`/`)
-            } else if (response.data.redirect == '/login') {
-                dispatch(auth_setOpenModalLogin(true))
-                // navigate(`/auth/login`);
+                if (response?.redirect == '/') {
+                    navigate(`/`)
+                } else if (response?.redirect == '/login') {
+                    dispatch(auth_setOpenModalLogin(true))
+                    // navigate(`/auth/login`);
+                }
             }
-        })
+        } catch (e) {
+            if (e?.response) {
+                setShowAuthMsg(true)
+                // console.log('e->>>>', e.response?.data?.message)
+                setAuthMsg(e.response?.data?.message)
+            }
+        }
     }
 
     const registerWithGoogle = e => {
@@ -97,23 +107,6 @@ export default function ModalRegister() {
         // Axios does not work with Google Auth2.0 , need to navigate to the url directly
         window.open('https://tryfingo.com/auth/login-google', '_self')
     }
-
-    ////when a user requests for the register , we check if he is already logged in
-    ////If user is already logged in redirect him to home page else
-    ////send the register page to let him register
-    useEffect(() => {
-        Axios({
-            method: 'GET',
-            withCredentials: true,
-            url: '/server/register',
-        }).then(function (response) {
-            setAuthMsg(response.data.message)
-            setShowAuthMsg(true)
-            // if (response.data.redirect == "/home") {
-            //   navigate(`/home`);
-            // }
-        })
-    }, [])
 
     const handleFirstNameChange = e => {
         setRegisterFirstName(e.target.value)
@@ -211,6 +204,12 @@ export default function ModalRegister() {
         })
     }
 
+    useEffect(() => {
+        if (!isAuthenticated && searchParams.get('modalRegister') === 'true') {
+            dispatch(auth_setOpenModalRegister(true))
+        }
+    }, [searchParams, isAuthenticated])
+
     return (
         <FingoModal
             className='auth_modal'
@@ -257,6 +256,7 @@ export default function ModalRegister() {
                             <Toast.Body>{authMsg}</Toast.Body>
                         </Toast> */}
                 {/* First Name Form Group */}
+                {authMsg && <p className="mb-0 text-center" style={{ color: 'red' }}>{authMsg}</p>}
                 <div className='form-row'>
                     <div className='col'>
                         <Form.Group>

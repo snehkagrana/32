@@ -43,6 +43,7 @@
         "multer-s3": "^2.10.0",
         "mustache": "^4.2.0",
         "nanoid": "^4.0.2",
+        "node-cron": "^3.0.3",
         "nodemailer": "^6.9.1",
         "passport": "^0.6.0",
         "passport-google-oauth20": "^2.0.0",
@@ -59,6 +60,7 @@
         "react-slick": "^0.29.0",
         "react-snap-carousel": "^0.3.2",
         "react-social-icons": "^6.3.0",
+        "short-unique-id": "^5.0.3",
         "slick-carousel": "^1.8.1",
         "tslib": "^2.4.1"
     },

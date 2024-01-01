@@ -1,3 +1,7 @@
+.FingoModal.ModalClaimReward.modal.show {
+    z-index: 1063;
+}
+
 @media (min-width: 576px) {
     .ModalClaimReward .modal-dialog {
         max-width: 320px;

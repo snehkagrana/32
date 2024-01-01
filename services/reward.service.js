@@ -1,4 +1,3 @@
-const reward = require('../models/reward')
 const RewardModel = require('../models/reward')
 const UserModel = require('../models/user')
 const dayjs = require('dayjs')
@@ -7,6 +6,7 @@ const {
     sendEmailUserRedeemGiftCard,
     sendEmailGiftCardRunOut,
 } = require('../email/send-email')
+const { MAX_REDEEM_GIFT_CARD_PER_MONTH } = require('../constants/app.constant')
 
 var ObjectId = require('mongoose').Types.ObjectId
 
@@ -63,7 +63,7 @@ exports.giftReward = async (adminEmail, body) => {
                 notes: body.notes,
                 isRedeemed: false,
                 hasSeen: false,
-                redeemedAt: new Date().toISOString(),
+                redeemedAt: null,
             }
             if (userRewards.length > 0) {
                 return [...userRewards, newUserReward]
@@ -142,6 +142,7 @@ exports.upload = async (file, id) => {
 }
 
 exports.redeem = async (email, body) => {
+    const today = new Date()
     let reward = await RewardModel.findById(body.itemId)
     let user = await UserModel.findOne({ email })
     let result = null
@@ -153,12 +154,23 @@ exports.redeem = async (email, body) => {
     const remainingGiftCard = reward.variants.filter(
         x => x._id != body.variantId && x.isAvailable
     )
-    // console.log('remainingGiftCard->>>>', remainingGiftCard)
+
+    // check limitation
+    const isLimitRedeem = () => {
+        const previousRewards = user.rewards.filter(x => {
+            // prettier-ignore
+            if(x?.redeemedAt && dayjs(x.redeemedAt).isSame(dayjs(today).toISOString(), 'month')) {
+                return true
+            }
+        })
+        return previousRewards.length >= MAX_REDEEM_GIFT_CARD_PER_MONTH
+    }
 
     // variant reward still exist & user diamond greater than diamond value can be to redeem
     if (
         rewardVariantStillExists?.isAvailable &&
-        user.diamond >= reward.diamondValue
+        user.diamond >= reward.diamondValue &&
+        !isLimitRedeem()
     ) {
         const getUpdateUserRewards = userRewards => {
             const newUserReward = {

@@ -1,4 +1,5 @@
-import React from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from 'react'
 import {
     BrowserRouter as Router,
     Route,
@@ -49,8 +50,21 @@ import { Toaster, ToastBar } from 'react-hot-toast'
 import AuthCallback from './pages/AuthCallback'
 import LandingPage from './pages/LandingPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
+import { useAuth, usePersistedGuest } from './hooks'
+import { useDispatch } from 'react-redux'
+import InvitationPage from './pages/InvitationPage'
 
 const App = () => {
+    const dispatch = useDispatch()
+    const { isAuthenticated } = useAuth()
+    const { persistedGuest_reset } = usePersistedGuest()
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            dispatch(persistedGuest_reset())
+        }
+    }, [isAuthenticated])
+
     return (
         <>
             <Router>
@@ -61,6 +75,11 @@ const App = () => {
                         exact
                         path='/auth/google/callback'
                         element={<AuthCallback />}
+                    />
+                    <Route
+                        exact
+                        path='/invite/:referralCode'
+                        element={<InvitationPage />}
                     />
                     <Route
                         exact
@@ -187,7 +206,11 @@ const App = () => {
                     <Route exact path='/aboutus' element={<AboutUs />} />
 
                     {/* auth routes */}
-                    <Route exact path='/reset-password/:email/:token' element={<ResetPasswordPage />} />
+                    <Route
+                        exact
+                        path='/reset-password/:email/:token'
+                        element={<ResetPasswordPage />}
+                    />
 
                     {/* ----- admin routes ----- */}
                     <Route

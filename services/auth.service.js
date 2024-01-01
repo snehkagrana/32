@@ -1,6 +1,6 @@
 const UserModel = require('../models/user')
 const cacheUtil = require('../utils/cache.util')
-const { daysDifference } = require('../utils/common.util')
+const { daysDifference, generateReferralCode } = require('../utils/common.util')
 const { mailTransporter } = require('../utils/mail.util')
 const { initializeDiamondUser } = require('../utils/reward.util')
 const { getLevelByXpPoints } = require('../utils/xp.utils')
@@ -8,6 +8,8 @@ const base64url = require('base64url')
 const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
 const { sendEmailForgotPassword } = require('../email/send-email')
+const { appConfig } = require('../configs/app.config')
+const dayjs = require('dayjs')
 
 exports.createUser = user => {
     return UserModel.create(user)
@@ -30,6 +32,8 @@ exports.logoutUser = (token, exp) => {
 }
 
 exports.syncUser = async email => {
+    const today = new Date()
+    const refCode = generateReferralCode()
     let result = false
     let user = await UserModel.findOne({ email }).exec()
 
@@ -71,6 +75,13 @@ exports.syncUser = async email => {
                             user?.xp?.total ? parseInt(user.xp.total, 10) : 0
                         ),
                     },
+                    // prettier-ignore
+                    heart: typeof user?.heart === 'number' ? user.heart : appConfig.defaultHeart,
+                    // prettier-ignore
+                    referralCode: !user?.referralCode ? refCode : user.referralCode,
+
+                    // prettier-ignore
+                    unlimitedHeart: user?.unlimitedHeart && dayjs(user.unlimitedHeart).isAfter(dayjs(today).toISOString(), 'second') ? user.unlimitedHeart : null,
                 },
             }
         )

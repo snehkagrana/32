@@ -1,47 +1,78 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useAuth, useMediaQuery } from 'src/hooks'
-
+import { useCallback, useState } from 'react'
+import { useAuth, useMediaQuery, usePersistedGuest } from 'src/hooks'
 import BananaIconSVG from 'src/assets/svg/banana-icon.svg'
 import DiamondIconSVG from 'src/assets/svg/diamond.svg'
 import StreakIcon from 'src/assets/images/fire-on.png'
-import { Overlay, Popover } from 'react-bootstrap'
+import HeartIconSVG from 'src/assets/svg/heart.svg'
+import UnlimitedHeartIcon from 'src/assets/images/unlimited-hearts.png'
+import HeartFadedIconSVG from 'src/assets/svg/heart-faded.svg'
 import FingoCardDayStreak from './FingoCardDayStreak'
 import FingoCardTotalXP from './FingoCardTotalXP'
-import { useRef, useState } from 'react'
 import FingoCardGiftbox from './FingoCardGiftbox'
 import 'src/styles/FingoWidgetHeader.styles.css'
+import { HeartCard } from './hearts'
+import { Popover } from './core'
+import dayjs from 'dayjs'
 
 const MENU_ITEMS = [
     {
         icon: StreakIcon,
+        disabledIcon: StreakIcon,
         name: 'streak',
         color: '#ff9600',
+        iconHeight: 24,
     },
     {
         icon: BananaIconSVG,
+        disabledIcon: BananaIconSVG,
         name: 'total_xp',
         color: '#c89600',
+        iconHeight: 22,
     },
     {
         icon: DiamondIconSVG,
+        disabledIcon: DiamondIconSVG,
         name: 'diamond',
         color: '#1cb0f6',
+        iconHeight: 26,
+    },
+    {
+        icon: HeartIconSVG,
+        disabledIcon: HeartFadedIconSVG,
+        name: 'heart',
+        color: '#ff4b4b',
+        iconHeight: 18,
     },
     // ...another menu menu tab
 ]
 
-const FingoWidgetHeader = ({ activeTab, setActiveTab }) => {
-    const { user } = useAuth()
-    const [show, setShow] = useState(false)
+const initialShowState = {
+    streak: false,
+    total_xp: false,
+    diamond: false,
+    heart: false,
+}
+
+const FingoWidgetHeader = () => {
+    const today = new Date()
+    const { user, isAuthenticated } = useAuth()
+    const { guestState } = usePersistedGuest()
+    const [show, setShow] = useState(initialShowState)
     const matchMobile = useMediaQuery('(max-width: 570px)')
-    const [target, setTarget] = useState(null)
-    const ref = useRef(null)
 
     const onClickItem = (e, name) => {
-        e.preventDefault()
-        setShow(name === activeTab ? false : true)
-        setTarget(e.target)
-        setActiveTab(name === activeTab ? '' : name)
+        setShow({
+            ...initialShowState,
+            [name]: !show[name],
+        })
+        if (e) {
+            e.preventDefault()
+        }
+    }
+
+    const onMouseLeave = () => {
+        setShow(initialShowState)
     }
 
     const getTabLabel = name => {
@@ -59,54 +90,180 @@ const FingoWidgetHeader = ({ activeTab, setActiveTab }) => {
                     ? String(user.diamond) ?? '0'
                     : undefined
 
+            // prettier-ignore
+            case 'heart':
+                if (isAuthenticated && user?.unlimitedHeart && dayjs(user.unlimitedHeart).isAfter(dayjs(today).toISOString(), 'minute')) {
+                    return undefined 
+                }
+                else if (isAuthenticated && user) {
+                    return user?.heart || 0
+                } else {
+                    return guestState?.heart || 0
+                }
+            // return user?.heart !== undefined
+            //     ? String(user.heart) ?? '0'
+            //     : undefined
+
             default:
                 return undefined
         }
     }
 
+    const getContent = paramsName => {
+        if (paramsName === 'streak') return <FingoCardDayStreak />
+        else if (paramsName === 'total_xp') return <FingoCardTotalXP />
+        else if (paramsName === 'diamond') return <FingoCardGiftbox />
+        else if (paramsName === 'heart') return <HeartCard />
+    }
+
+    const getIcon = (icon, disabledIcon, name) => {
+        if (name === 'heart') {
+            // prettier-ignore
+            if (isAuthenticated && user?.unlimitedHeart && dayjs(user.unlimitedHeart).isAfter(dayjs(today).toISOString(), 'minute')) {
+                return UnlimitedHeartIcon 
+            }
+            else if ((isAuthenticated && user?.heart === 0) || guestState?.heart === 0) {
+                return disabledIcon
+            } else {
+                return icon
+            }
+        } else {
+            return icon
+        }
+    }
+
+    const getLabelColor = (name, color) => {
+        if (name === 'heart') {
+            if (
+                (isAuthenticated && user?.heart === 0) ||
+                guestState?.heart === 0
+            ) {
+                return undefined
+            } else {
+                return color
+            }
+        } else {
+            return color
+        }
+    }
+
+    // prettier-ignore
+    const renderBadge = useCallback(menuName => {
+        if (isAuthenticated && user?.unlimitedHeart && dayjs(user.unlimitedHeart).isAfter(dayjs(today).toISOString(), 'minute')) {
+            return undefined 
+        }
+        if ((menuName === 'heart' && isAuthenticated && user?.heart === 0) || guestState?.heart === 0) {
+            return <div className='FingoWidgetHeaderBadge'></div>
+        }
+        return null
+    }, [guestState?.heart, isAuthenticated, user?.heart])
+
     return (
-        <div id='FingoWidgetHeaderRoot' ref={ref}>
+        <div id='FingoWidgetHeaderRoot'>
             <div className='FingoWidgetHeader'>
                 <div className='FingoWidgetHeaderInner'>
                     <ul>
-                        {MENU_ITEMS.map((i, index) => (
-                            <li key={String(index)}>
-                                <a
-                                    href='#'
-                                    onClick={e => onClickItem(e, i.name)}
-                                    className={
-                                        activeTab === i.name ? 'active' : ''
-                                    }
-                                >
-                                    <img src={i.icon} alt='footer icon' />
-                                    {getTabLabel(i.name) && (
-                                        <span style={{ color: i.color }}>
-                                            {getTabLabel(i.name)}
-                                        </span>
-                                    )}
-                                </a>
-                            </li>
-                        ))}
+                        {MENU_ITEMS.map((i, index) => {
+                            if (matchMobile || i.name === 'heart') {
+                                return (
+                                    <li key={String(index) + i.name}>
+                                        <Popover
+                                            isOpen={show[i.name]}
+                                            positions={['bottom', 'right']}
+                                            align='center'
+                                            padding={matchMobile ? 5 : 0}
+                                            reposition={true}
+                                            onClickOutside={() =>
+                                                setShow(initialShowState)
+                                            }
+                                            renderContent={getContent(i.name)}
+                                        >
+                                            <a
+                                                href='#'
+                                                onMouseEnter={() =>
+                                                    onClickItem(
+                                                        undefined,
+                                                        i.name
+                                                    )
+                                                }
+                                                // onMouseLeave={() =>
+                                                //     onMouseLeave(i.name)
+                                                // }
+                                                onClick={e =>
+                                                    onClickItem(e, i.name)
+                                                }
+                                            >
+                                                <img
+                                                    style={{
+                                                        height: i.iconHeight,
+                                                    }}
+                                                    src={getIcon(
+                                                        i.icon,
+                                                        i.disabledIcon,
+                                                        i.name
+                                                    )}
+                                                    alt='icon'
+                                                />
+                                                {getTabLabel(i.name) !==
+                                                    undefined && (
+                                                    <span
+                                                        style={{
+                                                            color: getLabelColor(
+                                                                i.name,
+                                                                i.color
+                                                            ),
+                                                        }}
+                                                    >
+                                                        {getTabLabel(i.name)}
+                                                    </span>
+                                                )}
+                                                {renderBadge(i.name)}
+                                            </a>
+                                        </Popover>
+                                    </li>
+                                )
+                            } else {
+                                return (
+                                    <li key={String(index) + i.name}>
+                                        <a
+                                            href='#'
+                                            onClick={e =>
+                                                onClickItem(e, i.name)
+                                            }
+                                        >
+                                            <img
+                                                style={{
+                                                    height: i.iconHeight,
+                                                }}
+                                                src={getIcon(
+                                                    i.icon,
+                                                    i.disabledIcon,
+                                                    i.name
+                                                )}
+                                                alt='icon'
+                                            />
+                                            {getTabLabel(i.name) !==
+                                                undefined && (
+                                                <span
+                                                    style={{
+                                                        color: getLabelColor(
+                                                            i.name,
+                                                            i.color
+                                                        ),
+                                                    }}
+                                                >
+                                                    {getTabLabel(i.name)}
+                                                </span>
+                                            )}
+                                            {renderBadge(i.name)}
+                                        </a>
+                                    </li>
+                                )
+                            }
+                        })}
                     </ul>
                 </div>
             </div>
-
-            {matchMobile && (
-                <Overlay
-                    show={show}
-                    target={target}
-                    placement='bottom'
-                    container={ref}
-                    containerPadding={0}
-                    className='FingoPopover'
-                >
-                    <Popover id='popover-contained'>
-                        {activeTab === 'streak' && <FingoCardDayStreak />}
-                        {activeTab === 'total_xp' && <FingoCardTotalXP />}
-                        {activeTab === 'diamond' && <FingoCardGiftbox />}
-                    </Popover>
-                </Overlay>
-            )}
         </div>
     )
 }

@@ -90,7 +90,7 @@ const FingoCardDayStreak = () => {
 
     return (
         <div
-            className={`mb-3 FingoCardDayStreak FingoShapeRadius ${
+            className={`FingoCardDayStreak FingoShapeRadius ${
                 isStreakBoxHighlighted ? 'highlight' : ''
             }`}
         >

@@ -25,7 +25,7 @@
 
 .FingoWidgetHeader li {
     display: flex;
-    width: 33.3%;
+    width: 25%;
     align-items: center;
     justify-content: center;
     flex-direction: column;
@@ -35,41 +35,51 @@
     text-decoration: none;
     user-select: none;
     height: 42px;
-    width: 92%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 0.5rem;
+    position: relative;
 }
 
-.FingoWidgetHeader li a.active {
+.FingoWidgetHeader li a.active,
+.FingoWidgetHeader li a:hover,
+.FingoWidgetHeader li a:focus {
     background-color: #f0f0f0;
 }
 
-[data-theme='dark'] .FingoWidgetHeader li a.active {
+[data-theme='dark'] .FingoWidgetHeader li a.active,
+[data-theme='dark'] .FingoWidgetHeader li a:hover,
+[data-theme='dark'] .FingoWidgetHeader li a:focus {
     background-color: #1e1e1e;
 }
 
 .FingoWidgetHeader li a span {
     font-weight: 700;
-    font-size: 18px;
+    font-size: 0.9rem;
     margin-left: 0.35rem;
     margin-top: 0.1rem;
+    color: #d4d4d4;
 }
 
-/* @media (min-width: 360px) {
+[data-theme='dark'] .FingoWidgetHeader li a span {
+    color: #727272;
+}
+
+@media (min-width: 576px) {
     .FingoWidgetHeader li a {
-        height: 60px;
-        width: 60px;
+        height: 44px;
+        width: 90%;
     }
-} */
+}
 
 .FingoWidgetHeader li a img {
     height: 26px;
     width: auto;
 }
 
-#FingoWidgetHeaderRoot .popover {
+/* #FingoWidgetHeaderRoot .popover {
     max-width: 100%;
     width: 100%;
     left: 0 !important;
@@ -78,4 +88,14 @@
     border: none;
     box-shadow: none;
     padding: 0 1rem;
+} */
+
+.FingoWidgetHeaderBadge {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    height: 12px;
+    width: 12px;
+    border-radius: 12px;
+    background-color: red;
 }

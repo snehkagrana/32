@@ -9,9 +9,14 @@ const initialState = {
     totalXP: 0,
     modalLevelUp: {
         open: false,
-        data: null
+        data: null,
     },
-    openModalHowToEarnDiamond: false
+    openModalHowToEarnDiamond: false,
+    openModalHeartRunOut: false,
+    openModalKeepLearning: false,
+    openModalConfirmRefill: false,
+    openModalUnlimitedHearts: false,
+    openModalInviteFriends: false,
 }
 
 // Actual Slice
@@ -43,6 +48,21 @@ export const appSlice = createSlice({
         },
         app_setOpenModalHowToEarnDiamond(state, action) {
             state.openModalHowToEarnDiamond = action.payload
+        },
+        app_setOpenModalHeartRunOut(state, action) {
+            state.openModalHeartRunOut = action.payload
+        },
+        app_setOpenModalKeepLearning(state, action) {
+            state.openModalKeepLearning = action.payload
+        },
+        app_setOpenModalConfirmRefill(state, action) {
+            state.openModalConfirmRefill = action.payload
+        },
+        app_setOpenModalUnlimitedHearts(state, action) {
+            state.openModalUnlimitedHearts = action.payload
+        },
+        app_setOpenModalInviteFriends(state, action) {
+            state.openModalInviteFriends = action.payload
         },
     },
 })

@@ -1,0 +1,71 @@
+.QuizPageHeaderInner {
+    height: 100%;
+}
+
+.QuizPageHeader {
+    display: block;
+    width: 100%;
+    z-index: 3;
+    margin-bottom: 0.8rem;
+}
+
+@media (min-width: 576px) {
+}
+
+.QuizPageHeader ul {
+    height: 100%;
+    padding-left: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.QuizPageHeader li {
+    display: flex;
+    width: 66px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.QuizPageHeader li a {
+    text-decoration: none;
+    user-select: none;
+    height: 42px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+}
+
+.QuizPageHeader li a:focus,
+.QuizPageHeader li a.active {
+    background-color: #f0f0f0;
+}
+
+[data-theme='dark'] .QuizPageHeader li a.active {
+    background-color: #1e1e1e;
+}
+
+.QuizPageHeader li a span {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-left: 0.35rem;
+    margin-top: 0.1rem;
+}
+
+@media (min-width: 576px) {
+    .QuizPageHeader li a {
+        height: 44px;
+        width: 64px;
+    }
+}
+
+.QuizPageHeader li a img {
+    height: 26px;
+    width: auto;
+}

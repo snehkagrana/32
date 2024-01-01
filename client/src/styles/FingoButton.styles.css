@@ -1,6 +1,7 @@
 .FingoButton {
     font-weight: 700;
     border-radius: 7px;
+    letter-spacing: 0.65px;
 }
 
 .FingoButton.success {
@@ -9,12 +10,12 @@
     box-shadow: rgb(26, 89, 40) 0px 7px;
     transition: all 0.2s ease 0s;
 }
-.FingoButton.success:active,
-.FingoButton.success:hover {
+.FingoButton.HoverEffect.success:active,
+.FingoButton.HoverEffect.success:hover {
     transform: translateY(5px);
     background-color: #28a745 !important;
 }
-.FingoButton.success:active:focus {
+.FingoButton.HoverEffect.success:active:focus {
     outline: none;
     border: none;
     box-shadow: rgb(26, 89, 40) 0px 7px !important;
@@ -30,12 +31,12 @@
     transition: all 0.2s ease 0s;
     color: #333;
 }
-.FingoButton.white:active,
-.FingoButton.white:hover {
+.FingoButton.HoverEffect.white:active,
+.FingoButton.HoverEffect.white:hover {
     transform: translateY(5px);
     background-color: #ffffff !important;
 }
-.FingoButton.white:active:focus {
+.FingoButton.HoverEffect.white:active:focus {
     outline: none;
     border: none;
     box-shadow: rgb(224, 224, 224) 0px 7px !important;
@@ -50,12 +51,12 @@
     box-shadow: rgb(26 84 146) 0px 7px;
     transition: all 0.2s ease 0s;
 }
-.FingoButton.primary:active,
-.FingoButton.primary:hover {
+.FingoButton.HoverEffect.primary:active,
+.FingoButton.HoverEffect.primary:hover {
     transform: translateY(5px);
     background-color: #007bff !important;
 }
-.FingoButton.primary:active:focus {
+.FingoButton.HoverEffect.primary:active:focus {
     outline: none;
     border: none;
     box-shadow: rgb(26 84 146) 0px 7px !important;
@@ -70,12 +71,12 @@
     box-shadow: rgb(139 0 26) 0px 7px;
     transition: all 0.2s ease 0s;
 }
-.FingoButton.danger:active,
-.FingoButton.danger:hover {
+.FingoButton.HoverEffect.danger:active,
+.FingoButton.HoverEffect.danger:hover {
     transform: translateY(5px);
     background-color: #f44336 !important;
 }
-.FingoButton.danger:active:focus {
+.FingoButton.HoverEffect.danger:active:focus {
     outline: none;
     border: none;
     box-shadow: rgb(139 0 26) 0px 7px !important;
@@ -90,12 +91,12 @@
     box-shadow: none !important;
     transition: all 0.2s ease 0s;
 }
-.FingoButton.btn-link:active,
-.FingoButton.btn-link:hover {
+.FingoButton.HoverEffect.btn-link:active,
+.FingoButton.HoverEffect.btn-link:hover {
     transform: translateY(5px);
     background-color: transparent !important;
 }
-.FingoButton.btn-link:active:focus {
+.FingoButton.HoverEffect.btn-link:active:focus {
     outline: none;
     border: none;
     box-shadow: transparent 0px 7px !important;
