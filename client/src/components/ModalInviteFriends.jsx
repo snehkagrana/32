@@ -8,12 +8,8 @@ import {
     EmailIcon,
     EmailShareButton,
     FacebookIcon,
-    FacebookMessengerIcon,
-    FacebookMessengerShareButton,
     FacebookShareButton,
     FacebookShareCount,
-    LineIcon,
-    LineShareButton,
     LinkedinIcon,
     LinkedinShareButton,
     TelegramIcon,
@@ -25,10 +21,12 @@ import {
 } from 'react-share'
 import FingoEnvelopeImg from 'src/assets/images/fingo-envelope.png'
 import 'src/styles/ModalInviteFriends.styles.css'
-import { appConfig } from 'src/configs/app.config'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import { Alert } from 'react-bootstrap'
 import { ReactComponent as InfoOutlineSVG } from 'src/assets/svg/info-outline.svg'
+
+const SHARE_TEXT = `I am learning finance the way and getting rewarded at Fingo! Come join me
+
+`
 
 const ModalInviteFriends = () => {
     const dispatch = useDispatch()
@@ -114,27 +112,9 @@ const ModalInviteFriends = () => {
 
                         <div className='SocialShareContainer'>
                             <div className='SocialShareItem'>
-                                <FacebookShareButton
-                                    url={getReferralLink}
-                                    className='SocialShareItem__share-button'
-                                >
-                                    <FacebookIcon size={32} round />
-                                </FacebookShareButton>
-
-                                <div>
-                                    <FacebookShareCount
-                                        url={getReferralLink}
-                                        className='SocialShareItem__share-count'
-                                    >
-                                        {count => count}
-                                    </FacebookShareCount>
-                                </div>
-                            </div>
-
-                            <div className='SocialShareItem'>
                                 <TwitterShareButton
                                     url={getReferralLink}
-                                    title={appConfig.appName}
+                                    title={SHARE_TEXT}
                                     className='SocialShareItem__share-button'
                                 >
                                     <XIcon size={32} round />
@@ -142,24 +122,24 @@ const ModalInviteFriends = () => {
                             </div>
 
                             <div className='SocialShareItem'>
+                                <WhatsappShareButton
+                                    url={getReferralLink}
+                                    title={SHARE_TEXT}
+                                    separator=''
+                                    className='SocialShareItem__share-button'
+                                >
+                                    <WhatsappIcon size={32} round />
+                                </WhatsappShareButton>
+                            </div>
+
+                            {/* <div className='SocialShareItem'>
                                 <TelegramShareButton
                                     url={getReferralLink}
                                     className='SocialShareItem__share-button'
                                 >
                                     <TelegramIcon size={32} round />
                                 </TelegramShareButton>
-                            </div>
-
-                            <div className='SocialShareItem'>
-                                <WhatsappShareButton
-                                    url={getReferralLink}
-                                    title={appConfig.appName}
-                                    separator=':: '
-                                    className='SocialShareItem__share-button'
-                                >
-                                    <WhatsappIcon size={32} round />
-                                </WhatsappShareButton>
-                            </div>
+                            </div> */}
 
                             <div className='SocialShareItem'>
                                 <LinkedinShareButton
@@ -168,6 +148,15 @@ const ModalInviteFriends = () => {
                                 >
                                     <LinkedinIcon size={32} round />
                                 </LinkedinShareButton>
+                            </div>
+
+                            <div className='SocialShareItem'>
+                                <FacebookShareButton
+                                    url={getReferralLink}
+                                    className='SocialShareItem__share-button'
+                                >
+                                    <FacebookIcon size={32} round />
+                                </FacebookShareButton>
                             </div>
                         </div>
                     </div>

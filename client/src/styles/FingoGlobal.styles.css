@@ -305,10 +305,11 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
+    width: 100%;
 }
 
 .SocialShareItem {
-    width: 16.6%;
+    width: 20%;
     text-align: center;
     padding: 0.5rem;
 }
