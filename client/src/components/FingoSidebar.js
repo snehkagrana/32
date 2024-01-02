@@ -28,6 +28,7 @@ const FingoSidebar = ({ open }) => {
         user,
         isAuthenticated,
         auth_logout,
+        isAdmin,
     } = useAuth()
 
     const {
@@ -193,7 +194,7 @@ const FingoSidebar = ({ open }) => {
                                 </li>
                             </>
                         )}
-                        {isAuthenticated && user?.role === 'admin' && (
+                        {isAdmin && (
                             <>
                                 <li>
                                     <a
@@ -250,6 +251,19 @@ const FingoSidebar = ({ open }) => {
                                     >
                                         <div className='icon'></div>
                                         <span>Rewards</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href='#'
+                                        className='FingoShapeRadius'
+                                        onClick={e => {
+                                            e.preventDefault()
+                                            navigate(`/admin/test-dnd`)
+                                        }}
+                                    >
+                                        <div className='icon'></div>
+                                        <span> Test DND</span>
                                     </a>
                                 </li>
                             </>
