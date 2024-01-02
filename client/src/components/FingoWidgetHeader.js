@@ -57,7 +57,7 @@ const initialShowState = {
 const FingoWidgetHeader = () => {
     const today = new Date()
     const { user, isAuthenticated } = useAuth()
-    const { guestState } = usePersistedGuest()
+    const { guest } = usePersistedGuest()
     const [show, setShow] = useState(initialShowState)
     const matchMobile = useMediaQuery('(max-width: 570px)')
 
@@ -78,17 +78,35 @@ const FingoWidgetHeader = () => {
     const getTabLabel = name => {
         switch (name) {
             case 'streak':
-                return user?.streak ? String(user.streak) ?? '0' : undefined
+                if (isAuthenticated && user) {
+                    return user?.streak ? String(user.streak) ?? '0' : undefined
+                } else {
+                    return guest?.streak
+                        ? String(guest.streak) ?? '0'
+                        : undefined
+                }
 
             case 'total_xp':
-                return user?.xp?.total
-                    ? String(user.xp.total) ?? '0'
-                    : undefined
+                if (isAuthenticated && user) {
+                    return user?.xp?.total
+                        ? String(user.xp.total) ?? '0'
+                        : undefined
+                } else {
+                    return guest?.xp?.total
+                        ? String(guest.xp.total) ?? '0'
+                        : undefined
+                }
 
             case 'diamond':
-                return user?.diamond !== undefined
-                    ? String(user.diamond) ?? '0'
-                    : undefined
+                if (isAuthenticated && user) {
+                    return user?.diamond !== undefined
+                        ? String(user.diamond) ?? '0'
+                        : undefined
+                } else {
+                    return guest?.diamond !== undefined
+                        ? String(guest.diamond) ?? '0'
+                        : undefined
+                }
 
             // prettier-ignore
             case 'heart':
@@ -98,7 +116,7 @@ const FingoWidgetHeader = () => {
                 else if (isAuthenticated && user) {
                     return user?.heart || 0
                 } else {
-                    return guestState?.heart || 0
+                    return guest?.heart || 0
                 }
             // return user?.heart !== undefined
             //     ? String(user.heart) ?? '0'
@@ -122,7 +140,7 @@ const FingoWidgetHeader = () => {
             if (isAuthenticated && user?.unlimitedHeart && dayjs(user.unlimitedHeart).isAfter(dayjs(today).toISOString(), 'minute')) {
                 return UnlimitedHeartIcon 
             }
-            else if ((isAuthenticated && user?.heart === 0) || guestState?.heart === 0) {
+            else if ((isAuthenticated && user?.heart === 0) || guest?.heart === 0) {
                 return disabledIcon
             } else {
                 return icon
@@ -134,10 +152,7 @@ const FingoWidgetHeader = () => {
 
     const getLabelColor = (name, color) => {
         if (name === 'heart') {
-            if (
-                (isAuthenticated && user?.heart === 0) ||
-                guestState?.heart === 0
-            ) {
+            if ((isAuthenticated && user?.heart === 0) || guest?.heart === 0) {
                 return undefined
             } else {
                 return color
@@ -149,14 +164,16 @@ const FingoWidgetHeader = () => {
 
     // prettier-ignore
     const renderBadge = useCallback(menuName => {
-        if (isAuthenticated && user?.unlimitedHeart && dayjs(user.unlimitedHeart).isAfter(dayjs(today).toISOString(), 'minute')) {
-            return undefined 
-        }
-        if ((menuName === 'heart' && isAuthenticated && user?.heart === 0) || guestState?.heart === 0) {
-            return <div className='FingoWidgetHeaderBadge'></div>
+        if(menuName === "heart") {
+            if (isAuthenticated && user?.unlimitedHeart && dayjs(user.unlimitedHeart).isAfter(dayjs(today).toISOString(), 'minute')) {
+                return undefined 
+            }
+            else if ((isAuthenticated && user?.heart === 0) || guest?.heart === 0) {
+                return <div className='FingoWidgetHeaderBadge'></div>
+            }
         }
         return null
-    }, [guestState?.heart, isAuthenticated, user?.heart])
+    }, [guest, isAuthenticated, user])
 
     return (
         <div id='FingoWidgetHeaderRoot'>

@@ -4,10 +4,12 @@ import { useSelector } from 'react-redux'
 import { CommonAPI } from 'src/api'
 import { useAuth } from './useAuth.hook'
 import toast from 'react-hot-toast'
+import { usePersistedGuest } from './usePersistedGuest.hook'
 
 export const useApp = () => {
     const state = useSelector(app_selectState)
     const { isAuthenticated, user } = useAuth()
+    const { guest } = usePersistedGuest()
 
     const app_isDarkTheme = useMemo(() => {
         return state.app_paletteMode === 'dark'
@@ -17,6 +19,7 @@ export const useApp = () => {
         let payload = {
             ...paramsPayload,
             userId: isAuthenticated && user ? user._id : null,
+            guestId: !isAuthenticated && guest._id ? guest._id : null,
         }
         try {
             const response = await CommonAPI.batch(payload)

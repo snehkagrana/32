@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const AuthController = require('../controllers/auth.controller')
+const GuestController = require('../controllers/guest.controller')
 const ErrorHandler = require('../middlewares/error.middleware')
 const AuthGuard = require('../middlewares/auth.middleware')
 const schema = require('../validations/auth.validation')
@@ -30,5 +31,11 @@ router.post(
     validate(schema.resetPassword),
     ErrorHandler(AuthController.resetPassword)
 )
+
+router.get('/guest/init', ErrorHandler(GuestController.init))
+
+router.get('/guest/sync', AuthGuard, ErrorHandler(GuestController.syncGuest))
+
+router.get('/guest', AuthGuard, ErrorHandler(GuestController.getGuest))
 
 module.exports = router

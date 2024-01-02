@@ -16,10 +16,21 @@ export const auth_loginWithEmailAndPassword = createAsyncThunk(
     }
 )
 
-export const auth_getUser = createAsyncThunk('@auth/getUser', async (token) => {
+export const auth_getUser = createAsyncThunk('@auth/getUser', async token => {
     return await AuthAPI.getAuthenticatedUser(token)
 })
 
-export const auth_logout = createAsyncThunk('@auth/logout', async (token) => {
+export const auth_logout = createAsyncThunk('@auth/logout', async token => {
     return await AuthAPI.revokeToken(token)
+})
+
+export const auth_initGuest = createAsyncThunk(
+    '@auth/initGuest',
+    async token => {
+        return await AuthAPI.guest_init(token)
+    }
+)
+
+export const auth_getGuest = createAsyncThunk('@auth/getGuest', async token => {
+    return await AuthAPI.guest_get(token)
 })

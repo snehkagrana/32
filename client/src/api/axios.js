@@ -37,9 +37,10 @@ const Axios = _axios.create({
 Axios.interceptors.request.use(
     async config => {
         try {
-            const idToken = authUtils.getUserAccessToken()
-            if (idToken) {
-                config.headers['Authorization'] = `Bearer ${idToken}`
+            // prettier-ignore
+            const accessToken = authUtils.getUserAccessToken() ?? authUtils.getGuestAccessToken()
+            if (accessToken) {
+                config.headers['Authorization'] = `Bearer ${accessToken}`
             }
         } catch (e) {
             console.log('EEE .>>', e)

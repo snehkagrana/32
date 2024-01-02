@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import Axios from 'src/api/axios'
 import { useNavigate } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
@@ -66,6 +66,7 @@ import {
     ModalUnlimitedHearts,
 } from 'src/components/hearts'
 import ModalInviteFriends from 'src/components/ModalInviteFriends'
+import { NUMBER_OF_LIMIT_LESSON_FOR_GUEST } from 'src/constants/app.constant'
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -76,7 +77,7 @@ import ModalInviteFriends from 'src/components/ModalInviteFriends'
 const HomePage = props => {
     const dispatch = useDispatch()
     const token = authUtils.getUserAccessToken()
-    const { guestState } = usePersistedGuest()
+    const { guest } = usePersistedGuest()
     const {
         auth_setOpenModalRegister,
         auth_syncAndGetUser,
@@ -293,7 +294,7 @@ const HomePage = props => {
             method: 'GET',
             url: `/server/categories/${forSkill}`,
             params: {
-                newUser: newUser,
+                newUser: Boolean(!isAuthenticated && !user),
             },
         }).then(res => {
             // console.log('categories', res.data);
@@ -311,6 +312,15 @@ const HomePage = props => {
         setCompletedCategories([...completedCategories, category])
     }
 
+    // prettier-ignore
+    const guestLimit = useMemo(() => {
+        return !isAuthenticated && Boolean(guest.score?.length >= NUMBER_OF_LIMIT_LESSON_FOR_GUEST)
+    }, [isAuthenticated, guest])
+
+    const onClickRegister = () => {
+        dispatch(auth_setOpenModalRegister(true))
+    }
+
     ////to authenticate user before allowing him to enter the home page
     ////if he is not redirect him to login page
 
@@ -319,65 +329,28 @@ const HomePage = props => {
             if (result?._id) {
                 setLastPlayed(result.last_played)
                 getSkills(result.last_played)
-            } else {
-                getSkills(guestState.last_played)
-                setLastPlayed(guestState.last_played)
             }
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [newUser])
+    }, [isAuthenticated, guest._id])
 
-    const storedScores = newUser
-        ? JSON.parse(sessionStorage.getItem('scores')) || []
-        : user
-          ? user.score
-          : []
+    // prettier-ignore
+    // const storedScores = !isAuthenticated && guest._id ? guest.score : user ? user.score : []
 
-    const storedLastPlayed = newUser
-        ? JSON.parse(sessionStorage.getItem('lastPlayed')) || null
-        : null
+    // prettier-ignore
+    // const storedLastPlayed = !isAuthenticated && guest._id ? guest.last_played || null : null
 
     let subTopicsCompleted = 0
 
     let lastSkillPercent = 0
 
-    if (newUser && skills.length) {
+    if (isAuthenticated && user && skills.length) {
         skills.forEach(skill => {
             skill.categories.forEach(category => {
                 const chaptersCount = skill.sub_categories.filter(
                     s => s.category === category
                 ).length
-                const userChaptersCount = storedScores.filter(
-                    i => i.skill === skill.skill && i.category === category
-                ).length
-
-                if (
-                    chaptersCount === userChaptersCount &&
-                    chaptersCount !== 0
-                ) {
-                    subTopicsCompleted++
-                }
-            })
-        })
-
-        if (storedLastPlayed && storedLastPlayed.skill) {
-            const lastAllSubCategories = skills.find(
-                s => s.skill === storedLastPlayed.skill
-            ).sub_categories.length
-            const userLastSubCategories = storedScores.filter(
-                s => s.skill === storedLastPlayed.skill
-            ).length
-            lastSkillPercent = Math.round(
-                (userLastSubCategories / lastAllSubCategories) * 100
-            )
-        }
-    } else if (user && skills.length) {
-        skills.forEach(skill => {
-            skill.categories.forEach(category => {
-                const chaptersCount = skill.sub_categories.filter(
-                    s => s.category === category
-                ).length
-                const userChaptersCount = user.score.filter(
+                const userChaptersCount = user?.score.filter(
                     i => i.skill === skill.skill && i.category === category
                 ).length
 
@@ -394,7 +367,37 @@ const HomePage = props => {
             const lastAllSubCategories = skills.find(
                 s => s.skill === lastPlayed.skill
             ).sub_categories.length
-            const userLastSubCategories = user.score.filter(
+            const userLastSubCategories = user?.score.filter(
+                s => s.skill === lastPlayed.skill
+            ).length
+            lastSkillPercent = Math.round(
+                (userLastSubCategories / lastAllSubCategories) * 100
+            )
+        }
+    } else if (guest?._id && skills.length) {
+        skills.forEach(skill => {
+            skill.categories.forEach(category => {
+                const chaptersCount = skill.sub_categories.filter(
+                    s => s.category === category
+                ).length
+                const userChaptersCount = guest?.score.filter(
+                    i => i.skill === skill.skill && i.category === category
+                ).length
+
+                if (
+                    chaptersCount === userChaptersCount &&
+                    chaptersCount !== 0
+                ) {
+                    subTopicsCompleted++
+                }
+            })
+        })
+
+        if (lastPlayed && lastPlayed.skill) {
+            const lastAllSubCategories = skills.find(
+                s => s.skill === lastPlayed.skill
+            ).sub_categories.length
+            const userLastSubCategories = guest.score.filter(
                 s => s.skill === lastPlayed.skill
             ).length
             lastSkillPercent = Math.round(
@@ -428,8 +431,7 @@ const HomePage = props => {
                                 <div className='col-12 px-0'>
                                     <Card className='welcome-card homePage-welcome-card'>
                                         <Card.Body>
-                                            {newUser &&
-                                            !guestState.last_played ? (
+                                            {newUser && !guest.last_played ? (
                                                 <Card.Text
                                                     className='welcome-card-text'
                                                     style={{
@@ -519,11 +521,13 @@ const HomePage = props => {
                                                             }}
                                                             className='getStarted welcome-card-button'
                                                             variant='success'
-                                                            onClick={() =>
-                                                                navigate(
-                                                                    navigateTo
-                                                                )
-                                                            }
+                                                            onClick={() => {
+                                                                guestLimit
+                                                                    ? onClickRegister()
+                                                                    : navigate(
+                                                                          navigateTo
+                                                                      )
+                                                            }}
                                                         >
                                                             {continueButtonHeader
                                                                 .split('_')
@@ -562,15 +566,17 @@ const HomePage = props => {
                                                             }}
                                                             className='getStarted welcome-card-button'
                                                             variant='success'
-                                                            onClick={() =>
-                                                                navigate(
-                                                                    `/skills/Investing/Start_Here/Stocks/information/0${
-                                                                        newUser
-                                                                            ? '?newUser=true'
-                                                                            : ''
-                                                                    }`
-                                                                )
-                                                            }
+                                                            onClick={() => {
+                                                                guestLimit
+                                                                    ? onClickRegister()
+                                                                    : navigate(
+                                                                          `/skills/Investing/Start_Here/Stocks/information/0${
+                                                                              newUser
+                                                                                  ? '?newUser=true'
+                                                                                  : ''
+                                                                          }`
+                                                                      )
+                                                            }}
                                                         >
                                                             What are Stocks?
                                                         </Button>
@@ -671,13 +677,14 @@ const HomePage = props => {
                                                 {newUser ? (
                                                     <a
                                                         href='#'
-                                                        onClick={() =>
+                                                        onClick={e => {
+                                                            e.preventDefault()
                                                             dispatch(
                                                                 auth_setOpenModalRegister(
                                                                     true
                                                                 )
                                                             )
-                                                        }
+                                                        }}
                                                         style={{
                                                             color: '#28a745',
                                                         }}
@@ -777,14 +784,13 @@ const HomePage = props => {
                                                                   category
                                                           ).length
                                                       let userCatCount
-                                                      if (newUser) {
+                                                      if (
+                                                          !isAuthenticated &&
+                                                          guest
+                                                      ) {
                                                           // Retrieve the scores from localStorage
                                                           const scores =
-                                                              JSON.parse(
-                                                                  sessionStorage.getItem(
-                                                                      'scores'
-                                                                  )
-                                                              ) || []
+                                                              guest.score
                                                           // Filter the scores by selectedSkill and category
                                                           userCatCount =
                                                               scores.filter(

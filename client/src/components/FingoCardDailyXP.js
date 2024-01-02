@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useCallback, useMemo } from 'react'
-import { useApp, useAuth, useReward } from 'src/hooks'
+import { useAuth, usePersistedGuest, useReward } from 'src/hooks'
 import 'src/styles/FingoCardDailyXP.styles.css'
 import { ReactComponent as LightningIcon } from 'src/assets/svg/lightning-fill2.svg'
 import TreasureImg from 'src/assets/images/ic_treasure.png'
@@ -25,22 +25,17 @@ import { DAILY_XP_TARGET } from 'src/constants'
 const FingoCardDailyXP = () => {
     const today = new Date()
     const dispatch = useDispatch()
-    const { dailyXP } = useApp()
     const { openModalClaimReward, reward_setOpenModalClaimReward } = useReward()
     const { newUser, user, isAuthenticated } = useAuth()
+    const { guest } = usePersistedGuest()
 
     const getDailyXp = useMemo(() => {
-        if (user) {
+        if (isAuthenticated && user) {
             return user?.xp?.daily > 60 ? 60 : user?.xp?.daily || 0
         } else {
-            return newUser
-                ? parseInt(sessionStorage.getItem('xp'), 10) || 0
-                : dailyXP > 60
-                  ? 60
-                  : dailyXP
+            return guest?.xp?.daily > 60 ? 60 : guest?.xp?.daily || 0
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [newUser, dailyXP, user])
+    }, [isAuthenticated, guest, user])
 
     const getLevelImage = level => {
         if (level) {
@@ -99,7 +94,7 @@ const FingoCardDailyXP = () => {
 
     // prettier-ignore
     const isAbleToClaimDailyReward = useMemo(() => {
-        if(isAuthenticated) {
+        if(isAuthenticated && user) {
             if(user?.xp?.daily >= DAILY_XP_TARGET) {
                 if (!user?.lastClaimedGemsDailyQuest) {
                     return true
@@ -111,10 +106,24 @@ const FingoCardDailyXP = () => {
             } else {
                 return false
             }
-        } else {
+        }
+        else if(guest?._id) {
+            if(guest?.xp?.daily >= DAILY_XP_TARGET) {
+                if (!guest?.lastClaimedGemsDailyQuest) {
+                    return true
+                } else if (dayjs(guest.lastClaimedGemsDailyQuest).isBefore(dayjs(today).toISOString(), 'day') ) {
+                    return true
+                } else {
+                    return false
+                }
+            } else {
+                return false
+            }
+        }
+        else {
             return false;
         }
-    }, [today, user, isAuthenticated])
+    }, [today, user, isAuthenticated, guest])
 
     // console.log("user?.lastClaimedGemsDailyQuest",user?.lastClaimedGemsDailyQuest)
 

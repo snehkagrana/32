@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react'
-import Axios from 'src/api/axios'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
 import CustomGoogleSignInButton from '../CustomGoogleSignInButton'
@@ -9,6 +8,7 @@ import { batch, useDispatch } from 'react-redux'
 import { useAuth, usePersistedGuest } from 'src/hooks'
 import { FingoModal } from 'src/components/core'
 import { AuthAPI } from 'src/api'
+import { authUtils } from 'src/utils'
 
 export default function ModalRegister() {
     const dispatch = useDispatch()
@@ -18,7 +18,7 @@ export default function ModalRegister() {
         auth_setOpenModalRegister,
         isAuthenticated,
     } = useAuth()
-    const { persistedGuest_reset } = usePersistedGuest()
+    const { persistedGuest_reset, guest, auth_initGuest } = usePersistedGuest()
 
     const [searchParams] = useSearchParams()
 
@@ -76,11 +76,19 @@ export default function ModalRegister() {
                 referralCode: searchParams.get('referralCode')
                     ? searchParams.get('referralCode')
                     : null,
+                registerToken: guest?.registerToken
+                    ? guest.registerToken
+                    : null,
+                syncId: guest?._id ? guest._id : null,
             })
             if (response) {
                 setAuthMsg(response?.message)
                 setShowAuthMsg(true)
+
+                // reset guest
                 dispatch(persistedGuest_reset())
+                authUtils.removeGuestAccessToken()
+
                 batch(() => {
                     dispatch(auth_setOpenModalRegister(false))
                     dispatch(auth_setOpenModalLogin(true))
@@ -256,7 +264,11 @@ export default function ModalRegister() {
                             <Toast.Body>{authMsg}</Toast.Body>
                         </Toast> */}
                 {/* First Name Form Group */}
-                {authMsg && <p className="mb-0 text-center" style={{ color: 'red' }}>{authMsg}</p>}
+                {authMsg && (
+                    <p className='mb-0 text-center' style={{ color: 'red' }}>
+                        {authMsg}
+                    </p>
+                )}
                 <div className='form-row'>
                     <div className='col'>
                         <Form.Group>

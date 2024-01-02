@@ -5,7 +5,7 @@ import IcHome from 'src/assets/images/ic_home.png'
 import IcTreasure from 'src/assets/images/ic_treasure.png'
 import IcUser from 'src/assets/images/ic_user.png'
 import { useCallback, useMemo, useState } from 'react'
-import { useAuth } from 'src/hooks'
+import { useAuth, usePersistedGuest } from 'src/hooks'
 import FingoCardDailyXP from './FingoCardDailyXP'
 import FingoUserInfo from './FingoUserInfo'
 import signedUp from 'src/images/pepe.jpg'
@@ -42,6 +42,7 @@ const initialShowState = {
 const FingoFooter = () => {
     const navigate = useNavigate()
     const { user, isAuthenticated } = useAuth()
+    const { guest } = usePersistedGuest()
     const [show, setShow] = useState(initialShowState)
 
     const onClickMenu = (e, name) => {
@@ -58,12 +59,14 @@ const FingoFooter = () => {
 
     const renderBadge = useCallback(
         menuName => {
-            if (menuName === 'daily-quest' && user?.xp?.daily >= 60) {
-                return <div className='FingoFooterBadge'></div>
+            if (menuName === 'daily-quest') {
+                if (user?.xp?.daily >= 60 || guest?.xp?.daily >= 60) {
+                    return <div className='FingoFooterBadge'></div>
+                }
             }
             return null
         },
-        [user]
+        [user, guest]
     )
 
     const getAvatarUrl = useMemo(() => {
@@ -118,7 +121,10 @@ const FingoFooter = () => {
                                                             ),
                                                     }}
                                                 >
-                                                    Lvl {user?.xp?.level ?? 1}
+                                                    Lvl{' '}
+                                                    {isAuthenticated
+                                                        ? user?.xp?.level
+                                                        : guest?.xp?.level}
                                                 </div>
                                             </div>
                                         </Popover>

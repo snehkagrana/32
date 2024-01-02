@@ -15,8 +15,8 @@ import CountdownTimer from '../CountdownTimer'
 const HeartCard = () => {
     const today = new Date()
     const dispatch = useDispatch()
-    const { user, isAuthenticated } = useAuth()
-    const { guestState } = usePersistedGuest()
+    const { user, isAuthenticated, auth_setOpenModalRegister } = useAuth()
+    const { guest } = usePersistedGuest()
     const { app_setOpenModalConfirmRefill, app_setOpenModalUnlimitedHearts } =
         useApp()
 
@@ -35,13 +35,13 @@ const HeartCard = () => {
             }
             return message1
         } else {
-            if (guestState?.heart === 5) {
+            if (guest?.heart === 5) {
                 return message1
-            } else if (guestState?.heart < 5) {
+            } else if (guest?.heart < 5) {
                 return message2
             }
         }
-    }, [isAuthenticated, user, guestState])
+    }, [isAuthenticated, user, guest])
 
     const getSubMessage = useMemo(() => {
         const subMessage1 = 'Keep on learning'
@@ -56,38 +56,42 @@ const HeartCard = () => {
                 return subMessage3
             }
         } else {
-            if (guestState?.heart === 5) {
+            if (guest?.heart === 5) {
                 return subMessage1
-            } else if (guestState?.heart < 5 && guestState?.heart !== 0) {
+            } else if (guest?.heart < 5 && guest?.heart !== 0) {
                 return subMessage2
             } else {
                 return subMessage3
             }
         }
-    }, [isAuthenticated, user, guestState])
+    }, [isAuthenticated, user, guest])
 
     const isAbleToRefill = useMemo(() => {
-        return Boolean(
+        return (
             user?.heart === 0 &&
-                user?.diamond >= AMOUNT_OF_GEMS_REDEEM_TO_HEARTS
+            user?.diamond >= AMOUNT_OF_GEMS_REDEEM_TO_HEARTS
         )
-    }, [isAuthenticated, user, guestState])
+    }, [isAuthenticated, user, guest])
 
     const isAbleToGetUnlimitedHearts = useMemo(() => {
         // logic here
         return true
-    }, [isAuthenticated, user, guestState])
+    }, [isAuthenticated, user, guest])
 
     const hearts = useMemo(() => {
         if (isAuthenticated && user) {
             return user?.heart || 0
         } else {
-            return guestState?.heart || 0
+            return guest?.heart || 0
         }
-    }, [isAuthenticated, user, guestState])
+    }, [isAuthenticated, user, guest])
 
     const onClickRefillHearts = () => {
-        dispatch(app_setOpenModalConfirmRefill(true))
+        if (isAuthenticated && user) {
+            dispatch(app_setOpenModalConfirmRefill(true))
+        } else {
+            dispatch(auth_setOpenModalRegister(true))
+        }
     }
 
     const onClickUnlimitedHearts = () => {

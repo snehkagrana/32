@@ -12,12 +12,13 @@ import SubCategorySidebar from '../components/SubCategorySidebar'
 import LoadingBox from '../components/LoadingBox'
 import { FingoHomeLayout } from 'src/components/layouts'
 import '../index.css'
-import { useAuth } from 'src/hooks'
+import { useAuth, usePersistedGuest } from 'src/hooks'
 import { InformationAPI } from 'src/api'
 import 'src/styles/InformationPage.styles.css'
 
 const InformationPage = () => {
     const { user, isAuthenticated, auth_syncAndGetUser } = useAuth()
+    const { guest } = usePersistedGuest()
     const [imageURL, setImageURL] = useState('')
     const { skillName, category, subcategory, page } = useParams()
     const navigate = useNavigate()
@@ -35,14 +36,14 @@ const InformationPage = () => {
     const [isLoadingInformation, setIsLoadingInformation] = useState(false)
     const [dropdownHeadingList, setDropdownHeadingList] = useState([])
 
-    const getInformation = isNewUser => {
+    const getInformation = () => {
         setIsLoadingInformation(true)
         Axios({
             method: 'GET',
             withCredentials: true,
             url: `/server/information/${skillName}/${category}/${subcategory}/${page}`,
             params: {
-                newUser: isNewUser,
+                newUser: Boolean(!isAuthenticated && !user),
             },
         })
             .then(res => {
@@ -93,13 +94,13 @@ const InformationPage = () => {
         [pageNumber, page]
     )
 
-    const getSkillBySkillName = isNewUser => {
+    const getSkillBySkillName = () => {
         Axios({
             method: 'GET',
             withCredentials: true,
             url: `/server/skills/${skillName}`,
             params: {
-                newUser: isNewUser,
+                newUser: Boolean(!isAuthenticated && !user),
             },
         }).then(res => {
             const filteredData = res.data.data[0].information.filter(
@@ -143,19 +144,20 @@ const InformationPage = () => {
     }
 
     useEffect(() => {
-        const newUser = searchParams.get('newUser')
-        if (newUser === 'true') {
-            getSkillBySkillName(newUser)
-            getInformation(newUser)
-            var checkIsCompleted = (
-                JSON.parse(sessionStorage.getItem('scores')) || []
-            ).filter(function (score) {
-                return (
-                    score.skill === skillName &&
-                    score.category === category &&
-                    score.sub_category === subcategory
-                )
-            })
+        if (isAuthenticated && user) {
+            getSkillBySkillName()
+            getInformation()
+            role.current = user.role
+            // eslint-disable-next-line no-redeclare
+            var checkIsCompleted =
+                user?.score &&
+                user.score.filter(function (score) {
+                    return (
+                        score.skill === skillName &&
+                        score.category === category &&
+                        score.sub_category === subcategory
+                    )
+                })
             if (checkIsCompleted.length > 0) {
                 isCompleted.current = true
                 setScore(checkIsCompleted[0].points)
@@ -163,30 +165,50 @@ const InformationPage = () => {
                 isCompleted.current = false
             }
         } else {
-            if (isAuthenticated && user) {
-                getSkillBySkillName()
-                getInformation()
-                role.current = user.role
-                // eslint-disable-next-line no-redeclare
-                var checkIsCompleted =
-                    user?.score &&
-                    user.score.filter(function (score) {
-                        return (
-                            score.skill === skillName &&
-                            score.category === category &&
-                            score.sub_category === subcategory
-                        )
-                    })
-                if (checkIsCompleted.length > 0) {
-                    isCompleted.current = true
-                    setScore(checkIsCompleted[0].points)
-                } else {
-                    isCompleted.current = false
-                }
+            getSkillBySkillName()
+            getInformation()
+            role.current = guest.role
+            // eslint-disable-next-line no-redeclare
+            var checkIsCompleted =
+                guest?.score &&
+                guest.score.filter(function (score) {
+                    return (
+                        score.skill === skillName &&
+                        score.category === category &&
+                        score.sub_category === subcategory
+                    )
+                })
+            if (checkIsCompleted.length > 0) {
+                isCompleted.current = true
+                setScore(checkIsCompleted[0].points)
+            } else {
+                isCompleted.current = false
             }
         }
+
+        // const newUser = searchParams.get('newUser')
+        // if (!isAuthenticated && guest) {
+        //     getSkillBySkillName(newUser)
+        //     getInformation()
+        //     var checkIsCompleted = (
+        //         JSON.parse(sessionStorage.getItem('scores')) || []
+        //     ).filter(function (score) {
+        //         return (
+        //             score.skill === skillName &&
+        //             score.category === category &&
+        //             score.sub_category === subcategory
+        //         )
+        //     })
+        //     if (checkIsCompleted.length > 0) {
+        //         isCompleted.current = true
+        //         setScore(checkIsCompleted[0].points)
+        //     } else {
+        //         isCompleted.current = false
+        //     }
+        // } else {
+        // }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pageNumber, searchParams, subcategory, isAuthenticated, user])
+    }, [pageNumber, searchParams, subcategory, isAuthenticated, user, guest])
 
     useEffect(() => {
         if (page) {
@@ -341,9 +363,7 @@ const InformationPage = () => {
                                                         }}
                                                         onClick={() => {
                                                             const newUserQueryParam =
-                                                                searchParams.get(
-                                                                    'newUser'
-                                                                )
+                                                                !isAuthenticated
                                                                     ? '?newUser=true'
                                                                     : ''
                                                             navigate(

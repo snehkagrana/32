@@ -31,7 +31,7 @@ const SHARE_TEXT = `I am learning finance the way and getting rewarded at Fingo!
 const ModalInviteFriends = () => {
     const dispatch = useDispatch()
     const { isAuthenticated, user } = useAuth()
-    const { guestState } = usePersistedGuest()
+    const { guest } = usePersistedGuest()
     const [copied, setCopied] = useState(false)
 
     const { openModalInviteFriends, app_setOpenModalInviteFriends } = useApp()

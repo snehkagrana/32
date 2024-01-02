@@ -1,4 +1,5 @@
 const AuthService = require('../services/auth.service')
+const GuestService = require('../services/guest.service')
 const ReferralService = require('../services/referral.service')
 const jwtConfig = require('../configs/jwt.config')
 const bcryptUtil = require('../utils/bcrypt.util')
@@ -18,7 +19,7 @@ exports.register = async (req, res) => {
     }
     const hashedPassword = await bcryptUtil.createHash(req.body.password)
 
-    const newUser = {
+    let newUser = {
         displayName: req.body.displayName,
         email: req.body.email,
         password: hashedPassword,
@@ -37,6 +38,27 @@ exports.register = async (req, res) => {
         unlimitedHeart: null,
         referralCode: refCode,
         registeredAt: new Date(),
+    }
+
+    // sync guest data
+    if (req.body?.registerToken && req.body?.syncId) {
+        const guestData = await GuestService.findGuestById(req.body.syncId)
+        if (guestData) {
+            newUser = {
+                ...newUser,
+                streak: guestData.streak,
+                lastCompletedDay: guestData.lastCompletedDay,
+                diamond: guestData.diamond,
+                xp: guestData.xp,
+                score: guestData.score,
+                completedDays: guestData.completedDays,
+                last_played: guestData.last_played,
+                heart: guestData.heart || appConfig.defaultHeart,
+                lastHeartAccruedAt: guestData.lastHeartAccruedAt || new Date(),
+                unlimitedHeart: null,
+            }
+        }
+        GuestService.deleteGuest(req.body?.syncId)
     }
 
     const user = await AuthService.createUser(newUser)

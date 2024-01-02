@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useMemo } from 'react'
 import { useParams, useLocation, useSearchParams } from 'react-router-dom'
 import Axios from 'src/api/axios'
 import { Link, useNavigate } from 'react-router-dom'
@@ -9,9 +9,8 @@ import Confetti from 'react-dom-confetti'
 import { Howl } from 'howler'
 import Sound from '../sounds/success-1.mp3'
 import { FingoHomeLayout } from 'src/components/layouts'
-import { AuthAPI } from 'src/api'
-import { useApp, useAuth } from 'src/hooks'
-import { batch, useDispatch } from 'react-redux'
+import { useApp, useAuth, usePersistedGuest } from 'src/hooks'
+import { useDispatch } from 'react-redux'
 import FingoModalLevelUp from 'src/components/FingoModalLevelUp'
 import 'src/styles/FingoLessonComplete.styles.css'
 import { FingoButton } from 'src/components/core'
@@ -20,10 +19,17 @@ import StartFilledFade from 'src/assets/images/diamond-faded.png'
 import BG from 'src/assets/images/8270289.jpg'
 import { ReactComponent as DiamondSvg } from 'src/assets/svg/diamond.svg'
 import 'src/styles/ScorePage.styles.css'
+import { NUMBER_OF_LIMIT_LESSON_FOR_GUEST } from 'src/constants/app.constant'
 
 const ScorePage = () => {
     const dispatch = useDispatch()
-    const { user, auth_syncAndGetUser } = useAuth()
+    const {
+        user,
+        auth_syncAndGetUser,
+        isAuthenticated,
+        auth_setOpenModalRegister,
+    } = useAuth()
+    const { guest } = usePersistedGuest()
     const { app_setModalLevelUp } = useApp()
     const { skillName, category, subcategory } = useParams()
     const location = useLocation()
@@ -41,8 +47,10 @@ const ScorePage = () => {
     const [diamondEarned, setDiamondEarned] = useState(0)
     const [celebrate, setCelebrate] = useState(false)
 
-    const [searchParams, setSearchParams] = useSearchParams()
-    const [newUserLimit, setNewUserLimit] = useState(false)
+    // prettier-ignore
+    const newUserLimit = useMemo(() => {
+        return !isAuthenticated && Boolean(guest.score?.length >= NUMBER_OF_LIMIT_LESSON_FOR_GUEST)
+    }, [isAuthenticated, guest])
 
     const confettiConfig = {
         angle: 90,
@@ -85,13 +93,13 @@ const ScorePage = () => {
         }
     }, [celebrate])
 
-    const getSkillBySkillName = newUser => {
+    const getSkillBySkillName = () => {
         Axios({
             method: 'GET',
             withCredentials: true,
             url: `/server/skills/${skillName}`,
             params: {
-                newUser: newUser,
+                newUser: Boolean(!isAuthenticated && guest._id),
             },
         }).then(res => {
             setSkillDetails(res.data.data[0])
@@ -154,65 +162,68 @@ const ScorePage = () => {
                 // setDiamondEarned()
                 role.current = result?.role
                 // Put logic to show modal level up here
-                if (
-                    parseInt(user?.xp?.total) < parseInt(result?.xp?.total) &&
-                    parseInt(user?.xp?.level) < parseInt(result?.xp?.level)
-                ) {
-                    dispatch(
-                        app_setModalLevelUp({
-                            open: true,
-                            data: result?.xp,
-                        })
-                    )
+
+                if (isAuthenticated) {
+                    if (
+                        parseInt(user?.xp?.total) <
+                            parseInt(result?.xp?.total) &&
+                        parseInt(user?.xp?.level) < parseInt(result?.xp?.level)
+                    ) {
+                        dispatch(
+                            app_setModalLevelUp({
+                                open: true,
+                                data: result?.xp,
+                            })
+                        )
+                    }
                 }
             }
         })
     }
 
     useEffect(() => {
-        const newUser = searchParams.get('newUser')
-        if (newUser === 'true') {
-            const storedScores =
-                JSON.parse(sessionStorage.getItem('scores')) || []
+        getUserInfo()
+        calculateDiamondEarned(data.score.current)
+        setCelebrate(true)
+        getSkillBySkillName()
 
-            const matchingScores = storedScores.filter(
-                scoreItem =>
-                    scoreItem.skill === skillName &&
-                    scoreItem.category === category
-            )
+        // const newUser = searchParams.get('newUser')
 
-            if (matchingScores.length >= 5) {
-                const score = matchingScores.reduce(
-                    (acc, item) => acc + item.score,
-                    0
-                )
-                const points = matchingScores.reduce(
-                    (acc, item) => acc + item.points,
-                    0
-                )
+        // if (newUser === 'true') {
+        //     const storedScores =
+        //         JSON.parse(sessionStorage.getItem('scores')) || []
 
-                setNewUserLimit(true)
-            } else {
-                setCelebrate(true)
-                getSkillBySkillName(newUser)
-                // getAllScores(newUser)
+        //     const matchingScores = storedScores.filter(
+        //         scoreItem =>
+        //             scoreItem.skill === skillName &&
+        //             scoreItem.category === category
+        //     )
 
-                const storedXp = sessionStorage.getItem('xp')
-                if (storedXp) {
-                    setXP(parseInt(storedXp, 10))
-                }
-            }
-        } else {
-            getUserInfo()
-            calculateDiamondEarned(data.score.current)
-            if (!newUser && Boolean(user)) {
-                setCelebrate(true)
-                getSkillBySkillName()
-                // getAllScores()
-            }
-        }
+        //     if (matchingScores.length >= 5) {
+        //         const score = matchingScores.reduce(
+        //             (acc, item) => acc + item.score,
+        //             0
+        //         )
+        //         const points = matchingScores.reduce(
+        //             (acc, item) => acc + item.points,
+        //             0
+        //         )
+
+        //         setNewUserLimit(true)
+        //     } else {
+        //         setCelebrate(true)
+        //         getSkillBySkillName(newUser)
+        //         // getAllScores(newUser)
+
+        //         const storedXp = sessionStorage.getItem('xp')
+        //         if (storedXp) {
+        //             setXP(parseInt(storedXp, 10))
+        //         }
+        //     }
+        // } else {
+        // }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchParams])
+    }, [])
 
     const renderStar = paramsDiamondEarned => {
         return (
@@ -242,6 +253,10 @@ const ScorePage = () => {
         // else return renderStarImg()
     }
 
+    const onClickRegister = () => {
+        dispatch(auth_setOpenModalRegister(true))
+    }
+
     return (
         <FingoHomeLayout>
             <Helmet>
@@ -259,26 +274,21 @@ const ScorePage = () => {
                 {data ? (
                     <>
                         {newUserLimit ? (
-                            <>
-                                <Card.Header className='congratulation-card-header'>
-                                    If you want to continue please Register
-                                </Card.Header>
-                                <Card.Body>
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                        }}
+                            <Card className='FingoUserLimitation d-flex flex-column FingoShapeRadius relative py-4'>
+                                <div className='h-36 w-100 d-flex align-items-center justify-center flex-column'>
+                                    <h5 className='mb-4 text-center leading-7'>
+                                        Don't lose out on your reward and
+                                        progress. Register now to continue.
+                                    </h5>
+                                    <FingoButton
+                                        style={{ minWidth: 200 }}
+                                        color='success'
+                                        onClick={onClickRegister}
                                     >
-                                        <Link to='/auth/register'>
-                                            <Button variant='success'>
-                                                Register
-                                            </Button>
-                                        </Link>
-                                    </div>
-                                </Card.Body>
-                            </>
+                                        Register
+                                    </FingoButton>
+                                </div>
+                            </Card>
                         ) : (
                             <div
                                 className='FingoLessonComplete'
@@ -314,9 +324,7 @@ const ScorePage = () => {
                                                     }}
                                                     onClick={() => {
                                                         const newUserQueryParam =
-                                                            searchParams.get(
-                                                                'newUser'
-                                                            )
+                                                            !isAuthenticated
                                                                 ? '?newUser=true'
                                                                 : ''
                                                         navigate(

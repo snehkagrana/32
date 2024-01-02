@@ -3,12 +3,13 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import '../styles/SubCategorySidebar.styles.css'
-import { useAuth } from 'src/hooks'
+import { useAuth, usePersistedGuest } from 'src/hooks'
 
 const SubCategorySidebar = props => {
     const { data, dropdownHeadingList } = props
     const navigate = useNavigate()
-    const { user } = useAuth()
+    const { isAuthenticated, user } = useAuth()
+    const { guest } = usePersistedGuest()
 
     const [searchParams] = useSearchParams()
     const { skillName, category, subcategory } = useParams()
@@ -20,9 +21,17 @@ const SubCategorySidebar = props => {
     }
 
     const isCompleted = item => {
-        if (user && user.score?.length > 0) {
+        if (isAuthenticated && user && user?.score?.length > 0) {
             return Boolean(
-                user.score.find(
+                user?.score.find(
+                    x =>
+                        x.sub_category === item.sub_category &&
+                        x.category === item.category
+                )
+            )
+        } else if (guest && guest?.score?.length > 0) {
+            return Boolean(
+                guest?.score?.find(
                     x =>
                         x.sub_category === item.sub_category &&
                         x.category === item.category

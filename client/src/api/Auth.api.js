@@ -43,4 +43,26 @@ export const AuthAPI = {
         )
         return response?.data
     },
+
+    guest_init: async () => {
+        const response = await Axios.get('/server/api/auth/guest/init')
+        if (response?.data?.accessToken) {
+            authUtils.saveGuestAccessToken(response.data.accessToken)
+        }
+        return response?.data
+    },
+
+    guest_sync: async () => {
+        const response = await Axios.get('/server/api/auth/guest/sync')
+        return response?.data
+    },
+
+    guest_get: async token => {
+        const response = await Axios.get('/server/api/auth/guest', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        return response?.data
+    },
 }

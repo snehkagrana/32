@@ -1,4 +1,5 @@
-import React, { useRef, useState, useEffect } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useRef, useState, useEffect, useMemo } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import Axios from 'src/api/axios'
 import { Link, useNavigate } from 'react-router-dom'
@@ -19,7 +20,7 @@ import { FingoHomeLayout } from 'src/components/layouts'
 import FingoWidgetContainer from 'src/components/FingoWidgetContainer'
 import { FingoScrollToTop } from 'src/components/layouts/FingoHomeLayout'
 import FingoModalLevelUp from 'src/components/FingoModalLevelUp'
-import { useAuth } from 'src/hooks'
+import { useAuth, usePersistedGuest } from 'src/hooks'
 import ModalListReward from 'src/components/reward/ModalListReward'
 import ModalRewardDetail from 'src/components/reward/ModalRewardDetail'
 import { ModalFormReward } from 'src/components/reward'
@@ -34,9 +35,13 @@ import {
     ModalUnlimitedHearts,
 } from 'src/components/hearts'
 import ModalInviteFriends from 'src/components/ModalInviteFriends'
+import { NUMBER_OF_LIMIT_LESSON_FOR_GUEST } from 'src/constants/app.constant'
+import { useDispatch } from 'react-redux'
 
 const SkillCategoryPage = () => {
-    const { isAuthenticated, user } = useAuth()
+    const dispatch = useDispatch()
+    const { isAuthenticated, user, auth_setOpenModalRegister } = useAuth()
+    const { guest } = usePersistedGuest()
     const { skillName } = useParams()
     const { categoryName } = useParams()
     const navigate = useNavigate()
@@ -52,19 +57,20 @@ const SkillCategoryPage = () => {
         navigate('/home')
     }
 
-    const getSkillBySkillName = isNewUser => {
+    // prettier-ignore
+    const guestLimit = useMemo(() => {
+        return !isAuthenticated && Boolean(guest.score?.length >= NUMBER_OF_LIMIT_LESSON_FOR_GUEST)
+    }, [isAuthenticated, guest])
+
+    const getSkillBySkillName = () => {
         Axios({
             method: 'GET',
             withCredentials: true,
             url: `/server/skills/${skillName}`,
             params: {
-                newUser: isNewUser,
+                newUser: Boolean(!isAuthenticated && !user),
             },
         }).then(res => {
-            // console.log("skill name", skillName);
-            // console.log("skill is ", res.data.data[0]);
-            // categories.current = res.data.data[0].categories;
-            // console.log("categories - ", categories.current);
             setCategories(res.data.data[0].categories)
             var subCategoriesList = res.data.data[0].sub_categories.filter(
                 function (el) {
@@ -76,61 +82,51 @@ const SkillCategoryPage = () => {
         })
     }
 
-    const handleSubCategorySelection = sub_category => {
-        const newUser = searchParams.get('newUser')
+    const handleSubCategorySelection = (subCategoryPath, isComplete) => {
         setTimeout(() => {
-            navigate(
-                `/skills/${skillName}/${categoryName}/${sub_category}/information/${0}${
-                    newUser ? '?newUser=true' : ''
-                }`
-            )
+            if (!isAuthenticated && guestLimit && !isComplete) {
+                dispatch(auth_setOpenModalRegister(true))
+            } else {
+                navigate(
+                    `/skills/${skillName}/${categoryName}/${subCategoryPath}/information/${0}`
+                )
+            }
         }, 300)
     }
 
     ////to authenticate user before allowing him to enter the home page
     ////if he is not redirect him to login page
     useEffect(() => {
-        // console.log("in use effect");
-        const newUser = searchParams.get('newUser')
-        if (newUser === 'true') {
-            getSkillBySkillName(newUser)
+        getSkillBySkillName()
+        if (isAuthenticated && user) {
+            // role.current = user?.role
             var tempCheckIsCompleted = []
-
-            // Retrieve scores from localStorage instead of the response object
-            const storedScores =
-                JSON.parse(sessionStorage.getItem('scores')) || []
-
-            // Loop through the scores from localStorage
-            storedScores.forEach(score => {
-                if (
-                    score.skill === skillName &&
-                    score.category === categoryName
-                )
-                    tempCheckIsCompleted = tempCheckIsCompleted.concat(
-                        score.sub_category
+            user?.score &&
+                user.score.forEach(score => {
+                    if (
+                        score.skill === skillName &&
+                        score.category === categoryName
                     )
-            })
-
-            checkIsCompleted.current = tempCheckIsCompleted
-        } else {
-            if (isAuthenticated && user) {
-                getSkillBySkillName()
-                role.current = user?.role
-                var tempCheckIsCompleted = []
-                user?.score &&
-                    user.score.forEach(score => {
-                        if (
-                            score.skill === skillName &&
-                            score.category === categoryName
+                        tempCheckIsCompleted = tempCheckIsCompleted.concat(
+                            score.sub_category
                         )
-                            tempCheckIsCompleted = tempCheckIsCompleted.concat(
-                                score.sub_category
-                            )
-                    })
-                checkIsCompleted.current = tempCheckIsCompleted
-            }
+                })
+            checkIsCompleted.current = tempCheckIsCompleted
+        } else if (guest?._id) {
+            var tempCheckIsCompleted = []
+            guest?.score &&
+                guest.score.forEach(score => {
+                    if (
+                        score.skill === skillName &&
+                        score.category === categoryName
+                    )
+                        tempCheckIsCompleted = tempCheckIsCompleted.concat(
+                            score.sub_category
+                        )
+                })
+            checkIsCompleted.current = tempCheckIsCompleted
         }
-    }, [searchParams, isAuthenticated, user, skillName, categoryName])
+    }, [guest, isAuthenticated, user, skillName, categoryName])
 
     return (
         <FingoHomeLayout>
@@ -192,7 +188,10 @@ const SkillCategoryPage = () => {
                                                                 }`}
                                                                 onClick={() =>
                                                                     handleSubCategorySelection(
-                                                                        sub_category.sub_category
+                                                                        sub_category.sub_category,
+                                                                        checkIsCompleted.current.includes(
+                                                                            sub_category.sub_category
+                                                                        )
                                                                     )
                                                                 }
                                                             >

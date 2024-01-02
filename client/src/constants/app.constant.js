@@ -1,5 +1,5 @@
 export const PERSIST_ROOT_KEY = 'fingo_persist:root'
-export const PERSIST_ROOT_VERSION = 2
+export const PERSIST_ROOT_VERSION = 3
 
 export const BATCH_EVENT_TIME_SPENT = 'time_spent'
 
@@ -14,3 +14,7 @@ export const HEARTS_REFILL_RATE = 60 // refill rate in minutes
 export const MAX_REDEEM_GIFT_CARD_PER_MONTH = 3
 
 export const NUMBER_OF_SUCCESS_REFERRALS = 3
+
+export const DEFAULT_GUEST_NAME = 'Stranger'
+
+export const NUMBER_OF_LIMIT_LESSON_FOR_GUEST = 5

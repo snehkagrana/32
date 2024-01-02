@@ -2,7 +2,11 @@ const HeartService = require('../services/heart.service')
 
 exports.refillHearts = async (req, res) => {
     const { gemsAmount } = req.body
-    const result = await HeartService.refillHearts(req.user._id, gemsAmount)
+
+    const result = await HeartService.refillHearts({
+        user: req.user,
+        gemsAmount,
+    })
 
     if (result) {
         return res.json({

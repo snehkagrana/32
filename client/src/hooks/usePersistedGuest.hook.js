@@ -4,11 +4,14 @@ import {
     persistedGuest_selectState,
 } from 'src/redux/persisted-guest'
 
+import { auth_initGuest } from 'src/redux/auth/auth.thunk'
+
 export const usePersistedGuest = () => {
-    const guestState = useSelector(persistedGuest_selectState)
+    const state = useSelector(persistedGuest_selectState)
 
     return {
-        guestState,
+        ...state,
         ...persistedGuest_reducerActions,
+        auth_initGuest,
     }
 }

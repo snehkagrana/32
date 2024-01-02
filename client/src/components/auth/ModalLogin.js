@@ -8,6 +8,7 @@ import '../../styles/auth.styles.css'
 import { useAuth, usePersistedGuest } from 'src/hooks'
 import { batch, useDispatch } from 'react-redux'
 import { FingoModal } from 'src/components/core'
+import { authUtils } from 'src/utils'
 
 export default function ModalLogin() {
     const dispatch = useDispatch()
@@ -21,7 +22,7 @@ export default function ModalLogin() {
         auth_setOpenModalForgotPassword,
     } = useAuth()
 
-    const { persistedGuest_reset } = usePersistedGuest();
+    const { persistedGuest_reset, auth_initGuest } = usePersistedGuest()
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -62,9 +63,7 @@ export default function ModalLogin() {
                             if (result?.payload?.redirect == '/updateemail') {
                                 navigate('/updateemail')
                             } else {
-
                                 dispatch(persistedGuest_reset())
-
                                 /**
                                  * After login success
                                  * Get user info, xp, and other info belongs to user
