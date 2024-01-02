@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useMemo } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import Axios from 'src/api/axios'
 import { Link, useNavigate } from 'react-router-dom'
@@ -35,9 +35,12 @@ import {
     ModalUnlimitedHearts,
 } from 'src/components/hearts'
 import ModalInviteFriends from 'src/components/ModalInviteFriends'
+import { NUMBER_OF_LIMIT_LESSON_FOR_GUEST } from 'src/constants/app.constant'
+import { useDispatch } from 'react-redux'
 
 const SkillCategoryPage = () => {
-    const { isAuthenticated, user } = useAuth()
+    const dispatch = useDispatch()
+    const { isAuthenticated, user, auth_setOpenModalRegister } = useAuth()
     const { guest } = usePersistedGuest()
     const { skillName } = useParams()
     const { categoryName } = useParams()
@@ -53,6 +56,11 @@ const SkillCategoryPage = () => {
     const handleClick = () => {
         navigate('/home')
     }
+
+    // prettier-ignore
+    const guestLimit = useMemo(() => {
+        return !isAuthenticated && Boolean(guest.score?.length >= NUMBER_OF_LIMIT_LESSON_FOR_GUEST)
+    }, [isAuthenticated, guest])
 
     const getSkillBySkillName = () => {
         Axios({
@@ -74,14 +82,15 @@ const SkillCategoryPage = () => {
         })
     }
 
-    const handleSubCategorySelection = sub_category => {
-        const newUser = searchParams.get('newUser')
+    const handleSubCategorySelection = (subCategoryPath, isComplete) => {
         setTimeout(() => {
-            navigate(
-                `/skills/${skillName}/${categoryName}/${sub_category}/information/${0}${
-                    newUser ? '?newUser=true' : ''
-                }`
-            )
+            if (!isAuthenticated && guestLimit && !isComplete) {
+                dispatch(auth_setOpenModalRegister(true))
+            } else {
+                navigate(
+                    `/skills/${skillName}/${categoryName}/${subCategoryPath}/information/${0}`
+                )
+            }
         }, 300)
     }
 
@@ -179,7 +188,10 @@ const SkillCategoryPage = () => {
                                                                 }`}
                                                                 onClick={() =>
                                                                     handleSubCategorySelection(
-                                                                        sub_category.sub_category
+                                                                        sub_category.sub_category,
+                                                                        checkIsCompleted.current.includes(
+                                                                            sub_category.sub_category
+                                                                        )
                                                                     )
                                                                 }
                                                             >
