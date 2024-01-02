@@ -55,6 +55,7 @@ exports.register = async (req, res) => {
                 last_played: guestData.last_played,
                 heart: guestData.heart || appConfig.defaultHeart,
                 lastHeartAccruedAt: guestData.lastHeartAccruedAt || new Date(),
+                lastClaimedGemsDailyQuest: guestData.lastClaimedGemsDailyQuest || null,
                 unlimitedHeart: null,
             }
         }
