@@ -3,3 +3,17 @@
     height: auto;
     margin-top: -7px;
 }
+
+.FingoUserLimitation {
+    max-width: 90%;
+    margin: auto;
+    padding: 3rem 1.5rem;
+}
+
+@media (min-width: 576px) {
+    .FingoUserLimitation {
+        max-width: 542px;
+        margin: auto;
+        padding: 4rem 2rem;
+    }
+}

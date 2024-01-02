@@ -274,27 +274,21 @@ const ScorePage = () => {
                 {data ? (
                     <>
                         {newUserLimit ? (
-                            <>
-                                <Card.Header className='congratulation-card-header'>
-                                    If you want to continue please Register
-                                </Card.Header>
-                                <Card.Body>
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                        }}
+                            <Card className='FingoUserLimitation d-flex flex-column FingoShapeRadius relative py-4'>
+                                <div className='h-36 w-100 d-flex align-items-center justify-center flex-column'>
+                                    <h5 className='mb-4 text-center leading-7'>
+                                        Don't lose out on your reward and
+                                        progress. Register now to continue.
+                                    </h5>
+                                    <FingoButton
+                                        style={{ minWidth: 200 }}
+                                        color='success'
+                                        onClick={onClickRegister}
                                     >
-                                        <Button
-                                            variant='success'
-                                            onClick={onClickRegister}
-                                        >
-                                            Register
-                                        </Button>
-                                    </div>
-                                </Card.Body>
-                            </>
+                                        Register
+                                    </FingoButton>
+                                </div>
+                            </Card>
                         ) : (
                             <div
                                 className='FingoLessonComplete'

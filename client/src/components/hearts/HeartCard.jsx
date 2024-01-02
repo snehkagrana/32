@@ -15,7 +15,7 @@ import CountdownTimer from '../CountdownTimer'
 const HeartCard = () => {
     const today = new Date()
     const dispatch = useDispatch()
-    const { user, isAuthenticated } = useAuth()
+    const { user, isAuthenticated, auth_setOpenModalRegister } = useAuth()
     const { guest } = usePersistedGuest()
     const { app_setOpenModalConfirmRefill, app_setOpenModalUnlimitedHearts } =
         useApp()
@@ -67,8 +67,10 @@ const HeartCard = () => {
     }, [isAuthenticated, user, guest])
 
     const isAbleToRefill = useMemo(() => {
-        // prettier-ignore
-        return Boolean(user?.heart === 0 && user?.diamond >= AMOUNT_OF_GEMS_REDEEM_TO_HEARTS) || Boolean(guest?.heart === 0 && guest?.diamond >= AMOUNT_OF_GEMS_REDEEM_TO_HEARTS)
+        return (
+            user?.heart === 0 &&
+            user?.diamond >= AMOUNT_OF_GEMS_REDEEM_TO_HEARTS
+        )
     }, [isAuthenticated, user, guest])
 
     const isAbleToGetUnlimitedHearts = useMemo(() => {
@@ -85,7 +87,11 @@ const HeartCard = () => {
     }, [isAuthenticated, user, guest])
 
     const onClickRefillHearts = () => {
-        dispatch(app_setOpenModalConfirmRefill(true))
+        if (isAuthenticated && user) {
+            dispatch(app_setOpenModalConfirmRefill(true))
+        } else {
+            dispatch(auth_setOpenModalRegister(true))
+        }
     }
 
     const onClickUnlimitedHearts = () => {

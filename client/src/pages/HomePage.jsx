@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import Axios from 'src/api/axios'
 import { useNavigate } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
@@ -66,6 +66,7 @@ import {
     ModalUnlimitedHearts,
 } from 'src/components/hearts'
 import ModalInviteFriends from 'src/components/ModalInviteFriends'
+import { NUMBER_OF_LIMIT_LESSON_FOR_GUEST } from 'src/constants/app.constant'
 
 ////This is the home page of the website, which is user directed to the
 ////after he has been authenticated, where he is given 2 options whether
@@ -311,6 +312,15 @@ const HomePage = props => {
         setCompletedCategories([...completedCategories, category])
     }
 
+    // prettier-ignore
+    const guestLimit = useMemo(() => {
+        return !isAuthenticated && Boolean(guest.score?.length >= NUMBER_OF_LIMIT_LESSON_FOR_GUEST)
+    }, [isAuthenticated, guest])
+
+    const onClickRegister = () => {
+        dispatch(auth_setOpenModalRegister(true))
+    }
+
     ////to authenticate user before allowing him to enter the home page
     ////if he is not redirect him to login page
 
@@ -511,11 +521,13 @@ const HomePage = props => {
                                                             }}
                                                             className='getStarted welcome-card-button'
                                                             variant='success'
-                                                            onClick={() =>
-                                                                navigate(
-                                                                    navigateTo
-                                                                )
-                                                            }
+                                                            onClick={() => {
+                                                                guestLimit
+                                                                    ? onClickRegister()
+                                                                    : navigate(
+                                                                          navigateTo
+                                                                      )
+                                                            }}
                                                         >
                                                             {continueButtonHeader
                                                                 .split('_')
@@ -554,15 +566,17 @@ const HomePage = props => {
                                                             }}
                                                             className='getStarted welcome-card-button'
                                                             variant='success'
-                                                            onClick={() =>
-                                                                navigate(
-                                                                    `/skills/Investing/Start_Here/Stocks/information/0${
-                                                                        newUser
-                                                                            ? '?newUser=true'
-                                                                            : ''
-                                                                    }`
-                                                                )
-                                                            }
+                                                            onClick={() => {
+                                                                guestLimit
+                                                                    ? onClickRegister()
+                                                                    : navigate(
+                                                                          `/skills/Investing/Start_Here/Stocks/information/0${
+                                                                              newUser
+                                                                                  ? '?newUser=true'
+                                                                                  : ''
+                                                                          }`
+                                                                      )
+                                                            }}
                                                         >
                                                             What are Stocks?
                                                         </Button>
