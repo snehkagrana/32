@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useRef, useState, useEffect } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import Axios from 'src/api/axios'
@@ -19,7 +20,7 @@ import { FingoHomeLayout } from 'src/components/layouts'
 import FingoWidgetContainer from 'src/components/FingoWidgetContainer'
 import { FingoScrollToTop } from 'src/components/layouts/FingoHomeLayout'
 import FingoModalLevelUp from 'src/components/FingoModalLevelUp'
-import { useAuth } from 'src/hooks'
+import { useAuth, usePersistedGuest } from 'src/hooks'
 import ModalListReward from 'src/components/reward/ModalListReward'
 import ModalRewardDetail from 'src/components/reward/ModalRewardDetail'
 import { ModalFormReward } from 'src/components/reward'
@@ -37,6 +38,7 @@ import ModalInviteFriends from 'src/components/ModalInviteFriends'
 
 const SkillCategoryPage = () => {
     const { isAuthenticated, user } = useAuth()
+    const { guest } = usePersistedGuest()
     const { skillName } = useParams()
     const { categoryName } = useParams()
     const navigate = useNavigate()
@@ -52,19 +54,15 @@ const SkillCategoryPage = () => {
         navigate('/home')
     }
 
-    const getSkillBySkillName = isNewUser => {
+    const getSkillBySkillName = () => {
         Axios({
             method: 'GET',
             withCredentials: true,
             url: `/server/skills/${skillName}`,
             params: {
-                newUser: isNewUser,
+                newUser: Boolean(!isAuthenticated && !user),
             },
         }).then(res => {
-            // console.log("skill name", skillName);
-            // console.log("skill is ", res.data.data[0]);
-            // categories.current = res.data.data[0].categories;
-            // console.log("categories - ", categories.current);
             setCategories(res.data.data[0].categories)
             var subCategoriesList = res.data.data[0].sub_categories.filter(
                 function (el) {
@@ -90,47 +88,36 @@ const SkillCategoryPage = () => {
     ////to authenticate user before allowing him to enter the home page
     ////if he is not redirect him to login page
     useEffect(() => {
-        // console.log("in use effect");
-        const newUser = searchParams.get('newUser')
-        if (newUser === 'true') {
-            getSkillBySkillName(newUser)
+        getSkillBySkillName()
+        if (isAuthenticated && user) {
+            // role.current = user?.role
             var tempCheckIsCompleted = []
-
-            // Retrieve scores from localStorage instead of the response object
-            const storedScores =
-                JSON.parse(sessionStorage.getItem('scores')) || []
-
-            // Loop through the scores from localStorage
-            storedScores.forEach(score => {
-                if (
-                    score.skill === skillName &&
-                    score.category === categoryName
-                )
-                    tempCheckIsCompleted = tempCheckIsCompleted.concat(
-                        score.sub_category
+            user?.score &&
+                user.score.forEach(score => {
+                    if (
+                        score.skill === skillName &&
+                        score.category === categoryName
                     )
-            })
-
-            checkIsCompleted.current = tempCheckIsCompleted
-        } else {
-            if (isAuthenticated && user) {
-                getSkillBySkillName()
-                role.current = user?.role
-                var tempCheckIsCompleted = []
-                user?.score &&
-                    user.score.forEach(score => {
-                        if (
-                            score.skill === skillName &&
-                            score.category === categoryName
+                        tempCheckIsCompleted = tempCheckIsCompleted.concat(
+                            score.sub_category
                         )
-                            tempCheckIsCompleted = tempCheckIsCompleted.concat(
-                                score.sub_category
-                            )
-                    })
-                checkIsCompleted.current = tempCheckIsCompleted
-            }
+                })
+            checkIsCompleted.current = tempCheckIsCompleted
+        } else if (guest?._id) {
+            var tempCheckIsCompleted = []
+            guest?.score &&
+                guest.score.forEach(score => {
+                    if (
+                        score.skill === skillName &&
+                        score.category === categoryName
+                    )
+                        tempCheckIsCompleted = tempCheckIsCompleted.concat(
+                            score.sub_category
+                        )
+                })
+            checkIsCompleted.current = tempCheckIsCompleted
         }
-    }, [searchParams, isAuthenticated, user, skillName, categoryName])
+    }, [guest, isAuthenticated, user, skillName, categoryName])
 
     return (
         <FingoHomeLayout>

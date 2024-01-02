@@ -12,7 +12,7 @@ const getToday = () => {
     return new Date(Date.UTC(year, month, day))
 }
 
-exports.daysDifference = lastDate => {
+const daysDifference = lastDate => {
     const todayUTC = getToday()
 
     const day = lastDate ? lastDate.toISOString().split('T')[0] : 0
@@ -28,8 +28,14 @@ exports.daysDifference = lastDate => {
     return Math.floor((todayUTC - lastCompletedDayUTC) / (1000 * 60 * 60 * 24))
 }
 
-exports.generateReferralCode = () => {
+const generateReferralCode = () => {
     // do logic there
     const uid = new ShortUniqueId({ length: 12 })
     return uid.rnd()
+}
+
+module.exports = {
+    getToday,
+    daysDifference,
+    generateReferralCode,
 }

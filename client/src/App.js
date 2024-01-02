@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import {
     BrowserRouter as Router,
     Route,
@@ -53,17 +53,29 @@ import ResetPasswordPage from './pages/ResetPasswordPage'
 import { useAuth, usePersistedGuest } from './hooks'
 import { useDispatch } from 'react-redux'
 import InvitationPage from './pages/InvitationPage'
+import { authUtils } from './utils'
 
 const App = () => {
     const dispatch = useDispatch()
-    const { isAuthenticated } = useAuth()
-    const { persistedGuest_reset } = usePersistedGuest()
+    const { isAuthenticated, user } = useAuth()
+    const { persistedGuest_reset, guest, auth_initGuest } = usePersistedGuest()
+
+    const initGuest = useCallback(() => {
+        if (!guest._id && !guest?.registerToken) {
+            dispatch(auth_initGuest())
+        }
+    }, [guest])
 
     useEffect(() => {
         if (isAuthenticated) {
             dispatch(persistedGuest_reset())
+            authUtils.removeGuestAccessToken()
+        } else {
+            if (!guest._id) {
+                initGuest()
+            }
         }
-    }, [isAuthenticated])
+    }, [isAuthenticated, user])
 
     return (
         <>

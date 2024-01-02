@@ -1,6 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useRef, useMemo } from 'react'
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
+import {
+    useParams,
+    useNavigate,
+    useSearchParams,
+    useFetcher,
+} from 'react-router-dom'
 import Axios from 'src/api/axios'
 import { Button, Card, ListGroup, Row } from 'react-bootstrap'
 import { Helmet } from 'react-helmet'
@@ -24,6 +30,7 @@ import {
 } from 'src/components/hearts'
 import ModalInviteFriends from 'src/components/ModalInviteFriends'
 import dayjs from 'dayjs'
+import { QuizAPI } from 'src/api'
 
 const RenderBlockQuiz = () => {
     const dispatch = useDispatch()
@@ -42,18 +49,15 @@ const Quiz = () => {
     const { appBatch, app_setOpenModalHeartRunOut } = useApp()
     const { isAuthenticated, user, auth_syncAndGetUser } = useAuth()
 
-    const {
-        persistedGuest_setScore,
-        persistedGuest_setLastPlayed,
-        guestState,
-    } = usePersistedGuest()
+    const { persistedGuest_setScore, persistedGuest_setLastPlayed, guest } =
+        usePersistedGuest()
     const [imageURL, setImageURL] = useState('')
     const { skillName, subcategory, category } = useParams()
     const navigate = useNavigate()
     const [itemId, setItemId] = useState(null)
-    const [showAlert, setShowAlert] = useState(null)
+    // const [showAlert, setShowAlert] = useState(null)
 
-    const control = useAnimation()
+    // const control = useAnimation()
 
     const skillDetails = useRef({})
     const questionSet = useRef([])
@@ -62,7 +66,6 @@ const Quiz = () => {
     const correctAnswers = useRef([])
     const score = useRef([])
     const points = useRef(0)
-    const role = useRef('')
 
     const [currentQuestion, setCurrentQuestion] = useState(null)
     const [currentExplaination, setCurrentExplaination] = useState(null)
@@ -178,8 +181,6 @@ const Quiz = () => {
         setIsSubmittedAnswer(true)
         setAnswersList([])
         setCorrectOptionsText([])
-
-        // console.log('score-_-->>', score)
     }
 
     const next = () => {
@@ -240,79 +241,27 @@ const Quiz = () => {
         }
     }
 
-    const saveScore = () => {
-        if (searchParams.get('newUser') === 'true') {
-            // If newUser is true, save the score in localStorage
-            let scores = JSON.parse(sessionStorage.getItem('scores')) || []
-            // Add the new score to the array
-            scores.push({
+    const saveScore = async () => {
+        try {
+            const response = await QuizAPI.saveScore({
                 skill: skillName,
                 category: category,
                 sub_category: subcategory,
-                points: points?.current || 0, // Assuming `points` is already the updated value you want to store
+                points: points.current,
+                score: score.current,
             })
-            // Save the updated array back to localStorage
-            sessionStorage.setItem('scores', JSON.stringify(scores))
-            sessionStorage.setItem(
-                'lastPlayed',
-                JSON.stringify({
-                    skill: skillName,
-                    category: category,
-                    sub_category: subcategory,
-                })
-            )
-
-            dispatch(
-                persistedGuest_setLastPlayed({
-                    skill: skillName,
-                    category: category,
-                    sub_category: subcategory,
-                })
-            )
-
-            dispatch(
-                persistedGuest_setScore([
-                    ...guestState.score,
-                    {
-                        skill: skillName,
-                        category: category,
-                        sub_category: subcategory,
-                        points: points,
-                    },
-                ])
-            )
-
-            // Directly navigate to score page without waiting for server response
-            navigate(
-                `/skills/${skillName}/${category}/${subcategory}/score?newUser=true`,
-                {
-                    state: { data: { score: score, points: points } },
-                }
-            )
-        } else {
-            Axios({
-                method: 'POST',
-                data: {
-                    skill: skillName,
-                    category: category,
-                    sub_category: subcategory,
-                    points: points.current,
-                    score: score.current,
-                },
-                withCredentials: true,
-                url: '/server/savescore',
-            }).then(function (response) {
+            if (response) {
                 navigate(
                     `/skills/${skillName}/${category}/${subcategory}/score`,
                     {
                         state: { data: { score: score, points: points } },
                     }
                 )
-            })
-        }
+            }
+        } catch (e) {}
     }
 
-    const saveXP = () => {
+    const saveXP = async () => {
         let xp = 0
         if (points.current > 0) {
             xp = points.current * 20
@@ -322,26 +271,15 @@ const Quiz = () => {
         } else {
             xp = 15
         }
-
-        if (searchParams.get('newUser') === 'true') {
-            // If newUser is true, save the XP in localStorage
-            const currentXP = parseInt(sessionStorage.getItem('xp'), 10) || 0
-            const updatedXP = currentXP + xp
-            sessionStorage.setItem('xp', updatedXP)
-            sessionStorage.setItem('streak', '1')
-            // Then call saveScore which will handle localStorage or Axios based on newUser status
-            saveScore()
-        } else {
-            Axios({
-                method: 'POST',
-                data: {
-                    xp: xp,
-                },
-                withCredentials: true,
-                url: '/server/savexp',
-            }).then(function (response) {
-                saveScore()
+        try {
+            const response = await QuizAPI.saveXP({
+                xp,
             })
+            if (response) {
+                saveScore()
+            }
+        } catch (e) {
+            console.log('e->', e)
         }
     }
 
@@ -361,14 +299,13 @@ const Quiz = () => {
         }
     }
 
-    const getAllQuestions = isNewUser => {
-        console.log('CALL ME---->>')
+    const getAllQuestions = () => {
         Axios({
             method: 'GET',
             withCredentials: true,
             url: `/server/questions/${skillName}/${category}/${subcategory}`,
             params: {
-                newUser: isNewUser,
+                newUser: Boolean(!isAuthenticated && !user),
             },
         }).then(res => {
             questionSet.current = res.data.data
@@ -385,7 +322,7 @@ const Quiz = () => {
                     withCredentials: true,
                     url: `/server/getImage/${key}`,
                     params: {
-                        newUser: isNewUser,
+                        newUser: Boolean(!isAuthenticated && !user),
                     },
                 }).then(res => {
                     setImageURL(res.data.url)
@@ -417,65 +354,23 @@ const Quiz = () => {
         })
     }
 
-    const getSkillBySkillName = isNewUser => {
+    const getSkillBySkillName = () => {
         Axios({
             method: 'GET',
             withCredentials: true,
             url: `/server/skills/${skillName}`,
             params: {
-                newUser: isNewUser,
+                newUser: Boolean(!isAuthenticated && !user),
             },
         }).then(res => {
             skillDetails.current = res.data.data
         })
     }
 
-    ////to authenticate user before allowing him to enter the home page
     useEffect(() => {
-        const newUser = searchParams.get('newUser')
-        if (newUser === 'true') {
-            // Retrieve the scores array from localStorage and parse it
-            const storedScores =
-                JSON.parse(sessionStorage.getItem('scores')) || []
-
-            // Filter scores by skillName and category
-            const matchingScores = storedScores.filter(
-                scoreItem =>
-                    scoreItem.skill === skillName &&
-                    scoreItem.category === category
-            )
-
-            // Check if there are 5 items with the same skillName and category
-            if (matchingScores.length >= 5) {
-                const score = matchingScores.reduce(
-                    (acc, item) => acc + item.score,
-                    0
-                ) // Sum of scores as an example
-                const points = matchingScores.reduce(
-                    (acc, item) => acc + item.points,
-                    0
-                ) // Sum of points as an example
-
-                // Navigate with the state data
-                navigate(
-                    `/skills/${skillName}/${category}/${subcategory}/score?newUser=true`,
-                    {
-                        state: { data: { score: score, points: points } },
-                    }
-                )
-            } else {
-                // Call the functions as before
-                getSkillBySkillName(newUser)
-                getAllQuestions(newUser)
-            }
-        } else {
-            if (isAuthenticated) {
-                getSkillBySkillName()
-                getAllQuestions()
-                role.current = user?.role
-            }
-        }
-    }, [searchParams, isAuthenticated])
+        getSkillBySkillName()
+        getAllQuestions()
+    }, [])
 
     const isDisabledAnswer = useMemo(() => {
         return (
@@ -551,21 +446,21 @@ const Quiz = () => {
             dispatch(app_setOpenModalHeartRunOut(true))
         }
         // prettier-ignore
-        if ((!isAuthenticated && guestState?.heart < 1) || (!user?.unlimitedHeart && user?.heart < 1)) {
+        if ((!isAuthenticated && guest?.heart < 1) || (!user?.unlimitedHeart && user?.heart < 1)) {
             dispatch(app_setOpenModalHeartRunOut(true))
         }
         return () => {
             dispatch(app_setOpenModalHeartRunOut(false))
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isAuthenticated, user, guestState])
+    }, [isAuthenticated, user, guest])
 
     const isRunOutOfHearts = useMemo(() => {
         return (
             (isAuthenticated && !user?.unlimitedHeart && user?.heart === 0) ||
-            guestState?.heart === 0
+            guest?.heart === 0
         )
-    }, [user, isAuthenticated, guestState])
+    }, [user, isAuthenticated, guest])
 
     return (
         <FingoHomeLayout>

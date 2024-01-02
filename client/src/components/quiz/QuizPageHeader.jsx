@@ -4,7 +4,7 @@ import { useAuth, usePersistedGuest } from 'src/hooks'
 import HeartIconSVG from 'src/assets/svg/heart.svg'
 import UnlimitedHeartIcon from 'src/assets/images/unlimited-hearts.png'
 import HeartFadedIconSVG from 'src/assets/svg/heart-faded.svg'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { HeartCard } from '../hearts'
 import { Popover } from 'src/components/core'
 import 'src/styles/QuizPageHeader.styles.css'
@@ -25,7 +25,7 @@ const QuizPageHeader = () => {
     const today = new Date()
     const [show, setShow] = useState(false)
     const { isAuthenticated, user } = useAuth()
-    const { guestState } = usePersistedGuest()
+    const { guest } = usePersistedGuest()
 
     const onClickItem = (e, name) => {
         setShow(!show)
@@ -43,7 +43,7 @@ const QuizPageHeader = () => {
                 else if (isAuthenticated && user) {
                     return user?.heart || 0
                 } else {
-                    return guestState?.heart || 0
+                    return guest?.heart || 0
                 }
 
                 default:
@@ -52,8 +52,8 @@ const QuizPageHeader = () => {
         } else {
             switch (name) {
                 case 'heart':
-                    return guestState?.heart !== undefined
-                        ? String(guestState.heart) ?? '0'
+                    return guest?.heart !== undefined
+                        ? String(guest.heart) ?? '0'
                         : undefined
 
                 default:
@@ -68,7 +68,7 @@ const QuizPageHeader = () => {
             if (isAuthenticated && user?.unlimitedHeart && dayjs(user.unlimitedHeart).isAfter(dayjs(today).toISOString(), 'minute')) {
                 return UnlimitedHeartIcon 
             }
-            else if ((isAuthenticated && user?.heart === 0) || guestState?.heart === 0) {
+            else if ((isAuthenticated && user?.heart === 0) || guest?.heart === 0) {
                 return disabledIcon
             } else {
                 return icon

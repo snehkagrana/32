@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { useApp, useAuth } from 'src/hooks'
+import { useApp, useAuth, usePersistedGuest } from 'src/hooks'
 import 'src/styles/FingoCardTotalXP.styles.css'
 import { ReactComponent as InfoIcon } from 'src/assets/svg/info.svg'
 import { useDispatch } from 'react-redux'
@@ -10,7 +10,8 @@ import { LEVEL_THRESHOLDS } from 'src/constants'
 
 const FingoCardTotalXP = () => {
     const { totalXP } = useApp()
-    const { newUser, user } = useAuth()
+    const { newUser, user, isAuthenticated } = useAuth()
+    const { guest } = usePersistedGuest()
     const dispatch = useDispatch()
 
     const { openModalLevelUp, app_setModalLevelUp } = useApp()
@@ -59,20 +60,25 @@ const FingoCardTotalXP = () => {
         dispatch(
             app_setModalLevelUp({
                 open: true,
-                data: user?.xp ? user.xp : null,
+                data: isAuthenticated && user ? user?.xp : guest?.xp,
             })
         )
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [openModalLevelUp, user])
+    }, [openModalLevelUp, isAuthenticated, user, guest])
 
     const getNextTargetXp = useMemo(() => {
-        if (user?.xp?.total) {
+        if (isAuthenticated && user?.xp?.total) {
             const filteredLevels = LEVEL_THRESHOLDS.filter(
                 x => x > parseInt(user.xp.total, 10)
             )
             return filteredLevels.length > 0 ? filteredLevels[0] : 0
+        } else {
+            const filteredLevels = LEVEL_THRESHOLDS.filter(
+                x => x > parseInt(guest?.xp?.total, 10)
+            )
+            return filteredLevels.length > 0 ? filteredLevels[0] : 0
         }
-    }, [user])
+    }, [isAuthenticated, user, guest])
 
     return (
         <div
@@ -117,17 +123,19 @@ const FingoCardTotalXP = () => {
                 </div>
                 <div className='right'>
                     <div className='xp-header'>
-                        {!newUser && Boolean(user) ? (
+                        {isAuthenticated && Boolean(user) ? (
                             <p>
                                 {user?.xp?.total} / {getNextTargetXp}{' '}
                             </p>
                         ) : (
-                            <p>0 / 50</p>
+                            <p>
+                                {guest?.xp?.total} / {getNextTargetXp}{' '}
+                            </p>
                         )}
                     </div>
                     <div className='FingoCardTotalXPContent'>
                         <div className='progress'>
-                            {!newUser && Boolean(user) ? (
+                            {isAuthenticated && Boolean(user) ? (
                                 <div
                                     className='progress-bar'
                                     role='progressbar'
@@ -154,7 +162,11 @@ const FingoCardTotalXP = () => {
                                     aria-valuemin='0'
                                     aria-valuemax='1000'
                                     style={{
-                                        width: '0%',
+                                        width: `${getProgressCurrentLevel(
+                                            guest?.xp?.total
+                                                ? parseInt(guest.xp.total)
+                                                : 0
+                                        )}%`,
                                         backgroundColor: getLevelColor(
                                             'default',
                                             1

@@ -1,5 +1,6 @@
 const RewardModel = require('../models/reward')
 const UserModel = require('../models/user')
+const GuestModel = require('../models/guest')
 const dayjs = require('dayjs')
 const { mailTransporter } = require('../utils/mail.util')
 const {
@@ -266,37 +267,54 @@ exports.redeem = async (email, body) => {
     return result
 }
 
-exports.claimReward = async (email, type) => {
+exports.claimReward = async ({ user: userParams, type }) => {
     let DIAMOND_AWARDED = 0
-    let user = await UserModel.findOne({ email }).exec()
+
+    let user = await UserModel.findById(userParams._id).exec()
+    let guest = await GuestModel.findById(userParams._id).exec()
+
     const today = new Date().toISOString()
+
     let result = null
 
     if (type == 'daily quest') {
         DIAMOND_AWARDED = 1
 
-        // check claimed gems from daily quest
-        // prettier-ignore
-        if (
-            !user.lastClaimedGemsDailyQuest ||
-            (user.lastClaimedGemsDailyQuest && dayjs(user.lastClaimedGemsDailyQuest).isBefore(dayjs(today).toISOString(), 'day'))
-        ) {
-            user = await UserModel.findOneAndUpdate(
-                { email },
-                {
-                    $set: {
-                        lastClaimedGemsDailyQuest: new Date(),
-                        diamond: user.diamond + DIAMOND_AWARDED,
+        if (user) {
+            // check claimed gems from daily quest
+            // prettier-ignore
+            if (!user.lastClaimedGemsDailyQuest || (user.lastClaimedGemsDailyQuest && dayjs(user.lastClaimedGemsDailyQuest).isBefore(dayjs(today).toISOString(), 'day'))) {
+                user = await UserModel.findOneAndUpdate(
+                    { email },
+                    {
+                        $set: {
+                            lastClaimedGemsDailyQuest: new Date(),
+                            diamond: user.diamond + DIAMOND_AWARDED,
+                        },
                     },
-                },
-                { new: true }
-            ).exec()
-
-            result = {
-                value: DIAMOND_AWARDED,
+                    { new: true }
+                ).exec()
+                result = {
+                    value: DIAMOND_AWARDED,
+                }
             }
-        } else {
-            result = null
+        } else if (guest && userParams.email === 'GUEST') {
+            // prettier-ignore
+            if (!guest.lastClaimedGemsDailyQuest || (guest.lastClaimedGemsDailyQuest && dayjs(guest.lastClaimedGemsDailyQuest).isBefore(dayjs(today).toISOString(), 'day'))) {
+                guest = await GuestModel.findOneAndUpdate(
+                    { _id: guest._id },
+                    {
+                        $set: {
+                            lastClaimedGemsDailyQuest: new Date(),
+                            diamond: guest.diamond + DIAMOND_AWARDED,
+                        },
+                    },
+                    { new: true }
+                ).exec()
+                result = {
+                    value: DIAMOND_AWARDED,
+                }
+            }
         }
     }
     // other type

@@ -14,7 +14,7 @@ import 'src/styles/ModalHeartRunOut.styles.css'
 const ModalHeartRunOut = () => {
     const dispatch = useDispatch()
     const { isAuthenticated, user } = useAuth()
-    const { guestState } = usePersistedGuest()
+    const { guest } = usePersistedGuest()
 
     const {
         openModalHeartRunOut,
@@ -26,7 +26,7 @@ const ModalHeartRunOut = () => {
 
     const handleCloseModal = () => {
         if (
-            (!isAuthenticated && guestState?.heart > 0) ||
+            (!isAuthenticated && guest?.heart > 0) ||
             (isAuthenticated && user?.heart > 0)
         ) {
             dispatch(app_setOpenModalHeartRunOut(false))
@@ -41,18 +41,16 @@ const ModalHeartRunOut = () => {
     }
 
     const isAbleToRefill = useMemo(() => {
-        return Boolean(
-            user?.heart === 0 &&
-                user?.diamond >= AMOUNT_OF_GEMS_REDEEM_TO_HEARTS
-        )
-    }, [user])
+        // prettier-ignore
+        return Boolean(user?.heart === 0 && user?.diamond >= AMOUNT_OF_GEMS_REDEEM_TO_HEARTS) || Boolean(guest?.heart === 0 && guest?.diamond >= AMOUNT_OF_GEMS_REDEEM_TO_HEARTS)
+    }, [isAuthenticated, user, guest])
 
     const getGemsAmount = useMemo(() => {
         if (!isAuthenticated) {
-            return guestState?.diamond || 0
+            return guest?.diamond || 0
         }
         return user?.diamond || 0
-    }, [isAuthenticated, user, guestState])
+    }, [isAuthenticated, user, guest])
 
     const onClickRefillHearts = () => {
         dispatch(app_setOpenModalHeartRunOut(false))

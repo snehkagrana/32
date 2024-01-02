@@ -3,6 +3,7 @@ const router = express.Router()
 
 const BatchController = require('../controllers/batch.controller')
 const ErrorHandler = require('../middlewares/error.middleware')
+const AuthGuard = require('../middlewares/auth.middleware')
 const schema = require('../validations/batch.validation')
 const validate = require('../utils/validator.util')
 
@@ -10,6 +11,7 @@ const validate = require('../utils/validator.util')
 router.post(
     '/batch',
     validate(schema.batch),
+    AuthGuard,
     ErrorHandler(BatchController.invoke)
 )
 

@@ -121,11 +121,11 @@ exports.redeem = async (req, res) => {
 
 // Claim reward
 exports.claimReward = async (req, res) => {
-    if (req.user.email && req.body?.type) {
-        const result = await RewardService.claimReward(
-            req.user.email,
-            req.body.type
-        )
+    if (req.user && req.body?.type) {
+        const result = await RewardService.claimReward({
+            user: req.user,
+            type: req.body.type,
+        })
         if (result) {
             return res.json({
                 message: 'Claim reward successfully.',

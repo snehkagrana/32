@@ -76,7 +76,7 @@ import ModalInviteFriends from 'src/components/ModalInviteFriends'
 const HomePage = props => {
     const dispatch = useDispatch()
     const token = authUtils.getUserAccessToken()
-    const { guestState } = usePersistedGuest()
+    const { guest } = usePersistedGuest()
     const {
         auth_setOpenModalRegister,
         auth_syncAndGetUser,
@@ -293,7 +293,7 @@ const HomePage = props => {
             method: 'GET',
             url: `/server/categories/${forSkill}`,
             params: {
-                newUser: newUser,
+                newUser: Boolean(!isAuthenticated && !user),
             },
         }).then(res => {
             // console.log('categories', res.data);
@@ -319,65 +319,28 @@ const HomePage = props => {
             if (result?._id) {
                 setLastPlayed(result.last_played)
                 getSkills(result.last_played)
-            } else {
-                getSkills(guestState.last_played)
-                setLastPlayed(guestState.last_played)
             }
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [newUser])
+    }, [isAuthenticated, guest._id])
 
-    const storedScores = newUser
-        ? JSON.parse(sessionStorage.getItem('scores')) || []
-        : user
-          ? user.score
-          : []
+    // prettier-ignore
+    // const storedScores = !isAuthenticated && guest._id ? guest.score : user ? user.score : []
 
-    const storedLastPlayed = newUser
-        ? JSON.parse(sessionStorage.getItem('lastPlayed')) || null
-        : null
+    // prettier-ignore
+    // const storedLastPlayed = !isAuthenticated && guest._id ? guest.last_played || null : null
 
     let subTopicsCompleted = 0
 
     let lastSkillPercent = 0
 
-    if (newUser && skills.length) {
+    if (isAuthenticated && user && skills.length) {
         skills.forEach(skill => {
             skill.categories.forEach(category => {
                 const chaptersCount = skill.sub_categories.filter(
                     s => s.category === category
                 ).length
-                const userChaptersCount = storedScores.filter(
-                    i => i.skill === skill.skill && i.category === category
-                ).length
-
-                if (
-                    chaptersCount === userChaptersCount &&
-                    chaptersCount !== 0
-                ) {
-                    subTopicsCompleted++
-                }
-            })
-        })
-
-        if (storedLastPlayed && storedLastPlayed.skill) {
-            const lastAllSubCategories = skills.find(
-                s => s.skill === storedLastPlayed.skill
-            ).sub_categories.length
-            const userLastSubCategories = storedScores.filter(
-                s => s.skill === storedLastPlayed.skill
-            ).length
-            lastSkillPercent = Math.round(
-                (userLastSubCategories / lastAllSubCategories) * 100
-            )
-        }
-    } else if (user && skills.length) {
-        skills.forEach(skill => {
-            skill.categories.forEach(category => {
-                const chaptersCount = skill.sub_categories.filter(
-                    s => s.category === category
-                ).length
-                const userChaptersCount = user.score.filter(
+                const userChaptersCount = user?.score.filter(
                     i => i.skill === skill.skill && i.category === category
                 ).length
 
@@ -394,7 +357,37 @@ const HomePage = props => {
             const lastAllSubCategories = skills.find(
                 s => s.skill === lastPlayed.skill
             ).sub_categories.length
-            const userLastSubCategories = user.score.filter(
+            const userLastSubCategories = user?.score.filter(
+                s => s.skill === lastPlayed.skill
+            ).length
+            lastSkillPercent = Math.round(
+                (userLastSubCategories / lastAllSubCategories) * 100
+            )
+        }
+    } else if (guest?._id && skills.length) {
+        skills.forEach(skill => {
+            skill.categories.forEach(category => {
+                const chaptersCount = skill.sub_categories.filter(
+                    s => s.category === category
+                ).length
+                const userChaptersCount = guest?.score.filter(
+                    i => i.skill === skill.skill && i.category === category
+                ).length
+
+                if (
+                    chaptersCount === userChaptersCount &&
+                    chaptersCount !== 0
+                ) {
+                    subTopicsCompleted++
+                }
+            })
+        })
+
+        if (lastPlayed && lastPlayed.skill) {
+            const lastAllSubCategories = skills.find(
+                s => s.skill === lastPlayed.skill
+            ).sub_categories.length
+            const userLastSubCategories = guest.score.filter(
                 s => s.skill === lastPlayed.skill
             ).length
             lastSkillPercent = Math.round(
@@ -428,8 +421,7 @@ const HomePage = props => {
                                 <div className='col-12 px-0'>
                                     <Card className='welcome-card homePage-welcome-card'>
                                         <Card.Body>
-                                            {newUser &&
-                                            !guestState.last_played ? (
+                                            {newUser && !guest.last_played ? (
                                                 <Card.Text
                                                     className='welcome-card-text'
                                                     style={{
@@ -671,13 +663,14 @@ const HomePage = props => {
                                                 {newUser ? (
                                                     <a
                                                         href='#'
-                                                        onClick={() =>
+                                                        onClick={e => {
+                                                            e.preventDefault()
                                                             dispatch(
                                                                 auth_setOpenModalRegister(
                                                                     true
                                                                 )
                                                             )
-                                                        }
+                                                        }}
                                                         style={{
                                                             color: '#28a745',
                                                         }}
@@ -777,14 +770,13 @@ const HomePage = props => {
                                                                   category
                                                           ).length
                                                       let userCatCount
-                                                      if (newUser) {
+                                                      if (
+                                                          !isAuthenticated &&
+                                                          guest
+                                                      ) {
                                                           // Retrieve the scores from localStorage
                                                           const scores =
-                                                              JSON.parse(
-                                                                  sessionStorage.getItem(
-                                                                      'scores'
-                                                                  )
-                                                              ) || []
+                                                              guest.score
                                                           // Filter the scores by selectedSkill and category
                                                           userCatCount =
                                                               scores.filter(
