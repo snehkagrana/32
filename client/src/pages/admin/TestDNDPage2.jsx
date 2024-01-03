@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { Helmet } from 'react-helmet'
-import { FingoBaseLayout } from 'src/components/layouts'
+import { FingoHomeLayout } from 'src/components/layouts'
 import styled from 'styled-components'
 import { FingoButton, FingoInput } from 'src/components/core'
 import { ReactComponent as AddSvg } from 'src/assets/svg/add.svg'
@@ -9,25 +9,12 @@ import DraggableItem from 'src/components/admin/test-dnd/DraggableItem'
 import toast from 'react-hot-toast'
 import { useApp } from 'src/hooks'
 import { v4 as uuidv4 } from 'uuid'
+import { Col, Row } from 'react-bootstrap'
+import { ReactComponent as CloseIcon } from 'src/assets/svg/close.svg'
 
 const FOOTER_HEIGHT = 70
 const TITLE = 'Label The Candlestick'
 const INITIAL_PLACE_KEY = 'INITIAL_PLACE'
-
-function makeId(length) {
-    let result = ''
-    const characters =
-        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    const charactersLength = characters.length
-    let counter = 0
-    while (counter < length) {
-        result += characters.charAt(
-            Math.floor(Math.random() * charactersLength)
-        )
-        counter += 1
-    }
-    return result
-}
 
 const TestDNDPage2 = () => {
     const { app_isDarkTheme } = useApp()
@@ -95,12 +82,31 @@ const TestDNDPage2 = () => {
         setListDroppable(INITIAL_TARGET_PLACES)
     }
 
-    // const [availableValues, setAvailableValues] = useState({
-    //     id: 'initialPlace',
-    //     list: ['Hight', 'Close', 'Open', 'Low'],
-    // })
+    const onClickAddDroppable = () => {
+        const id = uuidv4()
+        setListDroppable({
+            ...listDroppable,
+            [id]: {
+                id: id,
+                list: [],
+            },
+        })
+    }
 
     const [listDroppable, setListDroppable] = useState(INITIAL_TARGET_PLACES)
+
+    const onClickDeleteDroppable = droppableId => {
+        const currentListDroppable = Object.values(listDroppable)
+        const filteredListDroppable = currentListDroppable.filter(
+            x => x.id !== droppableId
+        )
+        const result = filteredListDroppable.reduce(function (acc, cur, i) {
+            acc[cur.id] = cur
+            return acc
+        }, {})
+
+        setListDroppable(result)
+    }
 
     const onClickAdd = useCallback(() => {
         if (inputValue) {
@@ -199,10 +205,16 @@ const TestDNDPage2 = () => {
         })
     }
 
-    // console.log('listDroppable', listDroppable)
+    const disabeldSaveButton = useMemo(() => {
+        return listDroppable[INITIAL_PLACE_KEY].list.length > 0
+    }, [listDroppable])
+
+    const onClickSave = () => {
+        toast.error('Still development to save to db')
+    }
 
     return (
-        <FingoBaseLayout>
+        <FingoHomeLayout>
             <Helmet>
                 <title>Experiment Quiz DND</title>
             </Helmet>
@@ -225,47 +237,51 @@ const TestDNDPage2 = () => {
                         </InputGroup>
 
                         <Droppable droppableId={INITIAL_PLACE_KEY}>
-                            {provided => (
-                                <InitialPlaceBox
-                                    className={`${
-                                        app_isDarkTheme ? 'dark' : ''
-                                    }`}
-                                >
-                                    <ItemContainer
+                            {(provided, snapshot) => {
+                                console.log('snapshot', snapshot)
+                                return (
+                                    <InitialPlaceBox
                                         {...provided.droppableProps}
                                         ref={provided.innerRef}
+                                        className={`${
+                                            app_isDarkTheme ? 'dark' : ''
+                                        }`}
                                     >
-                                        {Object.values(listDroppable)
-                                            .find(
-                                                x => x.id === INITIAL_PLACE_KEY
-                                            )
-                                            .list.map((x, itemIndex) => (
-                                                <DraggableItem
-                                                    key={x.id}
-                                                    id={x.id}
-                                                    text={x.label}
-                                                    index={itemIndex}
-                                                    onDelete={() =>
-                                                        onClickDelete(
-                                                            INITIAL_PLACE_KEY,
-                                                            itemIndex
-                                                        )
-                                                    }
-                                                />
-                                            ))}
-                                        {provided.placeholder}
-                                    </ItemContainer>
-                                </InitialPlaceBox>
-                            )}
+                                        <ItemContainer>
+                                            {Object.values(listDroppable)
+                                                .find(
+                                                    x =>
+                                                        x.id ===
+                                                        INITIAL_PLACE_KEY
+                                                )
+                                                .list.map((x, itemIndex) => (
+                                                    <DraggableItem
+                                                        key={x.id}
+                                                        id={x.id}
+                                                        text={x.label}
+                                                        index={itemIndex}
+                                                        onDelete={() =>
+                                                            onClickDelete(
+                                                                INITIAL_PLACE_KEY,
+                                                                itemIndex
+                                                            )
+                                                        }
+                                                    />
+                                                ))}
+                                            {provided.placeholder}
+                                        </ItemContainer>
+                                    </InitialPlaceBox>
+                                )
+                            }}
                         </Droppable>
 
-                        <FingoButton
+                        {/* <FingoButton
                             style={{ minWidth: 170 }}
                             // disabled={availableValues.length > 0}
                             enableHoverEffect={false}
                         >
                             Add More
-                        </FingoButton>
+                        </FingoButton> */}
                     </FormWrapper>
 
                     <DraggableWrapper>
@@ -282,46 +298,97 @@ const TestDNDPage2 = () => {
                                         key={droppable.id + index}
                                         droppableId={droppable.id}
                                     >
-                                        {provided => (
-                                            <StyledDroppablePlaceItemContainer>
-                                                <StyledDroppablePlaceItem
-                                                    {...provided.droppableProps}
-                                                    ref={provided.innerRef}
-                                                    className={`DroppablePlaceItem-${index} ${
-                                                        app_isDarkTheme
-                                                            ? 'dark'
-                                                            : ''
-                                                    }`}
-                                                >
-                                                    {droppable.list.length >
-                                                        0 &&
-                                                        droppable.list.map(
-                                                            (x, itemIndex) => (
-                                                                <DraggableItem
-                                                                    key={x.id}
-                                                                    id={x.id}
-                                                                    text={
-                                                                        x.label
-                                                                    }
-                                                                    index={
-                                                                        itemIndex
-                                                                    }
-                                                                    onDelete={() =>
-                                                                        onClickDelete(
-                                                                            droppable.id,
+                                        {(provided, snapshot) => {
+                                            // console.log('provided', provided)
+                                            // console.log('snapshot', snapshot)
+                                            return (
+                                                <StyledDroppablePlaceItemContainer>
+                                                    <StyledDroppablePlaceItem
+                                                        {...provided.droppableProps}
+                                                        ref={provided.innerRef}
+                                                        className={`DroppablePlaceItem-${index} ${
+                                                            app_isDarkTheme
+                                                                ? 'dark'
+                                                                : ''
+                                                        } ${
+                                                            snapshot.isDraggingOver
+                                                                ? 'isDraggingOver'
+                                                                : ''
+                                                        }`}
+                                                    >
+                                                        <DeleteDroppableBtn
+                                                            className='DeleteDroppableBtn'
+                                                            onClick={() =>
+                                                                onClickDeleteDroppable(
+                                                                    droppable.id
+                                                                )
+                                                            }
+                                                        >
+                                                            <CloseIcon />
+                                                        </DeleteDroppableBtn>
+                                                        {droppable.list.length >
+                                                            0 &&
+                                                            droppable.list.map(
+                                                                (
+                                                                    x,
+                                                                    itemIndex
+                                                                ) => (
+                                                                    <DraggableItem
+                                                                        key={
+                                                                            x.id
+                                                                        }
+                                                                        id={
+                                                                            x.id
+                                                                        }
+                                                                        text={
+                                                                            x.label
+                                                                        }
+                                                                        index={
                                                                             itemIndex
-                                                                        )
-                                                                    }
-                                                                />
-                                                            )
-                                                        )}
-                                                    {provided.placeholder}
-                                                </StyledDroppablePlaceItem>
-                                            </StyledDroppablePlaceItemContainer>
-                                        )}
+                                                                        }
+                                                                        onDelete={() =>
+                                                                            onClickDelete(
+                                                                                droppable.id,
+                                                                                itemIndex
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                )
+                                                            )}
+                                                        {provided.placeholder}
+                                                    </StyledDroppablePlaceItem>
+                                                </StyledDroppablePlaceItemContainer>
+                                            )
+                                        }}
                                     </Droppable>
                                 ))}
                         </DroppablePlaceContainer>
+
+                        <div className='w-100 text-center'>
+                            <FingoButton
+                                className='text-center'
+                                style={{ minWidth: 200 }}
+                                onClick={onClickAddDroppable}
+                            >
+                                + Add Droppable
+                            </FingoButton>
+                        </div>
+                    </DraggableWrapper>
+                </Container>
+            </DragDropContext>
+            <FormFooter>
+                <Row>
+                    <Col xs={12} md={6}>
+                        <FingoButton
+                            className='text-center'
+                            style={{ minWidth: 200 }}
+                            onClick={onClickSave}
+                            disabled={disabeldSaveButton}
+                        >
+                            Save
+                        </FingoButton>
+                    </Col>
+                    <Col xs={12} md={6}>
                         <FingoButton
                             className='text-center'
                             style={{ minWidth: 160 }}
@@ -330,10 +397,9 @@ const TestDNDPage2 = () => {
                         >
                             Reset
                         </FingoButton>
-                    </DraggableWrapper>
-                </Container>
-            </DragDropContext>
-            <FormFooter>
+                    </Col>
+                </Row>
+
                 {/* {availableValues.length === 0 && (
                     <FingoButton
                         color='success'
@@ -344,7 +410,7 @@ const TestDNDPage2 = () => {
                     </FingoButton>
                 )} */}
             </FormFooter>
-        </FingoBaseLayout>
+        </FingoHomeLayout>
     )
 }
 
@@ -357,8 +423,8 @@ const Container = styled.div`
 `
 
 const DraggableWrapper = styled.div`
-    width: 440px;
-    padding: 1.2rem;
+    width: 500px;
+    padding: 10px;
 `
 
 const DraggableHeader = styled.div`
@@ -398,6 +464,7 @@ const DroppablePlaceContainer = styled.div`
 const StyledDroppablePlaceItemContainer = styled.div`
     padding: 10px;
     width: 240px;
+    position: relative;
 `
 
 const StyledDroppablePlaceItem = styled.div`
@@ -405,11 +472,45 @@ const StyledDroppablePlaceItem = styled.div`
     width: 100%;
     min-height: 240px;
     border-radius: 0.3rem;
-    background-color: #f6fff7;
-    border: 1px solid #9ecfab;
+    background-color: #f9fffa;
+    border: 2px dashed #9ecfab;
     &.dark {
         background-color: #1b2926;
-        border: 1px solid #1b2b25;
+        border: 2px dashed #1b2b25;
+    }
+    &:hover {
+        .DeleteDroppableBtn {
+            transform: scale(1);
+        }
+    }
+
+    &.isDraggingOver {
+        background-color: #fbf7e9;
+        border: 2px dashed #e37b20;
+    }
+`
+
+const DeleteDroppableBtn = styled.div`
+    border: none;
+    outline: none;
+    padding: 0;
+    height: 28px;
+    width: 28px;
+    border-radius: 28px;
+    background-color: red;
+    color: white;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default !important;
+    transform: scale(0);
+    transition: all 0.2s;
+    svg {
+        width: 16px;
+        height: auto;
     }
 `
 
@@ -421,8 +522,8 @@ const FormWrapper = styled.div`
 const InitialPlaceBox = styled.div`
     min-height: 200px;
     border-radius: 0.3rem;
-    background-color: #ecf8fd;
-    border: 1px solid #a3d1eb;
+    background-color: #fafcff;
+    border: 2px dashed #a3d1eb;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -433,7 +534,7 @@ const InitialPlaceBox = styled.div`
 
     &.dark {
         background-color: #1a1f21;
-        border: 1px solid #1a1e21;
+        border: 2px dashed #1a1e21;
     }
 `
 
@@ -457,7 +558,7 @@ const FormFooter = styled.div`
     height: ${FOOTER_HEIGHT}px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
 `
 
 const Button = styled.button`

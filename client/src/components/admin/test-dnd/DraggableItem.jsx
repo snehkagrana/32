@@ -6,22 +6,37 @@ import { ReactComponent as CloseIcon } from 'src/assets/svg/close.svg'
 
 const StyledItem = styled.div`
     position: relative;
-    color: #0070ff;
-    background-color: #d6e5ff;
-    height: 34px;
     width: 100%;
-    transition: background-color 0.8s ease-out;
+    transition: background-color 0.5s ease-out;
     margin-bottom: 0.75rem;
-    border-radius: 0.3rem;
-    text-align: center;
-    font-weight: 700;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    &:hover {
-        background-color: #b0c5e9;
-        transition: background-color 0.1s ease-in;
+    user-select: none;
+
+    .StyledItemInner {
+        color: #0070ff;
+        background-color: #d6e5ff;
+        height: 42px;
+        text-align: center;
+        font-weight: 700;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.4rem;
+        border-color: rgb(10 127 255);
+        box-shadow: rgb(162 195 229) 0px 3px 0px 1px;
+        &:hover {
+            background-color: #b0c5e9;
+            transition: background-color 0.2s ease-in;
+            .DeleteBtn {
+                transform: scale(1);
+            }
+        }
+        &.isDragging {
+            background-color: #c1d8ff;
+            transform: rotate(-2deg) !important;
+            border-color: rgb(10 127 255);
+            box-shadow: rgb(84 148 215) 0px 3px 0px 1px;
+        }
     }
 
     &.dark {
@@ -49,6 +64,8 @@ const DeleteBtn = styled.div`
     align-items: center;
     justify-content: center;
     cursor: default !important;
+    transition: all 0.2s;
+    transform: scale(0);
     svg {
         width: 16px;
         height: auto;
@@ -59,19 +76,28 @@ const DraggableItem = ({ text, id, index, onDelete }) => {
     const { app_isDarkTheme } = useApp()
     return (
         <Draggable draggableId={id ?? text} index={index}>
-            {provided => (
-                <StyledItem
-                    className={`${app_isDarkTheme ? 'dark' : ''}`}
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                >
-                    <DeleteBtn onClick={onDelete}>
-                        <CloseIcon />
-                    </DeleteBtn>
-                    {text}
-                </StyledItem>
-            )}
+            {(provided, snapshot) => {
+                // console.log('snapshot', snapshot)
+                return (
+                    <StyledItem
+                        className={`${app_isDarkTheme ? 'dark' : ''}`}
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                    >
+                        <div
+                            className={`StyledItemInner ${
+                                snapshot.isDragging ? 'isDragging' : ''
+                            }`}
+                        >
+                            <DeleteBtn className='DeleteBtn' onClick={onDelete}>
+                                <CloseIcon />
+                            </DeleteBtn>
+                            {text}
+                        </div>
+                    </StyledItem>
+                )
+            }}
         </Draggable>
     )
 }
