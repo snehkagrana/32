@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Axios from "axios";
+import Axios from "src/api/axios";
 import { Link, useNavigate } from "react-router-dom";
 import {
     Container,
