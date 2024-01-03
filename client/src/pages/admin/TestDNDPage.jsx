@@ -1,18 +1,22 @@
 import React, { useCallback, useState } from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { Helmet } from 'react-helmet'
-import { FingoHomeLayout } from 'src/components/layouts'
-import DraggableSection from 'src/components/admin/test-dnd/DraggableSection'
+import { FingoBaseLayout } from 'src/components/layouts'
+// import DraggableSection from 'src/components/admin/test-dnd/DraggableSection'
 import styled from 'styled-components'
 import { FingoButton, FingoInput } from 'src/components/core'
 import { ReactComponent as AddSvg } from 'src/assets/svg/add.svg'
 import DraggableItem from 'src/components/admin/test-dnd/DraggableItem'
+import toast from 'react-hot-toast'
+
+const FOOTER_HEIGHT = 70
 
 const Container = styled.div`
     width: 100%;
     padding: 0 20px;
     display: flex;
     flex-wrap: nowrap;
+    padding-bottom: ${FOOTER_HEIGHT}px;
 `
 
 const DraggableWrapper = styled.div`
@@ -35,24 +39,34 @@ const DraggableHeader = styled.div`
 const DroppablePlaceContainer = styled.div`
     display: block;
     position: relative;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 480px;
 
     .DroppablePlaceItem-1 {
-        transform: translate(220px, -200px);
+        /* transform: translate(220px, -200px); */
     }
 
     .DroppablePlaceItem-2 {
-        transform: translate(0px, -180px);
+        /* transform: translate(0px, -180px); */
     }
 
     .DroppablePlaceItem-3 {
-        transform: translate(220px, -380px);
+        /* transform: translate(220px, -380px); */
     }
+`
+
+const StyledDroppablePlaceItemContainer = styled.div`
+    padding: 10px;
+    width: 240px;
 `
 
 const StyledDroppablePlaceItem = styled.div`
     padding: 1rem;
-    width: 200px;
-    min-height: 200px;
+    width: 100%;
+    min-height: 240px;
     border-radius: 0.3rem;
     background-color: #f6fff7;
     border: 1px solid #9ecfab;
@@ -77,7 +91,13 @@ const ItemContainer = styled.div`
 const FormFooter = styled.div`
     position: fixed;
     bottom: 0;
+    left: 0;
     width: 100%;
+    background: #fff;
+    height: ${FOOTER_HEIGHT}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
 
 const Button = styled.button`
@@ -115,52 +135,71 @@ function makeId(length) {
     return result
 }
 
+const INITIAL_AVAILABLE_VALUES = [
+    {
+        id: 'b8535264-ab2b-4a3e-96b3-30c0dbb95e39',
+        label: 'Hight',
+    },
+    {
+        id: 'aa0a3233-d95e-411a-a4d5-410331dc5670',
+        label: 'Close',
+    },
+    {
+        id: '26be1540-967e-4490-a8c8-cffab40d365f',
+        label: 'Open',
+    },
+    {
+        id: '56721605-682b-4b4e-94fa-5b22228109eb',
+        label: 'Low',
+    },
+]
+
+const INITIAL_TARGET_PLACES = [
+    {
+        id: 'place1',
+        items: [],
+    },
+    {
+        id: 'place2',
+        items: [],
+    },
+    {
+        id: 'place3',
+        items: [],
+    },
+    {
+        id: 'place4',
+        items: [],
+    },
+]
+
 const TestDNDPage = () => {
     const [inputValue, setInputValue] = useState('')
     const [values, setValues] = useState([])
 
-    const [availableValues, setAvailableValues] = useState([
-        {
-            id: 'b8535264-ab2b-4a3e-96b3-30c0dbb95e39',
-            label: 'Hight',
-        },
-        {
-            id: 'aa0a3233-d95e-411a-a4d5-410331dc5670',
-            label: 'Close',
-        },
-        {
-            id: '26be1540-967e-4490-a8c8-cffab40d365f',
-            label: 'Open',
-        },
-        {
-            id: '56721605-682b-4b4e-94fa-5b22228109eb',
-            label: 'Low',
-        },
-    ])
+    const [availableValues, setAvailableValues] = useState(
+        INITIAL_AVAILABLE_VALUES
+    )
 
-    const [draggablePlaces, setDraggablePlaces] = useState([
-        {
-            id: 'place1',
-            items: [],
-        },
-        {
-            id: 'place2',
-            items: [],
-        },
-        {
-            id: 'place3',
-            items: [],
-        },
-        {
-            id: 'place4',
-            items: [],
-        },
-    ])
+    const [targetPlaces, setTargetPlaces] = useState(INITIAL_TARGET_PLACES)
 
-    console.log('draggablePlaces', draggablePlaces)
+    console.log('targetPlaces', targetPlaces)
 
     const onChange = e => {
         setInputValue(e.target.value)
+    }
+
+    const handleKeyDown = e => {
+        if (e.key === 'Enter' && inputValue) {
+            setAvailableValues([
+                ...availableValues,
+                {
+                    id: makeId(20),
+                    label: inputValue,
+                },
+            ])
+            setInputValue('')
+        }
     }
 
     const onClickAdd = useCallback(() => {
@@ -168,7 +207,7 @@ const TestDNDPage = () => {
             setAvailableValues([
                 ...availableValues,
                 {
-                    id: makeId(5),
+                    id: makeId(20),
                     label: inputValue,
                 },
             ])
@@ -176,7 +215,10 @@ const TestDNDPage = () => {
         }
     }, [inputValue, availableValues])
 
-    // console.log('values ->', values)
+    const onClickReset = () => {
+        setAvailableValues(INITIAL_AVAILABLE_VALUES)
+        setTargetPlaces(INITIAL_TARGET_PLACES)
+    }
 
     const initialColumns = {
         todo: {
@@ -192,7 +234,8 @@ const TestDNDPage = () => {
             list: [],
         },
     }
-    const [columns, setColumns] = useState(initialColumns)
+
+    // const [columns, setColumns] = useState(initialColumns)
 
     const onDragEnd = ({ source, destination }) => {
         // Make sure we have a valid destination
@@ -204,35 +247,70 @@ const TestDNDPage = () => {
             return null
         }
 
-        const movedIndex = source.index
-
         let movedItem = null
+        const movedItemIndex = source.index
 
+        // Initial move from initial place to target place
         if (source.droppableId === 'initialPlace') {
-            movedItem = availableValues.find((_, index) => index === movedIndex)
-            setAvailableValues(
-                availableValues.filter((_, index) => index !== movedIndex)
+            movedItem = availableValues.find(
+                (_, index) => index === movedItemIndex
             )
+
+            // make sure it's actually moved to target place not initial place
+            if (destination.droppableId !== 'initialPlace') {
+                setAvailableValues(
+                    availableValues.filter(
+                        (_, index) => index !== movedItemIndex
+                    )
+                )
+            } else {
+                toast.error('Please moved to target place', {
+                    position: 'bottom-center',
+                })
+            }
         } else if (source.droppableId) {
-            const sourceArr = draggablePlaces.find(
+            const sourceArr = targetPlaces.find(
                 x => x.id === source.droppableId
             )
             if (sourceArr?.items?.length > 0) {
                 movedItem = sourceArr.items.find(
-                    (_, index) => index === movedIndex
+                    (_, index) => index === movedItemIndex
                 )
+            }
+
+            // Move back from target place to initial place
+            if (destination.droppableId === 'initialPlace') {
+                const sourcePlace = targetPlaces.find(
+                    x => x.id === source.droppableId
+                )
+                console.log('sourcePlace', sourcePlace)
+
+                const sourcePlaceIndex = targetPlaces.findIndex(
+                    x => x.id === destination.droppableId
+                )
+
+                const newSourcePlaceItems = targetPlaces
+                    .find(x => x.id === source.droppableId)
+                    .items.filter((_, index) => index !== source.index)
+
+                console.log('newSourcePlaceItems', newSourcePlaceItems)
+
+                // Set available values
+                setAvailableValues([...availableValues, movedItem])
             }
         }
 
         console.log('movedItem', movedItem)
         console.log('destination', destination)
+        console.log('source', source)
 
+        // Moved item to target place
         if (destination.droppableId !== 'initialPlace') {
-            const targetPlace = draggablePlaces.find(
+            const targetPlace = targetPlaces.find(
                 x => x.id === destination.droppableId
             )
 
-            const draggablePlaceIndex = draggablePlaces.findIndex(
+            const draggablePlaceIndex = targetPlaces.findIndex(
                 x => x.id === destination.droppableId
             )
 
@@ -240,21 +318,19 @@ const TestDNDPage = () => {
                 ...targetPlace,
                 items: [...targetPlace.items, movedItem],
             }
-            console.log('movedIndex', movedIndex)
-            console.log('targetPlace', targetPlace)
+
+            console.log('movedItemIndex', movedItemIndex)
+            console.log('targetPla˝ce', targetPlace)
             console.log('updatedTargetPlace', updatedTargetPlace)
 
             // make final new array of objects by combining updated object.
-            const updatedDraggablePlaces = [
-                ...draggablePlaces.slice(0, draggablePlaceIndex),
+            const updatedtargetPlaces = [
+                ...targetPlaces.slice(0, draggablePlaceIndex),
                 updatedTargetPlace,
-                ...draggablePlaces.slice(draggablePlaceIndex + 1),
+                ...targetPlaces.slice(draggablePlaceIndex + 1),
             ]
 
-            // Set draggable places
-            setDraggablePlaces(updatedDraggablePlaces)
-
-            // Remove from source
+            setTargetPlaces(updatedtargetPlaces)
         }
 
         // console.log('source.droppableId', source.droppableId)
@@ -322,9 +398,9 @@ const TestDNDPage = () => {
     }
 
     return (
-        <FingoHomeLayout>
+        <FingoBaseLayout>
             <Helmet>
-                <title>Reward</title>
+                <title>Experiment Quiz DND</title>
             </Helmet>
             <DragDropContext onDragEnd={onDragEnd}>
                 <Container>
@@ -335,6 +411,7 @@ const TestDNDPage = () => {
                                 name='value'
                                 value={inputValue}
                                 onChange={onChange}
+                                onKeyDown={handleKeyDown}
                                 placeholder='Input value...'
                             />
                             <Button onClick={onClickAdd} type='button'>
@@ -361,11 +438,13 @@ const TestDNDPage = () => {
                             )}
                         </Droppable>
 
-                        {availableValues.length === 0 && (
-                            <FingoButton enableHoverEffect={false}>
-                                Add More
-                            </FingoButton>
-                        )}
+                        <FingoButton
+                            style={{ minWidth: 170 }}
+                            disabled={availableValues.length > 0}
+                            enableHoverEffect={false}
+                        >
+                            Add More
+                        </FingoButton>
                     </FormWrapper>
 
                     <DraggableWrapper>
@@ -375,40 +454,57 @@ const TestDNDPage = () => {
                         </DraggableHeader>
 
                         <DroppablePlaceContainer>
-                            {draggablePlaces.map((x, index) => (
+                            {targetPlaces.map((x, index) => (
                                 <Droppable
                                     key={x.id + index}
                                     droppableId={x.id}
                                 >
                                     {provided => (
-                                        <StyledDroppablePlaceItem
-                                            {...provided.droppableProps}
-                                            ref={provided.innerRef}
-                                            className={`DroppablePlaceItem-${index}`}
-                                        >
-                                            {x.items.length > 0 &&
-                                                x.items.map((x, index) => (
-                                                    <DraggableItem
-                                                        key={x.id}
-                                                        text={x.label}
-                                                        index={index}
-                                                    />
-                                                ))}
-                                            {provided.placeholder}
-                                        </StyledDroppablePlaceItem>
+                                        <StyledDroppablePlaceItemContainer>
+                                            <StyledDroppablePlaceItem
+                                                {...provided.droppableProps}
+                                                ref={provided.innerRef}
+                                                className={`DroppablePlaceItem-${index}`}
+                                            >
+                                                {x.items.length > 0 &&
+                                                    x.items.map((x, index) => (
+                                                        <DraggableItem
+                                                            key={x.id}
+                                                            text={x.label}
+                                                            index={index}
+                                                        />
+                                                    ))}
+                                                {provided.placeholder}
+                                            </StyledDroppablePlaceItem>
+                                        </StyledDroppablePlaceItemContainer>
                                     )}
                                 </Droppable>
                             ))}
                         </DroppablePlaceContainer>
+
+                        <FingoButton
+                            className='text-center'
+                            style={{ minWidth: 160 }}
+                            color='danger'
+                            onClick={onClickReset}
+                        >
+                            Reset
+                        </FingoButton>
                     </DraggableWrapper>
                 </Container>
             </DragDropContext>
             <FormFooter>
                 {availableValues.length === 0 && (
-                    <FingoButton enableHoverEffect={false}>Submit</FingoButton>
+                    <FingoButton
+                        color='success'
+                        style={{ minWidth: 240 }}
+                        enableHoverEffect={false}
+                    >
+                        Save
+                    </FingoButton>
                 )}
             </FormFooter>
-        </FingoHomeLayout>
+        </FingoBaseLayout>
     )
 }
 
