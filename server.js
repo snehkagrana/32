@@ -41,8 +41,11 @@ const AuthGuard = require('./middlewares/auth.middleware');
 const { initializeDiamondUser, calculateDiamondUser } = require("./utils/reward.util");
 const { mailTransporter } = require("./utils/mail.util");
 const ReferralService = require('./services/referral.service')
+// const dayjs = require("dayjs");
 
 require('./cronjob/hearts.cronjob')
+
+// dayjs.tz.setDefault("Asia/Kolkata")
 
 aws.config.update({
     secretAccessKey: process.env.ACCESS_SECRET_KEY,

@@ -4,6 +4,7 @@ const { getToday, daysDifference } = require('../utils/common.util')
 const { calculateDiamondUser } = require('../utils/reward.util')
 const { getLevelByXpPoints } = require('../utils/xp.utils')
 const ReferralService = require('./referral.service')
+const dayjs = require('dayjs')
 
 exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
     let result = null
@@ -51,7 +52,7 @@ exports.saveScore = async ({ authUser, body }) => {
     let guest = await GuestModel.findById(authUser._id).exec()
 
     if (user) {
-        const today = getToday().toISOString().split('T')[0]
+        const today = dayjs(new Date()).format('YYYY-MM-DD')
         let allScoresList = user.score || []
 
         allScoresList.push({
@@ -74,6 +75,7 @@ exports.saveScore = async ({ authUser, body }) => {
         user.lastCompletedDay = today
 
         const dayOfWeek = (getToday().getDay() + 6) % 7
+
         const oldValue = user.completedDays || {}
 
         user.lastCompletedDay = today

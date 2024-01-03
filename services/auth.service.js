@@ -1,6 +1,10 @@
 const UserModel = require('../models/user')
 const cacheUtil = require('../utils/cache.util')
-const { daysDifference, generateReferralCode } = require('../utils/common.util')
+const {
+    daysDifference,
+    generateReferralCode,
+    getToday,
+} = require('../utils/common.util')
 const { mailTransporter } = require('../utils/mail.util')
 const { initializeDiamondUser } = require('../utils/reward.util')
 const { getLevelByXpPoints } = require('../utils/xp.utils')
