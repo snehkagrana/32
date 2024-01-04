@@ -19,11 +19,11 @@
 .FingoSwitch label {
     cursor: pointer;
     text-indent: -9999px;
-    width: 66px;
-    height: 26px;
+    width: 56px;
+    height: 22px;
     background: #d3e1d3;
     display: block;
-    border-radius: 26px;
+    border-radius: 22px;
     position: relative;
 }
 
@@ -34,12 +34,12 @@
 .FingoSwitch label:after {
     content: '';
     position: absolute;
-    top: -4px;
+    top: -2px;
     left: -3px;
-    width: 34px;
-    height: 34px;
+    width: 26px;
+    height: 26px;
     background: #fff;
-    border-radius: 34px;
+    border-radius: 26px;
     transition: 0.3s;
     background: linear-gradient(rgb(87 204 2) 10%, rgb(33 171 0));
     border-color: rgb(87 204 2);
