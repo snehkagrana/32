@@ -717,9 +717,9 @@ const Quiz = () => {
                                     ) : (
                                         <Button
                                             variant='success'
+                                            className="QuizSubmitBtn"
                                             style={{
                                                 width: '100%', // Make the button take full width on smaller screens
-                                                maxWidth: '28%', // Set a maximum width to prevent excessive stretching
                                                 whiteSpace: 'nowrap', // Prevent text from wrapping
                                                 textAlign: 'center',
                                                 boxShadow: '0px 7px #1a5928',

@@ -7,7 +7,7 @@
     min-height: 100vh;
     margin-left: auto;
     margin-right: auto;
-    width: 90%;
+    width: 100%;
     max-width: 480px;
     position: relative;
     padding-bottom: 100px; /* only for mobile */
@@ -94,4 +94,8 @@
     width: 100%;
     height: 100%;
     z-index: 10;
+}
+
+.QuizSubmitBtn {
+    max-width: 120px;
 }
