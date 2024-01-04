@@ -334,3 +334,16 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
         transform: translateY(-7px);
     }
 }
+
+.FingoTooltip {
+    background-color: #333;
+    color: #fff;
+    font-size: 0.9rem;
+    border-radius: 0.4rem;
+    padding: 0.3rem 0.6rem;
+}
+
+[data-theme='dark'] .FingoTooltip {
+    background-color: #fff;
+    color: #000;
+}
