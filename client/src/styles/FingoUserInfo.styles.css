@@ -31,6 +31,7 @@
     position: absolute;
     bottom: -12px;
     white-space: nowrap;
+    z-index: 1;
 }
 
 .FingoUserInfo .greetingText {
@@ -53,9 +54,28 @@
 .FingoUserInfo label {
     width: 48px;
     height: 48px;
+    border-radius: 48px;
     overflow: hidden;
     margin-bottom: 0;
-    display: inline-block;
+    display: flex;
+}
+
+.UploadPictureContainer:hover .UploadMarker {
+    display: flex;
+}
+
+.FingoUserInfo .UploadMarker {
+    width: 48px;
+    height: 48px;
+    border-radius: 48px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
 }
 
 .FingoUserInfo label img {

@@ -1,18 +1,24 @@
 import Axios from 'src/api/axios'
 import { useNavigate } from 'react-router-dom'
-import { useMemo, useState } from 'react'
+import { Fragment, useMemo, useRef, useState } from 'react'
 
 import nonSignedUp from 'src/images/nonSignedUp'
 import signedUp from 'src/images/pepe.jpg'
 import { useDispatch } from 'react-redux'
-import { useAuth } from 'src/hooks'
+import { useApp, useAuth } from 'src/hooks'
 
 import 'src/styles/FingoUserInfo.styles.css'
 import { getLevelColor } from 'src/utils'
+import { ArrowContainer, Popover as ReactTinyPopover } from 'react-tiny-popover'
+import { ReactComponent as PencilFillSvg } from 'src/assets/svg/pencil-fill.svg'
 
 const FingoUserInfo = () => {
     const now = new Date()
     const time = now.getHours()
+
+    const labelUploadRef = useRef(null)
+
+    const { app_isDarkTheme } = useApp()
 
     const { isAuthenticated } = useAuth()
 
@@ -32,9 +38,10 @@ const FingoUserInfo = () => {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { user, newUser, auth_setNewUser } = useAuth()
+    const { user, newUser, auth_syncAndGetUser } = useAuth()
 
     const [profilePicture, setProfilePicture] = useState('')
+    const [isOpenPopover, setIsOpenPopover] = useState('')
 
     const handleProfilePictureUpload = event => {
         const file = event.target.files[0]
@@ -51,11 +58,14 @@ const FingoUserInfo = () => {
         })
             .then(function (response) {
                 setProfilePicture(response.data.imageUrl)
+                auth_syncAndGetUser()
             })
             .catch(error => {
                 console.error('Error uploading file:', error)
             })
     }
+
+    const renderTooltip = () => <div className='FingoTooltip'>Upload Image</div>
 
     return (
         <div className='FingoUserInfo'>
@@ -74,27 +84,103 @@ const FingoUserInfo = () => {
                             Lvl {user?.xp?.level ?? 1}
                         </div>
                     )}
-                    <label htmlFor='profile-picture-upload'>
-                        {!isAuthenticated ? (
-                            <img
-                                src={nonSignedUp}
-                                alt='Profile'
-                                className='rounded-circle'
-                            />
-                        ) : user?.imgPath ? (
-                            <img
-                                src={user.imgPath}
-                                alt='Profile'
-                                className='rounded-circle'
-                            />
-                        ) : (
-                            <img
-                                src={signedUp}
-                                alt='Profile'
-                                className='rounded-circle'
-                            />
-                        )}
-                    </label>
+
+                    {isAuthenticated ? (
+                        <ReactTinyPopover
+                            isOpen={isOpenPopover}
+                            padding={10}
+                            reposition={true}
+                            content={({ position, childRect, popoverRect }) => (
+                                <ArrowContainer
+                                    position={position}
+                                    childRect={childRect}
+                                    popoverRect={popoverRect}
+                                    arrowSize={10}
+                                    className='PopoverArrowContainer'
+                                    arrowClassName='PopoverArrow'
+                                    arrowColor={
+                                        app_isDarkTheme ? '#fff' : '#333'
+                                    }
+                                >
+                                    {renderTooltip()}
+                                </ArrowContainer>
+                            )}
+                        >
+                            <div
+                                onMouseEnter={() => setIsOpenPopover(true)}
+                                onMouseLeave={() => {
+                                    setTimeout(() => {
+                                        setIsOpenPopover(false)
+                                    }, 300)
+                                }}
+                                className='position-relative UploadPictureContainer'
+                            >
+                                <label
+                                    ref={labelUploadRef}
+                                    htmlFor='profile-picture-upload'
+                                    className='cursor-pointer'
+                                >
+                                    {!isAuthenticated ? (
+                                        <img
+                                            src={nonSignedUp}
+                                            alt='Profile'
+                                            className='rounded-circle'
+                                        />
+                                    ) : user?.imgPath ? (
+                                        <img
+                                            src={user.imgPath}
+                                            alt='Profile'
+                                            className='rounded-circle'
+                                        />
+                                    ) : (
+                                        <img
+                                            src={signedUp}
+                                            alt='Profile'
+                                            className='rounded-circle'
+                                        />
+                                    )}
+                                </label>
+                                <div
+                                    className='UploadMarker'
+                                    onClick={() => {
+                                        if (labelUploadRef.current) {
+                                            labelUploadRef.current.click()
+                                        }
+                                    }}
+                                >
+                                    <PencilFillSvg />
+                                </div>
+                            </div>
+                        </ReactTinyPopover>
+                    ) : (
+                        <label
+                            htmlFor='profile-picture-upload'
+                            onMouseEnter={() => setIsOpenPopover(true)}
+                            onMouseLeave={() => setIsOpenPopover(false)}
+                            className='cursor-pointer'
+                        >
+                            {!isAuthenticated ? (
+                                <img
+                                    src={nonSignedUp}
+                                    alt='Profile'
+                                    className='rounded-circle'
+                                />
+                            ) : user?.imgPath ? (
+                                <img
+                                    src={user.imgPath}
+                                    alt='Profile'
+                                    className='rounded-circle'
+                                />
+                            ) : (
+                                <img
+                                    src={signedUp}
+                                    alt='Profile'
+                                    className='rounded-circle'
+                                />
+                            )}
+                        </label>
+                    )}
+
                     <input
                         id='profile-picture-upload'
                         type='file'

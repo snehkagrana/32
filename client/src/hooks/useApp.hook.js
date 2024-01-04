@@ -1,5 +1,10 @@
 import { useMemo } from 'react'
-import { app_selectState, app_reducerActions } from 'src/redux/app'
+import {
+    app_selectState,
+    app_reducerActions,
+    appPersisted_selectState,
+    appPersisted_reducerActions,
+} from 'src/redux/app'
 import { useSelector } from 'react-redux'
 import { CommonAPI } from 'src/api'
 import { useAuth } from './useAuth.hook'
@@ -8,6 +13,7 @@ import { usePersistedGuest } from './usePersistedGuest.hook'
 
 export const useApp = () => {
     const state = useSelector(app_selectState)
+    const statePersisted = useSelector(appPersisted_selectState)
     const { isAuthenticated, user } = useAuth()
     const { guest } = usePersistedGuest()
 
@@ -36,7 +42,9 @@ export const useApp = () => {
     return {
         app_isDarkTheme,
         ...state,
+        ...statePersisted,
         ...app_reducerActions,
+        ...appPersisted_reducerActions,
         appBatch,
     }
 }

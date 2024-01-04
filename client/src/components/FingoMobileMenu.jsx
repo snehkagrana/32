@@ -17,6 +17,7 @@ import IcFingoEnvelope from 'src/assets/images/fingo-envelope.png'
 
 import Swal from 'sweetalert2'
 import { authUtils } from 'src/utils'
+import { FingoSwitch } from './core'
 
 const FingoMobileMenu = ({ open }) => {
     const dispatch = useDispatch()
@@ -34,6 +35,8 @@ const FingoMobileMenu = ({ open }) => {
         app_setTotalXP,
         app_setOpenSidebar,
         app_setOpenModalInviteFriends,
+        settings,
+        appPersisted_setSettings,
     } = useApp()
 
     const { persistedGuest_reset } = usePersistedGuest()
@@ -93,6 +96,15 @@ const FingoMobileMenu = ({ open }) => {
 
     const onClickBackdrop = () => {
         dispatch(app_setOpenSidebar(false))
+    }
+
+    const onChangeSound = () => {
+        dispatch(
+            appPersisted_setSettings({
+                ...settings,
+                soundsEffect: !settings.soundsEffect,
+            })
+        )
     }
 
     return (
@@ -189,6 +201,12 @@ const FingoMobileMenu = ({ open }) => {
                         )}
                     </ul>
                     <div className='FingoMobileMenuSwitchContainer'>
+                        <FingoSwitch
+                            label='Sound Effects'
+                            checked={settings.soundsEffect}
+                            onChange={onChangeSound}
+                            className='mb-4 mt-2'
+                        />
                         <FingoSwitchTheme />
                     </div>
                 </div>

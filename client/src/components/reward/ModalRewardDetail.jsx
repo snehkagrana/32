@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Row, Col, ProgressBar, Alert } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
-import { useAdmin, useAuth, useReward } from 'src/hooks'
+import { useAdmin, useApp, useAuth, useReward } from 'src/hooks'
 import { FingoButton, FingoModal } from 'src/components/core'
 import OtherImg from 'src/assets/images/giftcard/other.jpg'
 import 'src/styles/ModalRewardDetail.styles.css'
@@ -52,6 +52,7 @@ const ModalRewardDetail = () => {
         reward_setModalForm,
         reward_adminGetList,
     } = useReward()
+    const { settings } = useApp()
     const [redeemSuccess, setRedeemSuccess] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [redeemedItem, setRedeemedItem] = useState(null)
@@ -273,7 +274,7 @@ const ModalRewardDetail = () => {
     }, [user, modalDetail.data])
 
     useEffect(() => {
-        if (redeemSuccess) {
+        if (redeemSuccess && settings.soundsEffect) {
             sound.once('load', () => {
                 if (celebrate) {
                     sound.play()
@@ -284,7 +285,7 @@ const ModalRewardDetail = () => {
                 sound.unload()
             }
         }
-    }, [celebrate, redeemSuccess])
+    }, [celebrate, redeemSuccess, settings.soundsEffect])
 
     return (
         <FingoModal
