@@ -49,7 +49,7 @@ const RenderBlockQuiz = () => {
 const Quiz = () => {
     const today = new Date()
     const dispatch = useDispatch()
-    const { appBatch, app_setOpenModalHeartRunOut } = useApp()
+    const { appBatch, app_setOpenModalHeartRunOut, settings } = useApp()
     const {
         isAuthenticated,
         user,
@@ -129,7 +129,9 @@ const Quiz = () => {
                 score.current[currentQuestionIndex.current] = 1
                 points.current = points.current + 1
                 setCurrentIsCorrect(true)
-                correctAudio.play()
+                if (settings.soundsEffect) {
+                    correctAudio.play()
+                }
                 appBatch({
                     eventType: BATCH_EVENT_TIME_SPENT,
                     eventTimestamp: new Date().getTime(),
@@ -141,7 +143,9 @@ const Quiz = () => {
                     }
                 })
             } else {
-                wrongAudio.play()
+                if (settings.soundsEffect) {
+                    wrongAudio.play()
+                }
                 setCurrentIsCorrect(false)
                 appBatch({
                     eventType: BATCH_EVENT_TIME_SPENT,
@@ -163,7 +167,9 @@ const Quiz = () => {
                 points.current = points.current + 1
                 setCurrentIsCorrect(true)
                 setCurrentIsCorrectIndex(currentSelectedIndex ?? null)
-                correctAudio.play()
+                if (settings.soundsEffect) {
+                    correctAudio.play()
+                }
                 appBatch({
                     eventType: BATCH_EVENT_TIME_SPENT,
                     eventTimestamp: new Date().getTime(),
@@ -175,7 +181,9 @@ const Quiz = () => {
                     }
                 })
             } else {
-                wrongAudio.play()
+                if (settings.soundsEffect) {
+                    wrongAudio.play()
+                }
                 setCurrentIsCorrect(false)
                 setCurrentIsCorrect(true)
                 setCurrentIsWrongIndex(currentSelectedIndex ?? null)

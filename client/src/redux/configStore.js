@@ -20,13 +20,14 @@ import { unauthenticatedMiddleware } from './middlewares'
 import { authPersistedSlice } from './auth/auth.persisted.slice'
 import { PERSIST_ROOT_KEY, PERSIST_ROOT_VERSION } from 'src/constants/app.constant'
 import { persistedGuestSlice } from './persisted-guest'
+import { appPersistedSlice } from './app/app.persisted.slice'
 
 // Config for Redux Persist
 const persistConfig = {
     key: PERSIST_ROOT_KEY,
     version: PERSIST_ROOT_VERSION,
     storage,
-    whitelist: [authPersistedSlice.name, persistedGuestSlice.name],
+    whitelist: [authPersistedSlice.name, persistedGuestSlice.name, appPersistedSlice.name],
 }
 
 // Listener Middleware

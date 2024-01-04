@@ -27,7 +27,7 @@ const confettiConfig = {
 const FingoModalLevelUp = ({ isFormScorePage }) => {
     const dispatch = useDispatch()
     const [celebrate, setCelebrate] = useState(false)
-    const { modalLevelUp, app_setModalLevelUp } = useApp()
+    const { modalLevelUp, app_setModalLevelUp, settings } = useApp()
     const { newUser, user } = useAuth()
 
     const sound = new Howl({
@@ -53,7 +53,7 @@ const FingoModalLevelUp = ({ isFormScorePage }) => {
     }, [modalLevelUp])
 
     useEffect(() => {
-        if (isFormScorePage) {
+        if (settings.soundsEffect && isFormScorePage) {
             sound.once('load', () => {
                 if (celebrate) {
                     sound.play()
@@ -65,13 +65,13 @@ const FingoModalLevelUp = ({ isFormScorePage }) => {
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [celebrate, isFormScorePage])
+    }, [celebrate, isFormScorePage, settings.soundsEffect])
 
     const getLevelImage = level => {
         if (level) {
             if (level > 10) {
                 return Assets.ImageLevel10
-            } 
+            }
             switch (level) {
                 case 1:
                     return Assets.ImageLevel1
@@ -156,7 +156,11 @@ const FingoModalLevelUp = ({ isFormScorePage }) => {
                         </>
                     )}
                 </div>
-                <FingoButton color='white' style={{borderRadius: '12px'}} onClick={onClose}>
+                <FingoButton
+                    color='white'
+                    style={{ borderRadius: '12px' }}
+                    onClick={onClose}
+                >
                     Continue
                 </FingoButton>
             </div>

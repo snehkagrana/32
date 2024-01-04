@@ -30,7 +30,7 @@ const ScorePage = () => {
         auth_setOpenModalRegister,
     } = useAuth()
     const { guest } = usePersistedGuest()
-    const { app_setModalLevelUp } = useApp()
+    const { app_setModalLevelUp, settings } = useApp()
     const { skillName, category, subcategory } = useParams()
     const location = useLocation()
     const navigate = useNavigate()
@@ -71,27 +71,24 @@ const ScorePage = () => {
     })
 
     useEffect(() => {
-        // Log to check if the sound file is loaded
-        console.log('Sound loaded:', sound.state())
+        if (settings.soundsEffect) {
+            // Ensure that the sound is loaded before playing
+            sound.once('load', () => {
+                if (celebrate) {
+                    // Play the sound when celebrate state changes to true
+                    sound.play()
+                }
+            })
 
-        // Ensure that the sound is loaded before playing
-        sound.once('load', () => {
-            console.log('Sound loaded:', sound.state())
+            // Load the sound
+            sound.load()
 
-            if (celebrate) {
-                // Play the sound when celebrate state changes to true
-                sound.play()
+            // Clean up the Howler.js sound object when the component is unmounted
+            return () => {
+                sound.unload()
             }
-        })
-
-        // Load the sound
-        sound.load()
-
-        // Clean up the Howler.js sound object when the component is unmounted
-        return () => {
-            sound.unload()
         }
-    }, [celebrate])
+    }, [celebrate, settings.soundsEffect])
 
     const getSkillBySkillName = () => {
         Axios({
