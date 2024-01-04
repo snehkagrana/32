@@ -1,0 +1,63 @@
+.FingoSwitch {
+    display: flex;
+    align-items: center;
+}
+
+.FingoSwitch p {
+    margin-bottom: 8px;
+    font-weight: 700;
+    margin-left: 1rem;
+    cursor: pointer;
+}
+
+.FingoSwitch input[type='checkbox'] {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+}
+
+.FingoSwitch label {
+    cursor: pointer;
+    text-indent: -9999px;
+    width: 66px;
+    height: 26px;
+    background: #d3e1d3;
+    display: block;
+    border-radius: 26px;
+    position: relative;
+}
+
+[data-theme='dark'] .FingoSwitch label {
+    background: #545d54;
+}
+
+.FingoSwitch label:after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -3px;
+    width: 34px;
+    height: 34px;
+    background: #fff;
+    border-radius: 34px;
+    transition: 0.3s;
+    background: linear-gradient(rgb(87 204 2) 10%, rgb(33 171 0));
+    border-color: rgb(87 204 2);
+    box-shadow: rgb(255, 255, 255) 0px 0px 0px 2px;
+    transition: all 0.2s ease 0s;
+}
+
+.FingoSwitch input:checked + label {
+    background: rgb(87 204 2);
+}
+
+.FingoSwitch input:checked + label:after {
+    left: calc(100% + 2px);
+    transform: translateX(-100%);
+    background: linear-gradient(#ffffff 10%, #e5f7ee);
+    box-shadow: rgb(0 157 35) 0px 0px 0px 2px;
+}
+
+.FingoSwitch label:active:after {
+    width: 40px;
+}
