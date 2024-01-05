@@ -4,10 +4,13 @@ const localStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const jwtUtil = require('./utils/jwt.util')
 const jwtConfig = require('./configs/jwt.config')
-const AuthService = require('./services/auth.service')
+const AuthService = require('./services/auth.service');
+const { appConfig } = require("./configs/app.config");
+const { generateReferralCode } = require("./utils/common.util");
 require("dotenv").config();
 
 module.exports = function (passport) {
+    const refCode = generateReferralCode()
     passport.use(
         new localStrategy({ usernameField: 'email' }, (email, password, done) => {
             User.findOne({ email: email }, (err, user) => {
@@ -41,12 +44,12 @@ module.exports = function (passport) {
             },
             async function (accessToken, refreshToken, profile, done) {
             // passport callback function
-    
+     
             // console.log("profile", profile);
-            const email = profile.emails[0].value;
-            const displayName = profile.displayName;
-            const profileImageUrl = profile.photos[0].value;
-    
+            const email = profile?.emails?.[0]?.value ? profile.emails[0].value : ''
+            const displayName = profile?.displayName ? profile.displayName : '';
+            const profileImageUrl = profile?.photos?.[0]?.value ? profile.photos[0].value : "";
+ 
             ////checking if another user with same email already exists
             let user = await User.findOne({ email }).exec();
             if (user) {
@@ -75,7 +78,12 @@ module.exports = function (passport) {
                         total: 0,
                         level: 1,
                     },
-                };
+                    heart: appConfig.defaultHeart || 5,
+                    lastHeartAccruedAt: new Date(),
+                    unlimitedHeart: null,
+                    referralCode: refCode,
+                    registeredAt: new Date(),
+                }; 
                 const newUser = await AuthService.createUser(newUserData);
                 const token = await jwtUtil.createToken({
                     _id: newUser._id,
