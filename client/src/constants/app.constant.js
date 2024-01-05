@@ -20,3 +20,5 @@ export const DEFAULT_GUEST_NAME = 'Stranger'
 export const NUMBER_OF_LIMIT_LESSON_FOR_GUEST = 5
 
 export const DEFAULT_ACTIVE_SOUND = true
+
+export const __DEV__ = process.env.NODE_ENV === 'development'
