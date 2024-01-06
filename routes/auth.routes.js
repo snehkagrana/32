@@ -36,6 +36,8 @@ router.get('/guest/init', ErrorHandler(GuestController.init))
 
 router.get('/guest/sync', AuthGuard, ErrorHandler(GuestController.syncGuest))
 
+router.post('/guest/register/sync-google', AuthGuard, ErrorHandler(AuthController.syncRegisterGoogle))
+
 router.get('/guest', AuthGuard, ErrorHandler(GuestController.getGuest))
 
 module.exports = router
