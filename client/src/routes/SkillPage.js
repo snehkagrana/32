@@ -15,6 +15,7 @@ import { Helmet } from "react-helmet";
 import Navbar from "../components/Navbar";
 import { FingoHomeLayout } from "src/components/layouts";
 import { useAuth } from "src/hooks";
+import ModalClaimReward from "src/components/reward/ModalClaimReward";
 
 const SkillPage = () => {
     const { auth_syncAndGetUser } = useAuth();
@@ -148,6 +149,7 @@ const SkillPage = () => {
 
                 <br></br>
             </Container>
+            <ModalClaimReward />
         </FingoHomeLayout>
     );
 };

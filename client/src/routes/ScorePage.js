@@ -20,6 +20,7 @@ import BG from 'src/assets/images/8270289.jpg'
 import { ReactComponent as DiamondSvg } from 'src/assets/svg/diamond.svg'
 import 'src/styles/ScorePage.styles.css'
 import { NUMBER_OF_LIMIT_LESSON_FOR_GUEST } from 'src/constants/app.constant'
+import ModalClaimReward from 'src/components/reward/ModalClaimReward'
 
 const ScorePage = () => {
     const dispatch = useDispatch()
@@ -372,6 +373,7 @@ const ScorePage = () => {
                 <br />
             </div>
             <FingoModalLevelUp isFormScorePage={true} />
+            <ModalClaimReward />
         </FingoHomeLayout>
     )
 }
