@@ -15,6 +15,7 @@ import '../index.css'
 import { useAuth, usePersistedGuest } from 'src/hooks'
 import { InformationAPI } from 'src/api'
 import 'src/styles/InformationPage.styles.css'
+import ModalClaimReward from 'src/components/reward/ModalClaimReward'
 
 const InformationPage = () => {
     const { user, isAuthenticated, auth_syncAndGetUser } = useAuth()
@@ -428,6 +429,7 @@ const InformationPage = () => {
                     />
                 </Col>
             </Row>
+            <ModalClaimReward />
         </FingoHomeLayout>
     )
 }

@@ -34,6 +34,7 @@ import {
 import ModalInviteFriends from 'src/components/ModalInviteFriends'
 import dayjs from 'dayjs'
 import { QuizAPI } from 'src/api'
+import ModalClaimReward from 'src/components/reward/ModalClaimReward'
 
 const RenderBlockQuiz = () => {
     const dispatch = useDispatch()
@@ -844,6 +845,7 @@ const Quiz = () => {
             <ModalConfirmRefillHearts />
             <ModalUnlimitedHearts />
             <ModalInviteFriends />
+            <ModalClaimReward />
         </FingoHomeLayout>
     )
 }

@@ -137,3 +137,37 @@ exports.resetPassword = async (email, password, token) => {
     }
     return result
 }
+
+exports.syncRegisterGoogle = async ({ email, data }) => {
+    let result = false
+    let user = await UserModel.findOne({ email }).exec()
+
+    if (user) {
+        user = await UserModel.findOneAndUpdate(
+            { email },
+            {
+                $set: {
+                    streak: data.streak,
+                    lastCompletedDay: data.lastCompletedDay,
+                    diamond: data.diamond,
+                    xp: data.xp,
+                    score: data.score,
+                    completedDays: data.completedDays,
+                    last_played: data.last_played,
+                    heart: data.heart || appConfig.defaultHeart,
+                    lastHeartAccruedAt: data.lastHeartAccruedAt || new Date(),
+                    lastClaimedGemsDailyQuest:
+                        data.lastClaimedGemsDailyQuest || null,
+                    unlimitedHeart: null,
+                },
+            }
+        )
+        if (user) {
+            result = true
+        }
+    } else {
+        result = false
+    }
+
+    return result
+}
