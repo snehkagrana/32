@@ -1,0 +1,33 @@
+.FingoToggleAudio {
+    display: flex;
+    align-items: center;
+}
+
+.FingoToggleAudio button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: #008eff;
+}
+
+[data-theme='dark'] .FingoToggleAudio button {
+    color: #5bb6ff;
+}
+
+.FingoToggleAudio button svg {
+    width: 34px;
+    height: auto;
+}
+
+.FingoToggleAudio p {
+    margin-bottom: 0;
+    font-weight: 700;
+    margin-left: 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+}

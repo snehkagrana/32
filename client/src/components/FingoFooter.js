@@ -13,6 +13,7 @@ import { getLevelColor } from 'src/utils'
 import FingoMobileMenu from './FingoMobileMenu'
 import { Popover } from './core'
 import 'src/styles/FingoFooter.styles.css'
+import dayjs from 'dayjs'
 
 const FOOTER_ITEMS = [
     {
@@ -40,6 +41,7 @@ const initialShowState = {
 }
 
 const FingoFooter = () => {
+    const today = new Date()
     const navigate = useNavigate()
     const { user, isAuthenticated } = useAuth()
     const { guest } = usePersistedGuest()
@@ -60,13 +62,21 @@ const FingoFooter = () => {
     const renderBadge = useCallback(
         menuName => {
             if (menuName === 'daily-quest') {
-                if (user?.xp?.daily >= 60 || guest?.xp?.daily >= 60) {
-                    return <div className='FingoFooterBadge'></div>
+                if (user) {
+                    // prettier-ignore
+                    if(dayjs(user?.lastClaimedGemsDailyQuest).isBefore(dayjs(today).toISOString(), 'day') && user?.xp?.daily >= 60) {
+                        return <div className='FingoFooterBadge'></div>
+                    }
+                } else if (guest?._id) {
+                    // prettier-ignore
+                    if(dayjs(guest?.lastClaimedGemsDailyQuest).isBefore(dayjs(today).toISOString(), 'day') && guest?.xp?.daily >= 60) {
+                        return <div className='FingoFooterBadge'></div>
+                    }
                 }
             }
             return null
         },
-        [user, guest]
+        [user, guest, today]
     )
 
     const getAvatarUrl = useMemo(() => {
@@ -94,9 +104,10 @@ const FingoFooter = () => {
                                             align='center'
                                             padding={0}
                                             reposition={true}
-                                            onClickOutside={() =>
+                                            onClickOutside={e => {
                                                 setShow(initialShowState)
-                                            }
+                                            }}
+                                            clickOutsideCapture={true}
                                             renderContent={getContent(i.name)}
                                         >
                                             <div
@@ -139,10 +150,11 @@ const FingoFooter = () => {
                                             align='center'
                                             padding={5}
                                             reposition={true}
-                                            onClickOutside={() =>
+                                            onClickOutside={e => {
                                                 setShow(initialShowState)
-                                            }
+                                            }}
                                             renderContent={getContent(i.name)}
+                                            clickOutsideCapture={true}
                                         >
                                             <a
                                                 href='#'

@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.37069716.css",
-    "main.js": "/static/js/main.9e799e4c.js",
+    "main.css": "/static/css/main.fc607689.css",
+    "main.js": "/static/js/main.a75c3d5b.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
     "static/media/8.png": "/static/media/8.9daef5f1f68e0fc2fb5f.png",
@@ -73,8 +73,8 @@
     "static/media/turtle.png": "/static/media/turtle.82cd73c53ac378ceab4b.png",
     "static/media/netflix-logo.png": "/static/media/netflix-logo.4bc03ff0aac6d4a37aa9.png",
     "static/media/sneh.jpg": "/static/media/sneh.f9ee79a2259e5e5a0ac8.jpg",
+    "static/media/wrong-audio.mp3": "/static/media/wrong-audio.a53eac151d288fb7cc53.mp3",
     "static/media/unlimited-hearts.png": "/static/media/unlimited-hearts.4a2ea3407c5b2d0d68f6.png",
-    "static/media/wrong-audio.mp3": "/static/media/wrong-audio.52e80b0ac4001d1e740d.mp3",
     "static/media/loudly-crying-face.svg": "/static/media/loudly-crying-face.33a7333119b0b78f74c07dcc8af4ac1d.svg",
     "static/media/amazon.jpg": "/static/media/amazon.b40e9d47b8b4b7a3a797.jpg",
     "static/media/64944-emoticon-index-finger-the-gesture-emoji.png": "/static/media/64944-emoticon-index-finger-the-gesture-emoji.400bd3dffad316e5a3be.png",
@@ -106,8 +106,10 @@
     "static/media/cloud-upload-sharp.svg": "/static/media/cloud-upload-sharp.46dca20eace9acf508c0cfc0b6699374.svg",
     "static/media/triangle-danger.svg": "/static/media/triangle-danger.060aa6ed42fc6afa2be77a1213a55d49.svg",
     "static/media/trash-bin-trash-linear.svg": "/static/media/trash-bin-trash-linear.e6576df2e2fb7e865b458a3e31d7c916.svg",
+    "static/media/volume-up-fill.svg": "/static/media/volume-up-fill.76573b3e96d72a95f5f9cddc37079f2c.svg",
     "static/media/eye-off.svg": "/static/media/eye-off.34141a6abb28a5b9d9a0b6b5e655d958.svg",
     "static/media/info-outline.svg": "/static/media/info-outline.5dc89c51656332c96bbcf9dd3e387dc6.svg",
+    "static/media/volume-off-fill.svg": "/static/media/volume-off-fill.4dc9edf2419a8926e2c1540bd4835902.svg",
     "static/media/enter.svg": "/static/media/enter.03b9d4ce8bcb86a794c21affed1e1b40.svg",
     "static/media/redeem.svg": "/static/media/redeem.89df62d10e052180396295da83cb1558.svg",
     "static/media/sad.svg": "/static/media/sad.a73777fcee698490c31308361d464354.svg",
@@ -118,12 +120,12 @@
     "static/media/error-fill.svg": "/static/media/error-fill.6114b542c23f4aba9607540cc338bae3.svg",
     "static/media/baseline-content-copy.svg": "/static/media/baseline-content-copy.58ba17b96079dd681d38d228fdc7ef61.svg",
     "static/media/info.svg": "/static/media/info.ef876f7b40a92ef036458f95b7e325e2.svg",
-    "main.37069716.css.map": "/static/css/main.37069716.css.map",
-    "main.9e799e4c.js.map": "/static/js/main.9e799e4c.js.map",
+    "main.fc607689.css.map": "/static/css/main.fc607689.css.map",
+    "main.a75c3d5b.js.map": "/static/js/main.a75c3d5b.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.37069716.css",
-    "static/js/main.9e799e4c.js"
+    "static/css/main.fc607689.css",
+    "static/js/main.a75c3d5b.js"
   ]
 }

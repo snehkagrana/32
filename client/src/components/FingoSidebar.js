@@ -18,7 +18,8 @@ import IcFingoEnvelope from 'src/assets/images/fingo-envelope.png'
 import Swal from 'sweetalert2'
 import FingoUserInfo from './FingoUserInfo'
 import { authUtils } from 'src/utils'
-import { FingoSwitch } from './core'
+import { FingoToggleAudio } from './FingoToggleAudio'
+// import { FingoSwitch } from './core'
 
 const FingoSidebar = ({ open }) => {
     const dispatch = useDispatch()
@@ -268,9 +269,8 @@ const FingoSidebar = ({ open }) => {
                         )}
                     </ul>
                     <div className='FingoSidebarSwitchContainer'>
-                        <FingoSwitch
-                            label='Sound Effects'
-                            checked={settings.soundsEffect}
+                        <FingoToggleAudio
+                            active={settings.soundsEffect}
                             onChange={onChangeSound}
                             className='mb-4'
                         />
