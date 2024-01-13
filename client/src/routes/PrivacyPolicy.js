@@ -38,7 +38,7 @@ const PrivacyPolicy = () => {
             <Container className="m-5">
                 <h1>Privacy Policy</h1>
 
-                <p>Last updated: April 28, 2023</p>
+                <p>Last updated: January 13, 2024</p>
                 <p>
                     This Privacy Policy describes Our policies and procedures on
                     the collection, use and disclosure of Your information when
@@ -594,6 +594,32 @@ const PrivacyPolicy = () => {
                     for any changes. Changes to this Privacy Policy are
                     effective when they are posted on this page.
                 </p>
+                <h1>
+                    Google Analytics and Microsoft Clarity
+                </h1>
+                <p>
+                We at tryfingo.com use Google Analytics to collect data. 
+                We need this data to understand how you use our website so we can improve its design and functionality. 
+                We also need the data to get the most out of our marketing campaigns.
+                With your consent, Google Analytics will process and collect your personal data (cookies and IP address)
+                 to give us valuable information. To learn more about Google Analytics privacy policy,{" "} 
+                <a 
+                href="https://policies.google.com/privacy/partners"
+                >  
+                Click Here.   
+                </a>
+                </p>
+                <p>We partner with Microsoft Clarity and Microsoft Advertising to capture how you use and interact with our website through behavioral metrics, heatmaps, and session replay to improve and market our products/services. 
+                Website usage data is captured using first and third-party cookies and other tracking technologies to determine the popularity of products/services and online activity. 
+                Additionally, we use this information for site optimization, fraud/security purposes, and advertising. 
+                For more information about how Microsoft collects and uses your data, visit the Microsoft Privacy Statement.
+                To learn more, {" "}
+                <a
+                href="https://privacy.microsoft.com/en-ca/privacystatement"
+                >
+                Click Here.    
+                </a>
+                </p>
                 <h1>Contact Us</h1>
                 <p>
                     If you have any questions about this Privacy Policy, You can
@@ -603,7 +629,7 @@ const PrivacyPolicy = () => {
                     <li>
                         By visiting this page on our website:{" "}
                         <a
-                            href="https://www.tryfingo.com/contact"
+                            href="https://www.tryfingo.com/contactus"
                             rel="external nofollow noopener"
                             target="_blank">
                             https://www.tryfingo.com/contactus
