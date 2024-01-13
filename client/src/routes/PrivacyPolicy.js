@@ -579,15 +579,7 @@ const PrivacyPolicy = () => {
                 </p>
                 <h1>Changes to this Privacy Policy</h1>
                 <p>
-                    We may update Our Privacy Policy from time to time. We will
-                    notify You of any changes by posting the new Privacy Policy
-                    on this page.
-                </p>
-                <p>
-                    We will let You know via email and/or a prominent notice on
-                    Our Service, prior to the change becoming effective and
-                    update the &quot;Last updated&quot; date at the top of this
-                    Privacy Policy.
+                We reserve the right to update and modify this Privacy Policy at any time.
                 </p>
                 <p>
                     You are advised to review this Privacy Policy periodically
