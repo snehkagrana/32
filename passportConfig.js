@@ -70,6 +70,7 @@ module.exports = function (passport) {
                     })
                     return done(false, {
                         access_token: token,
+                        isNewUser: false,
                         token_type: 'Bearer',
                         expires_in: jwtConfig.ttl,
                     })
@@ -102,6 +103,7 @@ module.exports = function (passport) {
                     })
                     return done(false, {
                         access_token: token,
+                        isNewUser: true,
                         token_type: 'Bearer',
                         expires_in: jwtConfig.ttl,
                         message: 'Success.',

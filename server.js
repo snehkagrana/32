@@ -150,9 +150,11 @@ app.get(
                 expires_in: '7d'
             }
          */
-        if(res.req?.user?.access_token) {
+        if(res.req?.user?.access_token && res.req?.user?.isNewUser) {
+            return res.redirect(`/auth/google/callback?token=${res.req.user.access_token}&isNewUser=${res.req?.user?.isNewUser}`)
+        } else {
             return res.redirect(`/auth/google/callback?token=${res.req.user.access_token}`)
-        };
+        }
     }
 );
 

@@ -19,11 +19,12 @@ const AuthCallback = () => {
     useEffect(() => {
         ;(async () => {
             const token = searchParams.get('token')
+            const isNewUser = searchParams.get('isNewUser')
+
             if (token) {
                 authUtils.saveUserAccessToken(token)
-
                 // prettier-ignore
-                if(guest?.registerToken && guest?._id) {
+                if(isNewUser && guest?.registerToken && guest?._id) {
                     try {
                         const response = await AuthAPI.guest_syncRegisterGoogle({
                             token,
