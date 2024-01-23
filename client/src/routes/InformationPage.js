@@ -235,6 +235,24 @@ const InformationPage = () => {
         })()
     }, [skillName, category, subcategory])
 
+    useEffect(() => {
+        const preventDefaultHandler = (e) => {
+            e.preventDefault();
+        };
+    
+        // Add event listeners when the component mounts
+        document.addEventListener('mousedown', preventDefaultHandler);
+        document.addEventListener('copy', preventDefaultHandler);
+        document.addEventListener('selectstart', preventDefaultHandler);
+    
+        // Remove event listeners when the component unmounts
+        return () => {
+            document.removeEventListener('mousedown', preventDefaultHandler);
+            document.removeEventListener('copy', preventDefaultHandler);
+            document.removeEventListener('selectstart', preventDefaultHandler);
+        };}, );
+    
+
     const onChangeDropdownHeading = useCallback(
         paramPageNumber => {
             const newUserQueryParam = searchParams.get('newUser')
