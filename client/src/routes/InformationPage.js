@@ -344,7 +344,7 @@ const InformationPage = () => {
                                                     minWidth: '20%',
                                                     boxShadow:
                                                         '0px 7px #303030',
-                                                    borderRadius: '12px',
+                                                    borderRadius: '10px',
                                                 }}
                                                 onClick={prev}
                                             >
@@ -359,7 +359,7 @@ const InformationPage = () => {
                                                     minWidth: '20%',
                                                     boxShadow:
                                                         '0px 7px #1a5928',
-                                                    borderRadius: '12px',
+                                                    borderRadius: '10px',
                                                 }}
                                                 variant='success'
                                                 onClick={next}
