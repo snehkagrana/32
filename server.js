@@ -43,7 +43,6 @@ const { initializeDiamondUser, calculateDiamondUser } = require("./utils/reward.
 const { mailTransporter } = require("./utils/mail.util");
 const ReferralService = require('./services/referral.service')
 // const dayjs = require("dayjs");
-const ReferralService = require('./services/referral.service');
 const AdminMiddleware = require('./middlewares/admin.middleware')
 
 require('./cronjob/hearts.cronjob')
