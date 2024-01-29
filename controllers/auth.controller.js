@@ -152,12 +152,34 @@ exports.sendLinkForgotPassword = async (req, res) => {
         .json({ message: 'Failed to send forgot password link.' })
 }
 
-exports.resetPassword = async (req, res) => {
-    const result = await AuthService.resetPassword(
+exports.sendCodeForgotPassword = async (req, res) => {
+    const result = await AuthService.sendCodeForgotPassword(req.body.email)
+    if (result) {
+        return res.json({ message: 'Send otp code successfully.' })
+    }
+    return res
+        .status(400)
+        .json({ message: 'Failed to send otp code forgot password.' })
+}
+
+exports.verifyCodeForgotPassword = async (req, res) => {
+    const result = await AuthService.verifyCodeForgotPassword(
         req.body.email,
-        req.body.password,
-        req.body.token
+        req.body.code
     )
+    if (result) {
+        return res.json({ message: 'Verified.' })
+    }
+    return res.status(400).json({ message: 'Failed verify forgot password.' })
+}
+
+exports.resetPassword = async (req, res) => {
+    const result = await AuthService.resetPassword({
+        email: req.body.email,
+        password: req.body.password,
+        token: req.body.token,
+        code: req.body.code,
+    })
     if (result) {
         return res.json({ message: 'Reset Password successfully.' })
     }

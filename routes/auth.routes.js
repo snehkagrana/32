@@ -27,6 +27,16 @@ router.post(
     ErrorHandler(AuthController.sendLinkForgotPassword)
 )
 router.post(
+    '/forgot-password/send-code',
+    validate(schema.sendCodeForgotPassword),
+    ErrorHandler(AuthController.sendCodeForgotPassword)
+)
+router.post(
+    '/forgot-password/verify-code',
+    validate(schema.verifyCodeForgotPassword),
+    ErrorHandler(AuthController.verifyCodeForgotPassword)
+)
+router.post(
     '/reset-password',
     validate(schema.resetPassword),
     ErrorHandler(AuthController.resetPassword)
@@ -36,7 +46,11 @@ router.get('/guest/init', ErrorHandler(GuestController.init))
 
 router.get('/guest/sync', AuthGuard, ErrorHandler(GuestController.syncGuest))
 
-router.post('/guest/register/sync-google', AuthGuard, ErrorHandler(AuthController.syncRegisterGoogle))
+router.post(
+    '/guest/register/sync-google',
+    AuthGuard,
+    ErrorHandler(AuthController.syncRegisterGoogle)
+)
 
 router.get('/guest', AuthGuard, ErrorHandler(GuestController.getGuest))
 
