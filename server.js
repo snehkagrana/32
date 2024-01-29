@@ -43,6 +43,8 @@ const { initializeDiamondUser, calculateDiamondUser } = require("./utils/reward.
 const { mailTransporter } = require("./utils/mail.util");
 const ReferralService = require('./services/referral.service')
 // const dayjs = require("dayjs");
+const ReferralService = require('./services/referral.service');
+const AdminMiddleware = require('./middlewares/admin.middleware')
 
 require('./cronjob/hearts.cronjob')
 
@@ -154,9 +156,11 @@ app.get(
                 expires_in: '7d'
             }
          */
-        if(res.req?.user?.access_token) {
+        if(res.req?.user?.access_token && res.req?.user?.isNewUser) {
+            return res.redirect(`/auth/google/callback?token=${res.req.user.access_token}&isNewUser=${res.req?.user?.isNewUser}`)
+        } else {
             return res.redirect(`/auth/google/callback?token=${res.req.user.access_token}`)
-        };
+        }
     }
 );
 
@@ -755,7 +759,7 @@ app.get("/server/informationById/:id", AuthGuard, (req, res) => {
 app.post(
     "/server/editquestion/:id",
     AuthGuard,
-    authRole(["admin"]),
+    AdminMiddleware,
     upload.single("photo"),
     (req, res) => {
         var id = req.params.id;
@@ -818,7 +822,7 @@ app.post(
 app.post(
     "/server/editinformation/:id",
     AuthGuard,
-    authRole(["admin"]),
+    AdminMiddleware,
     upload.single("photo"),
     (req, res) => {
         var id = req.params.id;
@@ -1745,7 +1749,7 @@ app.get("/server/categories/:skillName", AuthGuard, (req, res) => {
 app.post(
     "/server/addquestions",
     AuthGuard,
-    authRole(["admin"]),
+    AdminMiddleware,
     upload.single("photo"),
     async (req, res) => {
         ////checking if another user with same email already exists
@@ -1854,7 +1858,7 @@ app.post(
 app.post(
     "/server/addinformation",
     AuthGuard,
-    authRole(["admin"]),
+    AdminMiddleware,
     upload.single("photo"),
     async (req, res) => {
         ////checking if another user with same email already exists
@@ -1956,7 +1960,7 @@ app.post(
 app.post(
     "/server/addsubcategories",
     AuthGuard,
-    authRole(["admin"]),
+    AdminMiddleware,
     (req, res) => {
         ////checking if another user with same email already exists
         // console.log('sub req.body', req.body);
@@ -1984,7 +1988,7 @@ app.post(
     }
 );
 
-app.post("/server/addcategories", AuthGuard, authRole(["admin"]), (req, res) => {
+app.post("/server/addcategories", AuthGuard, AdminMiddleware, (req, res) => {
     ////checking if another user with same email already exists
     Skill.findOne({ skill: req.body.skill }, async (err, doc) => {
         if (err) console.log("ERROR", err);
@@ -2007,7 +2011,7 @@ app.post("/server/addcategories", AuthGuard, authRole(["admin"]), (req, res) => 
     });
 });
 
-app.post("/server/addskill", AuthGuard, authRole(["admin"]), (req, res) => {
+app.post("/server/addskill", AuthGuard, AdminMiddleware, (req, res) => {
     Skill.findOne({ skill: req.body.skill }, async (err, doc) => {
         if (err) throw err;
         if (!doc) {

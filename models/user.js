@@ -55,6 +55,7 @@ const UserSchema = new mongoose.Schema({
         6: Date,
     },
     password_reset_token: String,
+    passwordResetCode: String,
     diamond: Number,
 
     // for new user who has claim diamond in first time it's should be true

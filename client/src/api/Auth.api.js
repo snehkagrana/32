@@ -65,4 +65,17 @@ export const AuthAPI = {
         })
         return response?.data
     },
+
+    guest_syncRegisterGoogle: async ({ token, body }) => {
+        const response = await Axios.post(
+            '/server/api/auth/guest/register/sync-google',
+            { ...body },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        )
+        return response?.data
+    },
 }

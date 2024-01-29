@@ -55,7 +55,8 @@ exports.register = async (req, res) => {
                 last_played: guestData.last_played,
                 heart: guestData.heart || appConfig.defaultHeart,
                 lastHeartAccruedAt: guestData.lastHeartAccruedAt || new Date(),
-                lastClaimedGemsDailyQuest: guestData.lastClaimedGemsDailyQuest || null,
+                lastClaimedGemsDailyQuest:
+                    guestData.lastClaimedGemsDailyQuest || null,
                 unlimitedHeart: null,
             }
         }
@@ -151,14 +152,70 @@ exports.sendLinkForgotPassword = async (req, res) => {
         .json({ message: 'Failed to send forgot password link.' })
 }
 
-exports.resetPassword = async (req, res) => {
-    const result = await AuthService.resetPassword(
+exports.sendCodeForgotPassword = async (req, res) => {
+    const result = await AuthService.sendCodeForgotPassword(req.body.email)
+    if (result) {
+        return res.json({ message: 'Send otp code successfully.' })
+    }
+    return res
+        .status(400)
+        .json({ message: 'Failed to send otp code forgot password.' })
+}
+
+exports.verifyCodeForgotPassword = async (req, res) => {
+    const result = await AuthService.verifyCodeForgotPassword(
         req.body.email,
-        req.body.password,
-        req.body.token
+        req.body.code
     )
+    if (result) {
+        return res.json({ message: 'Verified.' })
+    }
+    return res.status(400).json({ message: 'Failed verify forgot password.' })
+}
+
+exports.resetPassword = async (req, res) => {
+    const result = await AuthService.resetPassword({
+        email: req.body.email,
+        password: req.body.password,
+        token: req.body.token,
+        code: req.body.code,
+    })
     if (result) {
         return res.json({ message: 'Reset Password successfully.' })
     }
     return res.status(400).json({ message: 'Failed to reset password.' })
+}
+
+exports.syncRegisterGoogle = async (req, res) => {
+    let result = false
+    // sync guest data
+    if (req.body?.registerToken && req.body?.syncId) {
+        const guestData = await GuestService.findGuestById(req.body.syncId)
+        if (guestData) {
+            const data = {
+                streak: guestData.streak,
+                lastCompletedDay: guestData.lastCompletedDay,
+                diamond: guestData.diamond,
+                xp: guestData.xp,
+                score: guestData.score,
+                completedDays: guestData.completedDays,
+                last_played: guestData.last_played,
+                heart: guestData.heart || appConfig.defaultHeart,
+                lastHeartAccruedAt: guestData.lastHeartAccruedAt || new Date(),
+                lastClaimedGemsDailyQuest:
+                    guestData.lastClaimedGemsDailyQuest || null,
+                unlimitedHeart: null,
+            }
+            result = await AuthService.syncRegisterGoogle({
+                email: req.user.email,
+                data,
+            })
+            GuestService.deleteGuest(req.body.syncId)
+        }
+    }
+    if (result) {
+        return res.json({ message: 'Sync successfully.' })
+    } else {
+        return res.status(400).json({ message: 'Failed to sync.' })
+    }
 }

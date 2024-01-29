@@ -11,9 +11,13 @@ const { getLevelByXpPoints } = require('../utils/xp.utils')
 const base64url = require('base64url')
 const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
-const { sendEmailForgotPassword } = require('../email/send-email')
+const {
+    sendEmailForgotPassword,
+    sendOtpEmailForgotPassword,
+} = require('../email/send-email')
 const { appConfig } = require('../configs/app.config')
 const dayjs = require('dayjs')
+const { generateOTP } = require('../utils/otp.util')
 
 exports.createUser = user => {
     return UserModel.create(user)
@@ -125,19 +129,104 @@ exports.sendLinkForgotPassword = async (email, baseUrl) => {
     return result
 }
 
-exports.resetPassword = async (email, password, token) => {
+exports.sendCodeForgotPassword = async email => {
+    let result = false
+    let user = await UserModel.findOne({ email }).exec()
+    if (user) {
+        const code = generateOTP(4)
+        await UserModel.findOneAndUpdate(
+            { email },
+            { $set: { passwordResetCode: code } }
+        ).exec()
+        await sendOtpEmailForgotPassword({
+            code: code,
+            from: process.env.MAIL,
+            to: user.email,
+            name: user?.displayName ? user.displayName : user?.username ?? '',
+        })
+
+        result = true
+    } else {
+        result = false
+    }
+    return result
+}
+
+exports.verifyCodeForgotPassword = async (email, code) => {
+    let result = false
+    let userExist = await UserModel.findOne({
+        email,
+        passwordResetCode: code,
+    }).exec()
+    if (userExist) {
+        result = true
+    } else {
+        result = false
+    }
+    return result
+}
+
+exports.resetPassword = async ({ email, password, token, code }) => {
     let result = false
     let user = await UserModel.findOne({ email }).exec()
 
-    if (user && token === user.password_reset_token) {
+    // request coming from web app
+    if (user && token && token === user.password_reset_token) {
         const hashedPassword = await bcrypt.hash(password, 10)
         user = await UserModel.findOneAndUpdate(
             { email: user.email },
             { $set: { password: hashedPassword, password_reset_token: '' } }
         )
         result = true
+    }
+
+    // request coming form mobile app
+    else if (
+        user &&
+        code &&
+        parseInt(code) === parseInt(user?.passwordResetCode)
+    ) {
+        const hashedPassword = await bcrypt.hash(password, 10)
+        user = await UserModel.findOneAndUpdate(
+            { email: user.email },
+            { $set: { password: hashedPassword, passwordResetCode: '' } }
+        )
+        result = true
+    }
+
+    return result
+}
+
+exports.syncRegisterGoogle = async ({ email, data }) => {
+    let result = false
+    let user = await UserModel.findOne({ email }).exec()
+
+    if (user) {
+        user = await UserModel.findOneAndUpdate(
+            { email },
+            {
+                $set: {
+                    streak: data.streak,
+                    lastCompletedDay: data.lastCompletedDay,
+                    diamond: data.diamond,
+                    xp: data.xp,
+                    score: data.score,
+                    completedDays: data.completedDays,
+                    last_played: data.last_played,
+                    heart: data.heart || appConfig.defaultHeart,
+                    lastHeartAccruedAt: data.lastHeartAccruedAt || new Date(),
+                    lastClaimedGemsDailyQuest:
+                        data.lastClaimedGemsDailyQuest || null,
+                    unlimitedHeart: null,
+                },
+            }
+        )
+        if (user) {
+            result = true
+        }
     } else {
         result = false
     }
+
     return result
 }

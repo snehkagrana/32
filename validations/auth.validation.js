@@ -27,11 +27,19 @@ module.exports = {
         email: Joi.string().email().required(),
         baseUrl: Joi.string().required(),
     }),
+    sendCodeForgotPassword: Joi.object().keys({
+        email: Joi.string().email().required(),
+    }),
+    verifyCodeForgotPassword: Joi.object().keys({
+        code: Joi.string().required(),
+        email: Joi.string().email().required(),
+    }),
     resetPassword: Joi.object()
         .keys({
             email: Joi.string().email().required(),
             password: Joi.string().required(),
-            token: Joi.string().required(),
+            token: Joi.string().allow(null),
+            code: Joi.string().allow(null),
         })
         .options({ allowUnknown: true }),
 }
