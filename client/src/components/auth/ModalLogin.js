@@ -354,7 +354,7 @@ export default function ModalLogin() {
                         }}
                         className='regHover'
                     >
-                        Register Now...
+                        Sign Up now...
                     </Button>
                 </div>
             </Form>

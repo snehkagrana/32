@@ -166,7 +166,7 @@ const FingoSidebar = ({ open }) => {
                                         <div className='icon'>
                                             <SignUpIcon />
                                         </div>
-                                        <span>Register</span>
+                                        <span>Sign Up</span>
                                     </a>
                                 </li>
                             </>
