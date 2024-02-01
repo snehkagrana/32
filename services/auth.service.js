@@ -1,4 +1,5 @@
 const UserModel = require('../models/user')
+const VerifyRegisterCodeModel = require('../models/verifyRegisterCode')
 const cacheUtil = require('../utils/cache.util')
 const { daysDifference, generateReferralCode } = require('../utils/common.util')
 const { mailTransporter } = require('../utils/mail.util')
@@ -14,6 +15,50 @@ const {
 const { appConfig } = require('../configs/app.config')
 const dayjs = require('dayjs')
 const { generateOTP } = require('../utils/otp.util')
+
+exports.sendRegisterCode = async email => {
+    const code = generateOTP(4)
+    let result = false
+    let user = await UserModel.findOne({ email }).exec()
+    let isExist = await VerifyRegisterCodeModel.findOne({ email })
+
+    if (!user) {
+        if (isExist) {
+            isExist = await VerifyRegisterCodeModel.findOneAndUpdate(
+                { email },
+                { $set: { code } },
+                { new: true }
+            ).exec()
+        } else {
+            isExist = await VerifyRegisterCodeModel.create({ email, code })
+        }
+        result = true
+    }
+    return result
+}
+
+exports.checkRegisterCode = async email => {
+    let result = false
+    let isExist = await VerifyRegisterCodeModel.findOne({ email })
+    if (isExist) {
+        result = true
+    }
+    return result
+}
+
+exports.verifyRegisterCode = async (email, code) => {
+    let result = false
+    let isExist = await VerifyRegisterCodeModel.findOne({
+        email,
+        code,
+    }).exec()
+    if (isExist) {
+        result = true
+    } else {
+        result = false
+    }
+    return result
+}
 
 exports.createUser = user => {
     return UserModel.create(user)

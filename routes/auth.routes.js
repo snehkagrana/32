@@ -9,6 +9,21 @@ const schema = require('../validations/auth.validation')
 const validate = require('../utils/validator.util')
 
 router.post(
+    '/register/send-code',
+    validate(schema.sendRegisterCode),
+    ErrorHandler(AuthController.sendRegisterCode)
+)
+router.post(
+    '/register/check-code',
+    validate(schema.checkRegisterCode),
+    ErrorHandler(AuthController.checkRegisterCode)
+)
+router.post(
+    '/register/verify-code',
+    validate(schema.verifyRegisterCode),
+    ErrorHandler(AuthController.verifyRegisterCode)
+)
+router.post(
     '/register',
     validate(schema.register),
     ErrorHandler(AuthController.register)

@@ -7,6 +7,33 @@ const jwtUtil = require('../utils/jwt.util')
 const { appConfig } = require('../configs/app.config')
 const { generateReferralCode } = require('../utils/common.util')
 
+exports.sendRegisterCode = async (req, res) => {
+    const result = await AuthService.sendRegisterCode(req.body.email)
+    if (result) {
+        return res.json({ message: 'OK' })
+    }
+    return res.status(400).json({ message: 'Failed to send register code' })
+}
+
+exports.checkRegisterCode = async (req, res) => {
+    const result = await AuthService.checkRegisterCode(req.body.email)
+    if (result) {
+        return res.json({ message: 'OK' })
+    }
+    return res.status(400).json({ message: 'Register code not found' })
+}
+
+exports.verifyRegisterCode = async (req, res) => {
+    const result = await AuthService.verifyRegisterCode(
+        req.body.email,
+        req.body.code
+    )
+    if (result) {
+        return res.json({ message: 'Verified' })
+    }
+    return res.status(400).json({ message: 'Error' })
+}
+
 exports.register = async (req, res) => {
     const refCode = generateReferralCode()
     const isExist = await AuthService.findUserByEmail(req.body.email)
@@ -38,6 +65,7 @@ exports.register = async (req, res) => {
         unlimitedHeart: null,
         referralCode: refCode,
         registeredAt: new Date(),
+        emailVerifiedAt: null,
     }
 
     // sync guest data

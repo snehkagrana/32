@@ -18,6 +18,7 @@ module.exports = {
         referralCode: Joi.string().optional().allow(null),
         registerToken: Joi.string().optional().allow(null),
         syncId: Joi.string().optional().allow(null),
+        clientType: Joi.string().optional().allow(null),
     }),
     login: Joi.object().keys({
         email: Joi.string().email().required(),
@@ -34,6 +35,22 @@ module.exports = {
         code: Joi.string().required(),
         email: Joi.string().email().required(),
     }),
+    sendRegisterCode: Joi.object()
+        .keys({
+            email: Joi.string().email().required(),
+        })
+        .options({ allowUnknown: true }),
+    checkRegisterCode: Joi.object()
+        .keys({
+            email: Joi.string().email().required(),
+        })
+        .options({ allowUnknown: true }),
+    verifyRegisterCode: Joi.object()
+        .keys({
+            email: Joi.string().email().required(),
+            code: Joi.string().required(),
+        })
+        .options({ allowUnknown: true }),
     resetPassword: Joi.object()
         .keys({
             email: Joi.string().email().required(),
