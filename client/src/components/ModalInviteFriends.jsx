@@ -24,7 +24,7 @@ import 'src/styles/ModalInviteFriends.styles.css'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import { ReactComponent as InfoOutlineSVG } from 'src/assets/svg/info-outline.svg'
 
-const SHARE_TEXT = `I am learning finance the way and getting rewarded at Fingo! Come join me
+const SHARE_TEXT = `I am learning finance the fun way and getting rewarded at Fingo! Come join me...
 
 `
 

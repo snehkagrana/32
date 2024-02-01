@@ -689,7 +689,7 @@ const HomePage = props => {
                                                             color: '#28a745',
                                                         }}
                                                     >
-                                                        Signup
+                                                        Sign up
                                                     </a>
                                                 ) : (
                                                     ''

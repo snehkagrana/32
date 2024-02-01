@@ -46,7 +46,7 @@ const ModalUnlimitedHearts = () => {
                         <img src={RockerImage} alt='img' className='mb-3' />
                         <h2 className='mb-2 text-center'>Unlimited Hearts</h2>
                         <h4 className='text-center'>
-                            Learn at your own pace and never run out of hearts
+                            Learn at your own pace and never run out of hearts.
                         </h4>
                     </div>
                     <div className='UnlimitedHeartsContent'>
