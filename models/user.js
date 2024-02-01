@@ -139,6 +139,7 @@ const UserSchema = new mongoose.Schema({
     referralCode: String,
     registeredAt: Date,
     numberOfSuccessReferrals: Number,
+    emailVerifiedAt: Date,
 })
 
 UserSchema.set('toJSON', {
