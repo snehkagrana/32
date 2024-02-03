@@ -356,7 +356,7 @@ exports.googleSignInMobile = async ({
                         guestData.lastClaimedGemsDailyQuest || null,
                     unlimitedHeart: null,
                 }
-                GuestService.deleteGuest(req.body.syncId)
+                GuestModel.deleteOne({ _id: syncId })
             }
         }
         const newUser = await UserModel.create(newGoogleUser)
