@@ -107,6 +107,21 @@ exports.register = async (req, res) => {
     })
 }
 
+exports.googleSignInMobile = async (req, res) => {
+    const { email, displayName, photo, registerToken, syncId } = req.body
+    const result = await AuthService.googleSignInMobile({
+        displayName,
+        email,
+        photo,
+        registerToken,
+        syncId,
+    })
+    if (result) {
+        return res.json(result)
+    }
+    return res.status(400).json({ message: 'Failed to signin with google' })
+}
+
 exports.login = async (req, res) => {
     const user = await AuthService.findUserByEmail(req.body.email)
     await AuthService.syncUser(req.body.email)

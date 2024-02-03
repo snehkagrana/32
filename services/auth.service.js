@@ -1,4 +1,5 @@
 const UserModel = require('../models/user')
+const GuestModel = require('../models/guest')
 const VerifyRegisterCodeModel = require('../models/verifyRegisterCode')
 const cacheUtil = require('../utils/cache.util')
 const { daysDifference, generateReferralCode } = require('../utils/common.util')
@@ -16,6 +17,8 @@ const {
 const { appConfig } = require('../configs/app.config')
 const dayjs = require('dayjs')
 const { generateOTP } = require('../utils/otp.util')
+const jwtUtil = require('../utils/jwt.util')
+const jwtConfig = require('../configs/jwt.config')
 
 exports.sendRegisterCode = async email => {
     const code = generateOTP(4)
@@ -278,4 +281,90 @@ exports.syncRegisterGoogle = async ({ email, data }) => {
     }
 
     return result
+}
+
+exports.googleSignInMobile = async ({
+    displayName,
+    email,
+    photo,
+    registerToken,
+    syncId,
+}) => {
+    const refCode = generateReferralCode()
+
+    /**
+     * checking if another user with same email already exists
+     **/
+    let user = await UserModel.findOne({ email }).exec()
+
+    if (user) {
+        const token = await jwtUtil.createToken({
+            _id: user._id,
+            email: user.email,
+        })
+        return {
+            access_token: token,
+            token_type: 'Bearer',
+            expires_in: jwtConfig.ttl,
+            message: 'Success.',
+        }
+    } else {
+        let newGoogleUser = {
+            displayName: displayName,
+            email: email,
+            password: '',
+            role: 'basic',
+            streak: 0,
+            lastCompletedDay: null,
+            imgPath: photo || null,
+            diamond: 0,
+            xp: {
+                current: 0,
+                daily: 0,
+                total: 0,
+                level: 1,
+            },
+            heart: appConfig.defaultHeart || 5,
+            lastHeartAccruedAt: new Date(),
+            unlimitedHeart: null,
+            referralCode: refCode,
+            registeredAt: new Date(),
+            emailVerifiedAt: new Date(),
+        }
+
+        // sync guest data
+        if (registerToken && syncId) {
+            const guestData = await GuestModel.findById(syncId)
+            if (guestData) {
+                newGoogleUser = {
+                    ...newGoogleUser,
+                    streak: guestData.streak,
+                    lastCompletedDay: guestData.lastCompletedDay,
+                    diamond: guestData.diamond,
+                    xp: guestData.xp,
+                    score: guestData.score,
+                    completedDays: guestData.completedDays,
+                    last_played: guestData.last_played,
+                    heart: guestData.heart || appConfig.defaultHeart,
+                    lastHeartAccruedAt:
+                        guestData.lastHeartAccruedAt || new Date(),
+                    lastClaimedGemsDailyQuest:
+                        guestData.lastClaimedGemsDailyQuest || null,
+                    unlimitedHeart: null,
+                }
+                GuestService.deleteGuest(req.body.syncId)
+            }
+        }
+        const newUser = await UserModel.create(newGoogleUser)
+        const token = await jwtUtil.createToken({
+            _id: newUser._id,
+            email: newUser.email,
+        })
+        return {
+            access_token: token,
+            token_type: 'Bearer',
+            expires_in: jwtConfig.ttl,
+            message: 'Success.',
+        }
+    }
 }

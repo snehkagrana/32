@@ -95,7 +95,7 @@ module.exports = function (passport) {
                         unlimitedHeart: null,
                         referralCode: refCode,
                         registeredAt: new Date(),
-                        emailVerifiedAt: null,
+                        emailVerifiedAt: new Date(),
                     }
                     const newUser = await AuthService.createUser(newUserData)
                     const token = await jwtUtil.createToken({
