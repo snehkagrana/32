@@ -9,6 +9,12 @@ const schema = require('../validations/auth.validation')
 const validate = require('../utils/validator.util')
 
 router.post(
+    '/google-signin-mobile',
+    validate(schema.googleSignInMobile),
+    ErrorHandler(AuthController.googleSignInMobile)
+)
+
+router.post(
     '/register/send-code',
     validate(schema.sendRegisterCode),
     ErrorHandler(AuthController.sendRegisterCode)

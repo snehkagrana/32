@@ -59,4 +59,13 @@ module.exports = {
             code: Joi.string().allow(null),
         })
         .options({ allowUnknown: true }),
+    googleSignInMobile: Joi.object()
+        .keys({
+            displayName: Joi.string().required(),
+            email: Joi.string().email().required(),
+            photo: Joi.string().allow(null),
+            registerToken: Joi.string().optional().allow(null),
+            syncId: Joi.string().optional().allow(null),
+        })
+        .options({ allowUnknown: true }),
 }
