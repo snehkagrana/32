@@ -10,6 +10,7 @@ const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
 const {
     sendEmailForgotPassword,
+    sendEmailVerifyRegisterCode,
     sendOtpEmailForgotPassword,
 } = require('../email/send-email')
 const { appConfig } = require('../configs/app.config')
@@ -32,6 +33,13 @@ exports.sendRegisterCode = async email => {
         } else {
             isExist = await VerifyRegisterCodeModel.create({ email, code })
         }
+
+        await sendEmailVerifyRegisterCode({
+            code,
+            from: process.env.MAIL,
+            to: email,
+        })
+
         result = true
     }
     return result
