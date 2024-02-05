@@ -76,7 +76,7 @@ const ModalUnlimitedHearts = () => {
                                     Sign Up
                                 </FingoButton>
                                 <p className='mt-3 mb-0 text-center text-sm'>
-                                    Sign up to get unlimited hearts{' '}
+                                    Sign up to get unlimited hearts.{' '}
                                 </p>
                             </>
                         )}
