@@ -3,6 +3,11 @@
 const mongoose = require('mongoose')
 
 const UserSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+    },
     displayName: String,
     email: String,
     password: String,
@@ -140,6 +145,8 @@ const UserSchema = new mongoose.Schema({
     registeredAt: Date,
     numberOfSuccessReferrals: Number,
     emailVerifiedAt: Date,
+    verifyEmailCode: String,
+    phoneNumber: String,
 })
 
 UserSchema.set('toJSON', {

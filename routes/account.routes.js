@@ -22,4 +22,36 @@ router.post(
     ErrorHandler(AccountController.markSeenMyReward)
 )
 
+// Send code verify email
+router.post(
+    '/account/email/verify/send-code',
+    validate(AccountValidations.sendCodeVerifyEmail),
+    AuthGuard,
+    ErrorHandler(AccountController.sendCodeVerifyEmail)
+)
+
+// Verify email
+router.post(
+    '/account/email/verify',
+    validate(AccountValidations.verifyEmail),
+    AuthGuard,
+    ErrorHandler(AccountController.verifyEmail)
+)
+
+// check availability username
+router.post(
+    '/account/username/availability',
+    validate(AccountValidations.checkAvailabilityUsername),
+    AuthGuard,
+    ErrorHandler(AccountController.checkAvailabilityUsername)
+)
+
+// update profile
+router.post(
+    '/account/update',
+    validate(AccountValidations.updateProfile),
+    AuthGuard,
+    ErrorHandler(AccountController.updateProfile)
+)
+
 module.exports = router

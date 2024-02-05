@@ -1,4 +1,5 @@
 const UserModel = require('../models/user')
+const { generateOTP } = require('../utils/otp.util')
 
 exports.getMyRewards = async email => {
     const user = await UserModel.findOne({ email })
@@ -31,6 +32,70 @@ exports.markSeenMyReward = async (email, body) => {
                             return x._doc
                         }
                     }),
+                },
+            },
+            { new: true }
+        ).exec()
+        result = true
+    }
+    return result
+}
+
+exports.checkAvailabilityUsername = async username => {
+    let user = await UserModel.findOne({ username }).exec()
+    if (!user) {
+        return true
+    }
+    return false
+}
+
+exports.sendCodeVerifyEmail = async ({ email }) => {
+    const code = generateOTP(4)
+    let result = false
+    let user = await UserModel.findOne({ email }).exec()
+    if (user) {
+        await UserModel.findOneAndUpdate(
+            { email },
+            { $set: { verifyEmailCode: code } },
+            { new: true }
+        ).exec()
+        result = true
+    }
+    return result
+}
+
+exports.verifyEmail = async ({ code, email }) => {
+    let result = false
+    let user = await UserModel.findOne({ email }).exec()
+    if (user && user?.verifyEmailCode === code) {
+        user = await UserModel.findOneAndUpdate(
+            { email: email },
+            {
+                $set: {
+                    verifyEmailCode: '',
+                    emailVerifiedAt: new Date(),
+                },
+            },
+            { new: true }
+        ).exec()
+        result = true
+    }
+    return result
+}
+
+exports.updateProfile = async (email, body) => {
+    let result = false
+    let user = await UserModel.findOne({ email }).exec()
+    if (user) {
+        // update user
+        user = await UserModel.findOneAndUpdate(
+            { email },
+            {
+                $set: {
+                    // email: body.email ?? user.email, // don't update email for now
+                    username: body.username ?? user.username,
+                    displayName: body.displayName ?? user.displayName,
+                    phoneNumber: body.phoneNumber ?? user.phoneNumber ?? null,
                 },
             },
             { new: true }

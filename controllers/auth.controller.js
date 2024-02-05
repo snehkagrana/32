@@ -5,7 +5,10 @@ const jwtConfig = require('../configs/jwt.config')
 const bcryptUtil = require('../utils/bcrypt.util')
 const jwtUtil = require('../utils/jwt.util')
 const { appConfig } = require('../configs/app.config')
-const { generateReferralCode } = require('../utils/common.util')
+const {
+    generateReferralCode,
+    generateUsername,
+} = require('../utils/common.util')
 
 exports.sendRegisterCode = async (req, res) => {
     const result = await AuthService.sendRegisterCode(req.body.email)
@@ -47,6 +50,7 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcryptUtil.createHash(req.body.password)
 
     let newUser = {
+        username: generateUsername(req.body.displayName),
         displayName: req.body.displayName,
         email: req.body.email,
         password: hashedPassword,

@@ -6,6 +6,7 @@ const {
     daysDifference,
     generateReferralCode,
     getToday,
+    generateUsername,
 } = require('../utils/common.util')
 const { mailTransporter } = require('../utils/mail.util')
 const { initializeDiamondUser } = require('../utils/reward.util')
@@ -146,6 +147,8 @@ exports.syncUser = async email => {
 
                     // prettier-ignore
                     unlimitedHeart: user?.unlimitedHeart && dayjs(user.unlimitedHeart).isAfter(dayjs(today).toISOString(), 'second') ? user.unlimitedHeart : null,
+                    // prettier-ignore
+                    username: !user?.username ? generateUsername(user.displayName) : user.username,
                 },
             }
         )
@@ -314,6 +317,7 @@ exports.googleSignInMobile = async ({
         }
     } else {
         let newGoogleUser = {
+            username: generateUsername(displayName),
             displayName: displayName,
             email: email,
             password: '',

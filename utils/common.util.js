@@ -20,8 +20,22 @@ const generateReferralCode = () => {
     return uid.rnd()
 }
 
+const generateUsername = fullName => {
+    var digits = '0123456789'
+    const userName = fullName
+        .toLowerCase()
+        .replace(/ /g, '')
+        .replace(/[^\w-]+/g, '')
+    let _number = ''
+    for (let i = 0; i < 5; i++) {
+        _number += digits[Math.floor(Math.random() * 10)]
+    }
+    return userName + _number
+}
+
 module.exports = {
     getToday,
     daysDifference,
     generateReferralCode,
+    generateUsername,
 }

@@ -6,7 +6,10 @@ const jwtUtil = require('./utils/jwt.util')
 const jwtConfig = require('./configs/jwt.config')
 const AuthService = require('./services/auth.service')
 const { appConfig } = require('./configs/app.config')
-const { generateReferralCode } = require('./utils/common.util')
+const {
+    generateReferralCode,
+    generateUsername,
+} = require('./utils/common.util')
 require('dotenv').config()
 
 module.exports = function (passport) {
@@ -76,6 +79,7 @@ module.exports = function (passport) {
                     })
                 } else {
                     const newUserData = {
+                        username: generateUsername(displayName),
                         displayName: displayName,
                         email: email,
                         password: '',
