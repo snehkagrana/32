@@ -38,6 +38,7 @@ const batchRoutes = require('./routes/batch.routes')
 const heartRoutes = require('./routes/heart.routes')
 const quizRoutes = require('./routes/quiz.routes')
 const draggableQuizRoutes = require('./routes/draggableQuiz.routes')
+const commonRoutes = require('./routes/common.routes')
 const AuthGuard = require('./middlewares/auth.middleware');
 const { initializeDiamondUser, calculateDiamondUser } = require("./utils/reward.util");
 const { mailTransporter } = require("./utils/mail.util");
@@ -99,6 +100,7 @@ app.use('/server/api', batchRoutes);
 app.use('/server/api', heartRoutes);  
 app.use('/server/api', quizRoutes);  
 app.use('/server/api', draggableQuizRoutes);  
+app.use('/server/api', commonRoutes);  
 
 app.use(
     session({
