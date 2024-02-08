@@ -51,7 +51,7 @@ const ModalKeepLearning = () => {
                     />
                     <h2 className='mb-3 text-center'>Wait, don't go!</h2>
                     <h4 className='text-center mb-4'>
-                        You're right on track! if you quit now, you will lose
+                        You're on the right track! If you quit now, you will lose
                         your progress.
                     </h4>
                     <FingoButton

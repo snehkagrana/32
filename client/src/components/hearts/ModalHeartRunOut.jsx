@@ -86,10 +86,10 @@ const ModalHeartRunOut = () => {
                         </div>
                         <img src={SadImg} alt='img' className='mb-3' />
                         <h2 className='mb-2 text-center'>
-                            You run out of hearts.
+                            You ran out of hearts.
                         </h2>
                         <h4 className='text-center'>
-                            Refer your friends for unlimited hearts or use gems
+                            Refer your friends to get unlimited hearts or use gems
                             to get hearts.
                         </h4>
                     </div>
