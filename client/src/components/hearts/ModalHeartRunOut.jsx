@@ -90,7 +90,7 @@ const ModalHeartRunOut = () => {
                         </h2>
                         <h4 className='text-center'>
                             Refer your friends to get unlimited hearts or use gems
-                            to get hearts.
+                            to get more hearts.
                         </h4>
                     </div>
                     <div className='HeartRunOutContent'>
