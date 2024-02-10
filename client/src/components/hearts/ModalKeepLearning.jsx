@@ -67,7 +67,7 @@ const ModalKeepLearning = () => {
                         className='ModalRefillCancelBtn'
                         onClick={onClickEndSession}
                     >
-                        End session
+                        End Session
                     </a>
                 </div>
             </div>
