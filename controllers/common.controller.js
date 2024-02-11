@@ -31,7 +31,7 @@ exports.getNextLesson = async (req, res) => {
     let questions = await QuestionModel.find().exec()
 
     // check user last played
-    if (user && user?.last_played?.skill) {
+    if (user && skills.length) {
         // prettier-ignore
         const currentSkill = skills.find(x => x.skill === user?.last_played?.skill)
         // prettier-ignore
