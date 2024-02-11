@@ -69,7 +69,7 @@ exports.register = async (req, res) => {
         unlimitedHeart: null,
         referralCode: refCode,
         registeredAt: new Date(),
-        emailVerifiedAt: null,
+        emailVerifiedAt: req.body.clientType === 'mobile' ? new Date() : null,
     }
 
     // sync guest data
