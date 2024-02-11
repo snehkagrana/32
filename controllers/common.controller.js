@@ -36,7 +36,6 @@ exports.getNextLesson = async (req, res) => {
         const currentSkill = skills.find(x => x.skill === user?.last_played?.skill)
         // prettier-ignore
         const currentSkillIndex = skills.findIndex(x => x.skill === user?.last_played?.skill)
-
         // skill found
         // prettier-ignore
         if(currentSkill && currentSkillIndex > -1) {
@@ -66,9 +65,16 @@ exports.getNextLesson = async (req, res) => {
 
         // skill not found
         else {
-            skill = questions[0].skill
-            category = questions[0].category
-            subCategory = questions[0].sub_category
+            const findFirstLesson = skills[0].sub_categories.find((x) => x.category === 'Start_Here' && x.sub_category === 'Stocks')
+            if(findFirstLesson) {
+                skill = skills[0].skill
+                category = findFirstLesson.category
+                subCategory = findFirstLesson.sub_category
+            } else {
+                skill = skills[0].skill
+                category = skills[0].sub_categories[0].category
+                subCategory = skills[0].sub_categories[0].sub_category
+            }
         }
     }
     // guest
@@ -77,7 +83,6 @@ exports.getNextLesson = async (req, res) => {
         const currentSkill = skills.find(x => x.skill === guest?.last_played?.skill)
         // prettier-ignore
         const currentSkillIndex = skills.findIndex(x => x.skill === guest?.last_played?.skill)
-
         // skill found
         // prettier-ignore
         if(currentSkill && currentSkillIndex > -1) {
@@ -107,13 +112,20 @@ exports.getNextLesson = async (req, res) => {
 
         // skill not found
         else {
-            skill = questions[0].skill
-            category = questions[0].category
-            subCategory = questions[0].sub_category
+            const findFirstLesson = skills[0].sub_categories.find((x) => x.category === 'Start_Here' && x.sub_category === 'Stocks')
+            if(findFirstLesson) {
+                skill = skills[0].skill
+                category = findFirstLesson.category
+                subCategory = findFirstLesson.sub_category
+            } else {
+                skill = skills[0].skill
+                category = skills[0].sub_categories[0].category
+                subCategory = skills[0].sub_categories[0].sub_category
+            }
         }
     }
     return res.json({
-        skill: skill,
+        skill,
         category,
         subCategory,
     })
