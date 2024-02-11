@@ -10,7 +10,8 @@ module.exports = {
 
     checkAvailabilityUsername: Joi.object()
         .keys({
-            username: Joi.string().required(),
+            // username: Joi.string().required(),
+            username: Joi.string().alphanum().min(3).max(30).required(),
         })
         .options({ allowUnknown: true }),
 

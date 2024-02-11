@@ -34,9 +34,10 @@ exports.markSeenMyReward = async (req, res) => {
 }
 
 exports.checkAvailabilityUsername = async (req, res) => {
-    const result = await AccountService.checkAvailabilityUsername(
-        req.body.username
-    )
+    const result = await AccountService.checkAvailabilityUsername({
+        username: req.body.username,
+        authenticatedUserEmail: req.user.email,
+    })
     if (result) {
         return res.json({
             message: 'Available',

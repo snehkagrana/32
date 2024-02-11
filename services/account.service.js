@@ -41,12 +41,23 @@ exports.markSeenMyReward = async (email, body) => {
     return result
 }
 
-exports.checkAvailabilityUsername = async username => {
-    let user = await UserModel.findOne({ username }).exec()
-    if (!user) {
-        return true
+exports.checkAvailabilityUsername = async ({
+    username,
+    authenticatedUserEmail,
+}) => {
+    let result = false
+    // prettier-ignore
+    const authenticatedUser = await UserModel.findOne({ email: authenticatedUserEmail }).exec()
+    const user = await UserModel.findOne({ username }).exec()
+    if (user && authenticatedUser?.username === username) {
+        result = true
+    } else if (!user) {
+        result = true
+    } else {
+        result = false
     }
-    return false
+
+    return result
 }
 
 exports.sendCodeVerifyEmail = async ({ email }) => {
