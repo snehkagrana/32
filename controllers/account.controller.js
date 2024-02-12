@@ -84,3 +84,10 @@ exports.updateProfile = async (req, res) => {
     }
     return res.status(400).json({ message: 'Failed to update profile!' })
 }
+
+exports.uploadPhoto = async (req, res) => {
+    return res.json({
+        message: 'Ok',
+        data: req.file.location,
+    })
+}

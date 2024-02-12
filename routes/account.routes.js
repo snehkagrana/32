@@ -6,6 +6,7 @@ const ErrorHandler = require('../middlewares/error.middleware')
 const AuthGuard = require('../middlewares/auth.middleware')
 const AccountValidations = require('../validations/account.validation')
 const validate = require('../utils/validator.util')
+const { multerUpload } = require('../configs/multer.config')
 
 // Get my reward
 router.get(
@@ -52,6 +53,14 @@ router.post(
     validate(AccountValidations.updateProfile),
     AuthGuard,
     ErrorHandler(AccountController.updateProfile)
+)
+
+// Upload photo
+router.post(
+    '/account/upload-photo',
+    AuthGuard,
+    multerUpload.single('photo'),
+    ErrorHandler(AccountController.uploadPhoto)
 )
 
 module.exports = router
