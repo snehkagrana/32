@@ -426,6 +426,12 @@ const InformationPage = () => {
                                 {!isQuiz && pageNumber + 1 === maxInfoPages && (
                                     <Button
                                         variant='success'
+                                        style={{
+                                                minWidth: '20%',
+                                                boxShadow: '0px 7px #1a5928',
+                                                borderRadius: '10px',
+                                                marginTop: '10px', 
+                                              }}
                                         onClick={() =>
                                             navigate(
                                                 `/skills/${skillName}/${category}`
