@@ -422,8 +422,7 @@ const InformationPage = () => {
                                                 </OverlayTrigger>
                                             </>
                                         )}
-                                </div>
-                                {!isQuiz && pageNumber + 1 === maxInfoPages && (
+                                        {!isQuiz && pageNumber + 1 === maxInfoPages && (
                                     <Button
                                         variant='success'
                                         style={{
@@ -441,6 +440,7 @@ const InformationPage = () => {
                                         Go Back!!
                                     </Button>
                                 )}
+                                </div>                             
                             </Card.Body>
                         )}
                     </Card>
