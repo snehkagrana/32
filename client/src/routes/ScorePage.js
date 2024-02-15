@@ -336,7 +336,7 @@ const ScorePage = () => {
                                                         )
                                                     }}
                                                 >
-                                                    Next: Start with{' '}
+                                                    Next: {' '}
                                                     {allSubCategories.current[
                                                         subCategoryIndex.current +
                                                             1
