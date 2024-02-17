@@ -86,7 +86,7 @@ const ModalConfirmRefill = () => {
                     <RefillIcon className='RefillHeartsIcon' />
                     <h2 className='mb-3 text-center'>Confirm</h2>
                     <h4 className='TextWithIcon mb-4'>
-                        You will fill {MAX_HEARTS}{' '}
+                        You will get {MAX_HEARTS}{' '}
                         <HeartIcon className='HeartSvg' /> with{' '}
                         {AMOUNT_OF_GEMS_REDEEM_TO_HEARTS} <DiamondIcon />
                     </h4>
