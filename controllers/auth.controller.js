@@ -11,6 +11,12 @@ const {
 } = require('../utils/common.util')
 
 exports.sendRegisterCode = async (req, res) => {
+    const isExist = await AuthService.findUserByEmail(req.body.email)
+    if (isExist) {
+        return res.status(400).json({
+            message: 'This email has been taken',
+        })
+    }
     const result = await AuthService.sendRegisterCode(req.body.email)
     if (result) {
         return res.json({ message: 'OK' })
@@ -34,7 +40,7 @@ exports.verifyRegisterCode = async (req, res) => {
     if (result) {
         return res.json({ message: 'Verified' })
     }
-    return res.status(400).json({ message: 'Error' })
+    return res.status(400).json({ message: 'Incorrect otp code' })
 }
 
 exports.register = async (req, res) => {
@@ -200,6 +206,13 @@ exports.sendLinkForgotPassword = async (req, res) => {
 }
 
 exports.sendCodeForgotPassword = async (req, res) => {
+    const isExist = await AuthService.findUserByEmail(req.body.email)
+    if (!isExist) {
+        return res.status(400).json({
+            message: 'Email not found',
+        })
+    }
+
     const result = await AuthService.sendCodeForgotPassword(req.body.email)
     if (result) {
         return res.json({ message: 'Send otp code successfully.' })
@@ -217,7 +230,7 @@ exports.verifyCodeForgotPassword = async (req, res) => {
     if (result) {
         return res.json({ message: 'Verified.' })
     }
-    return res.status(400).json({ message: 'Failed verify forgot password.' })
+    return res.status(400).json({ message: 'Incorrect otp code' })
 }
 
 exports.resetPassword = async (req, res) => {

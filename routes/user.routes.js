@@ -9,6 +9,9 @@ const AuthGuard = require('../middlewares/auth.middleware')
 router.get('/user/qr/:id', ErrorHandler(UserController.getUserQr))
 
 // Get users
+router.get('/user/:id', AuthGuard, ErrorHandler(UserController.getUserById))
+
+// Get users
 router.get('/user', AuthGuard, ErrorHandler(UserController.findAll))
 
 module.exports = router
