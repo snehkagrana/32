@@ -76,7 +76,7 @@ const ModalInviteFriends = () => {
                         <h4 className='text-center'>
                             Tell your friends it's free and fun to learn on
                             Fingo. Refer 3 friends and get unlimited hearts for
-                            3 days.
+                            72 hours.
                         </h4>
                     </div>
                     <div className='InviteFriendsContent'>
