@@ -38,7 +38,7 @@ const ModalListMyReward = () => {
             <div className='ListRewardContainer FingoShapeRadius'>
                 <div className='ListRewardHeader'>
                     <h2 className='mb-0'>My Rewards</h2>
-                    <p>You have {data.length} gift card</p>
+                    <p>You have {data.length} gift card{'(s)'}.</p>
                 </div>
                 <hr />
                 <div className='ListReward'>
