@@ -20,7 +20,7 @@ const QuizFeedback = new mongoose.Schema({
     // quizId: { type: mongoose.Schema.Types.ObjectId, ref: 'Question' },
     feedback: {
         type: String,
-        enum: ['funny', 'love', 'surprised', 'angry', 'sad'],
+        enum: ['grinning', 'neutral', 'sad'],
     },
     submittedAt: Date,
 })
