@@ -25,8 +25,8 @@ const HeartCard = () => {
     )
 
     const getMessage = useMemo(() => {
-        const message1 = 'You have full hearts'
-        const message2 = 'Next heart in 1 hours'
+        const message1 = 'You have full hearts.'
+        const message2 = 'Next heart in 1 hour.'
         if (isAuthenticated) {
             if (user?.heart === 5) {
                 return message1
