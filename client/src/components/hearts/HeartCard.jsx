@@ -45,8 +45,8 @@ const HeartCard = () => {
 
     const getSubMessage = useMemo(() => {
         const subMessage1 = 'Keep on learning'
-        const subMessage2 = 'You still have hearts left! Keep on learning'
-        const subMessage3 = 'You have no hearts left! Try an option below'
+        const subMessage2 = 'You still have hearts left! Keep on learning.'
+        const subMessage3 = 'You have no hearts left! Try an option below.'
         if (isAuthenticated) {
             if (user?.heart === 5) {
                 return subMessage1
