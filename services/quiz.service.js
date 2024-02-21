@@ -5,6 +5,7 @@ const { calculateDiamondUser } = require('../utils/reward.util')
 const { getLevelByXpPoints } = require('../utils/xp.utils')
 const ReferralService = require('./referral.service')
 const dayjs = require('dayjs')
+const { MAX_HEARTS } = require('../constants/app.constant')
 
 exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
     let result = null
@@ -14,6 +15,7 @@ exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
     if (user) {
         // prettier-ignore
         const MUST_REDUCE_HEART = Boolean(!isCorrect) && Boolean(!user?.unlimitedHeart) && user?.heart > 0
+        const IS_LOST_1ST_HEARTS = user.heart === MAX_HEARTS
 
         user = await UserModel.findOneAndUpdate(
             { email: user.email },
@@ -21,7 +23,7 @@ exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
                 $set: {
                     heart: MUST_REDUCE_HEART ? user.heart - 1 : user.heart,
                     // prettier-ignore
-                    lastHeartAccruedAt: MUST_REDUCE_HEART ? new Date() : user.lastHeartAccruedAt || null,
+                    lastHeartAccruedAt: MUST_REDUCE_HEART && IS_LOST_1ST_HEARTS ? new Date() : user.lastHeartAccruedAt || null,
                 },
             },
             { new: true }
@@ -29,13 +31,15 @@ exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
     } else if (guest) {
         // prettier-ignore
         const MUST_REDUCE_HEART = Boolean(!isCorrect) && guest?.heart > 0
+        const IS_LOST_1ST_HEARTS = guest.heart === MAX_HEARTS
+
         guest = await GuestModel.findOneAndUpdate(
             { _id: guest._id },
             {
                 $set: {
                     heart: MUST_REDUCE_HEART ? guest.heart - 1 : guest.heart,
                     // prettier-ignore
-                    lastHeartAccruedAt: MUST_REDUCE_HEART ? new Date() : guest.lastHeartAccruedAt || null,
+                    lastHeartAccruedAt: MUST_REDUCE_HEART && IS_LOST_1ST_HEARTS ? new Date() : guest.lastHeartAccruedAt || null,
                 },
             },
             { new: true }
