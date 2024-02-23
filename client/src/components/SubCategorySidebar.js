@@ -126,7 +126,7 @@ const SubCategorySidebar = props => {
                                     <path d='M7 11V7a5 5 0 0 1 10 0v4' />
                                 </g>
                             </svg>
-                            Please Login to Unlock Lesson
+                            Please Login to Unlock Lessons
                         </p>
                     </div>
                 </div>
@@ -138,7 +138,7 @@ const SubCategorySidebar = props => {
                 }}
             >
                 <Card.Body>
-                    <Card.Title>{data?.length ?? 0} Lesson</Card.Title>
+                    <Card.Title>{data?.length ?? 0} Lessons</Card.Title>
                     <div className='SubCategorySidebarContent'>
                         {data?.length > 0 &&
                             data.map((item, index) => {
