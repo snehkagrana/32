@@ -220,6 +220,7 @@ exports.saveXp = async ({ authUser, xp }) => {
     let guest = await GuestModel.findById(authUser._id).exec()
 
     if (user) {
+        ReferralService.validateReferral({ userId: authUser._id })
         user = await UserModel.updateOne(
             { email: user.email },
             {
@@ -241,7 +242,6 @@ exports.saveXp = async ({ authUser, xp }) => {
                 },
             }
         )
-        ReferralService.validateReferral({ userId: user._id })
         result = true
     } else if (guest && authUser.email === 'GUEST') {
         guest = await GuestModel.updateOne(
