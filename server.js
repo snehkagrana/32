@@ -103,6 +103,7 @@ app.use('/server/api', quizRoutes);
 app.use('/server/api', draggableQuizRoutes);  
 app.use('/server/api', commonRoutes);  
 app.use('/server/api', feedbackRoutes);  
+app.use('/.well-known', express.static('well-known'))
 
 app.use(
     session({
