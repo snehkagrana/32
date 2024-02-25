@@ -5,8 +5,10 @@ const CommonController = require('../controllers/common.controller')
 const ErrorHandler = require('../middlewares/error.middleware')
 const AuthGuard = require('../middlewares/auth.middleware')
 
-// Get information dropdown
-router.get('/initialize', ErrorHandler(CommonController.getInitialData))
+// prettier-ignore
+router.get('/initialize/skills', ErrorHandler(CommonController.getInitialSkills))
+// prettier-ignore
+router.get('/initialize/informations', ErrorHandler(CommonController.getInitialInformations))
 
 // Get next lesson
 router.get(

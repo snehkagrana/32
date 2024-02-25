@@ -1,20 +1,35 @@
 const SkillModel = require('../models/skill')
+const InformationModel = require('../models/information')
 const UserModel = require('../models/user')
 const GuestModel = require('../models/guest')
 const QuestionModel = require('../models/question')
 
-exports.getInitialData = async (req, res) => {
+exports.getInitialSkills = async (req, res) => {
     SkillModel.find((err, values) => {
         if (err) {
             return res
                 .status(400)
-                .json({ message: 'Failed to get initial data' })
+                .json({ message: 'Failed to get initial skills' })
         } else {
             values.sort((a, b) => {
                 return a.order - b.order
             })
             return res.json({
-                skills: values,
+                data: values,
+            })
+        }
+    })
+}
+
+exports.getInitialInformations = async (req, res) => {
+    InformationModel.find((err, values) => {
+        if (err) {
+            return res
+                .status(400)
+                .json({ message: 'Failed to get initial information' })
+        } else {
+            return res.json({
+                data: values,
             })
         }
     })
