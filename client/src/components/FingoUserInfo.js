@@ -23,7 +23,10 @@ const FingoUserInfo = () => {
     const { isAuthenticated } = useAuth()
 
     const getGreetingText = useMemo(() => {
-        if (time >= 4 && time < 12) {
+        if (time >=3 && time < 5){
+            return 'Good morning (or night?)'
+        }
+        else if (time >= 5 && time < 12) {
             return 'Good morning,';
         } else if (time >= 12 && time < 16) {
             return 'Good afternoon,';
