@@ -142,7 +142,7 @@ const EditQuestion = (props) => {
                                 <Form.Group>
                                     <Form.Label>Enter Question</Form.Label>
                                     <Form.Control
-                                        type="string"
+                                        type="textarea"
                                         defaultValue={question}
                                         onChange={(e) =>
                                             setQuestion(e.target.value)
