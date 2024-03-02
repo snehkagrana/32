@@ -305,7 +305,8 @@ const AddChapters = (props) => {
                                                                     "10px",
                                                                 padding: "13px",
                                                                 width: "100%",
-                                                                marginBottom: '8px'
+                                                                marginBottom: '8px',
+                                                                marginLeft: '8px'
                                                             }}
                                                             className="btn btn-danger mx-1"
                                                             onClick={() =>
@@ -460,7 +461,8 @@ const AddChapters = (props) => {
                                                                     "10px",
                                                                 padding: "13px",
                                                                 width: "100%",
-                                                                marginBottom: '8px'
+                                                                marginBottom: '8px',
+                                                                marginLeft: '8px'
                                                             }}
                                                             className="btn btn-danger mx-1"
                                                             onClick={() =>
