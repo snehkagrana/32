@@ -219,8 +219,19 @@ exports.saveXp = async ({ authUser, xp }) => {
     let user = await UserModel.findById(authUser._id).exec()
     let guest = await GuestModel.findById(authUser._id).exec()
 
+    /**
+     * NOTES
+     * 0 - Sunday
+     * 1 - Monday
+     */
+    const dayOfWeek = dayjs(new Date()).day()
+    // console.log('dayOfWeek', dayOfWeek)
+
     if (user) {
         ReferralService.validateReferral({ userId: authUser._id })
+        // prettier-ignore
+        const weeklyXp = typeof user.xp?.weekly === 'number' ? user.xp?.weekly + xp : xp
+
         user = await UserModel.updateOne(
             { email: user.email },
             {
@@ -238,12 +249,15 @@ exports.saveXp = async ({ authUser, xp }) => {
                         level: getLevelByXpPoints(
                             user?.xp?.total ? user.xp.total + xp : 0
                         ),
+                        weekly: weeklyXp,
                     },
                 },
             }
         )
         result = true
     } else if (guest && authUser.email === 'GUEST') {
+        // prettier-ignore
+        const weeklyXp = typeof guest.xp?.weekly === 'number' ? guest.xp?.weekly + xp : xp
         guest = await GuestModel.updateOne(
             { _id: guest._id },
             {
@@ -259,6 +273,7 @@ exports.saveXp = async ({ authUser, xp }) => {
                         daily: guest.xp.daily ? guest.xp.daily + xp : xp,
                         total: guest.xp.total ? guest.xp.total + xp : xp,
                         level: 1, // keep level 1 for guest
+                        weekly: weeklyXp,
                     },
                 },
             }

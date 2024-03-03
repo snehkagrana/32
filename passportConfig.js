@@ -93,6 +93,7 @@ module.exports = function (passport) {
                             daily: 0,
                             total: 0,
                             level: 1,
+                            weekly: 0,
                         },
                         heart: appConfig.defaultHeart || 5,
                         lastHeartAccruedAt: new Date(),

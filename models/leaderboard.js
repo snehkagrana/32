@@ -4,6 +4,7 @@ const LeaderBoardSchema = new mongoose.Schema({
     startDate: Date,
     endDate: Date,
     isActive: Boolean,
+    lastUpdate: Date,
     users: [
         {
             userId: mongoose.Schema.Types.ObjectId,

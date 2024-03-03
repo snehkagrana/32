@@ -139,6 +139,7 @@ exports.syncUser = async email => {
                         level: getLevelByXpPoints(
                             user?.xp?.total ? parseInt(user.xp.total, 10) : 0
                         ),
+                        weekly: user?.xp?.weekly ? user.xp.weekly : 0,
                     },
                     // prettier-ignore
                     heart: typeof user?.heart === 'number' ? user.heart : appConfig.defaultHeart,
@@ -331,6 +332,7 @@ exports.googleSignInMobile = async ({
                 daily: 0,
                 total: 0,
                 level: 1,
+                weekly: 0,
             },
             heart: appConfig.defaultHeart || 5,
             lastHeartAccruedAt: new Date(),

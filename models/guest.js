@@ -25,6 +25,7 @@ const GuestSchema = new mongoose.Schema({
         daily: Number,
         total: Number,
         level: Number,
+        weekly: Number,
     },
     last_played: {
         skill: {

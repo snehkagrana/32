@@ -49,7 +49,7 @@ const ReferralService = require('./services/referral.service')
 const AdminMiddleware = require('./middlewares/admin.middleware')
 
 require('./cronjob/hearts.cronjob')
-// require('./cronjob/leaderboard.cronjob')
+require('./cronjob/leaderboard.cronjob')
 
 // dayjs.tz.setDefault("Asia/Kolkata")
 
@@ -400,7 +400,7 @@ app.post("/server/updateProfilePhoto",
                 } else {
                     return res.json({
                         imageUrl: doc.imageUrl
-                    });
+                    }); 
                 }
             }
             res.json({

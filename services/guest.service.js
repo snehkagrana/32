@@ -59,6 +59,7 @@ exports.syncGuest = async guestId => {
                         current: guest?.xp?.current ? guest.xp.current : 0,
                         daily: guest?.xp?.daily ? guest.xp.daily : 0,
                         total: guest?.xp?.total ? guest.xp.total : 0,
+                        weekly: guest?.xp?.weekly ? guest.xp.weekly : 0,
                         level: 1, // keep level 1 for guest
                     },
                     // prettier-ignore
