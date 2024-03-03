@@ -17,6 +17,10 @@ cron.schedule('* * * * *', async function () {
     const hour = dayjs(new Date()).hour()
     const minute = dayjs(new Date()).minute()
 
+    console.log('dayOfWeek->', dayOfWeek)
+    console.log('hour->', hour)
+    console.log('minute->', minute)
+
     // prettier-ignore
     const currentActiveLeaderBoard = await LeaderBoardModel.findOne({ isActive: true }).exec()
 
