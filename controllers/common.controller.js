@@ -3,6 +3,7 @@ const InformationModel = require('../models/information')
 const UserModel = require('../models/user')
 const GuestModel = require('../models/guest')
 const QuestionModel = require('../models/question')
+const { appConfig } = require('../configs/app.config')
 
 exports.getInitialSkills = async (req, res) => {
     SkillModel.find((err, values) => {
@@ -32,6 +33,63 @@ exports.getInitialInformations = async (req, res) => {
                 data: values,
             })
         }
+    })
+}
+
+exports.getAvatars = async (req, res) => {
+    const baseUrl = `${appConfig.appBaseUrl}/static-files/avatars/`
+    const avatarExtension = 'jpg'
+    return res.json({
+        data: [
+            {
+                id: 1,
+                avatar: `${baseUrl}1.${avatarExtension}`,
+            },
+            {
+                id: 2,
+                avatar: `${baseUrl}2.${avatarExtension}`,
+            },
+            {
+                id: 3,
+                avatar: `${baseUrl}3.${avatarExtension}`,
+            },
+            {
+                id: 4,
+                avatar: `${baseUrl}4.${avatarExtension}`,
+            },
+            {
+                id: 5,
+                avatar: `${baseUrl}5.${avatarExtension}`,
+            },
+            {
+                id: 6,
+                avatar: `${baseUrl}6.${avatarExtension}`,
+            },
+            {
+                id: 7,
+                avatar: `${baseUrl}7.${avatarExtension}`,
+            },
+            {
+                id: 8,
+                avatar: `${baseUrl}8.${avatarExtension}`,
+            },
+            {
+                id: 9,
+                avatar: `${baseUrl}9.${avatarExtension}`,
+            },
+            {
+                id: 10,
+                avatar: `${baseUrl}10.${avatarExtension}`,
+            },
+            {
+                id: 11,
+                avatar: `${baseUrl}11.${avatarExtension}`,
+            },
+            {
+                id: 12,
+                avatar: `${baseUrl}12.${avatarExtension}`,
+            },
+        ],
     })
 }
 
