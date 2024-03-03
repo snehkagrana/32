@@ -7,7 +7,7 @@ const {
 } = require('../constants/app.constant')
 const dayjs = require('dayjs')
 
-cron.schedule('*/30 * * * * *', async function () {
+cron.schedule('* * * * *', async function () {
     /**
      * NOTES
      * dayOfWeek 0 - Sunday
