@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const AccountController = require('../controllers/account.controller')
-const FriendshipController = require('../controllers/friendship.controller')
+// const FriendshipController = require('../controllers/friendship.controller')
 const ErrorHandler = require('../middlewares/error.middleware')
 const AuthGuard = require('../middlewares/auth.middleware')
 const AccountValidations = require('../validations/account.validation')
@@ -69,12 +69,6 @@ router.post(
     validate(AccountValidations.changeAvatar),
     AuthGuard,
     ErrorHandler(AccountController.changeAvatar)
-)
-
-router.get(
-    '/account/friendship',
-    AuthGuard,
-    ErrorHandler(FriendshipController.getMyFriendship)
 )
 
 module.exports = router

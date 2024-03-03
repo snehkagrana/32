@@ -152,6 +152,20 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         default: null,
     },
+    following: {
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        },
+        displayName: String,
+    },
+    followers: {
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        },
+        displayName: String,
+    },
 })
 
 UserSchema.set('toJSON', {
