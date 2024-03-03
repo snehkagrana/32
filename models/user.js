@@ -36,6 +36,7 @@ const UserSchema = new mongoose.Schema({
         daily: Number,
         total: Number,
         level: Number,
+        weekly: Number,
     },
     last_played: {
         skill: {
@@ -147,6 +148,10 @@ const UserSchema = new mongoose.Schema({
     emailVerifiedAt: Date,
     verifyEmailCode: String,
     phoneNumber: String,
+    avatarId: {
+        type: Number,
+        default: null,
+    },
 })
 
 UserSchema.set('toJSON', {

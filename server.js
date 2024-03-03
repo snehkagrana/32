@@ -40,6 +40,7 @@ const quizRoutes = require('./routes/quiz.routes')
 const draggableQuizRoutes = require('./routes/draggableQuiz.routes')
 const commonRoutes = require('./routes/common.routes')
 const feedbackRoutes = require('./routes/feedback.routes')
+const leaderBoardRoutes = require('./routes/leaderboard.routes')
 const AuthGuard = require('./middlewares/auth.middleware');
 const { initializeDiamondUser, calculateDiamondUser } = require("./utils/reward.util");
 const { mailTransporter } = require("./utils/mail.util");
@@ -48,6 +49,7 @@ const ReferralService = require('./services/referral.service')
 const AdminMiddleware = require('./middlewares/admin.middleware')
 
 require('./cronjob/hearts.cronjob')
+// require('./cronjob/leaderboard.cronjob')
 
 // dayjs.tz.setDefault("Asia/Kolkata")
 
@@ -103,7 +105,9 @@ app.use('/server/api', quizRoutes);
 app.use('/server/api', draggableQuizRoutes);  
 app.use('/server/api', commonRoutes);  
 app.use('/server/api', feedbackRoutes);  
+app.use('/server/api', leaderBoardRoutes);  
 app.use('/.well-known', express.static('well-known'))
+app.use('/static-files', express.static('static-files'))
 
 app.use(
     session({
@@ -391,7 +395,7 @@ app.post("/server/updateProfilePhoto",
                 if (req.file && req.file.location) {
                     const res = await User.updateOne(
                         { email: req.user.email },
-                        { $set: { imgPath: req.file.location } }
+                        { $set: { imgPath: req.file.location, avatarId: null } }
                     );
                 } else {
                     return res.json({

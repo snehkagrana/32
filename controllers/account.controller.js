@@ -91,3 +91,16 @@ exports.uploadPhoto = async (req, res) => {
         data: req.file.location,
     })
 }
+
+exports.changeAvatar = async (req, res) => {
+    const result = await AccountService.changeAvatar(
+        req.user.email,
+        req.body.avatarId
+    )
+    if (result) {
+        return res.json({
+            message: 'Your avatar has been change',
+        })
+    }
+    return res.status(400).json({ message: 'Failed to update avatar!' })
+}

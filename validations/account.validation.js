@@ -36,4 +36,11 @@ module.exports = {
             phoneNumber: Joi.string().allow(null),
         })
         .options({ allowUnknown: true }),
+
+    changeAvatar: Joi.object()
+        .keys({
+            avatarId: Joi.number().required(),
+            clientType: Joi.string().allow(null),
+        })
+        .options({ allowUnknown: true }),
 }

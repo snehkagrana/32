@@ -1,3 +1,4 @@
+const { appConfig } = require('../configs/app.config')
 const UserModel = require('../models/user')
 const { generateOTP } = require('../utils/otp.util')
 
@@ -107,6 +108,27 @@ exports.updateProfile = async (email, body) => {
                     username: body.username ?? user.username,
                     displayName: body.displayName ?? user.displayName,
                     phoneNumber: body.phoneNumber ?? user.phoneNumber ?? null,
+                },
+            },
+            { new: true }
+        ).exec()
+        result = true
+    }
+    return result
+}
+
+exports.changeAvatar = async (email, avatarId) => {
+    let result = false
+    const avatarExtension = 'jpg'
+    let user = await UserModel.findOne({ email }).exec()
+    if (user && avatarId) {
+        // update user
+        user = await UserModel.findOneAndUpdate(
+            { email },
+            {
+                $set: {
+                    avatarId,
+                    imgPath: `${appConfig.appBaseUrl}/static-files/avatars/${avatarId}.${avatarExtension}`,
                 },
             },
             { new: true }
