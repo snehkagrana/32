@@ -77,6 +77,8 @@ exports.register = async (req, res) => {
         referralCode: refCode,
         registeredAt: new Date(),
         emailVerifiedAt: req.body.clientType === 'mobile' ? new Date() : null,
+        following: [],
+        followers: [],
     }
 
     // sync guest data
@@ -97,6 +99,8 @@ exports.register = async (req, res) => {
                 lastClaimedGemsDailyQuest:
                     guestData.lastClaimedGemsDailyQuest || null,
                 unlimitedHeart: null,
+                following: [],
+                followers: [],
             }
         }
         GuestService.deleteGuest(req.body?.syncId)

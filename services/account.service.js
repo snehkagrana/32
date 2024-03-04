@@ -2,6 +2,8 @@ const { appConfig } = require('../configs/app.config')
 const UserModel = require('../models/user')
 const { generateOTP } = require('../utils/otp.util')
 
+var ObjectId = require('mongoose').Types.ObjectId
+
 exports.getMyRewards = async email => {
     const user = await UserModel.findOne({ email })
     if (user) {
@@ -134,6 +136,95 @@ exports.changeAvatar = async (email, avatarId) => {
             { new: true }
         ).exec()
         result = true
+    }
+    return result
+}
+
+exports.toggleFollow = async ({ authUserId, action, userId }) => {
+    let result = false
+    let authUser = await UserModel.findOne({ _id: authUserId }).exec()
+    let user = await UserModel.findOne({ _id: userId }).exec()
+
+    if (authUser && user && action) {
+        if (action === 'follow') {
+            // prettier-ignore
+            let currentFollowing = authUser?.following?.filter(x => x.userId !== userId) || []
+            let newFollowing = [
+                ...currentFollowing,
+                {
+                    userId: user._id,
+                    // prettier-ignore
+                    displayName: user?.displayName ? user.displayName : user.username || '',
+                    totalXp: user?.xp?.total ? user.xp.total : 0,
+                    imgPath: user?.imgPath ? user.imgPath : '',
+                    createdAt: new Date(),
+                },
+            ]
+            // update user
+            authUser = await UserModel.findOneAndUpdate(
+                { _id: authUserId },
+                {
+                    $set: {
+                        following: newFollowing,
+                    },
+                },
+                { new: true }
+            ).exec()
+
+            // prettier-ignore
+            let currentFollowers = user?.followers?.filter(x => x.userId !== authUserId) || []
+            let newFollowers = [
+                ...currentFollowers,
+                {
+                    userId: authUser._id,
+                    // prettier-ignore
+                    displayName: authUser?.displayName ? authUser.displayName : authUser.username || '',
+                    totalXp: authUser?.xp?.total ? authUser.xp.total : 0,
+                    imgPath: authUser?.imgPath ? authUser.imgPath : '',
+                    createdAt: new Date(),
+                },
+            ]
+            user = await UserModel.findOneAndUpdate(
+                { _id: userId },
+                {
+                    $set: {
+                        followers: newFollowers,
+                    },
+                },
+                { new: true }
+            ).exec()
+
+            result = true
+        } else if (action === 'unfollow') {
+            // prettier-ignore
+            let currentFollowing = authUser?.following?.filter(x => x.userId !== userId) || []
+            // update user
+            authUser = await UserModel.findOneAndUpdate(
+                { _id: authUserId },
+                {
+                    $set: {
+                        following: currentFollowing,
+                    },
+                },
+                { new: true }
+            ).exec()
+
+            // prettier-ignore
+            let currentFollowers = user?.followers?.filter(x => x.userId !== authUserId) || []
+            user = await UserModel.findOneAndUpdate(
+                { _id: userId },
+                {
+                    $set: {
+                        followers: currentFollowers,
+                    },
+                },
+                { new: true }
+            ).exec()
+
+            result = true
+        }
+    } else {
+        result = false
     }
     return result
 }

@@ -104,3 +104,17 @@ exports.changeAvatar = async (req, res) => {
     }
     return res.status(400).json({ message: 'Failed to update avatar!' })
 }
+
+exports.toggleFollow = async (req, res) => {
+    const result = await AccountService.toggleFollow({
+        authUserId: req.user._id,
+        action: req.body.action,
+        userId: req.body.userId,
+    })
+    if (result) {
+        return res.json({
+            message: 'Success',
+        })
+    }
+    return res.status(400).json({ message: 'Failed!' })
+}

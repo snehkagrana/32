@@ -152,20 +152,30 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         default: null,
     },
-    following: {
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
+    following: [
+        {
+            userId: String,
+            displayName: String,
+            totalXp: Number,
+            imgPath: {
+                type: String,
+                default: null,
+            },
+            createdAt: Date,
         },
-        displayName: String,
-    },
-    followers: {
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
+    ],
+    followers: [
+        {
+            userId: String,
+            displayName: String,
+            totalXp: Number,
+            imgPath: {
+                type: String,
+                default: null,
+            },
+            createdAt: Date,
         },
-        displayName: String,
-    },
+    ],
 })
 
 UserSchema.set('toJSON', {

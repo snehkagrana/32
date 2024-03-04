@@ -150,6 +150,9 @@ exports.syncUser = async email => {
                     unlimitedHeart: user?.unlimitedHeart && dayjs(user.unlimitedHeart).isAfter(dayjs(today).toISOString(), 'second') ? user.unlimitedHeart : null,
                     // prettier-ignore
                     username: !user?.username ? generateUsername(user.displayName) : user.username,
+
+                    following: user?.following ? user.following : [],
+                    followers: user?.followers ? user.followers : [],
                 },
             }
         )
@@ -340,6 +343,8 @@ exports.googleSignInMobile = async ({
             referralCode: refCode,
             registeredAt: new Date(),
             emailVerifiedAt: new Date(),
+            following: [],
+            followers: [],
         }
 
         // sync guest data
@@ -361,6 +366,8 @@ exports.googleSignInMobile = async ({
                     lastClaimedGemsDailyQuest:
                         guestData.lastClaimedGemsDailyQuest || null,
                     unlimitedHeart: null,
+                    following: [],
+                    followers: [],
                 }
                 GuestModel.deleteOne({ _id: syncId })
             }

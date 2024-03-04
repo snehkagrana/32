@@ -43,4 +43,11 @@ module.exports = {
             clientType: Joi.string().allow(null),
         })
         .options({ allowUnknown: true }),
+
+    toggleFollow: Joi.object()
+        .keys({
+            action: Joi.string().required(),
+            userId: Joi.string().required(),
+        })
+        .options({ allowUnknown: true }),
 }

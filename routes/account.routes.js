@@ -71,4 +71,11 @@ router.post(
     ErrorHandler(AccountController.changeAvatar)
 )
 
+router.post(
+    '/account/follow',
+    validate(AccountValidations.toggleFollow),
+    AuthGuard,
+    ErrorHandler(AccountController.toggleFollow)
+)
+
 module.exports = router
