@@ -162,6 +162,10 @@ const UserSchema = new mongoose.Schema({
                 default: null,
             },
             createdAt: Date,
+            updatedAt: {
+                type: Date,
+                default: null,
+            },
         },
     ],
     followers: [
@@ -174,6 +178,10 @@ const UserSchema = new mongoose.Schema({
                 default: null,
             },
             createdAt: Date,
+            updatedAt: {
+                type: Date,
+                default: null,
+            },
         },
     ],
 })
