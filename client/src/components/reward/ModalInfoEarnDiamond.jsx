@@ -35,7 +35,7 @@ const ModalInfoEarnDiamond = () => {
                     <QuestionCircleSvg className='questionIcon' />
                     <div>
                         <h6 className='mb-0'>
-                            How to earn more <DiamondSvg /> ?
+                            How to earn more gems <DiamondSvg /> ?
                         </h6>
                     </div>
                 </div>
