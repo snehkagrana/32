@@ -78,4 +78,10 @@ router.post(
     ErrorHandler(AccountController.toggleFollow)
 )
 
+router.get(
+    '/account/friendship/sync',
+    AuthGuard,
+    ErrorHandler(AccountController.syncFriendship)
+)
+
 module.exports = router

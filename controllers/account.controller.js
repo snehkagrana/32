@@ -118,3 +118,15 @@ exports.toggleFollow = async (req, res) => {
     }
     return res.status(400).json({ message: 'Failed!' })
 }
+
+exports.syncFriendship = async (req, res) => {
+    const result = await AccountService.syncFriendship({
+        userId: req.user._id,
+    })
+    if (result) {
+        return res.json({
+            message: 'Success',
+        })
+    }
+    return res.status(400).json({ message: 'Failed!' })
+}

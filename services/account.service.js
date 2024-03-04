@@ -158,6 +158,7 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
                     totalXp: user?.xp?.total ? user.xp.total : 0,
                     imgPath: user?.imgPath ? user.imgPath : '',
                     createdAt: new Date(),
+                    updatedAt: new Date(),
                 },
             ]
             // update user
@@ -182,6 +183,7 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
                     totalXp: authUser?.xp?.total ? authUser.xp.total : 0,
                     imgPath: authUser?.imgPath ? authUser.imgPath : '',
                     createdAt: new Date(),
+                    updatedAt: new Date(),
                 },
             ]
             user = await UserModel.findOneAndUpdate(
@@ -226,5 +228,69 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
     } else {
         result = false
     }
+    return result
+}
+
+exports.syncFriendship = async ({ userId }) => {
+    let result = false
+    let authUser = await UserModel.findOne({ _id: userId }).exec()
+
+    const followers = authUser?.followers || []
+    const following = authUser?.following || []
+
+    if (followers.length > 0) {
+        let newFollowers = []
+        for (const f of followers) {
+            const _user = await UserModel.findOne({ _id: f.userId })
+            newFollowers.push({
+                // prettier-ignore
+                displayName: _user?.displayName ? _user.displayName : _user.username || '',
+                totalXp: _user?.xp?.total ? _user.xp.total : f.totalXp,
+                imgPath: _user?.imgPath ? _user.imgPath : '',
+                updatedAt: new Date(),
+                createdAt: f.createdAt,
+                userId: f.userId,
+            })
+        }
+        // update user
+        authUser = await UserModel.findOneAndUpdate(
+            { _id: userId },
+            {
+                $set: {
+                    followers: newFollowers,
+                },
+            },
+            { new: true }
+        ).exec()
+        result = true
+    }
+
+    if (following.length > 0) {
+        let newFollowing = []
+        for (const f of following) {
+            const _user = await UserModel.findOne({ _id: f.userId })
+            newFollowing.push({
+                // prettier-ignore
+                displayName: _user?.displayName ? _user.displayName : _user.username || '',
+                totalXp: _user?.xp?.total ? _user.xp.total : f.totalXp,
+                imgPath: _user?.imgPath ? _user.imgPath : '',
+                updatedAt: new Date(),
+                createdAt: f.createdAt,
+                userId: f.userId,
+            })
+        }
+        // update user
+        authUser = await UserModel.findOneAndUpdate(
+            { _id: userId },
+            {
+                $set: {
+                    following: newFollowing,
+                },
+            },
+            { new: true }
+        ).exec()
+        result = true
+    }
+
     return result
 }

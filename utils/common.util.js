@@ -33,9 +33,23 @@ const generateUsername = fullName => {
     return userName + _number
 }
 
+function convertUTCDateToLocalDate(date) {
+    var newDate = new Date(
+        date.getTime() + date.getTimezoneOffset() * 60 * 1000
+    )
+
+    var offset = date.getTimezoneOffset() / 60
+    var hours = date.getHours()
+
+    newDate.setHours(hours - offset)
+
+    return newDate
+}
+
 module.exports = {
     getToday,
     daysDifference,
     generateReferralCode,
     generateUsername,
+    convertUTCDateToLocalDate,
 }
