@@ -145,7 +145,7 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
     let authUser = await UserModel.findOne({ _id: authUserId }).exec()
     let user = await UserModel.findOne({ _id: userId }).exec()
 
-    if (authUser && user && action) {
+    if (authUser && user && action && userId !== authUserId) {
         if (action === 'follow') {
             // prettier-ignore
             let currentFollowing = authUser?.following?.filter(x => x.userId !== userId) || []
