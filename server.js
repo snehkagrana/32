@@ -50,6 +50,7 @@ const AdminMiddleware = require('./middlewares/admin.middleware')
 
 require('./cronjob/hearts.cronjob')
 require('./cronjob/leaderboard.cronjob')
+require('./cronjob/friendship.cronjob')
 
 // dayjs.tz.setDefault("Asia/Kolkata")
 

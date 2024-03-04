@@ -248,6 +248,7 @@ exports.syncFriendship = async ({ userId }) => {
                 // prettier-ignore
                 displayName: _user?.displayName ? _user.displayName : _user.username || '',
                 totalXp: _user?.xp?.total ? _user.xp.total : f.totalXp,
+                level: _user?.xp?.level ? _user.xp.level : f.level,
                 imgPath: _user?.imgPath ? _user.imgPath : '',
                 updatedAt: new Date(),
                 createdAt: f.createdAt,
@@ -275,6 +276,7 @@ exports.syncFriendship = async ({ userId }) => {
                 // prettier-ignore
                 displayName: _user?.displayName ? _user.displayName : _user.username || '',
                 totalXp: _user?.xp?.total ? _user.xp.total : f.totalXp,
+                level: _user?.xp?.level ? _user.xp.level : f.level,
                 imgPath: _user?.imgPath ? _user.imgPath : '',
                 updatedAt: new Date(),
                 createdAt: f.createdAt,
