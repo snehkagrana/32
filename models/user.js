@@ -157,6 +157,7 @@ const UserSchema = new mongoose.Schema({
             userId: String,
             displayName: String,
             totalXp: Number,
+            level: Number,
             imgPath: {
                 type: String,
                 default: null,
@@ -173,6 +174,7 @@ const UserSchema = new mongoose.Schema({
             userId: String,
             displayName: String,
             totalXp: Number,
+            level: Number,
             imgPath: {
                 type: String,
                 default: null,

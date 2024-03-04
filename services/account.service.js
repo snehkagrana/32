@@ -156,6 +156,7 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
                     // prettier-ignore
                     displayName: user?.displayName ? user.displayName : user.username || '',
                     totalXp: user?.xp?.total ? user.xp.total : 0,
+                    level: user?.xp?.level ? user.xp.level : 1,
                     imgPath: user?.imgPath ? user.imgPath : '',
                     createdAt: new Date(),
                     updatedAt: new Date(),
@@ -181,6 +182,7 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
                     // prettier-ignore
                     displayName: authUser?.displayName ? authUser.displayName : authUser.username || '',
                     totalXp: authUser?.xp?.total ? authUser.xp.total : 0,
+                    level: authUser?.xp?.level ? authUser.xp.level : 1,
                     imgPath: authUser?.imgPath ? authUser.imgPath : '',
                     createdAt: new Date(),
                     updatedAt: new Date(),
