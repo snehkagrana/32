@@ -84,4 +84,11 @@ router.get(
     ErrorHandler(AccountController.syncFriendship)
 )
 
+router.get(
+    '/account/friendship/search',
+    validate(AccountValidations.searchFriends),
+    AuthGuard,
+    ErrorHandler(AccountController.searchFriends)
+)
+
 module.exports = router

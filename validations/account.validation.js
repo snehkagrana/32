@@ -50,4 +50,10 @@ module.exports = {
             userId: Joi.string().required(),
         })
         .options({ allowUnknown: true }),
+
+    searchFriends: Joi.object()
+        .keys({
+            searchTerm: Joi.string().required(),
+        })
+        .options({ allowUnknown: true }),
 }

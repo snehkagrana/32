@@ -298,3 +298,20 @@ exports.syncFriendship = async ({ userId }) => {
 
     return result
 }
+
+exports.searchFriends = async ({ userId, searchTerm }) => {
+    let result = null
+    let query = {}
+    if (searchTerm) {
+        query.$or = [
+            { displayName: { $regex: searchTerm } },
+            { username: { $regex: searchTerm } },
+        ]
+        const users = await UserModel.find(query)
+        result = users?.filter(x => x._id !== userId) || []
+    } else {
+        result = null
+    }
+
+    return result
+}

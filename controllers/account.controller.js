@@ -130,3 +130,17 @@ exports.syncFriendship = async (req, res) => {
     }
     return res.status(400).json({ message: 'Failed!' })
 }
+
+exports.searchFriends = async (req, res) => {
+    const result = await AccountService.searchFriends({
+        userId: req.user._id,
+        searchTerm: req.query.searchTerm,
+    })
+    if (result) {
+        return res.json({
+            message: 'Success',
+            data: result,
+        })
+    }
+    return res.status(400).json({ message: 'Failed!' })
+}
