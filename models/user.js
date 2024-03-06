@@ -186,6 +186,16 @@ const UserSchema = new mongoose.Schema({
             },
         },
     ],
+    leaderBoards: [
+        {
+            leaderBoardId: String,
+            startDate: Date,
+            endDate: Date,
+            hasSeen: Boolean,
+            position: Number,
+            xp: Number,
+        },
+    ],
 })
 
 UserSchema.set('toJSON', {
