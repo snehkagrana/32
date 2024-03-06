@@ -13,16 +13,16 @@ cron.schedule('* * * * *', async function () {
      * dayOfWeek 0 - Sunday
      * dayOfWeek 1 - Monday
      */
-    // const dayOfWeek = dayjs(new Date()).day()
-    // const hour = dayjs(new Date()).hour()
-    // const minute = dayjs(new Date()).minute()
+    const dayOfWeek = dayjs(new Date()).day()
+    const hour = dayjs(new Date()).hour()
+    const minute = dayjs(new Date()).minute()
 
     /**
      * DEBUG PURPOSE
      */
-    const dayOfWeek = 1
-    const hour = 23
-    const minute = 53
+    // const dayOfWeek = 1
+    // const hour = 23
+    // const minute = 53
 
     // console.log('dayOfWeek->', dayOfWeek)
     // console.log('hour->', hour)
