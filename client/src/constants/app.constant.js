@@ -3,7 +3,7 @@ export const PERSIST_ROOT_VERSION = 3
 
 export const BATCH_EVENT_TIME_SPENT = 'time_spent'
 
-export const AMOUNT_OF_GEMS_REDEEM_TO_HEARTS = 15
+export const AMOUNT_OF_GEMS_REDEEM_TO_HEARTS = 25
 
 export const MAX_HEARTS = 5
 
