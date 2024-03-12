@@ -408,8 +408,7 @@ const ModalRewardDetail = () => {
                                         <div>
                                             {!isAvailable && (
                                                 <Alert variant='danger text-center mb-2'>
-                                                    This gift card is not
-                                                    available
+                                                    Oops! This gift card is empty. We will refill it soon.
                                                 </Alert>
                                             )}
                                             <Row className='align-items-center justify-space-between'>
