@@ -22,6 +22,14 @@ exports.getUserById = async (req, res) => {
     return res.status(400).json({ message: 'Failed to get user' })
 }
 
+exports.getUserByUsername = async (req, res) => {
+    const result = await UserService.findOneByUsername(req.params.username)
+    if (result) {
+        return res.json(result)
+    }
+    return res.status(400).json({ message: 'Failed to get user' })
+}
+
 exports.getUserQr = async (req, res) => {
     const user = await UserModel.findById(req.params.id)
     if (user) {

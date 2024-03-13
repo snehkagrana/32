@@ -8,3 +8,7 @@ exports.findAll = async params => {
 exports.findOne = async id => {
     return await UserModel.findOne({ _id: id })
 }
+
+exports.findOneByUsername = async username => {
+    return await UserModel.findOne({ username })
+}

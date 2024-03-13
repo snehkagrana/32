@@ -5,10 +5,14 @@ const UserController = require('../controllers/user.controller')
 const ErrorHandler = require('../middlewares/error.middleware')
 const AuthGuard = require('../middlewares/auth.middleware')
 
-// update profile
+// get qr user
 router.get('/user/qr/:id', ErrorHandler(UserController.getUserQr))
 
-// Get users
+// Get user by username
+// prettier-ignore
+router.get('/user/username/:username', AuthGuard, ErrorHandler(UserController.getUserByUsername))
+
+// Get by id
 router.get('/user/:id', AuthGuard, ErrorHandler(UserController.getUserById))
 
 // Get users
