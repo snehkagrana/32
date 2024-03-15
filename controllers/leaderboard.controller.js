@@ -5,7 +5,6 @@ const UserModel = require('../models/user')
 exports.getCurrentLeaderBoard = async (req, res) => {
     const leaderBoard = await LeaderBoardModel.findOne({
         isActive: true,
-        endDate: { $gt: new Date() },
     })
 
     if (leaderBoard) {
