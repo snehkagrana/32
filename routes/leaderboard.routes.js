@@ -27,6 +27,15 @@ router.get(
  * Get current leaderboard
  */
 router.get(
+    '/leaderboard/friends',
+    AuthGuard,
+    ErrorHandler(LeaderBoardController.getLeaderBoardFriends)
+)
+
+/**
+ * Get current leaderboard
+ */
+router.get(
     '/leaderboard',
     AuthGuard,
     ErrorHandler(LeaderBoardController.getCurrentLeaderBoard)

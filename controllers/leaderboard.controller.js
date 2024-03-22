@@ -2,6 +2,34 @@ const dayjs = require('dayjs')
 const LeaderBoardModel = require('../models/leaderboard')
 const UserModel = require('../models/user')
 
+exports.getLeaderBoardFriends = async (req, res) => {
+    const authUserId = req.user._id
+    const leaderBoard = await LeaderBoardModel.findOne({
+        isActive: true,
+    })
+    const user = await UserModel.findOne({ _id: authUserId }).exec()
+
+    if (leaderBoard && user) {
+        let users = []
+
+        for (const u of leaderBoard.users) {
+            if (user.following.find(x => x.userId == u.userId)) {
+                users.push(u)
+            }
+        }
+
+        return res.json({
+            data: {
+                ...leaderBoard._doc,
+                users: users,
+            },
+            message: 'Success.',
+        })
+    }
+
+    return res.status(400).json({ message: 'Failed to get fiends leaderboard' })
+}
+
 exports.getCurrentLeaderBoard = async (req, res) => {
     const leaderBoard = await LeaderBoardModel.findOne({
         isActive: true,
