@@ -6,16 +6,19 @@ const {
     MAX_WEEKLY_USERS_LEADER_BOARD,
 } = require('../constants/app.constant')
 const dayjs = require('dayjs')
+const { convertUTCDateToLocalDate } = require('../utils/common.util')
 
 cron.schedule('* * * * *', async function () {
+    const now = convertUTCDateToLocalDate(new Date())
+
     /**
      * NOTES
      * dayOfWeek 0 - Sunday
      * dayOfWeek 1 - Monday
      */
-    const dayOfWeek = dayjs(new Date()).day()
-    const hour = dayjs(new Date()).hour()
-    const minute = dayjs(new Date()).minute()
+    const dayOfWeek = dayjs(now).day()
+    const hour = dayjs(now).hour()
+    const minute = dayjs(now).minute()
 
     /**
      * DEBUG PURPOSE
@@ -24,9 +27,9 @@ cron.schedule('* * * * *', async function () {
     // const hour = 23
     // const minute = 53
 
-    // console.log('dayOfWeek->', dayOfWeek)
-    // console.log('hour->', hour)
-    // console.log('minute->', minute)
+    console.log('dayOfWeek->', dayOfWeek)
+    console.log('hour->', hour)
+    console.log('minute->', minute)
 
     // prettier-ignore
     const currentActiveLeaderBoard = await LeaderBoardModel.findOne({ isActive: true }).exec()
@@ -39,7 +42,7 @@ cron.schedule('* * * * *', async function () {
                 {
                     $set: {
                         isActive: false,
-                        lastUpdate: new Date(),
+                        lastUpdate: now,
                     },
                 }
             ).exec()
@@ -96,7 +99,7 @@ cron.schedule('* * * * *', async function () {
                 await LeaderBoardModel.updateOne(
                     { _id: currentActiveLeaderBoard._id },
                     {
-                        lastUpdate: new Date(),
+                        lastUpdate: now,
                         users: leaderBoardUsers.map((x, index) => ({
                             ...x,
                             position: index + 1,
@@ -109,7 +112,7 @@ cron.schedule('* * * * *', async function () {
         }
     } else {
         if (dayOfWeek === 1) {
-            const endDate = dayjs(new Date())
+            const endDate = dayjs(now)
                 .add(6, 'day')
                 .hour(23)
                 .minute(50)
@@ -132,9 +135,9 @@ cron.schedule('* * * * *', async function () {
                 // Create this week leaderboard
                 await LeaderBoardModel.create({
                     isActive: true,
-                    startDate: new Date(),
+                    startDate: now,
                     endDate,
-                    lastUpdate: new Date(),
+                    lastUpdate: now,
                     users: leaderBoardUsers.map((x, index) => ({
                         ...x,
                         position: index + 1,
@@ -144,9 +147,9 @@ cron.schedule('* * * * *', async function () {
                 // Create this week leaderboard with empty users
                 await LeaderBoardModel.create({
                     isActive: true,
-                    startDate: new Date(),
+                    startDate: now,
                     endDate,
-                    lastUpdate: new Date(),
+                    lastUpdate: now,
                     users: [],
                 })
             }
