@@ -1,6 +1,7 @@
 const { appConfig } = require('../configs/app.config')
 const UserModel = require('../models/user')
 const { generateOTP } = require('../utils/otp.util')
+const { validateEmail } = require('../utils/common.util')
 
 var ObjectId = require('mongoose').Types.ObjectId
 
@@ -308,7 +309,21 @@ exports.searchFriends = async ({ userId, searchTerm }) => {
             { username: { $regex: searchTerm } },
         ]
         const users = await UserModel.find(query)
-        result = users?.filter(x => x._id !== userId) || []
+        // prettier-ignore
+        let filteredUsers = users?.filter(x => {
+            if(x._id !== userId && !validateEmail(x?.username)) {
+                return x
+            }
+        }) || []
+        result = filteredUsers?.map(x => ({
+            avatarId: x._doc?.avatarId,
+            _id: x._doc?._id,
+            displayName: x._doc?.displayName,
+            username: x._doc?.username || '',
+            email: x._doc?.email || '',
+            xp: x._doc?.xp,
+            imgPath: x._doc?.imgPath,
+        }))
     } else {
         result = null
     }
