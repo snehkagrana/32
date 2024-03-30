@@ -9,7 +9,8 @@ const dayjs = require('dayjs')
 const { convertUTCDateToLocalDate } = require('../utils/common.util')
 
 cron.schedule('* * * * *', async function () {
-    const now = convertUTCDateToLocalDate(new Date())
+    // const now = convertUTCDateToLocalDate(new Date())
+    const now = new Date()
 
     /**
      * NOTES
@@ -27,9 +28,9 @@ cron.schedule('* * * * *', async function () {
     // const hour = 23
     // const minute = 53
 
-    console.log('dayOfWeek->', dayOfWeek)
-    console.log('hour->', hour)
-    console.log('minute->', minute)
+    // console.log('dayOfWeek->', dayOfWeek)
+    // console.log('hour->', hour)
+    // console.log('minute->', minute)
 
     // prettier-ignore
     const currentActiveLeaderBoard = await LeaderBoardModel.findOne({ isActive: true }).exec()
@@ -111,7 +112,7 @@ cron.schedule('* * * * *', async function () {
             }
         }
     } else {
-        if (dayOfWeek === 1) {
+        if (dayOfWeek >= 1) {
             const endDate = dayjs(now)
                 .add(6, 'day')
                 .hour(23)
