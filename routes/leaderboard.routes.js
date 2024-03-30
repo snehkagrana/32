@@ -4,6 +4,18 @@ const router = express.Router()
 const LeaderBoardController = require('../controllers/leaderboard.controller')
 const ErrorHandler = require('../middlewares/error.middleware')
 const AuthGuard = require('../middlewares/auth.middleware')
+const schema = require('../validations/leaderboard.validation')
+const validate = require('../utils/validator.util')
+
+/**
+ * Update and sync leaderboard
+ */
+router.post(
+    '/leaderboard/sync',
+    validate(schema.updateAndSync),
+    AuthGuard,
+    ErrorHandler(LeaderBoardController.updateAndSyncWeeklyLeaderBoard)
+)
 
 /**
  * Get result leaderboard

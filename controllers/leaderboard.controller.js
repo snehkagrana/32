@@ -1,6 +1,10 @@
 const dayjs = require('dayjs')
 const LeaderBoardModel = require('../models/leaderboard')
 const UserModel = require('../models/user')
+const {
+    MINIMUM_WEEKLY_XP_LEADER_BOARD,
+    MAX_WEEKLY_USERS_LEADER_BOARD,
+} = require('../constants/app.constant')
 
 exports.getLeaderBoardFriends = async (req, res) => {
     const authUserId = req.user._id
@@ -101,4 +105,56 @@ exports.markSeen = async (req, res) => {
         })
     }
     return res.status(400).json({ message: 'Failed to mark seen leaderboard' })
+}
+
+exports.updateAndSyncWeeklyLeaderBoard = async (req, res) => {
+    const now = new Date()
+
+    const userId = req.user._id
+    const xp = req.body?.xp || 0
+
+    /**
+     * NOTES
+     */
+    // prettier-ignore
+    let activeLeaderBoard = await LeaderBoardModel.findOne({ isActive: true }).exec()
+    // console.log('activeLeaderBoard', activeLeaderBoard)
+
+    if (activeLeaderBoard) {
+        // sync leaderboard
+        // prettier-ignore
+        const users = await UserModel.find({ 'xp.weekly': { $gte: MINIMUM_WEEKLY_XP_LEADER_BOARD } }).limit(MAX_WEEKLY_USERS_LEADER_BOARD).exec()
+
+        if (users?.length > 0) {
+            // prettier-ignore
+            let leaderBoardUsers = users.map(x => {
+                // console.log("x._doc.xp.weekly + xp",x._doc.xp.weekly + xp)
+                return {
+                    userId: x._doc._id,
+                    displayName: x._doc.displayName ? x._doc.displayName : x._doc.username || '',
+                    // xp: String(x._doc._id) == userId ? x._doc.xp.weekly + xp : x._doc.xp.weekly || MINIMUM_WEEKLY_XP_LEADER_BOARD,
+                    xp: x._doc.xp.weekly || MINIMUM_WEEKLY_XP_LEADER_BOARD,
+                    email: x._doc.email,
+                    imgPath: x._doc.imgPath || '',
+                }
+            });
+            leaderBoardUsers.sort((a, b) => b.xp - a.xp)
+
+            await LeaderBoardModel.updateOne(
+                { _id: activeLeaderBoard._id },
+                {
+                    lastUpdate: now,
+                    users: leaderBoardUsers.map((x, index) => ({
+                        ...x,
+                        position: index + 1,
+                    })),
+                }
+            )
+
+            return res.json({
+                data: null,
+                message: 'Success.',
+            })
+        }
+    }
 }
