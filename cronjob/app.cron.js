@@ -64,6 +64,9 @@ cron.schedule('* * * * *', async function () {
     const hour = dayjs(today).hour()
     const minute = dayjs(today).minute()
 
+    console.log('dayOfWeek', dayOfWeek)
+    console.log('hour', hour)
+
     const currentActiveLeaderBoard = await LeaderBoardModel.findOne({
         isActive: true,
     }).exec()
