@@ -56,7 +56,7 @@ exports.getResultLeaderBoard = async (req, res) => {
 
     const prevLeaderBoard = await LeaderBoardModel.findOne({
         isActive: false,
-        endDate: { $lt: currentLeaderBoard.startDate },
+        startDate: { $lt: currentLeaderBoard.startDate },
     })
 
     if (prevLeaderBoard) {
