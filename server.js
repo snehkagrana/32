@@ -48,8 +48,8 @@ const ReferralService = require('./services/referral.service')
 // const dayjs = require("dayjs");
 const AdminMiddleware = require('./middlewares/admin.middleware')
 
-require('./cronjob/hearts.cronjob')
-require('./cronjob/leaderboard.cronjob')
+require('./cronjob/app.cron')
+// require('./cronjob/leaderboard.cronjob')
 // require('./cronjob/friendship.cronjob')
 
 // dayjs.tz.setDefault("Asia/Kolkata")
