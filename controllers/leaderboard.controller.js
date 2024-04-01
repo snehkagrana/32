@@ -17,7 +17,10 @@ exports.getLeaderBoardFriends = async (req, res) => {
         let users = []
 
         for (const u of leaderBoard.users) {
-            if (user.following.find(x => x.userId == u.userId)) {
+            if (
+                user.following.find(x => x.userId == u.userId) ||
+                String(user._id) == u.userId
+            ) {
                 users.push(u)
             }
         }
