@@ -66,6 +66,7 @@ cron.schedule('* * * * *', async function () {
 
     console.log('dayOfWeek', dayOfWeek)
     console.log('hour', hour)
+    console.log('minute', minute)
 
     const currentActiveLeaderBoard = await LeaderBoardModel.findOne({
         isActive: true,
@@ -117,6 +118,8 @@ cron.schedule('* * * * *', async function () {
                     }
                 }
             }
+
+            console.log('currentActiveLeaderBoard')
         } else {
             // sync leaderboard
             // prettier-ignore
@@ -190,6 +193,7 @@ cron.schedule('* * * * *', async function () {
                     users: [],
                 })
             }
+            console.log('createNewLeaderboard')
         } else {
             // console.log('Do nothing')
         }
