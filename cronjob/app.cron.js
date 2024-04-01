@@ -121,6 +121,7 @@ cron.schedule('* * * * *', async function () {
 
             console.log('currentActiveLeaderBoard')
         } else {
+            console.log('sync Leaderboard')
             // sync leaderboard
             // prettier-ignore
             const users = await UserModel.find({ 'xp.weekly': { $gte: MINIMUM_WEEKLY_XP_LEADER_BOARD } }).limit(MAX_WEEKLY_USERS_LEADER_BOARD).exec()
@@ -147,7 +148,6 @@ cron.schedule('* * * * *', async function () {
                     },
                     { new: true }
                 )
-                // console.log('LEADERBOARD SYNCED >>>>')
             }
         }
     } else {
