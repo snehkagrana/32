@@ -75,7 +75,7 @@ cron.schedule('* * * * *', async function () {
     if (currentActiveLeaderBoard) {
         // Reset leaderboard
         // if (dayOfWeek === 0 && hour === 23 && minute >= 50) {
-        if (dayOfWeek === 2 && hour === 14 && minute >= 1) {
+        if (dayOfWeek === 2 && hour === 14 && minute === 35) {
             await LeaderBoardModel.updateOne(
                 { _id: currentActiveLeaderBoard._id },
                 {
@@ -152,6 +152,7 @@ cron.schedule('* * * * *', async function () {
             }
         }
     } else {
+        // if (dayOfWeek >= 1) {
         if (dayOfWeek >= 2) {
             const endDate = dayjs(today)
                 .add(6, 'day')
