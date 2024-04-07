@@ -64,6 +64,7 @@ exports.saveScore = async ({ authUser, body }) => {
             category: body.category,
             sub_category: body.sub_category,
             points: body.points,
+            xp: body.xp,
         })
 
         const daysDiff = daysDifference(user.lastCompletedDay)
@@ -141,6 +142,7 @@ exports.saveScore = async ({ authUser, body }) => {
             category: body.category,
             sub_category: body.sub_category,
             points: body.points,
+            xp: body.xp,
         })
 
         const daysDiff = daysDifference(guest.lastCompletedDay)
