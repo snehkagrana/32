@@ -21,6 +21,7 @@ exports.saveXp = async (req, res) => {
     if (result) {
         return res.json({
             message: 'Success',
+            xp: req.body.xp,
         })
     }
     return res.status(400).json({ message: 'Failed to save score' })
