@@ -57,26 +57,36 @@ exports.getResultLeaderBoard = async (req, res) => {
         isActive: true,
     })
 
-    const prevLeaderBoard = await LeaderBoardModel.findOne({
+    const prevLeaderBoards = await LeaderBoardModel.find({
         isActive: false,
         startDate: { $lt: currentLeaderBoard.startDate },
     })
 
-    if (prevLeaderBoard) {
+    if (prevLeaderBoards?.length > 0) {
         // prettier-ignore
-        const myRank = prevLeaderBoard.users?.find(x => x.userId == req.user._id) || null
-        return res.json({
-            data: {
-                leaderBoardId: prevLeaderBoard._id,
-                winner: {
-                    1: prevLeaderBoard.users?.[0] || null,
-                    2: prevLeaderBoard.users?.[1] || null,
-                    3: prevLeaderBoard.users?.[2] || null,
+        const lastPrevLeaderBoard = prevLeaderBoards?.[prevLeaderBoards.length - 1];
+
+        // prettier-ignore
+        const myRank = lastPrevLeaderBoard?.users?.find(x => x.userId == req.user._id) || null
+
+        if (lastPrevLeaderBoard) {
+            return res.json({
+                data: {
+                    leaderBoardId: lastPrevLeaderBoard._id,
+                    winner: {
+                        1: lastPrevLeaderBoard.users?.[0] || null,
+                        2: lastPrevLeaderBoard.users?.[1] || null,
+                        3: lastPrevLeaderBoard.users?.[2] || null,
+                    },
+                    myRank,
                 },
-                myRank,
-            },
-            message: 'Success.',
-        })
+                message: 'Success.',
+            })
+        } else {
+            return res
+                .status(400)
+                .json({ message: 'Failed to get result leaderboard' })
+        }
     }
 
     return res.status(400).json({ message: 'Failed to get result leaderboard' })
