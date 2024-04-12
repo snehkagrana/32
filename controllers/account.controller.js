@@ -144,3 +144,17 @@ exports.searchFriends = async (req, res) => {
     }
     return res.status(400).json({ message: 'Failed!' })
 }
+
+exports.saveFCMToken = async (req, res) => {
+    const result = await AccountService.saveFCMToken({
+        email: req.user.email,
+        token: req.body.token,
+    })
+    if (result) {
+        return res.json({
+            message: 'Success',
+            data: result,
+        })
+    }
+    return res.status(400).json({ message: 'Failed!' })
+}

@@ -56,4 +56,10 @@ module.exports = {
             searchTerm: Joi.string().required(),
         })
         .options({ allowUnknown: true }),
+
+    saveFCMToken: Joi.object()
+        .keys({
+            token: Joi.string().required(),
+        })
+        .options({ allowUnknown: true }),
 }

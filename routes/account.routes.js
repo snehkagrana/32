@@ -91,4 +91,11 @@ router.get(
     ErrorHandler(AccountController.searchFriends)
 )
 
+router.post(
+    '/account/fcm-token',
+    validate(AccountValidations.saveFCMToken),
+    AuthGuard,
+    ErrorHandler(AccountController.saveFCMToken)
+)
+
 module.exports = router

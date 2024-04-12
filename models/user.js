@@ -199,6 +199,7 @@ const UserSchema = new mongoose.Schema({
             xp: Number,
         },
     ],
+    fcmToken: String,
 })
 
 UserSchema.set('toJSON', {
