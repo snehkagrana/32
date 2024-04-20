@@ -59,7 +59,7 @@ require('./cronjob/app.cron')
 var serviceAccount = require("./fingo-8fe5c-firebase-adminsdk-qd52d-1db764cff8.json");
 
 firebaseAdmin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
+    credential: firebaseAdmin.credential.cert(serviceAccount)
 });
  
 aws.config.update({
