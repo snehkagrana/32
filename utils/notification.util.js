@@ -16,6 +16,13 @@ const sendNotification = async ({ token, title, body, data }) => {
                 },
                 data: data || {},
             },
+            apns: {
+                payload: {
+                    aps: {
+                        sound: 'Default',
+                    },
+                },
+            },
             token: token,
         }
         const response = await admin.messaging().send(message)
