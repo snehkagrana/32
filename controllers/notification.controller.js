@@ -14,5 +14,5 @@ exports.sendNotifications = async (req, res, next) => {
             data: result,
         })
     }
-    return res.status(400).json({ message: 'Failed to submit quiz feedback' })
+    return res.status(400).json({ message: 'Failed to send notification' })
 }
