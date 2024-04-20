@@ -41,6 +41,7 @@ const draggableQuizRoutes = require('./routes/draggableQuiz.routes')
 const commonRoutes = require('./routes/common.routes')
 const feedbackRoutes = require('./routes/feedback.routes')
 const leaderBoardRoutes = require('./routes/leaderboard.routes')
+const notificationRoutes = require('./routes/notification.routes')
 const AuthGuard = require('./middlewares/auth.middleware');
 const { initializeDiamondUser, calculateDiamondUser } = require("./utils/reward.util");
 const { mailTransporter } = require("./utils/mail.util");
@@ -114,6 +115,7 @@ app.use('/server/api', draggableQuizRoutes);
 app.use('/server/api', commonRoutes);  
 app.use('/server/api', feedbackRoutes);  
 app.use('/server/api', leaderBoardRoutes);  
+app.use('/server/api', notificationRoutes);
 app.use('/.well-known', express.static('well-known'))
 app.use('/static-files', express.static('static-files'))
 
