@@ -47,6 +47,7 @@ const { mailTransporter } = require("./utils/mail.util");
 const ReferralService = require('./services/referral.service')
 // const dayjs = require("dayjs");
 const AdminMiddleware = require('./middlewares/admin.middleware')
+const firebaseAdmin = require("firebase-admin");
 
 require('./cronjob/app.cron')
 // require('./cronjob/leaderboard.cronjob')
@@ -54,6 +55,12 @@ require('./cronjob/app.cron')
 
 // dayjs.tz.setDefault("Asia/Kolkata")
 
+var serviceAccount = require("./fingo-8fe5c-firebase-adminsdk-qd52d-1db764cff8.json");
+
+firebaseAdmin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+});
+ 
 aws.config.update({
     secretAccessKey: process.env.ACCESS_SECRET_KEY,
     accessKeyId: process.env.ACCESS_KEY,
