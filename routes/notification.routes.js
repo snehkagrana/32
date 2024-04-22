@@ -15,4 +15,11 @@ router.post(
     ErrorHandler(NotificationController.sendNotifications)
 )
 
+// Get notification
+router.get(
+    '/notification/list',
+    AuthGuard,
+    ErrorHandler(NotificationController.getNotifications)
+)
+
 module.exports = router

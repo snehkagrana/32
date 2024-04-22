@@ -1,27 +1,57 @@
 const { appConfig } = require('../configs/app.config')
+const NotificationModel = require('../models/notification')
 const UserModel = require('../models/user')
 const { generateOTP } = require('../utils/otp.util')
 const { validateEmail } = require('../utils/common.util')
-const NotificationService = require('../services/notification.service')
-const { NOTIFICATION_TYPE } = require('../constants/app.constant')
+const { sendNotification } = require('../utils/notification.util')
 
-var ObjectId = require('mongoose').Types.ObjectId
-
-exports.getMyRewards = async email => {
-    const user = await UserModel.findOne({ email })
-    if (user) {
-        return user._doc.rewards
-    }
+exports.getNotificationList = async ({ userId }) => {
+    const notifications = await NotificationModel.find({ userId })
+    return notifications
 }
 
-exports.markSeenMyReward = async (email, body) => {
-    let user = await UserModel.findOne({ email }).exec()
+exports.sendAndSaveNotification = async ({
+    userId,
+    title,
+    body,
+    type,
+    dataId,
+}) => {
+    let result = false
+    const user = await UserModel.findOne({ _id: userId })
+
+    console.log('user', user)
+
+    if (user?.fcmToken) {
+        const notifications = await NotificationModel.create({
+            userId,
+            title: title || '',
+            body: body || '',
+            type: type || 'common',
+            dataId: dataId || null,
+            readAt: null,
+        })
+        await sendNotification({
+            token: user.fcmToken,
+            title,
+            body,
+            data: dataId ? { dataId } : {},
+        })
+        result = true
+        return notifications
+    }
+
+    return result
+}
+
+exports.markSeenNotification = async ({ userId, body }) => {
+    let user = await NotificationModel.findOne({ userId }).exec()
     let result = false
 
     if (user) {
         // update user rewards
-        user = await UserModel.findOneAndUpdate(
-            { email },
+        user = await NotificationModel.findOneAndUpdate(
+            { userId },
             {
                 $set: {
                     rewards: user.rewards.map(x => {
@@ -53,8 +83,8 @@ exports.checkAvailabilityUsername = async ({
 }) => {
     let result = false
     // prettier-ignore
-    const authenticatedUser = await UserModel.findOne({ email: authenticatedUserEmail }).exec()
-    const user = await UserModel.findOne({ username }).exec()
+    const authenticatedUser = await NotificationModel.findOne({ email: authenticatedUserEmail }).exec()
+    const user = await NotificationModel.findOne({ username }).exec()
     if (user && authenticatedUser?.username === username) {
         result = true
     } else if (!user) {
@@ -69,9 +99,9 @@ exports.checkAvailabilityUsername = async ({
 exports.sendCodeVerifyEmail = async ({ email }) => {
     const code = generateOTP(4)
     let result = false
-    let user = await UserModel.findOne({ email }).exec()
+    let user = await NotificationModel.findOne({ email }).exec()
     if (user) {
-        await UserModel.findOneAndUpdate(
+        await NotificationModel.findOneAndUpdate(
             { email },
             { $set: { verifyEmailCode: code } },
             { new: true }
@@ -83,9 +113,9 @@ exports.sendCodeVerifyEmail = async ({ email }) => {
 
 exports.verifyEmail = async ({ code, email }) => {
     let result = false
-    let user = await UserModel.findOne({ email }).exec()
+    let user = await NotificationModel.findOne({ email }).exec()
     if (user && user?.verifyEmailCode === code) {
-        user = await UserModel.findOneAndUpdate(
+        user = await NotificationModel.findOneAndUpdate(
             { email: email },
             {
                 $set: {
@@ -102,10 +132,10 @@ exports.verifyEmail = async ({ code, email }) => {
 
 exports.updateProfile = async (email, body) => {
     let result = false
-    let user = await UserModel.findOne({ email }).exec()
+    let user = await NotificationModel.findOne({ email }).exec()
     if (user) {
         // update user
-        user = await UserModel.findOneAndUpdate(
+        user = await NotificationModel.findOneAndUpdate(
             { email },
             {
                 $set: {
@@ -125,10 +155,10 @@ exports.updateProfile = async (email, body) => {
 exports.changeAvatar = async (email, avatarId) => {
     let result = false
     const avatarExtension = 'jpg'
-    let user = await UserModel.findOne({ email }).exec()
+    let user = await NotificationModel.findOne({ email }).exec()
     if (user && avatarId) {
         // update user
-        user = await UserModel.findOneAndUpdate(
+        user = await NotificationModel.findOneAndUpdate(
             { email },
             {
                 $set: {
@@ -145,25 +175,11 @@ exports.changeAvatar = async (email, avatarId) => {
 
 exports.toggleFollow = async ({ authUserId, action, userId }) => {
     let result = false
-    let authUser = await UserModel.findOne({ _id: authUserId }).exec()
-    let user = await UserModel.findOne({ _id: userId }).exec()
-
-    let notificationData = null
+    let authUser = await NotificationModel.findOne({ _id: authUserId }).exec()
+    let user = await NotificationModel.findOne({ _id: userId }).exec()
 
     if (authUser && user && action && userId !== authUserId) {
-        notificationData = {
-            userId: userId,
-            type: NOTIFICATION_TYPE.friends_follow,
-            dataId: null,
-        }
-
         if (action === 'follow') {
-            notificationData = {
-                ...notificationData,
-                title: `Following`,
-                body: `Hey, ${authUser.displayName}, ${user.displayName} added you as friend`,
-            }
-
             // prettier-ignore
             let currentFollowing = authUser?.following?.filter(x => x.userId !== userId) || []
             let newFollowing = [
@@ -180,7 +196,7 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
                 },
             ]
             // update user
-            authUser = await UserModel.findOneAndUpdate(
+            authUser = await NotificationModel.findOneAndUpdate(
                 { _id: authUserId },
                 {
                     $set: {
@@ -205,7 +221,7 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
                     updatedAt: new Date(),
                 },
             ]
-            user = await UserModel.findOneAndUpdate(
+            user = await NotificationModel.findOneAndUpdate(
                 { _id: userId },
                 {
                     $set: {
@@ -215,14 +231,12 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
                 { new: true }
             ).exec()
 
-            await NotificationService.sendAndSaveNotification(notificationData)
-
             result = true
         } else if (action === 'unfollow') {
             // prettier-ignore
             let currentFollowing = authUser?.following?.filter(x => x.userId !== userId) || []
             // update user
-            authUser = await UserModel.findOneAndUpdate(
+            authUser = await NotificationModel.findOneAndUpdate(
                 { _id: authUserId },
                 {
                     $set: {
@@ -234,7 +248,7 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
 
             // prettier-ignore
             let currentFollowers = user?.followers?.filter(x => x.userId !== authUserId) || []
-            user = await UserModel.findOneAndUpdate(
+            user = await NotificationModel.findOneAndUpdate(
                 { _id: userId },
                 {
                     $set: {
@@ -254,7 +268,7 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
 
 exports.syncFriendship = async ({ userId }) => {
     let result = false
-    let authUser = await UserModel.findOne({ _id: userId }).exec()
+    let authUser = await NotificationModel.findOne({ _id: userId }).exec()
 
     const followers = authUser?.followers || []
     const following = authUser?.following || []
@@ -262,7 +276,7 @@ exports.syncFriendship = async ({ userId }) => {
     if (followers.length > 0) {
         let newFollowers = []
         for (const f of followers) {
-            const _user = await UserModel.findOne({ _id: f.userId })
+            const _user = await NotificationModel.findOne({ _id: f.userId })
             newFollowers.push({
                 // prettier-ignore
                 displayName: _user?.displayName ? _user.displayName : _user.username || '',
@@ -275,7 +289,7 @@ exports.syncFriendship = async ({ userId }) => {
             })
         }
         // update user
-        authUser = await UserModel.findOneAndUpdate(
+        authUser = await NotificationModel.findOneAndUpdate(
             { _id: userId },
             {
                 $set: {
@@ -290,7 +304,7 @@ exports.syncFriendship = async ({ userId }) => {
     if (following.length > 0) {
         let newFollowing = []
         for (const f of following) {
-            const _user = await UserModel.findOne({ _id: f.userId })
+            const _user = await NotificationModel.findOne({ _id: f.userId })
             newFollowing.push({
                 // prettier-ignore
                 displayName: _user?.displayName ? _user.displayName : _user.username || '',
@@ -303,7 +317,7 @@ exports.syncFriendship = async ({ userId }) => {
             })
         }
         // update user
-        authUser = await UserModel.findOneAndUpdate(
+        authUser = await NotificationModel.findOneAndUpdate(
             { _id: userId },
             {
                 $set: {
@@ -326,7 +340,7 @@ exports.searchFriends = async ({ userId, searchTerm }) => {
             { displayName: { $regex: searchTerm } },
             { username: { $regex: searchTerm } },
         ]
-        const users = await UserModel.find(query)
+        const users = await NotificationModel.find(query)
         // prettier-ignore
         let filteredUsers = users?.filter(x => {
             if(x._id !== userId && !validateEmail(x?.username)) {
@@ -346,24 +360,5 @@ exports.searchFriends = async ({ userId, searchTerm }) => {
         result = null
     }
 
-    return result
-}
-
-exports.saveFCMToken = async ({ email, token }) => {
-    let result = false
-    let user = await UserModel.findOne({ email }).exec()
-    if (user && token) {
-        // update user
-        user = await UserModel.findOneAndUpdate(
-            { email },
-            {
-                $set: {
-                    fcmToken: token,
-                },
-            },
-            { new: true }
-        ).exec()
-        result = true
-    }
     return result
 }

@@ -23,6 +23,14 @@ const MINIMUM_WEEKLY_LESSON_LEADER_BOARD = 0
 
 const MAX_WEEKLY_USERS_LEADER_BOARD = 1000
 
+const NOTIFICATION_TYPE = {
+    common: 'common',
+    reminder: 'reminder',
+    friends_follow: 'friends_follow',
+    leaderboard: 'leaderboard',
+    heart_refill: 'heart_refill',
+}
+
 module.exports = {
     DEFAULT_HEART,
     BATCH_EVENT_TIME_SPENT,
@@ -36,4 +44,5 @@ module.exports = {
     MINIMUM_WEEKLY_XP_LEADER_BOARD,
     MINIMUM_WEEKLY_LESSON_LEADER_BOARD,
     MAX_WEEKLY_USERS_LEADER_BOARD,
+    NOTIFICATION_TYPE,
 }

@@ -9,7 +9,7 @@ module.exports = async function (req, res, next) {
 
     let notificationData = req.notificationData
 
-    /*
+    /* 
     Here, I am executing the following code inside a try-catch block,
     so that we can handle the error regarding notification here, rather 
     than a centralised error handler. 

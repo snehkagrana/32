@@ -10,11 +10,11 @@ const sendNotification = async ({ token, title, body, data }) => {
                 title: title,
                 body: body,
             },
+            data: data || {},
             android: {
                 notification: {
                     sound: 'Default',
                 },
-                data: data || {},
             },
             apns: {
                 payload: {

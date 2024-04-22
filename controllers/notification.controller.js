@@ -1,11 +1,12 @@
-const { sendNotification } = require('../utils/notification.util')
+const NotificationService = require('../services/notification.service')
 
 exports.sendNotifications = async (req, res, next) => {
-    const result = await sendNotification({
-        token: req.body.token,
+    const result = await NotificationService.sendAndSaveNotification({
+        userId: req.user._id,
         title: req.body.title,
         body: req.body.body,
-        data: req.body.data,
+        type: req.body.type,
+        dataId: req.body.dataId,
     })
 
     if (result) {
@@ -15,4 +16,17 @@ exports.sendNotifications = async (req, res, next) => {
         })
     }
     return res.status(400).json({ message: 'Failed to send notification' })
+}
+
+exports.getNotifications = async (req, res, next) => {
+    const result = await NotificationService.getNotificationList({
+        userId: req.user._id,
+    })
+    if (result) {
+        return res.json({
+            message: 'Success',
+            data: result,
+        })
+    }
+    return res.status(400).json({ message: 'Failed to get notification' })
 }
