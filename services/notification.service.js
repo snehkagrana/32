@@ -20,8 +20,6 @@ exports.sendAndSaveNotification = async ({
     let result = false
     const user = await UserModel.findOne({ _id: userId })
 
-    console.log('user', user)
-
     if (user?.fcmToken) {
         const notifications = await NotificationModel.create({
             userId,

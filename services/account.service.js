@@ -161,7 +161,7 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
             notificationData = {
                 ...notificationData,
                 title: `Following`,
-                body: `Hey, ${authUser.displayName}, ${user.displayName} added you as friend`,
+                body: `Hey, ${user.displayName}, ${authUser.displayName} added you as friend`,
             }
 
             // prettier-ignore
