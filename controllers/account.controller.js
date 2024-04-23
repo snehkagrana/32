@@ -158,3 +158,16 @@ exports.saveFCMToken = async (req, res) => {
     }
     return res.status(400).json({ message: 'Failed!' })
 }
+
+exports.removeFCMToken = async (req, res) => {
+    const result = await AccountService.removeFCMToken({
+        email: req.user.email,
+    })
+    if (result) {
+        return res.json({
+            message: 'Success',
+            data: result,
+        })
+    }
+    return res.status(400).json({ message: 'Failed to remove FCM token!' })
+}

@@ -98,4 +98,10 @@ router.post(
     ErrorHandler(AccountController.saveFCMToken)
 )
 
+router.delete(
+    '/account/fcm-token',
+    AuthGuard,
+    ErrorHandler(AccountController.removeFCMToken)
+)
+
 module.exports = router

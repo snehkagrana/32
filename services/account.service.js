@@ -367,3 +367,22 @@ exports.saveFCMToken = async ({ email, token }) => {
     }
     return result
 }
+
+exports.removeFCMToken = async ({ email }) => {
+    let result = false
+    let user = await UserModel.findOne({ email }).exec()
+    if (user) {
+        // update user
+        user = await UserModel.findOneAndUpdate(
+            { email },
+            {
+                $set: {
+                    fcmToken: null,
+                },
+            },
+            { new: true }
+        ).exec()
+        result = true
+    }
+    return result
+}
