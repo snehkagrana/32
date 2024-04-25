@@ -30,3 +30,33 @@ exports.getNotifications = async (req, res, next) => {
     }
     return res.status(400).json({ message: 'Failed to get notification' })
 }
+
+// admin get notifee user
+exports.admin_getNotifeeUsers = async (req, res, next) => {
+    const result = await NotificationService.admin_getNotifeeUsers()
+
+    if (result) {
+        return res.json({
+            message: 'Success',
+            data: result,
+        })
+    }
+    return res.status(400).json({ message: 'Failed get users' })
+}
+
+// admin send general notification
+exports.admin_sendGeneralNotification = async (req, res, next) => {
+    const result = await NotificationService.admin_sendGeneralNotification({
+        users: req.body.users || [],
+        title: req.body.title || '',
+        body: req.body.body || '',
+        imageUrl: req.body.imageUrl || null,
+    })
+    if (result) {
+        return res.json({
+            message: 'Success',
+            data: result,
+        })
+    }
+    return res.status(400).json({ message: 'Failed get users' })
+}

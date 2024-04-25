@@ -4,6 +4,7 @@ const UserModel = require('../models/user')
 const { generateOTP } = require('../utils/otp.util')
 const { validateEmail } = require('../utils/common.util')
 const { sendNotification } = require('../utils/notification.util')
+const { NOTIFICATION_TYPE } = require('../constants/app.constant')
 
 exports.getNotificationList = async ({ userId }) => {
     const notifications = await NotificationModel.find({ userId })
@@ -75,20 +76,49 @@ exports.markSeenNotification = async ({ userId, body }) => {
     return result
 }
 
-exports.checkAvailabilityUsername = async ({
-    username,
-    authenticatedUserEmail,
+exports.admin_getNotifeeUsers = async () => {
+    const users = await UserModel.find({ fcmToken: { $exists: true } }).exec()
+    return users || []
+}
+
+exports.admin_sendGeneralNotification = async ({
+    users,
+    title,
+    body,
+    imageUrl,
 }) => {
     let result = false
-    // prettier-ignore
-    const authenticatedUser = await NotificationModel.findOne({ email: authenticatedUserEmail }).exec()
-    const user = await NotificationModel.findOne({ username }).exec()
-    if (user && authenticatedUser?.username === username) {
+
+    const NAME_PATTERN = '[[NAME]]'
+    const EMAIL_PATTERN = '[[EMAIL]]'
+
+    if (users?.length > 0) {
         result = true
-    } else if (!user) {
-        result = true
-    } else {
-        result = false
+        users.forEach(async user => {
+            let replacedTitle = ''
+            let replacedBody = ''
+
+            // prettier-ignore
+            replacedTitle = title.replace(NAME_PATTERN, user?.displayName || 'User')
+            // prettier-ignore
+            replacedTitle = replacedTitle.replace(EMAIL_PATTERN, user?.email || '')
+
+            // prettier-ignore
+            replacedBody = body.replace(NAME_PATTERN, user?.displayName || 'User')
+            // prettier-ignore
+            replacedBody = replacedBody.replace(EMAIL_PATTERN, user?.email || '')
+
+            const notificationData = {
+                userId: user.userId,
+                title: replacedTitle,
+                body: replacedBody,
+                imageUrl: imageUrl || '',
+                type: NOTIFICATION_TYPE.common,
+                dataId: null,
+            }
+
+            await this.sendAndSaveNotification(notificationData)
+        })
     }
 
     return result
