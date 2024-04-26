@@ -8,6 +8,7 @@ const {
     MINIMUM_WEEKLY_XP_LEADER_BOARD,
     MAX_WEEKLY_USERS_LEADER_BOARD,
 } = require('../constants/app.constant')
+const NotificationService = require('../services/notification.service')
 
 cron.schedule('* * * * *', async function () {
     const today = new Date()
@@ -34,6 +35,21 @@ cron.schedule('* * * * *', async function () {
                         lastHeartAccruedAt: new Date()
                     } }
                 ).exec()
+
+                if(user.heart >= 4) {
+                    const notificationData = {
+                        title: `💚Your hearts are full`,
+                        body: user.lastLessonCategoryName
+                            ? `Continue learning about ${user.lastLessonCategoryName || ""}`
+                            : `Continue learning`,
+                        userId: user._id,
+                        type: NOTIFICATION_TYPE.common, 
+                        dataId: null,
+                    } 
+
+                    // send notification
+                    await NotificationService.sendAndSaveNotification(notificationData) 
+                }
             }
         })
     }
