@@ -121,6 +121,7 @@ exports.saveScore = async ({ authUser, body }) => {
                 $set: {
                     diamond: getGemsAwarded(),
                     score: allScoresList,
+                    lastLessonCategoryName: body.category,
                     last_played: {
                         skill: body.skill,
                         category: body.category,
