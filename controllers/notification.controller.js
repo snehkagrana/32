@@ -58,5 +58,5 @@ exports.admin_sendGeneralNotification = async (req, res, next) => {
             data: result,
         })
     }
-    return res.status(400).json({ message: 'Failed get users' })
+    return res.status(400).json({ message: 'Failed to send notification' })
 }

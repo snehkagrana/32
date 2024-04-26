@@ -18,7 +18,7 @@ router.post(
 )
 
 // Get notifee user
-router.post(
+router.get(
     '/admin/notification/users',
     AuthGuard,
     AdminMiddleware,
