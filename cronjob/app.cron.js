@@ -1,7 +1,11 @@
 const cron = require('node-cron')
 const UserModel = require('../models/user')
 const GuestModel = require('../models/guest')
-const { MAX_HEARTS, HEARTS_REFILL_RATE } = require('../constants/app.constant')
+const {
+    MAX_HEARTS,
+    HEARTS_REFILL_RATE,
+    NOTIFICATION_TYPE,
+} = require('../constants/app.constant')
 const dayjs = require('dayjs')
 const LeaderBoardModel = require('../models/leaderboard')
 const {
@@ -45,7 +49,7 @@ cron.schedule('* * * * *', async function () {
                         userId: user._id,
                         type: NOTIFICATION_TYPE.common, 
                         dataId: null,
-                    } 
+                    }  
 
                     // send notification
                     await NotificationService.sendAndSaveNotification(notificationData) 
