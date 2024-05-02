@@ -41,4 +41,18 @@ router.get(
     ErrorHandler(NotificationController.getNotifications)
 )
 
+// Mark read
+router.get(
+    '/notification/mark-all-read',
+    AuthGuard,
+    ErrorHandler(NotificationController.markAllRead)
+)
+
+// Mark read
+router.get(
+    '/notification/mark-read/:notificationId',
+    AuthGuard,
+    ErrorHandler(NotificationController.markRead)
+)
+
 module.exports = router

@@ -47,10 +47,9 @@ cron.schedule('* * * * *', async function () {
                             ? `Continue learning about ${user.lastLessonCategoryName || ""}`
                             : `Continue learning`,
                         userId: user._id,
-                        type: NOTIFICATION_TYPE.common, 
+                        type: NOTIFICATION_TYPE.heart_refill, 
                         dataId: null,
-                    }  
-
+                    }
                     // send notification
                     await NotificationService.sendAndSaveNotification(notificationData) 
                 }

@@ -16,6 +16,10 @@ const NotificationModel = new mongoose.Schema({
         default: 'common',
     },
     dataId: { type: String, default: null },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
     readAt: { type: Date, default: null },
 })
 

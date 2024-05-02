@@ -52,6 +52,9 @@ import { authUtils } from './utils'
  * Pages
  */
 const TestDNDPage2 = React.lazy(() => import('./pages/admin/TestDNDPage2'))
+const AdminNotificationPage = React.lazy(
+    () => import('./pages/admin/AdminNotificationPage')
+)
 
 const App = () => {
     const dispatch = useDispatch()
@@ -244,6 +247,11 @@ const App = () => {
                         />
 
                         {/* ----- admin routes ----- */}
+                        <Route
+                            exact
+                            path='/admin/notification'
+                            element={<AdminNotificationPage />}
+                        />
                         <Route
                             exact
                             path='/admin/test-dnd'

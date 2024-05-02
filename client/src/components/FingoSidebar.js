@@ -278,6 +278,19 @@ const FingoSidebar = ({ open }) => {
                                         <span> Test DND</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a
+                                        href='#'
+                                        className='FingoShapeRadius'
+                                        onClick={e => {
+                                            e.preventDefault()
+                                            navigate(`/admin/notification`)
+                                        }}
+                                    >
+                                        <div className='icon'></div>
+                                        <span> Notifications</span>
+                                    </a>
+                                </li>
                             </>
                         )}
                     </ul>

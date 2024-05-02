@@ -31,10 +31,38 @@ exports.getNotifications = async (req, res, next) => {
     return res.status(400).json({ message: 'Failed to get notification' })
 }
 
+exports.markAllRead = async (req, res, next) => {
+    const result = await NotificationService.markAllRead({
+        userId: req.user._id,
+    })
+    if (result) {
+        return res.json({
+            message: 'Success',
+            data: result,
+        })
+    }
+    return res
+        .status(400)
+        .json({ message: 'Failed mark all read notifications' })
+}
+
+exports.markRead = async (req, res, next) => {
+    const result = await NotificationService.markRead({
+        userId: req.user._id,
+        notificationId: req.params.notificationId,
+    })
+    if (result) {
+        return res.json({
+            message: 'Success',
+            data: result,
+        })
+    }
+    return res.status(400).json({ message: 'Failed to read notification' })
+}
+
 // admin get notifee user
 exports.admin_getNotifeeUsers = async (req, res, next) => {
     const result = await NotificationService.admin_getNotifeeUsers()
-
     if (result) {
         return res.json({
             message: 'Success',

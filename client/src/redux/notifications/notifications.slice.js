@@ -1,0 +1,106 @@
+import { createSlice } from '@reduxjs/toolkit'
+import {
+    notifications_getNotificationRecipients,
+    notifications_getList,
+    notifications_getListMyRewards,
+} from './notifications.thunk'
+
+// Initial state
+const initialState = {
+    notificationRecipientsIsLoading: false,
+    notificationRecipientsIsError: false,
+    notificationRecipientsData: [],
+    modalForm: {
+        open: false,
+        data: null,
+    },
+    openModallistNotificaitons: false,
+    openModalListMyReward: false,
+    openModalClaimReward: {
+        open: false,
+        data: {
+            type: null,
+            value: 0,
+        },
+    },
+    modalDetail: {
+        open: false,
+        data: null,
+    },
+
+    listNotificaitonsData: [],
+    listNotificaitonsIsLoading: false,
+    listNotificaitonsIsError: false,
+
+    listMyRewardData: [],
+    listMyRewardIsLoading: false,
+    listMyRewardIsError: false,
+}
+
+// Actual Slice
+export const notificationsSlice = createSlice({
+    name: 'notifications',
+    initialState,
+    reducers: {
+        notifications_setModalForm(state, action) {
+            state.modalForm = action.payload
+        },
+        notifications_setOpenModallistNotificaitons(state, action) {
+            state.openModallistNotificaitons = action.payload
+        },
+        notifications_setOpenModalListMyReward(state, action) {
+            state.openModalListMyReward = action.payload
+        },
+        notifications_setOpenModalClaimReward(state, action) {
+            state.openModalClaimReward = action.payload
+        },
+        notifications_setModalDetail(state, action) {
+            state.modalDetail = action.payload
+        },
+        notifications_reset: () => initialState,
+    },
+    extraReducers: builder => {
+        // Get list notification  for admin
+        builder.addCase(
+            notifications_getNotificationRecipients.pending,
+            state => {
+                state.notificationRecipientsIsLoading = true
+                state.notificationRecipientsIsError = false
+            }
+        )
+        builder.addCase(
+            notifications_getNotificationRecipients.rejected,
+            (state, action) => {
+                state.notificationRecipientsIsLoading = false
+                state.notificationRecipientsIsError = true
+            }
+        )
+        builder.addCase(
+            notifications_getNotificationRecipients.fulfilled,
+            (state, action) => {
+                state.notificationRecipientsIsError = false
+                state.notificationRecipientsIsLoading = false
+                state.notificationRecipientsData = action.payload?.data || []
+            }
+        )
+
+        // Get list reward for user basic
+        builder.addCase(notifications_getList.pending, state => {
+            state.listNotificaitonsIsLoading = true
+            state.listNotificaitonsIsError = false
+        })
+        builder.addCase(notifications_getList.rejected, (state, action) => {
+            state.listNotificaitonsIsLoading = false
+            state.listNotificaitonsIsError = true
+        })
+        builder.addCase(notifications_getList.fulfilled, (state, action) => {
+            state.listNotificaitonsIsError = false
+            state.listNotificaitonsIsLoading = false
+            state.listNotificaitonsData = action.payload?.data || []
+        })
+    },
+})
+
+export const notifications_reducerActions = notificationsSlice.actions
+
+export const notifications_selectState = state => state.notifications

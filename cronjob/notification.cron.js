@@ -10,8 +10,6 @@ cron.schedule('*/10 * * * *', async function () {
         fcmToken: { $exists: true },
     }).exec()
 
-    console.log('CRONJOB notification running')
-
     if (users.length > 0) {
         users.forEach(async user => {
             const notificationData = {

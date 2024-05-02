@@ -11,6 +11,56 @@ exports.getNotificationList = async ({ userId }) => {
     return notifications
 }
 
+exports.markAllRead = async ({ userId }) => {
+    let result = false
+    const notifications = await NotificationModel.find({ userId })
+
+    // update user rewards
+    user = await NotificationModel.findOneAndUpdate(
+        { userId },
+        {
+            $set: {
+                rewards: user.rewards.map(x => {
+                    if (
+                        x.rewardId == body.rewardId &&
+                        x.variantId == body.variantId
+                    ) {
+                        return {
+                            ...x._doc,
+                            hasSeen: true,
+                            isRedeemed: true,
+                        }
+                    } else {
+                        return x._doc
+                    }
+                }),
+            },
+        },
+        { new: true }
+    ).exec()
+
+    return result
+}
+
+exports.markRead = async ({ userId, notificationId }) => {
+    let result = false
+    const notification = await NotificationModel.find({
+        userId,
+        _id: notificationId,
+    })
+
+    // update user rewards
+    notification = await NotificationModel.findOneAndUpdate(
+        { _id: notificationId },
+        {
+            $set: {},
+        },
+        { new: true }
+    ).exec()
+
+    return result
+}
+
 exports.sendAndSaveNotification = async ({
     userId,
     title,
