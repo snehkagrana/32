@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit'
 import {
     notifications_getNotificationRecipients,
     notifications_getList,
-    notifications_getListMyRewards,
 } from './notifications.thunk'
 
 // Initial state
@@ -10,10 +9,8 @@ const initialState = {
     notificationRecipientsIsLoading: false,
     notificationRecipientsIsError: false,
     notificationRecipientsData: [],
-    modalForm: {
-        open: false,
-        data: null,
-    },
+    openModalUserRecipients: false,
+    selectedUserRecipients: [],
     openModallistNotificaitons: false,
     openModalListMyReward: false,
     openModalClaimReward: {
@@ -42,8 +39,11 @@ export const notificationsSlice = createSlice({
     name: 'notifications',
     initialState,
     reducers: {
-        notifications_setModalForm(state, action) {
-            state.modalForm = action.payload
+        notifications_setOpenModalUserRecipients(state, action) {
+            state.openModalUserRecipients = action.payload
+        },
+        notifications_setSelectedUserRecipients(state, action) {
+            state.selectedUserRecipients = action.payload
         },
         notifications_setOpenModallistNotificaitons(state, action) {
             state.openModallistNotificaitons = action.payload

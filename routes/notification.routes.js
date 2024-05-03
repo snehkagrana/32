@@ -7,6 +7,7 @@ const AuthGuard = require('../middlewares/auth.middleware')
 const AdminMiddleware = require('../middlewares/admin.middleware')
 const schema = require('../validations/notification.validation')
 const validate = require('../utils/validator.util')
+const { multerUpload } = require('../configs/multer.config')
 
 // Send general notification
 router.post(
@@ -25,13 +26,13 @@ router.get(
     ErrorHandler(NotificationController.admin_getNotifeeUsers)
 )
 
-// Send notification
+// Upload notification image
 router.post(
-    '/notification/send',
-    validate(schema.sendNotification),
+    '/admin/notification/upload',
     AuthGuard,
     AdminMiddleware,
-    ErrorHandler(NotificationController.sendNotifications)
+    multerUpload.single('image'),
+    ErrorHandler(NotificationController.admin_uploadImage)
 )
 
 // Get notification
@@ -53,6 +54,13 @@ router.get(
     '/notification/mark-read/:notificationId',
     AuthGuard,
     ErrorHandler(NotificationController.markRead)
+)
+
+// Get unread notification
+router.get(
+    '/notification/unread',
+    AuthGuard,
+    ErrorHandler(NotificationController.getUnreadNotification)
 )
 
 module.exports = router

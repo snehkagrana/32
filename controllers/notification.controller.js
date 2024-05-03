@@ -54,10 +54,21 @@ exports.markRead = async (req, res, next) => {
     if (result) {
         return res.json({
             message: 'Success',
-            data: result,
+            data: null,
         })
     }
     return res.status(400).json({ message: 'Failed to read notification' })
+}
+
+exports.getUnreadNotification = async (req, res, next) => {
+    const result = await NotificationService.getUnreadNotification({
+        userId: req.user._id,
+    })
+
+    return res.json({
+        message: 'Success',
+        data: result,
+    })
 }
 
 // admin get notifee user
@@ -87,4 +98,12 @@ exports.admin_sendGeneralNotification = async (req, res, next) => {
         })
     }
     return res.status(400).json({ message: 'Failed to send notification' })
+}
+
+// admin send general notification
+exports.admin_uploadImage = async (req, res) => {
+    return res.json({
+        message: 'Ok',
+        data: req.file.location,
+    })
 }

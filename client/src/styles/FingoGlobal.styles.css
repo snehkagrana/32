@@ -347,3 +347,7 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
     background-color: #fff;
     color: #000;
 }
+
+.modal-notification-recipients .modal-dialog {
+    max-width: 500px;
+}
