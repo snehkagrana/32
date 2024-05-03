@@ -8,7 +8,9 @@ const { NOTIFICATION_TYPE } = require('../constants/app.constant')
 const user = require('../models/user')
 
 exports.getNotificationList = async ({ userId }) => {
-    const notifications = await NotificationModel.find({ userId })
+    const notifications = await NotificationModel.find({ userId }).sort({
+        createdAt: 'desc',
+    })
     return notifications
 }
 
