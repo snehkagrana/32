@@ -1,10 +1,12 @@
 {
   "files": {
-    "main.css": "/static/css/main.fce566b0.css",
-    "main.js": "/static/js/main.98a84ea0.js",
-    "static/js/930.dc612544.chunk.js": "/static/js/930.dc612544.chunk.js",
+    "main.css": "/static/css/main.f3472fc8.css",
+    "main.js": "/static/js/main.4f5b14bf.js",
+    "static/js/930.a2f62c70.chunk.js": "/static/js/930.a2f62c70.chunk.js",
+    "static/js/845.be626d7b.chunk.js": "/static/js/845.be626d7b.chunk.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
-    "static/js/446.38a34c45.chunk.js": "/static/js/446.38a34c45.chunk.js",
+    "static/js/61.a90a833a.chunk.js": "/static/js/61.a90a833a.chunk.js",
+    "static/js/709.e71e48c5.chunk.js": "/static/js/709.e71e48c5.chunk.js",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
     "static/media/8.png": "/static/media/8.9daef5f1f68e0fc2fb5f.png",
     "static/media/65023-thought-thinking-emoji-free-hq-image.png": "/static/media/65023-thought-thinking-emoji-free-hq-image.b75f2f06e46d3fa8a8cb.png",
@@ -122,14 +124,16 @@
     "static/media/info.svg": "/static/media/info.ef876f7b40a92ef036458f95b7e325e2.svg",
     "static/media/close.svg": "/static/media/close.cb5270ed2e7c504efec466e131cae9df.svg",
     "static/media/add.svg": "/static/media/add.71211a5e33a0fd675ebb734ab062b9d5.svg",
-    "main.fce566b0.css.map": "/static/css/main.fce566b0.css.map",
-    "main.98a84ea0.js.map": "/static/js/main.98a84ea0.js.map",
-    "930.dc612544.chunk.js.map": "/static/js/930.dc612544.chunk.js.map",
+    "main.f3472fc8.css.map": "/static/css/main.f3472fc8.css.map",
+    "main.4f5b14bf.js.map": "/static/js/main.4f5b14bf.js.map",
+    "930.a2f62c70.chunk.js.map": "/static/js/930.a2f62c70.chunk.js.map",
+    "845.be626d7b.chunk.js.map": "/static/js/845.be626d7b.chunk.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map",
-    "446.38a34c45.chunk.js.map": "/static/js/446.38a34c45.chunk.js.map"
+    "61.a90a833a.chunk.js.map": "/static/js/61.a90a833a.chunk.js.map",
+    "709.e71e48c5.chunk.js.map": "/static/js/709.e71e48c5.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.fce566b0.css",
-    "static/js/main.98a84ea0.js"
+    "static/css/main.f3472fc8.css",
+    "static/js/main.4f5b14bf.js"
   ]
 }
