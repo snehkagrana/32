@@ -351,6 +351,21 @@ exports.searchFriends = async ({ userId, searchTerm }) => {
 
 exports.saveFCMToken = async ({ email, token }) => {
     let result = false
+    const previousFcmUserToken = await UserModel.findOne({
+        fcmToken: token,
+    }).exec()
+    if (previousFcmUserToken) {
+        await UserModel.findOneAndUpdate(
+            { email: previousFcmUserToken.email },
+            {
+                $set: {
+                    fcmToken: '',
+                },
+            },
+            { new: true }
+        ).exec()
+    }
+
     let user = await UserModel.findOne({ email }).exec()
     if (user && token) {
         // update user
