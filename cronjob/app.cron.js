@@ -41,7 +41,10 @@ cron.schedule('* * * * *', async function () {
                 ).exec()
 
                 if(user.heart >= 4) {
-                    const lessonName = user?.lastLessonCategoryName?.split(' ').join('_') || null
+                    const lessonName = user?.lastLessonCategoryName
+                        ? user?.lastLessonCategoryName?.split('_')?.join(' ')
+                        : user?.last_played?.category?.split('_')?.join(' ') || ''
+                    
                     const notificationData = {
                         title: `💚 Your hearts are full`,
                         body: lessonName
