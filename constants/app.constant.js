@@ -29,6 +29,7 @@ const NOTIFICATION_TYPE = {
     friends_follow: 'friends_follow',
     leaderboard: 'leaderboard',
     heart_refill: 'heart_refill',
+    streak: 'streak',
 }
 
 module.exports = {

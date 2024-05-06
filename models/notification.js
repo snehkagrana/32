@@ -12,6 +12,7 @@ const NotificationModel = new mongoose.Schema({
             'friends_follow',
             'leaderboard',
             'heart_refill',
+            'streak',
         ],
         default: 'common',
     },

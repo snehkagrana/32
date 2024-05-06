@@ -4,22 +4,34 @@ const { NOTIFICATION_TYPE } = require('../constants/app.constant')
 
 const NotificationService = require('../services/notification.service')
 
+const sendStreakNotification = async ({ title, body, userId }) => {
+    const notificationData = {
+        title,
+        body,
+        userId,
+        type: NOTIFICATION_TYPE.streak,
+        dataId: null,
+    }
+    // send notification
+    await NotificationService.sendAndSaveNotification(notificationData)
+}
+
 cron.schedule('*/10 * * * *', async function () {
     const today = new Date()
-    const users = await UserModel.find({
-        fcmToken: { $exists: true },
-    }).exec()
 
-    if (users.length > 0) {
-        users.forEach(async user => {
-            const notificationData = {
-                title: `Hi ${user.displayName || user.username}`,
-                body: `This is a notification schedule that sent every 10 minutes to user has FCM token`,
-                userId: user._id,
-                type: NOTIFICATION_TYPE.common,
-                dataId: null,
-            }
-            await NotificationService.sendAndSaveNotification(notificationData)
-        })
-    }
+    /**
+     * NOTES
+     * dayOfWeek 0 - Sunday
+     * dayOfWeek 1 - Monday
+     */
+    const dayOfWeek = dayjs(today).day()
+    const hour = dayjs(today).hour()
+    const minute = dayjs(today).minute()
+
+    console.log('CRONJOB RUN -> At every 10th minute.')
+    // console.log('dayOfWeek', dayOfWeek)
+    // console.log('hour', hour)
+    // console.log('minute', minute)
 })
+
+module.exports = { sendStreakNotification }
