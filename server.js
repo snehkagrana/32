@@ -117,6 +117,7 @@ app.use('/server/api', commonRoutes);
 app.use('/server/api', feedbackRoutes);  
 app.use('/server/api', leaderBoardRoutes);  
 app.use('/server/api', notificationRoutes);
+app.use('/.well-known/apple-app-site-association', express.static('well-known/apple-app-site-association.json'))
 app.use('/.well-known', express.static('well-known'))
 app.use('/static-files', express.static('static-files'))
 

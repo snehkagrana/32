@@ -1,0 +1,11 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "om.tryfingo.appdev",
+                "paths": ["NOT /admin/*", "/*"]
+            }
+        ]
+    }
+}
