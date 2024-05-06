@@ -3,7 +3,7 @@
         "apps": [],
         "details": [
             {
-                "appID": "om.tryfingo.appdev",
+                "appID": "com.tryfingo.appdev",
                 "paths": ["NOT /admin/*", "/*"]
             }
         ]
