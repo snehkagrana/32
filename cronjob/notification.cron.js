@@ -16,22 +16,4 @@ const sendStreakNotification = async ({ title, body, userId }) => {
     await NotificationService.sendAndSaveNotification(notificationData)
 }
 
-cron.schedule('*/10 * * * *', async function () {
-    const today = new Date()
-
-    /**
-     * NOTES
-     * dayOfWeek 0 - Sunday
-     * dayOfWeek 1 - Monday
-     */
-    const dayOfWeek = dayjs(today).day()
-    const hour = dayjs(today).hour()
-    const minute = dayjs(today).minute()
-
-    console.log('CRONJOB RUN -> At every 10th minute.' + dayOfWeek)
-    // console.log('dayOfWeek', dayOfWeek)
-    // console.log('hour', hour)
-    // console.log('minute', minute)
-})
-
 // module.exports = { sendStreakNotification }
