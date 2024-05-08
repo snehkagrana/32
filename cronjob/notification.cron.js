@@ -28,10 +28,10 @@ cron.schedule('*/10 * * * *', async function () {
     const hour = dayjs(today).hour()
     const minute = dayjs(today).minute()
 
-    console.log('CRONJOB RUN -> At every 10th minute.')
+    console.log('CRONJOB RUN -> At every 10th minute.' + dayOfWeek)
     // console.log('dayOfWeek', dayOfWeek)
     // console.log('hour', hour)
     // console.log('minute', minute)
 })
 
-module.exports = { sendStreakNotification }
+// module.exports = { sendStreakNotification }
