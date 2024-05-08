@@ -51,7 +51,7 @@ const AdminMiddleware = require('./middlewares/admin.middleware')
 const firebaseAdmin = require("firebase-admin");
 
 require('./cronjob/app.cron')
-require('./cronjob/notification.cron')
+// require('./cronjob/notification.cron')
 // require('./cronjob/leaderboard.cronjob')
 // require('./cronjob/friendship.cronjob')
 
