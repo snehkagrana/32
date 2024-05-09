@@ -13,6 +13,7 @@ const {
     MAX_WEEKLY_USERS_LEADER_BOARD,
 } = require('../constants/app.constant')
 const await = require('../services/notification.service')
+const NotificationService = require('../services/notification.service')
 
 cron.schedule('* * * * *', async function () {
     const today = new Date()
