@@ -63,7 +63,7 @@ router.get(
     ErrorHandler(NotificationController.getUnreadNotification)
 )
 
-// Send general notification
+// [TEST] user press action notification
 router.post(
     '/notification/press-action',
     AuthGuard,
