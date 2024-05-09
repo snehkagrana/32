@@ -63,4 +63,11 @@ router.get(
     ErrorHandler(NotificationController.getUnreadNotification)
 )
 
+// Send general notification
+router.post(
+    '/notification/press-action',
+    AuthGuard,
+    ErrorHandler(NotificationController.userPressActionNotification)
+)
+
 module.exports = router

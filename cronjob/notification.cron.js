@@ -5,6 +5,9 @@ const { NOTIFICATION_TYPE } = require('../constants/app.constant')
 const NotificationService = require('../services/notification.service')
 
 const sendStreakNotification = async ({ title, body, userId }) => {
+
+    const title = "You missed your lesson. You know what happens now🔫"
+
     const notificationData = {
         title,
         body,
@@ -16,4 +19,4 @@ const sendStreakNotification = async ({ title, body, userId }) => {
     await NotificationService.sendAndSaveNotification(notificationData)
 }
 
-// module.exports = { sendStreakNotification }
+module.exports = { sendStreakNotification }

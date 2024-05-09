@@ -238,6 +238,8 @@ cron.schedule('*/10 * * * *', async function () {
     const minute = dayjs(today).minute()
 
     console.log('CRONJOB RUN -> At every 10th minute.' + dayOfWeek)
+
+    
     // console.log('dayOfWeek', dayOfWeek)
     // console.log('hour', hour)
     // console.log('minute', minute)

@@ -107,3 +107,12 @@ exports.admin_uploadImage = async (req, res) => {
         data: req.file.location,
     })
 }
+
+// admin send general notification
+exports.userPressActionNotification = async (req, res, next) => {
+    console.log('USER PRESS ACTION NOTIFICATION', res.body)
+    return res.json({
+        message: 'OK!',
+        data: null,
+    })
+}
