@@ -256,7 +256,7 @@ cron.schedule('*/10 * * * *', async function () {
                 user.lastCompleteLessonDate &&
                 dayjs(today).diff(user.lastCompleteLessonDate, 'day') > 3
             ) {
-                console.log('usersWithZeroStreak.length 3', user)
+                console.log('usersWithZeroStreak.length 3', user.displayName)
                 usersWithZeroStreak.length
                 const notificationData = {
                     title: `${user.displayName} we miss you.`,
@@ -269,7 +269,7 @@ cron.schedule('*/10 * * * *', async function () {
                     notificationData
                 )
             } else {
-                console.log('usersWithZeroStreak.length !3', user)
+                console.log('usersWithZeroStreak.length !3', user.displayName)
                 const notificationData = {
                     title: `You missed your lesson.`,
                     body: 'You know what happens now🔫',
