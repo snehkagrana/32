@@ -259,29 +259,28 @@ cron.schedule('*/10 * * * *', async function () {
                 dayjs(today).diff(user.lastCompleteLessonDate, 'day') > 3
             ) {
                 console.log('usersWithZeroStreak.length 3', user.displayName)
-                usersWithZeroStreak.length
-                const notificationData = {
-                    title: `${user.displayName} we miss you.`,
-                    body: "Looks like you didn't get the time. That's ok, take a quick lesson today",
-                    userId: user._id,
-                    type: NOTIFICATION_TYPE.streak,
-                    dataId: null,
-                }
-                await NotificationService.sendAndSaveNotification(
-                    notificationData
-                )
+                // const notificationData = {
+                //     title: `${user.displayName} we miss you.`,
+                //     body: "Looks like you didn't get the time. That's ok, take a quick lesson today",
+                //     userId: user._id,
+                //     type: NOTIFICATION_TYPE.streak,
+                //     dataId: null,
+                // }
+                // await NotificationService.sendAndSaveNotification(
+                //     notificationData
+                // )
             } else {
                 console.log('usersWithZeroStreak.length !3', user.displayName)
-                const notificationData = {
-                    title: `You missed your lesson.`,
-                    body: 'You know what happens now🔫',
-                    userId: user._id,
-                    type: NOTIFICATION_TYPE.streak,
-                    dataId: null,
-                }
-                await NotificationService.sendAndSaveNotification(
-                    notificationData
-                )
+                // const notificationData = {
+                //     title: `You missed your lesson.`,
+                //     body: 'You know what happens now🔫',
+                //     userId: user._id,
+                //     type: NOTIFICATION_TYPE.streak,
+                //     dataId: null,
+                // }
+                // await NotificationService.sendAndSaveNotification(
+                //     notificationData
+                // )
             }
         })
     }
