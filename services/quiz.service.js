@@ -122,6 +122,7 @@ exports.saveScore = async ({ authUser, body }) => {
                     diamond: getGemsAwarded(),
                     score: allScoresList,
                     lastLessonCategoryName: body.category,
+                    lastCompleteLessonDate: new Date(),
                     last_played: {
                         skill: body.skill,
                         category: body.category,

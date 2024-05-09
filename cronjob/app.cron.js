@@ -12,7 +12,7 @@ const {
     MINIMUM_WEEKLY_XP_LEADER_BOARD,
     MAX_WEEKLY_USERS_LEADER_BOARD,
 } = require('../constants/app.constant')
-const NotificationService = require('../services/notification.service')
+const await = require('../services/notification.service')
 
 cron.schedule('* * * * *', async function () {
     const today = new Date()
@@ -55,7 +55,7 @@ cron.schedule('* * * * *', async function () {
                         dataId: null,
                     }
                     // send notification
-                    await NotificationService.sendAndSaveNotification(notificationData) 
+                    await await sendAndSaveNotification(notificationData) 
                 }
             }
         })
@@ -225,6 +225,7 @@ cron.schedule('* * * * *', async function () {
     }
 })
 
+// Cronjob every 10th minute
 cron.schedule('*/10 * * * *', async function () {
     const today = new Date()
 
@@ -237,10 +238,45 @@ cron.schedule('*/10 * * * *', async function () {
     const hour = dayjs(today).hour()
     const minute = dayjs(today).minute()
 
-    console.log('CRONJOB RUN -> At every 10th minute.' + dayOfWeek)
-
-    
     // console.log('dayOfWeek', dayOfWeek)
     // console.log('hour', hour)
     // console.log('minute', minute)
+
+    // console.log('CRONJOB RUN -> At every 10th minute.' + dayOfWeek)
+
+    // user with 0 streak
+    const usersWithZeroStreak = await UserModel.find({
+        streak: { $lt: 1 },
+    }).exec()
+
+    if (usersWithZeroStreak.length > 0) {
+        usersWithZeroStreak.forEach(async user => {
+            if (
+                user.lastCompleteLessonDate &&
+                dayjs(today).diff(user.lastCompleteLessonDate, 'day') > 3
+            ) {
+                const notificationData = {
+                    title: `${user.displayName} we miss you.`,
+                    body: "Looks like you didn't get the time. That's ok, take a quick lesson today",
+                    userId: user._id,
+                    type: NOTIFICATION_TYPE.streak,
+                    dataId: null,
+                }
+                await NotificationService.sendAndSaveNotification(
+                    notificationData
+                )
+            } else {
+                const notificationData = {
+                    title: `You missed your lesson.`,
+                    body: 'You know what happens now🔫',
+                    userId: user._id,
+                    type: NOTIFICATION_TYPE.streak,
+                    dataId: null,
+                }
+                await NotificationService.sendAndSaveNotification(
+                    notificationData
+                )
+            }
+        })
+    }
 })

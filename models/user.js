@@ -201,6 +201,7 @@ const UserSchema = new mongoose.Schema({
     ],
     fcmToken: String,
     lastLessonCategoryName: String,
+    lastCompleteLessonDate: Date,
 })
 
 UserSchema.set('toJSON', {
