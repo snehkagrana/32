@@ -248,6 +248,7 @@ cron.schedule('*/10 * * * *', async function () {
     // user with 0 streak
     const usersWithZeroStreak = await UserModel.find({
         streak: { $lt: 1 },
+        fcmToken: { $exists: true },
     }).exec()
 
     if (usersWithZeroStreak.length > 0) {
