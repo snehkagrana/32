@@ -55,7 +55,7 @@ cron.schedule('* * * * *', async function () {
                         dataId: null,
                     }
                     // send notification
-                    await await sendAndSaveNotification(notificationData) 
+                    await sendAndSaveNotification(notificationData) 
                 }
             }
         })
