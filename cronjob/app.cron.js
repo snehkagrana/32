@@ -274,7 +274,7 @@ cron.schedule('*/10 * * * *', async function () {
                         dataId: null,
                         streakNotificationTypeId: STREAK_NOTIFICATION_TYPE[1]({ name: user.displayName }).typeId
                     }
-                    await NotificationService.sendAndSaveNotification(notificationData)
+                    // await NotificationService.sendAndSaveNotification(notificationData)
                 } 
             } else {
                 if(user.lastDeliveredStreakNotificationType !== STREAK_NOTIFICATION_TYPE[2]().typeId) {
@@ -287,7 +287,7 @@ cron.schedule('*/10 * * * *', async function () {
                         dataId: null,
                         streakNotificationTypeId: STREAK_NOTIFICATION_TYPE[2]().typeId
                     }
-                    await NotificationService.sendAndSaveNotification(notificationData)
+                    // await NotificationService.sendAndSaveNotification(notificationData)
                 } 
             }
         })
@@ -311,9 +311,9 @@ cron.schedule('*/10 * * * *', async function () {
                             dataId: null,
                             streakNotificationTypeId: STREAK_NOTIFICATION_TYPE[3]({ streakNumber: user.streak }).typeId
                         }
-                        await NotificationService.sendAndSaveNotification(
-                            notificationData
-                        )
+                        // await NotificationService.sendAndSaveNotification(
+                        //     notificationData
+                        // )
                     }
                 }
             }
