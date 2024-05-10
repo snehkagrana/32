@@ -302,7 +302,7 @@ cron.schedule('*/10 * * * *', async function () {
                 // const dayOfWeek = (today.getDate() + 6) % 7
                 if (dayjs(user.lastCompleteLessonDate).day() < dayOfWeek) {
                     // prettier-ignore
-                    if (user.lastDeliveredStreakNotificationType !== STREAK_NOTIFICATION_TYPE[3]().typeId) {
+                    if (user.lastDeliveredStreakNotificationType !== STREAK_NOTIFICATION_TYPE[3]({ streakNumber: user.streak }).typeId) {
                         const notificationData = {
                             title: STREAK_NOTIFICATION_TYPE[3]({ streakNumber: user.streak }).title,
                             body: STREAK_NOTIFICATION_TYPE[3]({ streakNumber: user.streak }).body,
