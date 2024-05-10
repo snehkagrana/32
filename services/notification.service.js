@@ -55,6 +55,7 @@ exports.sendAndSaveNotification = async ({
     body,
     type,
     dataId,
+    streakNotificationTypeId,
 }) => {
     let result = false
     const user = await UserModel.findOne({ _id: userId })
@@ -74,6 +75,17 @@ exports.sendAndSaveNotification = async ({
             body,
             data: dataId ? { dataId } : {},
         })
+
+        if (streakNotificationTypeId) {
+            // prettier-ignore
+            await UserModel.updateOne(
+                { _id: userId },
+                {
+                    $set: { lastDeliveredStreakNotificationType: streakNotificationTypeId },
+                }
+            ).exec()
+        }
+
         result = true
         return notifications
     }

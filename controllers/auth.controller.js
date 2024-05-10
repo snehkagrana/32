@@ -79,6 +79,9 @@ exports.register = async (req, res) => {
         emailVerifiedAt: req.body.clientType === 'mobile' ? new Date() : null,
         following: [],
         followers: [],
+        fcmToken: '',
+        lastLessonCategoryName: '',
+        lastCompleteLessonDate: null,
     }
 
     // sync guest data
@@ -270,6 +273,9 @@ exports.syncRegisterGoogle = async (req, res) => {
                 lastClaimedGemsDailyQuest:
                     guestData.lastClaimedGemsDailyQuest || null,
                 unlimitedHeart: null,
+                lastLessonCategoryName: guestData.lastLessonCategoryName || '',
+                lastCompleteLessonDate:
+                    guestData.lastCompleteLessonDate || null,
             }
             result = await AuthService.syncRegisterGoogle({
                 email: req.user.email,

@@ -12,8 +12,11 @@ const {
     MINIMUM_WEEKLY_XP_LEADER_BOARD,
     MAX_WEEKLY_USERS_LEADER_BOARD,
 } = require('../constants/app.constant')
-const await = require('../services/notification.service')
 const NotificationService = require('../services/notification.service')
+const {
+    STREAK_NOTIFICATION_TYPE,
+} = require('../constants/streak-notification.constant')
+const { daysDifference, getToday } = require('../utils/common.util')
 
 cron.schedule('* * * * *', async function () {
     const today = new Date()
@@ -243,44 +246,76 @@ cron.schedule('*/10 * * * *', async function () {
     // console.log('hour', hour)
     // console.log('minute', minute)
 
-    // console.log('CRONJOB RUN -> At every 10th minute.' + dayOfWeek)
-
     // user with 0 streak
     const usersWithZeroStreak = await UserModel.find({
         streak: { $lt: 1 },
         fcmToken: { $exists: true },
     }).exec()
 
+    // user with 0 streak
+    const usersWithStreaks = await UserModel.find({
+        streak: { $gt: 0 },
+        fcmToken: { $exists: true },
+    }).exec()
+
+    // User with zero streak
     if (usersWithZeroStreak.length > 0) {
         console.log('usersWithZeroStreak.length', usersWithZeroStreak.length)
         usersWithZeroStreak.forEach(async user => {
-            if (
-                user.lastCompleteLessonDate &&
-                dayjs(today).diff(user.lastCompleteLessonDate, 'day') > 3
-            ) {
-                console.log('usersWithZeroStreak.length 3', user.displayName)
-                // const notificationData = {
-                //     title: `${user.displayName} we miss you.`,
-                //     body: "Looks like you didn't get the time. That's ok, take a quick lesson today",
-                //     userId: user._id,
-                //     type: NOTIFICATION_TYPE.streak,
-                //     dataId: null,
-                // }
-                // await NotificationService.sendAndSaveNotification(
-                //     notificationData
-                // )
+            // prettier-ignore
+            if (user.lastCompleteLessonDate && dayjs(today).diff(user.lastCompleteLessonDate, 'day') >= 3) {
+                if(user.lastDeliveredStreakNotificationType !== STREAK_NOTIFICATION_TYPE[1]({ name: user.displayName }).typeId) {
+                    console.log('usersWithZeroStreak.length 3', user.email)
+                    const notificationData = {
+                        title: STREAK_NOTIFICATION_TYPE[1]({ name: user.displayName }).title,
+                        body: STREAK_NOTIFICATION_TYPE[1]({ name: user.displayName }).body,
+                        userId: user._id,
+                        type: NOTIFICATION_TYPE.streak,
+                        dataId: null,
+                        streakNotificationTypeId: STREAK_NOTIFICATION_TYPE[1]({ name: user.displayName }).typeId
+                    }
+                    await NotificationService.sendAndSaveNotification(notificationData)
+                } 
             } else {
-                console.log('usersWithZeroStreak.length !3', user.displayName)
-                // const notificationData = {
-                //     title: `You missed your lesson.`,
-                //     body: 'You know what happens now🔫',
-                //     userId: user._id,
-                //     type: NOTIFICATION_TYPE.streak,
-                //     dataId: null,
-                // }
-                // await NotificationService.sendAndSaveNotification(
-                //     notificationData
-                // )
+                if(user.lastDeliveredStreakNotificationType !== STREAK_NOTIFICATION_TYPE[2]().typeId) {
+                    console.log('usersWithZeroStreak.length !3', user.displayName)
+                    const notificationData = {
+                        title: STREAK_NOTIFICATION_TYPE[2]().title,
+                        body: STREAK_NOTIFICATION_TYPE[2]().body,
+                        userId: user._id,
+                        type: NOTIFICATION_TYPE.streak,
+                        dataId: null,
+                        streakNotificationTypeId: STREAK_NOTIFICATION_TYPE[2]().typeId
+                    }
+                    await NotificationService.sendAndSaveNotification(notificationData)
+                } 
+            }
+        })
+    }
+
+    // User has streak
+    if (usersWithStreaks.length > 0) {
+        console.log('usersWithStreaks.length', usersWithStreaks.length)
+        usersWithStreaks.forEach(async user => {
+            if (user.lastCompleteLessonDate) {
+                // const daysDiff = daysDifference(user.lastCompleteLessonDate)
+                // const dayOfWeek = (today.getDate() + 6) % 7
+                if (dayjs(user.lastCompleteLessonDate).day() < dayOfWeek) {
+                    // prettier-ignore
+                    if (user.lastDeliveredStreakNotificationType !== STREAK_NOTIFICATION_TYPE[3]().typeId) {
+                        const notificationData = {
+                            title: STREAK_NOTIFICATION_TYPE[3]({ streakNumber: user.streak }).title,
+                            body: STREAK_NOTIFICATION_TYPE[3]({ streakNumber: user.streak }).body,
+                            userId: user._id,
+                            type: NOTIFICATION_TYPE.streak,
+                            dataId: null,
+                            streakNotificationTypeId: STREAK_NOTIFICATION_TYPE[3]({ streakNumber: user.streak }).typeId
+                        }
+                        await NotificationService.sendAndSaveNotification(
+                            notificationData
+                        )
+                    }
+                }
             }
         })
     }

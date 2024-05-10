@@ -101,6 +101,11 @@ module.exports = function (passport) {
                         referralCode: refCode,
                         registeredAt: new Date(),
                         emailVerifiedAt: new Date(),
+                        following: [],
+                        followers: [],
+                        fcmToken: '',
+                        lastLessonCategoryName: '',
+                        lastCompleteLessonDate: null,
                     }
                     const newUser = await AuthService.createUser(newUserData)
                     const token = await jwtUtil.createToken({

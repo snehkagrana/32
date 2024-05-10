@@ -202,6 +202,7 @@ const UserSchema = new mongoose.Schema({
     fcmToken: String,
     lastLessonCategoryName: String,
     lastCompleteLessonDate: Date,
+    lastDeliveredStreakNotificationType: Number,
 })
 
 UserSchema.set('toJSON', {

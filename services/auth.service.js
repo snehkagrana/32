@@ -345,6 +345,9 @@ exports.googleSignInMobile = async ({
             emailVerifiedAt: new Date(),
             following: [],
             followers: [],
+            fcmToken: '',
+            lastLessonCategoryName: '',
+            lastCompleteLessonDate: null,
         }
 
         // sync guest data
