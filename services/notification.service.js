@@ -1,5 +1,7 @@
 const { appConfig } = require('../configs/app.config')
 const NotificationModel = require('../models/notification')
+const NotificationTemplateModel = require('../models/notificationTemplate')
+const DeliveredNotificationHistoryModel = require('../models/deliveredNotificationHistory')
 const UserModel = require('../models/user')
 const { generateOTP } = require('../utils/otp.util')
 const { validateEmail } = require('../utils/common.util')
@@ -111,6 +113,7 @@ exports.admin_sendGeneralNotification = async ({
     title,
     body,
     imageUrl,
+    authUserId,
 }) => {
     let result = false
 
@@ -144,7 +147,40 @@ exports.admin_sendGeneralNotification = async ({
 
             await this.sendAndSaveNotification(notificationData)
         })
+
+        await DeliveredNotificationHistoryModel.create({
+            sendBy: authUserId,
+            title: replacedTitle,
+            body: replacedBody,
+            imageUrl: imageUrl || '',
+            type: NOTIFICATION_TYPE.common,
+            createdAt: new Date(),
+            users,
+        })
     }
 
     return result
+}
+
+exports.admin_getNotificationTemplate = async () => {
+    return await NotificationTemplateModel.find({}).sort({
+        createdAt: 'desc',
+    })
+}
+
+exports.admin_createNotificationTemplate = body => {
+    return NotificationTemplateModel.create(body)
+}
+
+exports.admin_updateNotificationTemplate = async body => {
+    const { _id, ...rest } = body
+    return await NotificationTemplateModel.findOneAndUpdate(
+        { _id: _id },
+        rest,
+        { new: true }
+    )
+}
+
+exports.admin_deleteNotificationTemplate = async id => {
+    return await NotificationTemplateModel.deleteOne({ _id: id })
 }

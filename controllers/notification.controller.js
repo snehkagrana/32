@@ -90,6 +90,7 @@ exports.admin_sendGeneralNotification = async (req, res, next) => {
         title: req.body.title || '',
         body: req.body.body || '',
         imageUrl: req.body.imageUrl || null,
+        authUserId: req.user._id
     })
     if (result) {
         return res.json({
@@ -115,4 +116,62 @@ exports.userPressActionNotification = async (req, res, next) => {
         message: 'OK!',
         data: null,
     })
+}
+
+// admin get notification template
+exports.admin_getNotificationTemplate = async (req, res, next) => {
+    const result = await NotificationService.admin_getNotificationTemplate()
+    if (result) {
+        return res.json({
+            message: 'Success',
+            data: result,
+        })
+    }
+    return res
+        .status(400)
+        .json({ message: 'Failed to get notification template' })
+}
+
+// admin create notification template
+exports.admin_createNotificationTemplate = async (req, res, next) => {
+    const result = await NotificationService.admin_createNotificationTemplate(
+        req.body
+    )
+    if (result) {
+        return res.json({
+            message: 'Success',
+            data: result,
+        })
+    }
+    return res
+        .status(400)
+        .json({ message: 'Failed to get notification template' })
+}
+
+// admin update notification template
+exports.admin_updateNotificationTemplate = async (req, res, next) => {
+    const result = await NotificationService.admin_updateNotificationTemplate(
+        req.body
+    )
+    if (result) {
+        return res.json({
+            message: 'Success',
+            data: result,
+        })
+    }
+    return res
+        .status(400)
+        .json({ message: 'Failed to get notification template' })
+}
+
+exports.admin_deleteNotificationTemplate = async (req, res) => {
+    const result = await NotificationService.admin_deleteNotificationTemplate(
+        req.body.id
+    )
+    if (result) {
+        return res.json({
+            message: 'Success.',
+            data: result,
+        })
+    }
 }

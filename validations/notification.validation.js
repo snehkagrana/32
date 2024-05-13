@@ -25,4 +25,15 @@ module.exports = {
             body: Joi.string().required(),
         })
         .options({ allowUnknown: true }),
+
+    create: Joi.object()
+        .keys({
+            title: Joi.string(),
+            body: Joi.string(),
+            imageUrl: Joi.string().allow(null),
+        })
+        .options({ allowUnknown: true }),
+    delete: Joi.object().keys({
+        id: Joi.string().required(),
+    }),
 }
