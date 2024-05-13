@@ -146,15 +146,16 @@ exports.admin_sendGeneralNotification = async ({
             }
 
             await this.sendAndSaveNotification(notificationData)
-            await DeliveredNotificationHistoryModel.create({
-                sendBy: authUserId,
-                title: replacedTitle,
-                body: replacedBody,
-                imageUrl: imageUrl || '',
-                type: NOTIFICATION_TYPE.common,
-                createdAt: new Date(),
-                users,
-            })
+        })
+
+        await DeliveredNotificationHistoryModel.create({
+            sendBy: authUserId,
+            title,
+            body,
+            imageUrl: imageUrl || '',
+            type: NOTIFICATION_TYPE.common,
+            createdAt: new Date(),
+            users,
         })
     }
 
