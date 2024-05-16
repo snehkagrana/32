@@ -77,6 +77,11 @@ exports.sendAndSaveNotification = async ({
     let result = false
     const user = await UserModel.findOne({ _id: userId })
 
+    const dateString = new Date().toLocaleString('en-US', {
+        timeZone: SERVER_TIMEZONE,
+    })
+    const now = dayjs(dateString).format()
+
     if (user?.fcmToken) {
         const notifications = await NotificationModel.create({
             userId,
@@ -85,6 +90,7 @@ exports.sendAndSaveNotification = async ({
             type: type || 'common',
             dataId: dataId || null,
             readAt: null,
+            createdAt: now,
         })
         await sendNotification({
             token: user.fcmToken,
@@ -189,14 +195,26 @@ exports.admin_getNotificationTemplate = async () => {
 }
 
 exports.admin_createNotificationTemplate = body => {
-    return NotificationTemplateModel.create(body)
+    const dateString = new Date().toLocaleString('en-US', {
+        timeZone: SERVER_TIMEZONE,
+    })
+    const now = dayjs(dateString).format()
+
+    return NotificationTemplateModel.create({
+        createdAt: now,
+        ...body,
+    })
 }
 
 exports.admin_updateNotificationTemplate = async body => {
     const { _id, ...rest } = body
+    const dateString = new Date().toLocaleString('en-US', {
+        timeZone: SERVER_TIMEZONE,
+    })
+    const now = dayjs(dateString).format()
     return await NotificationTemplateModel.findOneAndUpdate(
         { _id: _id },
-        rest,
+        { ...rest, updatedAt: now },
         { new: true }
     )
 }
