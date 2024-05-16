@@ -4,6 +4,8 @@ const { daysDifference } = require('../utils/common.util')
 const { initializeDiamondUser } = require('../utils/reward.util')
 const { getLevelByXpPoints } = require('../utils/xp.utils')
 const { appConfig } = require('../configs/app.config')
+const { SERVER_TIMEZONE } = require('../constants/app.constant')
+const dayjs = require('dayjs')
 
 exports.createGuest = async data => {
     return await GuestModel.create(data)
@@ -24,6 +26,11 @@ exports.logoutUser = (token, exp) => {
 exports.syncGuest = async guestId => {
     let result = false
     let guest = await GuestModel.findById(guestId).exec()
+
+    const dateString = new Date().toLocaleString('en-US', {
+        timeZone: SERVER_TIMEZONE,
+    })
+    const now = dayjs(dateString).format()
 
     if (guest) {
         const daysDiff = daysDifference(guest.lastCompletedDay)
@@ -65,7 +72,7 @@ exports.syncGuest = async guestId => {
                     // prettier-ignore
                     heart: typeof guest?.heart === 'number' ? guest.heart : appConfig.defaultHeart,
 
-                    lastActiveAt: new Date(),
+                    lastActiveAt: now,
                 },
             }
         )

@@ -4,6 +4,7 @@ const UserModel = require('../models/user')
 const {
     MINIMUM_WEEKLY_XP_LEADER_BOARD,
     MAX_WEEKLY_USERS_LEADER_BOARD,
+    SERVER_TIMEZONE,
 } = require('../constants/app.constant')
 
 exports.getLeaderBoardFriends = async (req, res) => {
@@ -121,7 +122,10 @@ exports.markSeen = async (req, res) => {
 }
 
 exports.updateAndSyncWeeklyLeaderBoard = async (req, res) => {
-    const now = new Date()
+    const dateString = new Date().toLocaleString('en-US', {
+        timeZone: SERVER_TIMEZONE,
+    })
+    const now = dayjs(dateString).format()
 
     const userId = req.user._id
     const xp = req.body?.xp || 0

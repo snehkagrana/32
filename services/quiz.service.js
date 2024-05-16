@@ -5,12 +5,17 @@ const { calculateDiamondUser } = require('../utils/reward.util')
 const { getLevelByXpPoints } = require('../utils/xp.utils')
 const ReferralService = require('./referral.service')
 const dayjs = require('dayjs')
-const { MAX_HEARTS } = require('../constants/app.constant')
+const { MAX_HEARTS, SERVER_TIMEZONE } = require('../constants/app.constant')
 
 exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
     let result = null
     let user = await UserModel.findById(userId).exec()
     let guest = await GuestModel.findById(guestId).exec()
+
+    const dateString = new Date().toLocaleString('en-US', {
+        timeZone: SERVER_TIMEZONE,
+    })
+    const now = dayjs(dateString).format()
 
     if (user) {
         // prettier-ignore
@@ -23,7 +28,7 @@ exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
                 $set: {
                     heart: MUST_REDUCE_HEART ? user.heart - 1 : user.heart,
                     // prettier-ignore
-                    lastHeartAccruedAt: MUST_REDUCE_HEART && IS_LOST_1ST_HEARTS ? new Date() : user.lastHeartAccruedAt || null,
+                    lastHeartAccruedAt: MUST_REDUCE_HEART && IS_LOST_1ST_HEARTS ? now : user.lastHeartAccruedAt || null,
                 },
             },
             { new: true }
@@ -39,7 +44,7 @@ exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
                 $set: {
                     heart: MUST_REDUCE_HEART ? guest.heart - 1 : guest.heart,
                     // prettier-ignore
-                    lastHeartAccruedAt: MUST_REDUCE_HEART && IS_LOST_1ST_HEARTS ? new Date() : guest.lastHeartAccruedAt || null,
+                    lastHeartAccruedAt: MUST_REDUCE_HEART && IS_LOST_1ST_HEARTS ? now : guest.lastHeartAccruedAt || null,
                 },
             },
             { new: true }
@@ -55,8 +60,13 @@ exports.saveScore = async ({ authUser, body }) => {
     let user = await UserModel.findById(authUser._id).exec()
     let guest = await GuestModel.findById(authUser._id).exec()
 
+    const dateString = new Date().toLocaleString('en-US', {
+        timeZone: SERVER_TIMEZONE,
+    })
+    const now = dayjs(dateString).format()
+    const dayOfWeek = dayjs(now).day()
+
     if (user) {
-        const today = dayjs(new Date()).format('YYYY-MM-DD')
         let allScoresList = user.score || []
 
         allScoresList.push({
@@ -77,16 +87,13 @@ exports.saveScore = async ({ authUser, body }) => {
             user.streak = 1
         }
 
-        user.lastCompletedDay = today
-
-        const dayOfWeek = (getToday().getDay() + 6) % 7
+        user.lastCompletedDay = now
 
         const oldValue = user.completedDays || {}
 
-        user.lastCompletedDay = today
         const completedDays = {
             ...oldValue,
-            [dayOfWeek]: today,
+            [dayOfWeek]: now,
         }
 
         const getGemsAwarded = () => {
@@ -122,7 +129,6 @@ exports.saveScore = async ({ authUser, body }) => {
                     diamond: getGemsAwarded(),
                     score: allScoresList,
                     lastLessonCategoryName: body.category,
-                    lastCompleteLessonDate: new Date(),
                     last_played: {
                         skill: body.skill,
                         category: body.category,
@@ -136,7 +142,6 @@ exports.saveScore = async ({ authUser, body }) => {
         )
         result = true
     } else if (guest && authUser.email === 'GUEST') {
-        const today = getToday().toISOString().split('T')[0]
         let allScoresList = guest.score || []
 
         allScoresList.push({
@@ -157,15 +162,13 @@ exports.saveScore = async ({ authUser, body }) => {
             guest.streak = 1
         }
 
-        guest.lastCompletedDay = today
+        guest.lastCompletedDay = now
 
-        const dayOfWeek = (getToday().getDay() + 6) % 7
         const oldValue = guest.completedDays || {}
 
-        guest.lastCompletedDay = today
         const completedDays = {
             ...oldValue,
-            [dayOfWeek]: today,
+            [dayOfWeek]: now,
         }
 
         const getGemsAwarded = () => {
@@ -222,14 +225,6 @@ exports.saveXp = async ({ authUser, xp }) => {
     let result = null
     let user = await UserModel.findById(authUser._id).exec()
     let guest = await GuestModel.findById(authUser._id).exec()
-
-    /**
-     * NOTES
-     * 0 - Sunday
-     * 1 - Monday
-     */
-    const dayOfWeek = dayjs(new Date()).day()
-    // console.log('dayOfWeek', dayOfWeek)
 
     if (user) {
         ReferralService.validateReferral({ userId: authUser._id })

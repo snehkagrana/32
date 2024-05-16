@@ -4,6 +4,7 @@ const UserModel = require('../models/user')
 const {
     HOUR_OF_UNLIMITED_HEARTS,
     NUMBER_OF_SUCCESS_REFERRALS,
+    SERVER_TIMEZONE,
 } = require('../constants/app.constant')
 
 exports.create = async ({ referralCode, userId }) => {
@@ -40,6 +41,11 @@ exports.validateReferral = async ({ userId }) => {
         isValid: false,
     }).exec()
 
+    const dateString = new Date().toLocaleString('en-US', {
+        timeZone: SERVER_TIMEZONE,
+    })
+    const now = dayjs(dateString).format()
+
     if (user && referral) {
         const referralOwner = await UserModel.findById(referral.ownerId).exec()
 
@@ -61,12 +67,12 @@ exports.validateReferral = async ({ userId }) => {
             const getUnlimitedHearts = totalOfSuccessReferral => {
                 // prettier-ignore
                 if (totalOfSuccessReferral === NUMBER_OF_SUCCESS_REFERRALS) {
-                    return !referralOwner?.unlimitedHeart ? dayjs(new Date()).add(HOUR_OF_UNLIMITED_HEARTS, 'hour').toISOString() : referralOwner?.unlimitedHeart || null
+                    return !referralOwner?.unlimitedHeart ? dayjs(now).add(HOUR_OF_UNLIMITED_HEARTS, 'hour').toISOString() : referralOwner?.unlimitedHeart || null
                 }
                 else if(totalOfSuccessReferral > NUMBER_OF_SUCCESS_REFERRALS) {
                     const prevSuccessRef = Math.floor(totalOfSuccessReferral / NUMBER_OF_SUCCESS_REFERRALS);
                     if(totalOfSuccessReferral - (prevSuccessRef * NUMBER_OF_SUCCESS_REFERRALS) === 0) {
-                        return !referralOwner?.unlimitedHeart ? dayjs(new Date()).add(HOUR_OF_UNLIMITED_HEARTS, 'hour').toISOString() : referralOwner?.unlimitedHeart || null
+                        return !referralOwner?.unlimitedHeart ? dayjs(now).add(HOUR_OF_UNLIMITED_HEARTS, 'hour').toISOString() : referralOwner?.unlimitedHeart || null
                     } else {
                         return referralOwner?.unlimitedHeart || null
                     }
