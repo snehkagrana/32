@@ -1,22 +1,14 @@
 const cron = require('node-cron')
 const UserModel = require('../models/user')
 const GuestModel = require('../models/guest')
-const {
-    MAX_HEARTS,
-    HEARTS_REFILL_RATE,
-    NOTIFICATION_TYPE,
-} = require('../constants/app.constant')
+const { MAX_HEARTS, HEARTS_REFILL_RATE, NOTIFICATION_TYPE } = require('../constants/app.constant')
 const dayjs = require('dayjs')
 const LeaderBoardModel = require('../models/leaderboard')
-const {
-    MINIMUM_WEEKLY_XP_LEADER_BOARD,
-    MAX_WEEKLY_USERS_LEADER_BOARD,
-} = require('../constants/app.constant')
+const { MINIMUM_WEEKLY_XP_LEADER_BOARD, MAX_WEEKLY_USERS_LEADER_BOARD } = require('../constants/app.constant')
 const NotificationService = require('../services/notification.service')
-const {
-    STREAK_NOTIFICATION_TYPE,
-} = require('../constants/streak-notification.constant')
+const { STREAK_NOTIFICATION_TYPE, REMINDER_NOTIFICATION_TYPE } = require('../constants/notification-type.constant')
 const { daysDifference, getToday } = require('../utils/common.util')
+const { NotificationStreak, NotificationReminder } = require('../utils/notification.util')
 
 cron.schedule('* * * * *', async function () {
     const today = new Date()
@@ -90,10 +82,6 @@ cron.schedule('* * * * *', async function () {
     const dayOfWeek = dayjs(today).day()
     const hour = dayjs(today).hour()
     const minute = dayjs(today).minute()
-
-    console.log('dayOfWeek', dayOfWeek)
-    console.log('hour', hour)
-    console.log('minute', minute)
 
     const currentActiveLeaderBoard = await LeaderBoardModel.findOne({
         isActive: true,
@@ -181,11 +169,7 @@ cron.schedule('* * * * *', async function () {
     } else {
         if (dayOfWeek >= 1) {
             // if (dayOfWeek >= 2) { // DEBUG
-            const endDate = dayjs(today)
-                .add(6, 'day')
-                .hour(23)
-                .minute(50)
-                .toISOString()
+            const endDate = dayjs(today).add(6, 'day').hour(23).minute(50).toISOString()
 
             // prettier-ignore
             const users = await UserModel.find({ 'xp.weekly': { $gte: MINIMUM_WEEKLY_XP_LEADER_BOARD } }).limit(MAX_WEEKLY_USERS_LEADER_BOARD).exec()
@@ -229,9 +213,12 @@ cron.schedule('* * * * *', async function () {
     }
 })
 
-// Cronjob every 10th minute
-cron.schedule('*/10 * * * *', async function () {
-    const today = new Date()
+// Cronjob At every 5th minute.
+cron.schedule('*/5 * * * *', async function () {
+    // const today = new Date()
+    const today = new Date().toLocaleString('en-US', {
+        timeZone: 'Asia/Kolkata',
+    })
 
     /**
      * NOTES
@@ -242,81 +229,70 @@ cron.schedule('*/10 * * * *', async function () {
     const hour = dayjs(today).hour()
     const minute = dayjs(today).minute()
 
-    // console.log('dayOfWeek', dayOfWeek)
-    // console.log('hour', hour)
-    // console.log('minute', minute)
+    console.log('dayOfWeek', dayOfWeek)
+    console.log('hour', hour)
+    console.log('minute', minute)
 
     // user with 0 streak
-    const usersWithZeroStreak = await UserModel.find({
-        streak: { $lt: 1 },
+    const usersHasFCMToken = await UserModel.find({
         fcmToken: { $exists: true },
     }).exec()
 
-    // user with 0 streak
-    const usersWithStreaks = await UserModel.find({
-        streak: { $gt: 0 },
-        fcmToken: { $exists: true },
-    }).exec()
+    if (usersHasFCMToken.length > 0) {
+        console.log('usersHasFCMToken.length', usersHasFCMToken.length)
+        usersHasFCMToken.forEach(async user => {
+            console.log(`${user.email} - ${user.streak}`)
 
-    // User with zero streak
-    if (usersWithZeroStreak.length > 0) {
-        console.log('usersWithZeroStreak.length', usersWithZeroStreak.length)
-        usersWithZeroStreak.forEach(async user => {
-            // prettier-ignore
-            if (user.lastCompleteLessonDate && dayjs(today).diff(user.lastCompleteLessonDate, 'day') >= 3) {
-                if(user.lastDeliveredStreakNotificationType !== STREAK_NOTIFICATION_TYPE[1]({ name: user.displayName }).typeId) {
-                    console.log('usersWithZeroStreak.length 3', user.email)
-                    const notificationData = {
-                        title: STREAK_NOTIFICATION_TYPE[1]({ name: user.displayName }).title,
-                        body: STREAK_NOTIFICATION_TYPE[1]({ name: user.displayName }).body,
-                        userId: user._id,
-                        type: NOTIFICATION_TYPE.streak,
-                        dataId: null,
-                        streakNotificationTypeId: STREAK_NOTIFICATION_TYPE[1]({ name: user.displayName }).typeId
-                    }
-                    // await NotificationService.sendAndSaveNotification(notificationData)
-                } 
-            } else {
-                if(user.lastDeliveredStreakNotificationType !== STREAK_NOTIFICATION_TYPE[2]().typeId) {
-                    console.log('usersWithZeroStreak.length !3', user.displayName)
-                    const notificationData = {
-                        title: STREAK_NOTIFICATION_TYPE[2]().title,
-                        body: STREAK_NOTIFICATION_TYPE[2]().body,
-                        userId: user._id,
-                        type: NOTIFICATION_TYPE.streak,
-                        dataId: null,
-                        streakNotificationTypeId: STREAK_NOTIFICATION_TYPE[2]().typeId
-                    }
-                    // await NotificationService.sendAndSaveNotification(notificationData)
-                } 
-            }
-        })
-    }
-
-    // User has streak
-    if (usersWithStreaks.length > 0) {
-        console.log('usersWithStreaks.length', usersWithStreaks.length)
-        usersWithStreaks.forEach(async user => {
-            if (user.lastCompleteLessonDate) {
-                // const daysDiff = daysDifference(user.lastCompleteLessonDate)
-                // const dayOfWeek = (today.getDate() + 6) % 7
-                if (dayjs(user.lastCompleteLessonDate).day() < dayOfWeek) {
-                    // prettier-ignore
-                    if (user.lastDeliveredStreakNotificationType !== STREAK_NOTIFICATION_TYPE[3]({ streakNumber: user.streak }).typeId) {
-                        const notificationData = {
-                            title: STREAK_NOTIFICATION_TYPE[3]({ streakNumber: user.streak }).title,
-                            body: STREAK_NOTIFICATION_TYPE[3]({ streakNumber: user.streak }).body,
-                            userId: user._id,
-                            type: NOTIFICATION_TYPE.streak,
-                            dataId: null,
-                            streakNotificationTypeId: STREAK_NOTIFICATION_TYPE[3]({ streakNumber: user.streak }).typeId
-                        }
-                        // await NotificationService.sendAndSaveNotification(
-                        //     notificationData
-                        // )
-                    }
+            /**
+             * User streak more than 0
+             */
+            if (user.streak > 0) {
+                console.log(`->> diff ${user.email} - ${dayjs(today).diff(user.lastCompleteLessonDate, 'day')}`)
+                // Check if lesson done, if not - send Streak Reminder at 9:30PM.
+                if (user.lastCompleteLessonDate && dayjs(today).diff(user.lastCompleteLessonDate, 'day') !== 0) {
                 }
+            } else if (user.streak === 0) {
+                /**
+                 * User with 0 streak
+                 */
             }
         })
     }
+
+    /**
+     * -------------
+     * LEADER BOARD NOTIFICATION
+     * -------------
+     */
+
+    /**
+     * -------------
+     * LESSON REMINDER
+     * -------------
+     */
 })
+
+// const today = new Date().toLocaleString('en-US', {
+//     timeZone: 'Asia/Kolkata',
+// })
+
+// const dayOfWeek = dayjs(today).day()
+// const hour = dayjs(today).hour()
+// const minute = dayjs(today).minute()
+
+// console.log('->>>>>> dayOfWeek', dayOfWeek)
+// console.log('->>>>>> hour', hour)
+
+// const jakartaTime = new Date().toLocaleString()
+// const kolkataTime = new Date().toLocaleString('en-US', {
+//     timeZone: 'Asia/Kolkata',
+// })
+
+// console.log('->>> Asia/Jakarta', jakartaTime)
+// console.log('->>> Asia/Kolkata', kolkataTime)
+
+// const DAYJS_JAKARTA = dayjs(jakartaTime)
+// const DAYJS_KOLKATA = dayjs(kolkataTime)
+
+// console.log('->>> DAYJS_JAKARTA', DAYJS_JAKARTA.format())
+// console.log('->>> DAYJS_KOLKATA', DAYJS_KOLKATA.format())

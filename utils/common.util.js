@@ -34,9 +34,7 @@ const generateUsername = fullName => {
 }
 
 function convertUTCDateToLocalDate(date) {
-    var newDate = new Date(
-        date.getTime() + date.getTimezoneOffset() * 60 * 1000
-    )
+    var newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000)
 
     var offset = date.getTimezoneOffset() / 60
     var hours = date.getHours()
@@ -54,6 +52,10 @@ function validateEmail(email) {
         )
 }
 
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max)
+}
+
 module.exports = {
     getToday,
     daysDifference,
@@ -61,4 +63,5 @@ module.exports = {
     generateUsername,
     convertUTCDateToLocalDate,
     validateEmail,
+    getRandomInt,
 }

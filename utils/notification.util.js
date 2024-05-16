@@ -1,4 +1,8 @@
 const admin = require('firebase-admin')
+const NotificationService = require('../services/notification.service')
+const { STREAK_NOTIFICATION_TYPE, REMINDER_NOTIFICATION_TYPE } = require('../constants/notification-type.constant')
+const { NOTIFICATION_TYPE } = require('../constants/app.constant')
+const { getRandomInt } = require('./common.util')
 
 const sendNotification = async ({ token, title, body, data }) => {
     try {
@@ -32,4 +36,39 @@ const sendNotification = async ({ token, title, body, data }) => {
         throw error
     }
 }
-module.exports = { sendNotification }
+
+const NotificationStreak = {
+    sendNotification: async ({ typeId, user, streakNumber, hoursLeft }) => {
+        const data = {
+            title: STREAK_NOTIFICATION_TYPE[typeId]({ name: user.displayName, streakNumber, hoursLeft }).title,
+            body: STREAK_NOTIFICATION_TYPE[typeId]({ name: user.displayName }).body,
+            userId: user._id,
+            type: NOTIFICATION_TYPE.streak,
+            dataId: null,
+            streakNotificationTypeId: STREAK_NOTIFICATION_TYPE[typeId]({ name: user.displayName }).typeId,
+        }
+        await NotificationService.sendAndSaveNotification(data)
+    },
+
+    sendRandomReminder: async () => {},
+}
+
+const NotificationReminder = {
+    sendNotification: async ({ user }) => {
+        const TYPE_ID = getRandomInt(Object.keys(REMINDER_NOTIFICATION_TYPE).length)
+        const data = {
+            title: REMINDER_NOTIFICATION_TYPE[TYPE_ID]({ name: user.displayName }).title,
+            body: REMINDER_NOTIFICATION_TYPE[TYPE_ID]({ name: user.displayName }).body,
+            userId: user._id,
+            type: NOTIFICATION_TYPE.streak,
+            dataId: null,
+        }
+        await NotificationService.sendAndSaveNotification(data)
+    },
+}
+
+module.exports = {
+    sendNotification,
+    NotificationStreak,
+    NotificationReminder,
+}

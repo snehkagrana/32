@@ -51,14 +51,7 @@ exports.getUnreadNotification = async ({ userId }) => {
     return notifications.length || 0
 }
 
-exports.sendAndSaveNotification = async ({
-    userId,
-    title,
-    body,
-    type,
-    dataId,
-    streakNotificationTypeId,
-}) => {
+exports.sendAndSaveNotification = async ({ userId, title, body, type, dataId, streakNotificationTypeId }) => {
     let result = false
     const user = await UserModel.findOne({ _id: userId })
 
@@ -81,7 +74,7 @@ exports.sendAndSaveNotification = async ({
         if (streakNotificationTypeId) {
             // prettier-ignore
             await UserModel.updateOne(
-                { _id: userId },
+                { _id: userId }, 
                 {
                     $set: { lastDeliveredStreakNotificationType: streakNotificationTypeId },
                 }
@@ -108,13 +101,7 @@ exports.admin_getNotifeeUsers = async () => {
     return []
 }
 
-exports.admin_sendGeneralNotification = async ({
-    users,
-    title,
-    body,
-    imageUrl,
-    authUserId,
-}) => {
+exports.admin_sendGeneralNotification = async ({ users, title, body, imageUrl, authUserId }) => {
     let result = false
 
     const NAME_PATTERN = '[[NAME]]'
@@ -174,11 +161,7 @@ exports.admin_createNotificationTemplate = body => {
 
 exports.admin_updateNotificationTemplate = async body => {
     const { _id, ...rest } = body
-    return await NotificationTemplateModel.findOneAndUpdate(
-        { _id: _id },
-        rest,
-        { new: true }
-    )
+    return await NotificationTemplateModel.findOneAndUpdate({ _id: _id }, rest, { new: true })
 }
 
 exports.admin_deleteNotificationTemplate = async id => {
