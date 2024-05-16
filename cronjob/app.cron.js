@@ -1,17 +1,47 @@
 const cron = require('node-cron')
 const UserModel = require('../models/user')
 const GuestModel = require('../models/guest')
-const { MAX_HEARTS, HEARTS_REFILL_RATE, NOTIFICATION_TYPE } = require('../constants/app.constant')
+const {
+    MAX_HEARTS,
+    HEARTS_REFILL_RATE,
+    NOTIFICATION_TYPE,
+    SERVER_TIMEZONE,
+} = require('../constants/app.constant')
 const dayjs = require('dayjs')
 const LeaderBoardModel = require('../models/leaderboard')
-const { MINIMUM_WEEKLY_XP_LEADER_BOARD, MAX_WEEKLY_USERS_LEADER_BOARD } = require('../constants/app.constant')
+const {
+    MINIMUM_WEEKLY_XP_LEADER_BOARD,
+    MAX_WEEKLY_USERS_LEADER_BOARD,
+} = require('../constants/app.constant')
 const NotificationService = require('../services/notification.service')
-const { STREAK_NOTIFICATION_TYPE, REMINDER_NOTIFICATION_TYPE } = require('../constants/notification-type.constant')
+const {
+    STREAK_NOTIFICATION_TYPE,
+    REMINDER_NOTIFICATION_TYPE,
+} = require('../constants/notification-type.constant')
 const { daysDifference, getToday } = require('../utils/common.util')
-const { NotificationStreak, NotificationReminder } = require('../utils/notification.util')
+const {
+    NotificationStreak,
+    NotificationReminder,
+} = require('../utils/notification.util')
 
 cron.schedule('* * * * *', async function () {
-    const today = new Date()
+    const today = new Date().toLocaleString('en-US', {
+        timeZone: SERVER_TIMEZONE,
+    })
+
+    /**
+     * NOTES
+     * dayOfWeek 0 - Sunday
+     * dayOfWeek 1 - Monday
+     */
+    const dayOfWeek = dayjs(today).day()
+    const hour = dayjs(today).hour()
+    const minute = dayjs(today).minute()
+
+    console.log('dayOfWeek', dayOfWeek)
+    console.log('hour', hour)
+    console.log('minute', minute)
+
     const users = await UserModel.find({
         heart: { $lt: MAX_HEARTS },
         unlimitedHeart: null,
@@ -73,16 +103,9 @@ cron.schedule('* * * * *', async function () {
         })
     }
 
-    // Leaderboard
     /**
-     * NOTES
-     * dayOfWeek 0 - Sunday
-     * dayOfWeek 1 - Monday
+     * Leaderboard
      */
-    const dayOfWeek = dayjs(today).day()
-    const hour = dayjs(today).hour()
-    const minute = dayjs(today).minute()
-
     const currentActiveLeaderBoard = await LeaderBoardModel.findOne({
         isActive: true,
     }).exec()
@@ -169,7 +192,11 @@ cron.schedule('* * * * *', async function () {
     } else {
         if (dayOfWeek >= 1) {
             // if (dayOfWeek >= 2) { // DEBUG
-            const endDate = dayjs(today).add(6, 'day').hour(23).minute(50).toISOString()
+            const endDate = dayjs(today)
+                .add(6, 'day')
+                .hour(23)
+                .minute(50)
+                .toISOString()
 
             // prettier-ignore
             const users = await UserModel.find({ 'xp.weekly': { $gte: MINIMUM_WEEKLY_XP_LEADER_BOARD } }).limit(MAX_WEEKLY_USERS_LEADER_BOARD).exec()
@@ -215,9 +242,8 @@ cron.schedule('* * * * *', async function () {
 
 // Cronjob At every 5th minute.
 cron.schedule('*/5 * * * *', async function () {
-    // const today = new Date()
     const today = new Date().toLocaleString('en-US', {
-        timeZone: 'Asia/Kolkata',
+        timeZone: SERVER_TIMEZONE,
     })
 
     /**
@@ -229,9 +255,9 @@ cron.schedule('*/5 * * * *', async function () {
     const hour = dayjs(today).hour()
     const minute = dayjs(today).minute()
 
-    console.log('dayOfWeek', dayOfWeek)
-    console.log('hour', hour)
-    console.log('minute', minute)
+    // console.log('dayOfWeek', dayOfWeek)
+    // console.log('hour', hour)
+    // console.log('minute', minute)
 
     // user with 0 streak
     const usersHasFCMToken = await UserModel.find({
@@ -247,9 +273,17 @@ cron.schedule('*/5 * * * *', async function () {
              * User streak more than 0
              */
             if (user.streak > 0) {
-                console.log(`->> diff ${user.email} - ${dayjs(today).diff(user.lastCompleteLessonDate, 'day')}`)
+                console.log(
+                    `->> diff ${user.email} - ${dayjs(today).diff(
+                        user.lastCompletedDay,
+                        'day'
+                    )}`
+                )
                 // Check if lesson done, if not - send Streak Reminder at 9:30PM.
-                if (user.lastCompleteLessonDate && dayjs(today).diff(user.lastCompleteLessonDate, 'day') !== 0) {
+                if (
+                    user.lastCompletedDay &&
+                    dayjs(today).diff(user.lastCompletedDay, 'day') !== 0
+                ) {
                 }
             } else if (user.streak === 0) {
                 /**
