@@ -347,7 +347,6 @@ exports.googleSignInMobile = async ({
             followers: [],
             fcmToken: '',
             lastLessonCategoryName: '',
-            lastCompleteLessonDate: null,
         }
 
         // sync guest data

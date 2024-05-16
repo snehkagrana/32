@@ -23,6 +23,8 @@ const MINIMUM_WEEKLY_LESSON_LEADER_BOARD = 0
 
 const MAX_WEEKLY_USERS_LEADER_BOARD = 1000
 
+const SERVER_TIMEZONE = 'Asia/Kolkata'
+
 const NOTIFICATION_TYPE = {
     common: 'common',
     reminder: 'reminder',
@@ -46,4 +48,5 @@ module.exports = {
     MINIMUM_WEEKLY_LESSON_LEADER_BOARD,
     MAX_WEEKLY_USERS_LEADER_BOARD,
     NOTIFICATION_TYPE,
+    SERVER_TIMEZONE,
 }

@@ -64,7 +64,6 @@ const GuestSchema = new mongoose.Schema({
     createdAt: Date,
     lastActiveAt: Date,
     lastLessonCategoryName: String,
-    lastCompleteLessonDate: Date,
 })
 
 module.exports = mongoose.model('Guest', GuestSchema)
