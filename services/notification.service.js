@@ -201,8 +201,8 @@ exports.admin_createNotificationTemplate = body => {
     const now = dayjs(dateString).format()
 
     return NotificationTemplateModel.create({
-        createdAt: now,
         ...body,
+        createdAt: now,
     })
 }
 
