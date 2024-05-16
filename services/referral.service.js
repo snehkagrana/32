@@ -10,11 +10,6 @@ const {
 exports.create = async ({ referralCode, userId }) => {
     let result = false
 
-    const dateString = new Date().toLocaleString('en-US', {
-        timeZone: SERVER_TIMEZONE,
-    })
-    const now = dayjs(dateString).format()
-
     const owner = await UserModel.findOne({
         referralCode,
     }).exec()
@@ -31,7 +26,6 @@ exports.create = async ({ referralCode, userId }) => {
             userId,
             ownerId: owner._id,
             isValid: false,
-            registerAt: now,
         })
         result = true
     }
