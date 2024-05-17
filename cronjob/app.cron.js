@@ -370,6 +370,25 @@ cron.schedule('*/5 * * * *', async function () {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         }
                     }
+                } else if (DIFF_DAY === 0) {
+                    const userStreak = user.streak
+                    // (When streak reaches a milestone - 5-day, 15-day, 25-day, 30-day, 50-day, 75-day, 100-day)
+                    if (
+                        userStreak === 5 ||
+                        userStreak === 15 ||
+                        userStreak === 25 ||
+                        userStreak === 30 ||
+                        userStreak === 50 ||
+                        userStreak === 75 ||
+                        userStreak === 100
+                    ) {
+                        await NotificationStreak.sendReminder({
+                            user,
+                            typeId: 'STREAK_COMBO',
+                            streakNumber: user.streak,
+                            lessonName: user.lastLessonCategoryName,
+                        })
+                    }
                 }
             } else if (user.streak === 0) {
                 /**
