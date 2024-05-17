@@ -67,7 +67,6 @@ exports.sendAndSaveNotification = async ({
     const user = await UserModel.findOne({ _id: userId })
 
     const NOW = Date.now()
-
     const LOCALE_DATE_NOW = moment.tz(NOW, SERVER_TIMEZONE)
 
     if (user?.fcmToken) {
@@ -79,7 +78,6 @@ exports.sendAndSaveNotification = async ({
             dataId: dataId || null,
             readAt: null,
             createdAt: LOCALE_DATE_NOW,
-            readAt: NOW,
         })
 
         await sendNotification({
