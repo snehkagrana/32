@@ -307,7 +307,7 @@ cron.schedule('*/5 * * * *', async function () {
                  */
                 if (user?.lastCompletedDay) {
                     // prettier-ignore
-                    const DIFF_DAY = dayjs(TODAY).diff(user.lastHeartAccruedAt, 'day')
+                    const DIFF_DAY = dayjs(TODAY).diff(user.lastCompletedDay, 'day')
                     console.log(`->>DIFF_DAY -> ${user.email} - ${DIFF_DAY}`)
                 }
             }
