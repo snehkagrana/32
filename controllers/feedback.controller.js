@@ -1,13 +1,6 @@
-const dayjs = require('dayjs')
-const { SERVER_TIMEZONE } = require('../constants/app.constant')
 const FeedbackService = require('../services/feedback.service')
 
 exports.submitQuizFeedback = async (req, res, next) => {
-    const dateString = new Date().toLocaleString('en-US', {
-        timeZone: SERVER_TIMEZONE,
-    })
-    const now = dayjs(dateString).format()
-
     const email = req?.user?.email || req.body.email
     const result = await FeedbackService.submitQuizFeedback({
         email,
@@ -15,7 +8,7 @@ exports.submitQuizFeedback = async (req, res, next) => {
         category: req.body.category,
         subCategory: req.body.subCategory,
         feedback: req.body.feedback,
-        submittedAt: now,
+        submittedAt: new Date(),
     })
     if (result) {
         return res.json({

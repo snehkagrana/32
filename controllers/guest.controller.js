@@ -1,17 +1,11 @@
 const GuestService = require('../services/guest.service')
 const jwtUtil = require('../utils/jwt.util')
 const { appConfig } = require('../configs/app.config')
-const { DEFAULT_GUEST_NAME, SERVER_TIMEZONE } = require('../constants/app.constant')
+const { DEFAULT_GUEST_NAME } = require('../constants/app.constant')
 const base64url = require('base64url')
 const crypto = require('crypto')
-const dayjs = require('dayjs')
 
 exports.init = async (req, res) => {
-    const dateString = new Date().toLocaleString('en-US', {
-        timeZone: SERVER_TIMEZONE,
-    })
-    const now = dayjs(dateString).format()
-
     const isExist = await GuestService.findGuestById(req.body.email)
     const registerToken = base64url(crypto.randomBytes(20))
 
@@ -37,9 +31,9 @@ exports.init = async (req, res) => {
             weekly: 0,
         },
         heart: appConfig.defaultHeart || 5,
-        lastHeartAccruedAt: now,
+        lastHeartAccruedAt: new Date(),
         registerToken,
-        createdAt: now,
+        createdAt: new Date(),
     }
 
     const guest = await GuestService.createGuest(data)

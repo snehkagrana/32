@@ -10,17 +10,10 @@ const {
     generateReferralCode,
     generateUsername,
 } = require('./utils/common.util')
-const { SERVER_TIMEZONE } = require('./constants/app.constant')
-const dayjs = require('dayjs')
 require('dotenv').config()
 
 module.exports = function (passport) {
     const refCode = generateReferralCode()
-    const dateString = new Date().toLocaleString('en-US', {
-        timeZone: SERVER_TIMEZONE,
-    })
-    const now = dayjs(dateString).format()
-
     passport.use(
         new localStrategy(
             { usernameField: 'email' },
@@ -103,11 +96,11 @@ module.exports = function (passport) {
                             weekly: 0,
                         },
                         heart: appConfig.defaultHeart || 5,
-                        lastHeartAccruedAt: now,
+                        lastHeartAccruedAt: new Date(),
                         unlimitedHeart: null,
                         referralCode: refCode,
-                        registeredAt: now,
-                        emailVerifiedAt: now,
+                        registeredAt: new Date(),
+                        emailVerifiedAt: new Date(),
                         following: [],
                         followers: [],
                         fcmToken: '',

@@ -1,21 +1,17 @@
-const dayjs = require('dayjs')
 const { default: ShortUniqueId } = require('short-unique-id')
-const { SERVER_TIMEZONE } = require('../constants/app.constant')
 
 const getToday = () => {
     return new Date()
 }
 
 const daysDifference = lastDate => {
-    // const day = lastDate ? lastDate.toISOString().split('T')[0] : 0
-    // const lastCompletedDay = new Date(day)
-    // return Math.floor((today - lastCompletedDay) / (1000 * 60 * 60 * 24))
-    if (!lastDate) return
-    const dateString = new Date().toLocaleString('en-US', {
-        timeZone: SERVER_TIMEZONE,
-    })
-    const now = dayjs(dateString).format()
-    return dayjs(now).diff(lastDate, 'day')
+    const today = new Date()
+
+    const day = lastDate ? lastDate.toISOString().split('T')[0] : 0
+
+    const lastCompletedDay = new Date(day)
+
+    return Math.floor((today - lastCompletedDay) / (1000 * 60 * 60 * 24))
 }
 
 const generateReferralCode = () => {
@@ -38,9 +34,7 @@ const generateUsername = fullName => {
 }
 
 function convertUTCDateToLocalDate(date) {
-    var newDate = new Date(
-        date.getTime() + date.getTimezoneOffset() * 60 * 1000
-    )
+    var newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000)
 
     var offset = date.getTimezoneOffset() / 60
     var hours = date.getHours()

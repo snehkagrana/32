@@ -6,12 +6,8 @@ const UserModel = require('../models/user')
 const { generateOTP } = require('../utils/otp.util')
 const { validateEmail } = require('../utils/common.util')
 const { sendNotification } = require('../utils/notification.util')
-const {
-    NOTIFICATION_TYPE,
-    SERVER_TIMEZONE,
-} = require('../constants/app.constant')
+const { NOTIFICATION_TYPE } = require('../constants/app.constant')
 const user = require('../models/user')
-const dayjs = require('dayjs')
 
 exports.getNotificationList = async ({ userId }) => {
     const notifications = await NotificationModel.find({ userId }).sort({
@@ -21,16 +17,11 @@ exports.getNotificationList = async ({ userId }) => {
 }
 
 exports.markAllRead = async ({ userId }) => {
-    const dateString = new Date().toLocaleString('en-US', {
-        timeZone: SERVER_TIMEZONE,
-    })
-    const now = dayjs(dateString).format()
-
     await NotificationModel.updateMany(
         { userId },
         {
             $set: {
-                readAt: now,
+                readAt: new Date(),
             },
         },
         { new: true }
@@ -40,17 +31,11 @@ exports.markAllRead = async ({ userId }) => {
 
 exports.markRead = async ({ userId, notificationId }) => {
     // update notification
-
-    const dateString = new Date().toLocaleString('en-US', {
-        timeZone: SERVER_TIMEZONE,
-    })
-    const now = dayjs(dateString).format()
-
     await NotificationModel.findOneAndUpdate(
         { _id: notificationId },
         {
             $set: {
-                readAt: now,
+                readAt: new Date(),
             },
         },
         { new: true }
@@ -66,14 +51,7 @@ exports.getUnreadNotification = async ({ userId }) => {
     return notifications.length || 0
 }
 
-exports.sendAndSaveNotification = async ({
-    userId,
-    title,
-    body,
-    type,
-    dataId,
-    streakNotificationTypeId,
-}) => {
+exports.sendAndSaveNotification = async ({ userId, title, body, type, dataId, streakNotificationTypeId }) => {
     let result = false
     const user = await UserModel.findOne({ _id: userId })
 
@@ -123,19 +101,8 @@ exports.admin_getNotifeeUsers = async () => {
     return []
 }
 
-exports.admin_sendGeneralNotification = async ({
-    users,
-    title,
-    body,
-    imageUrl,
-    authUserId,
-}) => {
+exports.admin_sendGeneralNotification = async ({ users, title, body, imageUrl, authUserId }) => {
     let result = false
-
-    const dateString = new Date().toLocaleString('en-US', {
-        timeZone: SERVER_TIMEZONE,
-    })
-    const now = dayjs(dateString).format()
 
     const NAME_PATTERN = '[[NAME]]'
     const EMAIL_PATTERN = '[[EMAIL]]'
@@ -174,7 +141,7 @@ exports.admin_sendGeneralNotification = async ({
             body,
             imageUrl: imageUrl || '',
             type: NOTIFICATION_TYPE.common,
-            createdAt: now,
+            createdAt: new Date(),
             users,
         })
     }
@@ -194,11 +161,7 @@ exports.admin_createNotificationTemplate = body => {
 
 exports.admin_updateNotificationTemplate = async body => {
     const { _id, ...rest } = body
-    return await NotificationTemplateModel.findOneAndUpdate(
-        { _id: _id },
-        rest,
-        { new: true }
-    )
+    return await NotificationTemplateModel.findOneAndUpdate({ _id: _id }, rest, { new: true })
 }
 
 exports.admin_deleteNotificationTemplate = async id => {

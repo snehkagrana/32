@@ -46,12 +46,16 @@ const AuthGuard = require('./middlewares/auth.middleware');
 const { initializeDiamondUser, calculateDiamondUser } = require("./utils/reward.util");
 const { mailTransporter } = require("./utils/mail.util");
 const ReferralService = require('./services/referral.service')
-const dayjs = require("dayjs");
+// const dayjs = require("dayjs");
 const AdminMiddleware = require('./middlewares/admin.middleware')
 const firebaseAdmin = require("firebase-admin");
-const { SERVER_TIMEZONE } = require("./constants/app.constant");
 
 require('./cronjob/app.cron')
+// require('./cronjob/notification.cron')
+// require('./cronjob/leaderboard.cronjob')
+// require('./cronjob/friendship.cronjob')
+
+// dayjs.tz.setDefault("Asia/Kolkata")
 
 var serviceAccount = require("./fingo-8fe5c-firebase-adminsdk-qd52d-1db764cff8.json");
 
@@ -2042,9 +2046,6 @@ app.post("/server/addskill", AuthGuard, AdminMiddleware, (req, res) => {
     });
 });
 
-/**
- * @deprecated
- */
 app.post("/server/savescore", AuthGuard, (req, res) => {
     User.findOne({ email: req.user.email }, async (err, doc) => {
         if (err) {
@@ -2136,10 +2137,6 @@ app.post("/server/savescore", AuthGuard, (req, res) => {
         }
     });
 });
-
-/**
- * @deprecated
- */
 app.post("/server/savexp", AuthGuard, (req, res) => {
     const {xp} = req.body;
     User.findOne({ email: req.user.email }, async (err, doc) => {
@@ -2207,14 +2204,15 @@ const isNextDay = (lastDate) => {
     );
 };
 
-const daysDifference = lastDate => {
-    if (!lastDate) return
-    const dateString = new Date().toLocaleString('en-US', {
-        timeZone: SERVER_TIMEZONE,
-    })
-    const now = dayjs(dateString).format()
-    return dayjs(now).diff(lastDate, 'day')
-}
+const daysDifference = (lastDate) => {
+    const todayUTC = getToday();
+
+    const day = lastDate ? lastDate.toISOString().split("T")[0] : 0;
+    const lastCompletedDay = new Date(day);
+    const lastCompletedDayUTC = new Date(Date.UTC(lastCompletedDay.getUTCFullYear(), lastCompletedDay.getUTCMonth(), lastCompletedDay.getUTCDate()));
+
+    return Math.floor((todayUTC - lastCompletedDayUTC) / (1000 * 60 * 60 * 24));
+};
 
 const getToday = () => {
     const now = new Date();

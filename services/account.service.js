@@ -3,11 +3,7 @@ const UserModel = require('../models/user')
 const { generateOTP } = require('../utils/otp.util')
 const { validateEmail } = require('../utils/common.util')
 const NotificationService = require('../services/notification.service')
-const {
-    NOTIFICATION_TYPE,
-    SERVER_TIMEZONE,
-} = require('../constants/app.constant')
-const dayjs = require('dayjs')
+const { NOTIFICATION_TYPE } = require('../constants/app.constant')
 
 var ObjectId = require('mongoose').Types.ObjectId
 
@@ -86,11 +82,6 @@ exports.sendCodeVerifyEmail = async ({ email }) => {
 }
 
 exports.verifyEmail = async ({ code, email }) => {
-    const dateString = new Date().toLocaleString('en-US', {
-        timeZone: SERVER_TIMEZONE,
-    })
-    const now = dayjs(dateString).format()
-
     let result = false
     let user = await UserModel.findOne({ email }).exec()
     if (user && user?.verifyEmailCode === code) {
@@ -99,7 +90,7 @@ exports.verifyEmail = async ({ code, email }) => {
             {
                 $set: {
                     verifyEmailCode: '',
-                    emailVerifiedAt: now,
+                    emailVerifiedAt: new Date(),
                 },
             },
             { new: true }
@@ -157,11 +148,6 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
     let authUser = await UserModel.findOne({ _id: authUserId }).exec()
     let user = await UserModel.findOne({ _id: userId }).exec()
 
-    const dateString = new Date().toLocaleString('en-US', {
-        timeZone: SERVER_TIMEZONE,
-    })
-    const now = dayjs(dateString).format()
-
     let notificationData = null
 
     if (authUser && user && action && userId !== authUserId) {
@@ -189,8 +175,8 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
                     totalXp: user?.xp?.total ? user.xp.total : 0,
                     level: user?.xp?.level ? user.xp.level : 1,
                     imgPath: user?.imgPath ? user.imgPath : '',
-                    createdAt: now,
-                    updatedAt: now,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
                 },
             ]
             // update user
@@ -215,8 +201,8 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
                     totalXp: authUser?.xp?.total ? authUser.xp.total : 0,
                     level: authUser?.xp?.level ? authUser.xp.level : 1,
                     imgPath: authUser?.imgPath ? authUser.imgPath : '',
-                    createdAt: now,
-                    updatedAt: now,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
                 },
             ]
             user = await UserModel.findOneAndUpdate(
@@ -270,11 +256,6 @@ exports.syncFriendship = async ({ userId }) => {
     let result = false
     let authUser = await UserModel.findOne({ _id: userId }).exec()
 
-    const dateString = new Date().toLocaleString('en-US', {
-        timeZone: SERVER_TIMEZONE,
-    })
-    const now = dayjs(dateString).format()
-
     const followers = authUser?.followers || []
     const following = authUser?.following || []
 
@@ -288,7 +269,7 @@ exports.syncFriendship = async ({ userId }) => {
                 totalXp: _user?.xp?.total ? _user.xp.total : f.totalXp,
                 level: _user?.xp?.level ? _user.xp.level : f.level,
                 imgPath: _user?.imgPath ? _user.imgPath : '',
-                updatedAt: now,
+                updatedAt: new Date(),
                 createdAt: f.createdAt,
                 userId: f.userId,
             })
@@ -316,7 +297,7 @@ exports.syncFriendship = async ({ userId }) => {
                 totalXp: _user?.xp?.total ? _user.xp.total : f.totalXp,
                 level: _user?.xp?.level ? _user.xp.level : f.level,
                 imgPath: _user?.imgPath ? _user.imgPath : '',
-                updatedAt: now,
+                updatedAt: new Date(),
                 createdAt: f.createdAt,
                 userId: f.userId,
             })

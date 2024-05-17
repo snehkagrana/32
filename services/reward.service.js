@@ -7,10 +7,7 @@ const {
     sendEmailUserRedeemGiftCard,
     sendEmailGiftCardRunOut,
 } = require('../email/send-email')
-const {
-    MAX_REDEEM_GIFT_CARD_PER_MONTH,
-    SERVER_TIMEZONE,
-} = require('../constants/app.constant')
+const { MAX_REDEEM_GIFT_CARD_PER_MONTH } = require('../constants/app.constant')
 
 var ObjectId = require('mongoose').Types.ObjectId
 
@@ -146,10 +143,7 @@ exports.upload = async (file, id) => {
 }
 
 exports.redeem = async (email, body) => {
-    const dateString = new Date().toLocaleString('en-US', {
-        timeZone: SERVER_TIMEZONE,
-    })
-    const now = dayjs(dateString).format()
+    const today = new Date()
     let reward = await RewardModel.findById(body.itemId)
     let user = await UserModel.findOne({ email })
     let result = null
@@ -166,7 +160,7 @@ exports.redeem = async (email, body) => {
     const isLimitRedeem = () => {
         const previousRewards = user.rewards.filter(x => {
             // prettier-ignore
-            if(x?.redeemedAt && dayjs(x.redeemedAt).isSame(dayjs(now).toISOString(), 'month')) {
+            if(x?.redeemedAt && dayjs(x.redeemedAt).isSame(dayjs(today).toISOString(), 'month')) {
                 return true
             }
         })
@@ -192,7 +186,7 @@ exports.redeem = async (email, body) => {
                 notes: body.notes,
                 isRedeemed: true,
                 hasSeen: true,
-                redeemedAt: now,
+                redeemedAt: new Date().toISOString(),
             }
             if (userRewards.length > 0) {
                 return [...userRewards, newUserReward]
@@ -249,7 +243,7 @@ exports.redeem = async (email, body) => {
             giftCardName: reward.name,
             code: rewardVariantStillExists.claimCode,
             pin: rewardVariantStillExists.pin,
-            time: dayjs(dateString).format('DD MMM, YYYY, HH:mm'),
+            time: dayjs(new Date()).format('DD MMM, YYYY, HH:mm'),
         })
 
         /**
@@ -279,10 +273,7 @@ exports.claimReward = async ({ user: userParams, type }) => {
     let user = await UserModel.findById(userParams._id).exec()
     let guest = await GuestModel.findById(userParams._id).exec()
 
-    const dateString = new Date().toLocaleString('en-US', {
-        timeZone: SERVER_TIMEZONE,
-    })
-    const now = dayjs(dateString).format()
+    const today = new Date().toISOString()
 
     let result = null
 
@@ -292,12 +283,12 @@ exports.claimReward = async ({ user: userParams, type }) => {
         if (user) {
             // check claimed gems from daily quest
             // prettier-ignore
-            if (!user.lastClaimedGemsDailyQuest || (user.lastClaimedGemsDailyQuest && dayjs(user.lastClaimedGemsDailyQuest).isBefore(dayjs(now).toISOString(), 'day'))) {
+            if (!user.lastClaimedGemsDailyQuest || (user.lastClaimedGemsDailyQuest && dayjs(user.lastClaimedGemsDailyQuest).isBefore(dayjs(today).toISOString(), 'day'))) {
                 user = await UserModel.findOneAndUpdate(
                     { email: user.email },
                     {
                         $set: {
-                            lastClaimedGemsDailyQuest: now,
+                            lastClaimedGemsDailyQuest: new Date(),
                             diamond: user.diamond + DIAMOND_AWARDED,
                         },
                     },
@@ -309,12 +300,12 @@ exports.claimReward = async ({ user: userParams, type }) => {
             }
         } else if (guest && userParams.email === 'GUEST') {
             // prettier-ignore
-            if (!guest.lastClaimedGemsDailyQuest || (guest.lastClaimedGemsDailyQuest && dayjs(guest.lastClaimedGemsDailyQuest).isBefore(dayjs(now).toISOString(), 'day'))) {
+            if (!guest.lastClaimedGemsDailyQuest || (guest.lastClaimedGemsDailyQuest && dayjs(guest.lastClaimedGemsDailyQuest).isBefore(dayjs(today).toISOString(), 'day'))) {
                 guest = await GuestModel.findOneAndUpdate(
                     { _id: guest._id },
                     {
                         $set: {
-                            lastClaimedGemsDailyQuest: now,
+                            lastClaimedGemsDailyQuest: new Date(),
                             diamond: guest.diamond + DIAMOND_AWARDED,
                         },
                     },

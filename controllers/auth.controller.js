@@ -5,12 +5,7 @@ const jwtConfig = require('../configs/jwt.config')
 const bcryptUtil = require('../utils/bcrypt.util')
 const jwtUtil = require('../utils/jwt.util')
 const { appConfig } = require('../configs/app.config')
-const {
-    generateReferralCode,
-    generateUsername,
-} = require('../utils/common.util')
-const { SERVER_TIMEZONE } = require('../constants/app.constant')
-const dayjs = require('dayjs')
+const { generateReferralCode, generateUsername } = require('../utils/common.util')
 
 exports.sendRegisterCode = async (req, res) => {
     const isExist = await AuthService.findUserByEmail(req.body.email)
@@ -35,10 +30,7 @@ exports.checkRegisterCode = async (req, res) => {
 }
 
 exports.verifyRegisterCode = async (req, res) => {
-    const result = await AuthService.verifyRegisterCode(
-        req.body.email,
-        req.body.code
-    )
+    const result = await AuthService.verifyRegisterCode(req.body.email, req.body.code)
     if (result) {
         return res.json({ message: 'Verified' })
     }
@@ -48,11 +40,6 @@ exports.verifyRegisterCode = async (req, res) => {
 exports.register = async (req, res) => {
     const refCode = generateReferralCode()
     const isExist = await AuthService.findUserByEmail(req.body.email)
-
-    const dateString = new Date().toLocaleString('en-US', {
-        timeZone: SERVER_TIMEZONE,
-    })
-    const now = dayjs(dateString).format()
 
     if (isExist) {
         return res.status(400).json({
@@ -79,11 +66,11 @@ exports.register = async (req, res) => {
             weekly: 0,
         },
         heart: appConfig.defaultHeart || 5,
-        lastHeartAccruedAt: now,
+        lastHeartAccruedAt: new Date(),
         unlimitedHeart: null,
         referralCode: refCode,
-        registeredAt: now,
-        emailVerifiedAt: req.body.clientType === 'mobile' ? now : null,
+        registeredAt: new Date(),
+        emailVerifiedAt: req.body.clientType === 'mobile' ? new Date() : null,
         following: [],
         followers: [],
         fcmToken: '',
@@ -104,9 +91,8 @@ exports.register = async (req, res) => {
                 completedDays: guestData.completedDays,
                 last_played: guestData.last_played,
                 heart: guestData.heart || appConfig.defaultHeart,
-                lastHeartAccruedAt: guestData.lastHeartAccruedAt || now,
-                lastClaimedGemsDailyQuest:
-                    guestData.lastClaimedGemsDailyQuest || null,
+                lastHeartAccruedAt: guestData.lastHeartAccruedAt || new Date(),
+                lastClaimedGemsDailyQuest: guestData.lastClaimedGemsDailyQuest || null,
                 unlimitedHeart: null,
                 following: [],
                 followers: [],
@@ -150,10 +136,7 @@ exports.login = async (req, res) => {
     const user = await AuthService.findUserByEmail(req.body.email)
     await AuthService.syncUser(req.body.email)
     if (user) {
-        const isMatched = await bcryptUtil.compareHash(
-            req.body.password,
-            user.password
-        )
+        const isMatched = await bcryptUtil.compareHash(req.body.password, user.password)
         if (isMatched) {
             const token = await jwtUtil.createToken({
                 _id: user._id,
@@ -179,9 +162,7 @@ exports.login = async (req, res) => {
         }
     }
 
-    return res
-        .status(400)
-        .json({ message: 'Incorrect Email or Wrong Password' })
+    return res.status(400).json({ message: 'Incorrect Email or Wrong Password' })
 }
 
 exports.getUser = async (req, res) => {
@@ -207,16 +188,11 @@ exports.logout = async (req, res) => {
 }
 
 exports.sendLinkForgotPassword = async (req, res) => {
-    const result = await AuthService.sendLinkForgotPassword(
-        req.body.email,
-        req.body.baseUrl
-    )
+    const result = await AuthService.sendLinkForgotPassword(req.body.email, req.body.baseUrl)
     if (result) {
         return res.json({ message: 'Send link successfully.' })
     }
-    return res
-        .status(400)
-        .json({ message: 'Failed to send forgot password link.' })
+    return res.status(400).json({ message: 'Failed to send forgot password link.' })
 }
 
 exports.sendCodeForgotPassword = async (req, res) => {
@@ -231,16 +207,11 @@ exports.sendCodeForgotPassword = async (req, res) => {
     if (result) {
         return res.json({ message: 'Send otp code successfully.' })
     }
-    return res
-        .status(400)
-        .json({ message: 'Failed to send otp code forgot password.' })
+    return res.status(400).json({ message: 'Failed to send otp code forgot password.' })
 }
 
 exports.verifyCodeForgotPassword = async (req, res) => {
-    const result = await AuthService.verifyCodeForgotPassword(
-        req.body.email,
-        req.body.code
-    )
+    const result = await AuthService.verifyCodeForgotPassword(req.body.email, req.body.code)
     if (result) {
         return res.json({ message: 'Verified.' })
     }
@@ -275,9 +246,8 @@ exports.syncRegisterGoogle = async (req, res) => {
                 completedDays: guestData.completedDays,
                 last_played: guestData.last_played,
                 heart: guestData.heart || appConfig.defaultHeart,
-                lastHeartAccruedAt: guestData.lastHeartAccruedAt || now,
-                lastClaimedGemsDailyQuest:
-                    guestData.lastClaimedGemsDailyQuest || null,
+                lastHeartAccruedAt: guestData.lastHeartAccruedAt || new Date(),
+                lastClaimedGemsDailyQuest: guestData.lastClaimedGemsDailyQuest || null,
                 unlimitedHeart: null,
                 lastLessonCategoryName: guestData.lastLessonCategoryName || '',
             }

@@ -24,7 +24,6 @@ const dayjs = require('dayjs')
 const { generateOTP } = require('../utils/otp.util')
 const jwtUtil = require('../utils/jwt.util')
 const jwtConfig = require('../configs/jwt.config')
-const { SERVER_TIMEZONE } = require('../constants/app.constant')
 
 exports.sendRegisterCode = async email => {
     const code = generateOTP(4)
@@ -98,11 +97,7 @@ exports.logoutUser = (token, exp) => {
 }
 
 exports.syncUser = async email => {
-    const dateString = new Date().toLocaleString('en-US', {
-        timeZone: SERVER_TIMEZONE,
-    })
-    const now = dayjs(dateString).format()
-
+    const today = new Date()
     const refCode = generateReferralCode()
     let result = false
     let user = await UserModel.findOne({ email }).exec()
@@ -115,7 +110,7 @@ exports.syncUser = async email => {
             // User missed one day, reset streak to 0
             user.streak = 0
         } else if (daysDiff === 0) {
-            // keep streak the same
+            //keep streak the same
         } else {
             // User missed more than one day, keep streak at 0
             user.streak = 0
@@ -152,7 +147,7 @@ exports.syncUser = async email => {
                     referralCode: !user?.referralCode ? refCode : user.referralCode,
 
                     // prettier-ignore
-                    unlimitedHeart: user?.unlimitedHeart && dayjs(user.unlimitedHeart).isAfter(dayjs(now).toISOString(), 'second') ? user.unlimitedHeart : null,
+                    unlimitedHeart: user?.unlimitedHeart && dayjs(user.unlimitedHeart).isAfter(dayjs(today).toISOString(), 'second') ? user.unlimitedHeart : null,
                     // prettier-ignore
                     username: !user?.username ? generateUsername(user.displayName) : user.username,
 
@@ -269,11 +264,6 @@ exports.syncRegisterGoogle = async ({ email, data }) => {
     let result = false
     let user = await UserModel.findOne({ email }).exec()
 
-    const dateString = new Date().toLocaleString('en-US', {
-        timeZone: SERVER_TIMEZONE,
-    })
-    const now = dayjs(dateString).format()
-
     if (user) {
         user = await UserModel.findOneAndUpdate(
             { email },
@@ -287,7 +277,7 @@ exports.syncRegisterGoogle = async ({ email, data }) => {
                     completedDays: data.completedDays,
                     last_played: data.last_played,
                     heart: data.heart || appConfig.defaultHeart,
-                    lastHeartAccruedAt: data.lastHeartAccruedAt || now,
+                    lastHeartAccruedAt: data.lastHeartAccruedAt || new Date(),
                     lastClaimedGemsDailyQuest:
                         data.lastClaimedGemsDailyQuest || null,
                     unlimitedHeart: null,
@@ -312,11 +302,6 @@ exports.googleSignInMobile = async ({
     syncId,
 }) => {
     const refCode = generateReferralCode()
-
-    const dateString = new Date().toLocaleString('en-US', {
-        timeZone: SERVER_TIMEZONE,
-    })
-    const now = dayjs(dateString).format()
 
     /**
      * checking if another user with same email already exists
@@ -353,11 +338,11 @@ exports.googleSignInMobile = async ({
                 weekly: 0,
             },
             heart: appConfig.defaultHeart || 5,
-            lastHeartAccruedAt: now,
+            lastHeartAccruedAt: new Date(),
             unlimitedHeart: null,
             referralCode: refCode,
-            registeredAt: now,
-            emailVerifiedAt: now,
+            registeredAt: new Date(),
+            emailVerifiedAt: new Date(),
             following: [],
             followers: [],
             fcmToken: '',
@@ -379,7 +364,7 @@ exports.googleSignInMobile = async ({
                     last_played: guestData.last_played,
                     heart: guestData.heart || appConfig.defaultHeart,
                     lastHeartAccruedAt:
-                        guestData.lastHeartAccruedAt || now,
+                        guestData.lastHeartAccruedAt || new Date(),
                     lastClaimedGemsDailyQuest:
                         guestData.lastClaimedGemsDailyQuest || null,
                     unlimitedHeart: null,
