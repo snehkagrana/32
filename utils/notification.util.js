@@ -42,7 +42,7 @@ const sendNotification = async ({ token, title, body, data }) => {
 }
 
 const NotificationStreak = {
-    sendRandomReminder: async ({ typeId, user, streakNumber, lessonName }) => {
+    sendReminder: async ({ typeId, user, streakNumber, lessonName }) => {
         const params = {
             streakNumber: streakNumber || 0,
             lessonName: lessonName || '',
