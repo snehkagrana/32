@@ -1,6 +1,10 @@
 const admin = require('firebase-admin')
 const NotificationService = require('../services/notification.service')
-const { STREAK_NOTIFICATION_TYPE, REMINDER_NOTIFICATION_TYPE } = require('../constants/notification-type.constant')
+const {
+    STREAK_NOTIFICATION_TYPE,
+    RANDOMLY_LESSON_REMINDER_NOTIFICATION_TYPE,
+    RANDOMLY_STREAK_NOTIFICATION_TYPE,
+} = require('../constants/notification-type.constant')
 const { NOTIFICATION_TYPE } = require('../constants/app.constant')
 const { getRandomInt } = require('./common.util')
 
@@ -38,32 +42,76 @@ const sendNotification = async ({ token, title, body, data }) => {
 }
 
 const NotificationStreak = {
-    sendNotification: async ({ typeId, user, streakNumber, hoursLeft }) => {
-        const data = {
-            title: STREAK_NOTIFICATION_TYPE[typeId]({ name: user.displayName, streakNumber, hoursLeft }).title,
-            body: STREAK_NOTIFICATION_TYPE[typeId]({ name: user.displayName }).body,
+    sendRandomReminder: async ({ typeId, user, streakNumber, lessonName }) => {
+        const params = {
+            streakNumber: streakNumber || 0,
+            lessonName: lessonName || '',
+            name: user.displayName || '',
+        }
+        if (!STREAK_NOTIFICATION_TYPE[typeId]) {
+            return false
+        }
+        const DATA = {
+            title: STREAK_NOTIFICATION_TYPE[typeId](params)?.title || '',
+            body: STREAK_NOTIFICATION_TYPE[typeId](params)?.body || '',
             userId: user._id,
             type: NOTIFICATION_TYPE.streak,
             dataId: null,
-            streakNotificationTypeId: STREAK_NOTIFICATION_TYPE[typeId]({ name: user.displayName }).typeId,
         }
-        await NotificationService.sendAndSaveNotification(data)
+        return await NotificationService.sendAndSaveNotification(DATA)
     },
 
-    sendRandomReminder: async () => {},
+    sendRandomReminder: async ({
+        user,
+        streakNumber,
+        hoursLeft,
+        lessonName,
+    }) => {
+        const TYPE_ID = getRandomInt(
+            Object.keys(RANDOMLY_STREAK_NOTIFICATION_TYPE).length
+        )
+        const params = {
+            // name: user.displayName || '',
+            streakNumber: streakNumber || 0,
+            hoursLeft: hoursLeft || 0,
+            lessonName: lessonName || '',
+        }
+        if (!RANDOMLY_STREAK_NOTIFICATION_TYPE[TYPE_ID]) {
+            return false
+        }
+        // prettier-ignore
+        const DATA = {
+            title: RANDOMLY_STREAK_NOTIFICATION_TYPE[TYPE_ID](params)?.title || "",
+            body: RANDOMLY_STREAK_NOTIFICATION_TYPE[TYPE_ID](params)?.body || "",
+            userId: user._id,
+            type: NOTIFICATION_TYPE.streak,
+            dataId: null,
+        }
+        return await NotificationService.sendAndSaveNotification(DATA)
+    },
 }
 
 const NotificationReminder = {
-    sendNotification: async ({ user }) => {
-        const TYPE_ID = getRandomInt(Object.keys(REMINDER_NOTIFICATION_TYPE).length)
-        const data = {
-            title: REMINDER_NOTIFICATION_TYPE[TYPE_ID]({ name: user.displayName }).title,
-            body: REMINDER_NOTIFICATION_TYPE[TYPE_ID]({ name: user.displayName }).body,
+    sendRandomReminder: async ({ user, lessonName }) => {
+        const TYPE_ID = getRandomInt(
+            Object.keys(RANDOMLY_LESSON_REMINDER_NOTIFICATION_TYPE).length
+        )
+        const params = {
+            lessonName: lessonName || '',
+            name: user.displayName || '',
+        }
+        if (!RANDOMLY_LESSON_REMINDER_NOTIFICATION_TYPE[TYPE_ID]) {
+            return false
+        }
+        // prettier-ignore
+        const DATA = {
+            title: RANDOMLY_LESSON_REMINDER_NOTIFICATION_TYPE[TYPE_ID](params)?.title || '',
+            body: RANDOMLY_LESSON_REMINDER_NOTIFICATION_TYPE[TYPE_ID](params)?.body || '',
             userId: user._id,
-            type: NOTIFICATION_TYPE.streak,
+            type: NOTIFICATION_TYPE.reminder,
             dataId: null,
         }
-        await NotificationService.sendAndSaveNotification(data)
+        return await NotificationService.sendAndSaveNotification(DATA)
     },
 }
 

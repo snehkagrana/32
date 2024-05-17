@@ -4,7 +4,9 @@ const RANDOMLY_STREAK_NOTIFICATION_TYPE = {
         return {
             typeId: 1,
             title: `🚨SAVE YOUR STREAK!!`,
-            body: `You will lose your ${streakNumber || ''} streak. Complete a lesson now.`,
+            body: `You will lose your ${
+                streakNumber || ''
+            } streak. Complete a lesson now.`,
         }
     },
     2: ({ hoursLeft, streakNumber }) => {
@@ -82,96 +84,96 @@ const RANDOMLY_STREAK_NOTIFICATION_TYPE = {
 
 const STREAK_NOTIFICATION_TYPE = {
     // params list { streakNumber, lessonName, name }
-    combo: ({ streakNumber }) => {
+    STREAK_COMBO: ({ streakNumber }) => {
         return {
-            typeId: 'combo',
+            typeId: 'STREAK_COMBO',
             title: `🔥You are on fire!`,
             body: `Continue your ${streakNumber} day streak on Fingo!`,
         }
     },
-    day1: () => {
+    DAY_1: () => {
         return {
-            typeId: 'day1',
+            typeId: 'DAY_1',
             title: `Get ready for what is coming for you`,
             body: `You missed your lesson. You know what happens now🔫.`,
         }
     },
-    day2: () => {
+    DAY_2: () => {
         return {
-            typeId: 'day2',
+            typeId: 'DAY_2',
             title: `You did it again!?`,
             body: `It’s been 2 days since you completed a lesson. Continue learning on Fingo.`,
         }
     },
-    day3: () => {
+    DAY_3: () => {
         return {
-            typeId: 'day3',
+            typeId: 'DAY_3',
             title: `Are you John Cena?🤼`,
             body: `Cauz we don’t see you completing your lessons. Take them now`,
         }
     },
-    day4: ({ name }) => {
+    DAY_4: ({ name }) => {
         return {
-            typeId: 'day4',
+            typeId: 'DAY_4',
             title: `${name}, we miss you`,
             body: `Looks like you didn’t get the time. That’s ok, take a quick lesson today.`,
         }
     },
-    day5: ({ lessonName }) => {
+    DAY_5: ({ lessonName }) => {
         return {
-            typeId: 'day5',
+            typeId: 'DAY_5',
             title: `Looks like you hit the snooze button😴.`,
             body: `It’s been 5 days since we saw you. Come back and complete ${lessonName}.`,
         }
     },
-    day6: () => {
+    DAY_6: () => {
         return {
-            typeId: 'day6',
+            typeId: 'DAY_6',
             title: `Earth has traveled over 15 million kilometers...`,
             body: `Around the Sun since you last completed a lesson on Fingo. Earn bananas and compete with your friends!`,
         }
     },
-    day7: () => {
+    DAY_7: () => {
         return {
-            typeId: 'day7',
+            typeId: 'DAY_7',
             title: `A week of silence😶.`,
             body: `Don't you miss us? Complete a lesson and show some love🥹.`,
         }
     },
-    day8: () => {
+    DAY_8: () => {
         return {
-            typeId: 'day8',
+            typeId: 'DAY_8',
             title: `It is absolutely bananas!🍌📛.`,
             body: `It's been 8 days since we last saw you! Earn bananas and compete with
             your friends.`,
         }
     },
-    day9: ({ name, lessonName }) => {
+    DAY_9: ({ name, lessonName }) => {
         return {
-            typeId: 'day9',
+            typeId: 'DAY_9',
             title: `We are missing our star learner ${name}🌟.`,
             body: `Continue learning about ${lessonName} and get the top spot on the
             leaderboard.`,
         }
     },
-    day10: () => {
+    DAY_10: () => {
         return {
-            typeId: 'day10',
+            typeId: 'DAY_10',
             title: `(fly noises🪰)`,
             body: `It's been a long day, without you my friend. Complete a lesson and join
             us, please?😞.`,
         }
     },
-    day11: () => {
+    DAY_11: () => {
         return {
-            typeId: 'day11',
+            typeId: 'DAY_11',
             title: `Bye bye!👋`,
             body: `Looks like the notifications are not working. Do you still want to receive the notifications?`,
         }
     },
 }
 
-const REMINDER_NOTIFICATION_TYPE = {
+const RANDOMLY_LESSON_REMINDER_NOTIFICATION_TYPE = {
     // param list { name, lessonName }
     1: ({ name }) => {
         return {
@@ -219,7 +221,9 @@ const REMINDER_NOTIFICATION_TYPE = {
         return {
             typeId: 7,
             title: `Take a break from Snap👻, maybe?`,
-            body: lessonName ? `Quickly complete your ${lessonName} lesson.` : `Quickly complete your lesson.`,
+            body: lessonName
+                ? `Quickly complete your ${lessonName} lesson.`
+                : `Quickly complete your lesson.`,
         }
     },
     8: () => {
@@ -233,7 +237,9 @@ const REMINDER_NOTIFICATION_TYPE = {
         return {
             typeId: 9,
             title: `Bananas will rot🍌💀!`,
-            body: lessonName ? `Complete ${lessonName || ''} lesson and earn more bananas.` : `Complete your lesson and earn more bananas.`,
+            body: lessonName
+                ? `Complete ${lessonName || ''} lesson and earn more bananas.`
+                : `Complete your lesson and earn more bananas.`,
         }
     },
     10: () => {
@@ -248,5 +254,5 @@ const REMINDER_NOTIFICATION_TYPE = {
 module.exports = {
     RANDOMLY_STREAK_NOTIFICATION_TYPE,
     STREAK_NOTIFICATION_TYPE,
-    REMINDER_NOTIFICATION_TYPE,
+    RANDOMLY_LESSON_REMINDER_NOTIFICATION_TYPE,
 }
