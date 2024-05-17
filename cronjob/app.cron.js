@@ -261,16 +261,26 @@ cron.schedule('* * * * *', async function () {
 
 // Cronjob At every 5th minute.
 cron.schedule('*/5 * * * *', async function () {
-    const today = new Date().toLocaleString('en-US', {
+    const LOCALE_DATE_NOW = new Date().toLocaleString('en-US', {
         timeZone: SERVER_TIMEZONE,
     })
+    const TODAY = new Date()
+
+    /**
+     * NOTES
+     * LOCALE_DAY_OF_WEEK  0 - Sunday
+     * LOCALE_DAY_OF_WEEK  1 - Monday
+     */
+    const LOCALE_DAY_OF_WEEK = dayjs(LOCALE_DATE_NOW).day()
+    const LOCALE_HOUR = dayjs(LOCALE_DATE_NOW).hour()
+    const LOCALE_MINUTE = dayjs(LOCALE_DATE_NOW).minute()
 
     // user with 0 streak
     const usersHasFCMToken = await UserModel.find({
         fcmToken: { $exists: true },
     }).exec()
 
-    if (usersHasFCMToken.length > 0) {
+    if (usersHasFCMToken?.length > 0) {
         console.log('usersHasFCMToken.length', usersHasFCMToken.length)
         usersHasFCMToken.forEach(async user => {
             console.log(`${user.email} - ${user.streak}`)
@@ -280,21 +290,26 @@ cron.schedule('*/5 * * * *', async function () {
              */
             if (user.streak > 0) {
                 console.log(
-                    `->> diff ${user.email} - ${dayjs(today).diff(
+                    `->> diff ${user.email} - ${dayjs(TODAY).diff(
                         user.lastCompletedDay,
                         'day'
                     )}`
                 )
-                // Check if lesson done, if not - send Streak Reminder at 9:30PM.
+                // Check if lesson done, if not - send Streak Reminder at 9:30PM. If Streak is 0, then message according to days not used
                 if (
                     user.lastCompletedDay &&
-                    dayjs(today).diff(user.lastCompletedDay, 'day') !== 0
+                    dayjs(TODAY).diff(user.lastCompletedDay, 'day') !== 0
                 ) {
                 }
             } else if (user.streak === 0) {
                 /**
-                 * User with 0 streak
+                 * User streak is 0
                  */
+                if (user?.lastCompletedDay) {
+                    // prettier-ignore
+                    const DIFF_DAY = dayjs(TODAY).diff(user.lastHeartAccruedAt, 'day')
+                    console.log(`->>DIFF_DAY -> ${user.email} - ${DIFF_DAY}`)
+                }
             }
         })
     }
