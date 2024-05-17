@@ -25,51 +25,54 @@ const {
 } = require('../utils/notification.util')
 
 cron.schedule('* * * * *', async function () {
-    const today = new Date().toLocaleString('en-US', {
+    const LOCALE_DATE_NOW = new Date().toLocaleString('en-US', {
         timeZone: SERVER_TIMEZONE,
     })
+    const TODAY = new Date()
 
     /**
      * NOTES
-     * dayOfWeek 0 - Sunday
-     * dayOfWeek 1 - Monday
+     * LOCALE_DAY_OF_WEEK  0 - Sunday
+     * LOCALE_DAY_OF_WEEK  1 - Monday
      */
-    const dayOfWeek = dayjs(today).day()
-    const hour = dayjs(today).hour()
-    const minute = dayjs(today).minute()
+    const LOCALE_DAY_OF_WEEK = dayjs(LOCALE_DATE_NOW).day()
+    const LOCALE_HOUR = dayjs(LOCALE_DATE_NOW).hour()
+    const LOCALE_MINUTE = dayjs(LOCALE_DATE_NOW).minute()
 
-    console.log('dayOfWeek', dayOfWeek)
-    console.log('hour', hour)
-    console.log('minute', minute)
+    console.log('->LOCALE_DAY_OF_WEEK ', LOCALE_DAY_OF_WEEK)
+    console.log('->LOCALE_HOUR', LOCALE_HOUR)
+    console.log('->LOCALE_MINUTE', LOCALE_MINUTE)
 
-    const users = await UserModel.find({
+    const usersLessHeart = await UserModel.find({
         heart: { $lt: MAX_HEARTS },
         unlimitedHeart: null,
         lastHeartAccruedAt: { $exists: true },
     }).exec()
 
-    const guests = await GuestModel.find({
+    const guestLessHeart = await GuestModel.find({
         heart: { $lt: MAX_HEARTS },
         lastHeartAccruedAt: { $exists: true },
     }).exec()
 
-    if (users.length > 0) {
-        users.forEach(async user => {
+    if (usersLessHeart.length > 0) {
+        usersLessHeart.forEach(async user => {
+            console.log(`->>usersLessHeart -> ${user.email}:${user.heart}`)
             // prettier-ignore
-            if (user?.lastHeartAccruedAt && dayjs(today).diff(user.lastHeartAccruedAt, 'minute') > HEARTS_REFILL_RATE) {
+            if (user?.lastHeartAccruedAt && dayjs(TODAY).diff(user.lastHeartAccruedAt, 'minute') > HEARTS_REFILL_RATE) {
 
                 await UserModel.updateOne(
                     { email: user.email },
                     { $set: {
                         heart: user.heart + 1,
-                        lastHeartAccruedAt: new Date()
-                    } }
+                        lastHeartAccruedAt: TODAY
+                    } },
+                    { new: true }
                 ).exec()
 
-                if(user.heart >= 4) {
+                if(user.heart >= MAX_HEARTS - 1) {
                     const lessonName = user?.lastLessonCategoryName
                         ? user?.lastLessonCategoryName?.split('_')?.join(' ')
-                        : user?.last_played?.category?.split('_')?.join(' ') || ''
+                        : user?.last_played?.sub_category?.split('_')?.join(' ') || ''
                     
                     const notificationData = {
                         title: `💚 Your hearts are full`,
@@ -88,10 +91,10 @@ cron.schedule('* * * * *', async function () {
     }
 
     // guest
-    if (guests.length > 0) {
-        guests.forEach(async guest => {
+    if (guestLessHeart.length > 0) {
+        guestLessHeart.forEach(async guest => {
             // prettier-ignore
-            if (guest?.lastHeartAccruedAt && dayjs(today).diff(guest.lastHeartAccruedAt, 'minute') > HEARTS_REFILL_RATE) {
+            if (guest?.lastHeartAccruedAt && dayjs(TODAY).diff(guest.lastHeartAccruedAt, 'minute') > HEARTS_REFILL_RATE) {
                 await GuestModel.updateOne(
                     { _id: guest._id },
                     { $set: {
@@ -104,7 +107,9 @@ cron.schedule('* * * * *', async function () {
     }
 
     /**
+     * ---------------------
      * Leaderboard
+     * ---------------------
      */
     const currentActiveLeaderBoard = await LeaderBoardModel.findOne({
         isActive: true,
@@ -112,14 +117,18 @@ cron.schedule('* * * * *', async function () {
 
     if (currentActiveLeaderBoard) {
         // Reset leaderboard
-        if (dayOfWeek === 0 && hour === 23 && minute >= 50) {
-            // if (dayOfWeek === 2 && hour === 14 && minute === 35) { // DEBUG
+        if (
+            LOCALE_DAY_OF_WEEK === 0 &&
+            LOCALE_HOUR === 23 &&
+            LOCALE_MINUTE >= 50
+        ) {
+            // if (LOCALE_DAY_OF_WEEK  === 2 && LOCALE_HOUR === 14 && minute === 35) { // DEBUG
             await LeaderBoardModel.updateOne(
                 { _id: currentActiveLeaderBoard._id },
                 {
                     $set: {
                         isActive: false,
-                        lastUpdate: today,
+                        lastUpdate: TODAY,
                     },
                 }
             ).exec()
@@ -142,8 +151,12 @@ cron.schedule('* * * * *', async function () {
                             position: u.position,
                             xp: u.xp 
                         };
+
                         // prettier-ignore
-                        const userResultsLeaderBoard = user?.leaderBoards?.length > 0 ? [...user.leaderBoards,nextResultLeaderBoard] : [nextResultLeaderBoard]
+                        const userResultsLeaderBoard = user?.leaderBoards?.length > 0
+                                ? [...user.leaderBoards, nextResultLeaderBoard]
+                                : [nextResultLeaderBoard]
+
                         await UserModel.updateOne(
                             { _id: u.userId },
                             {
@@ -157,13 +170,14 @@ cron.schedule('* * * * *', async function () {
                     }
                 }
             }
-
             // console.log('currentActiveLeaderBoard')
         } else {
             // console.log('sync Leaderboard')
-            // sync leaderboard
+            // Sync leaderboard data
             // prettier-ignore
-            const users = await UserModel.find({ 'xp.weekly': { $gte: MINIMUM_WEEKLY_XP_LEADER_BOARD } }).limit(MAX_WEEKLY_USERS_LEADER_BOARD).exec()
+            const users = await UserModel.find({
+                'xp.weekly': { $gte: MINIMUM_WEEKLY_XP_LEADER_BOARD }
+            }).limit(MAX_WEEKLY_USERS_LEADER_BOARD).exec()
 
             if (users?.length > 0) {
                 // prettier-ignore
@@ -179,7 +193,7 @@ cron.schedule('* * * * *', async function () {
                 await LeaderBoardModel.updateOne(
                     { _id: currentActiveLeaderBoard._id },
                     {
-                        lastUpdate: today,
+                        lastUpdate: TODAY,
                         users: leaderBoardUsers.map((x, index) => ({
                             ...x,
                             position: index + 1,
@@ -190,20 +204,25 @@ cron.schedule('* * * * *', async function () {
             }
         }
     } else {
-        if (dayOfWeek >= 1) {
-            // if (dayOfWeek >= 2) { // DEBUG
-            const endDate = dayjs(today)
+        /**
+         * Create new weekly leaderboard
+         */
+        if (LOCALE_DAY_OF_WEEK >= 1) {
+            // if (LOCALE_DAY_OF_WEEK  >= 2) { // DEBUG
+            const endDate = dayjs(LOCALE_DATE_NOW)
                 .add(6, 'day')
                 .hour(23)
                 .minute(50)
                 .toISOString()
 
             // prettier-ignore
-            const users = await UserModel.find({ 'xp.weekly': { $gte: MINIMUM_WEEKLY_XP_LEADER_BOARD } }).limit(MAX_WEEKLY_USERS_LEADER_BOARD).exec()
+            const usersWithWeeklyXp = await UserModel.find({
+                'xp.weekly': { $gte: MINIMUM_WEEKLY_XP_LEADER_BOARD }
+            }).limit(MAX_WEEKLY_USERS_LEADER_BOARD).exec()
 
-            if (users?.length > 0) {
+            if (usersWithWeeklyXp?.length > 0) {
                 // prettier-ignore
-                let leaderBoardUsers = users.map(x => ({
+                let leaderBoardUsers = usersWithWeeklyXp.map(x => ({
                     userId: x._doc._id, 
                     displayName: x._doc.displayName ? x._doc.displayName : x._doc.username || '',
                     xp: x._doc.xp.weekly || MINIMUM_WEEKLY_XP_LEADER_BOARD,
@@ -215,9 +234,9 @@ cron.schedule('* * * * *', async function () {
                 // Create this week leaderboard
                 await LeaderBoardModel.create({
                     isActive: true,
-                    startDate: today,
+                    startDate: LOCALE_DATE_NOW,
                     endDate,
-                    lastUpdate: today,
+                    lastUpdate: TODAY,
                     users: leaderBoardUsers.map((x, index) => ({
                         ...x,
                         position: index + 1,
@@ -227,9 +246,9 @@ cron.schedule('* * * * *', async function () {
                 // Create this week leaderboard with empty users
                 await LeaderBoardModel.create({
                     isActive: true,
-                    startDate: today,
+                    startDate: LOCALE_DATE_NOW,
                     endDate,
-                    lastUpdate: today,
+                    lastUpdate: TODAY,
                     users: [],
                 })
             }
@@ -245,19 +264,6 @@ cron.schedule('*/5 * * * *', async function () {
     const today = new Date().toLocaleString('en-US', {
         timeZone: SERVER_TIMEZONE,
     })
-
-    /**
-     * NOTES
-     * dayOfWeek 0 - Sunday
-     * dayOfWeek 1 - Monday
-     */
-    const dayOfWeek = dayjs(today).day()
-    const hour = dayjs(today).hour()
-    const minute = dayjs(today).minute()
-
-    // console.log('dayOfWeek', dayOfWeek)
-    // console.log('hour', hour)
-    // console.log('minute', minute)
 
     // user with 0 streak
     const usersHasFCMToken = await UserModel.find({
@@ -305,28 +311,3 @@ cron.schedule('*/5 * * * *', async function () {
      * -------------
      */
 })
-
-// const today = new Date().toLocaleString('en-US', {
-//     timeZone: 'Asia/Kolkata',
-// })
-
-// const dayOfWeek = dayjs(today).day()
-// const hour = dayjs(today).hour()
-// const minute = dayjs(today).minute()
-
-// console.log('->>>>>> dayOfWeek', dayOfWeek)
-// console.log('->>>>>> hour', hour)
-
-// const jakartaTime = new Date().toLocaleString()
-// const kolkataTime = new Date().toLocaleString('en-US', {
-//     timeZone: 'Asia/Kolkata',
-// })
-
-// console.log('->>> Asia/Jakarta', jakartaTime)
-// console.log('->>> Asia/Kolkata', kolkataTime)
-
-// const DAYJS_JAKARTA = dayjs(jakartaTime)
-// const DAYJS_KOLKATA = dayjs(kolkataTime)
-
-// console.log('->>> DAYJS_JAKARTA', DAYJS_JAKARTA.format())
-// console.log('->>> DAYJS_KOLKATA', DAYJS_KOLKATA.format())
