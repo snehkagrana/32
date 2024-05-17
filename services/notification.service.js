@@ -6,8 +6,12 @@ const UserModel = require('../models/user')
 const { generateOTP } = require('../utils/otp.util')
 const { validateEmail } = require('../utils/common.util')
 const { sendNotification } = require('../utils/notification.util')
-const { NOTIFICATION_TYPE } = require('../constants/app.constant')
+const {
+    NOTIFICATION_TYPE,
+    SERVER_TIMEZONE,
+} = require('../constants/app.constant')
 const user = require('../models/user')
+const moment = require('moment-timezone')
 
 exports.getNotificationList = async ({ userId }) => {
     const notifications = await NotificationModel.find({ userId }).sort({
@@ -51,9 +55,18 @@ exports.getUnreadNotification = async ({ userId }) => {
     return notifications.length || 0
 }
 
-exports.sendAndSaveNotification = async ({ userId, title, body, type, dataId, streakNotificationTypeId }) => {
+exports.sendAndSaveNotification = async ({
+    userId,
+    title,
+    body,
+    type,
+    dataId,
+    streakNotificationTypeId,
+}) => {
     let result = false
     const user = await UserModel.findOne({ _id: userId })
+
+    const LOCALE_DATE_NOW = moment.tz(Date.now(), SERVER_TIMEZONE)
 
     if (user?.fcmToken) {
         const notifications = await NotificationModel.create({
@@ -63,7 +76,9 @@ exports.sendAndSaveNotification = async ({ userId, title, body, type, dataId, st
             type: type || 'common',
             dataId: dataId || null,
             readAt: null,
+            createdAt: LOCALE_DATE_NOW,
         })
+
         await sendNotification({
             token: user.fcmToken,
             title,
@@ -101,7 +116,13 @@ exports.admin_getNotifeeUsers = async () => {
     return []
 }
 
-exports.admin_sendGeneralNotification = async ({ users, title, body, imageUrl, authUserId }) => {
+exports.admin_sendGeneralNotification = async ({
+    users,
+    title,
+    body,
+    imageUrl,
+    authUserId,
+}) => {
     let result = false
 
     const NAME_PATTERN = '[[NAME]]'
@@ -161,7 +182,11 @@ exports.admin_createNotificationTemplate = body => {
 
 exports.admin_updateNotificationTemplate = async body => {
     const { _id, ...rest } = body
-    return await NotificationTemplateModel.findOneAndUpdate({ _id: _id }, rest, { new: true })
+    return await NotificationTemplateModel.findOneAndUpdate(
+        { _id: _id },
+        rest,
+        { new: true }
+    )
 }
 
 exports.admin_deleteNotificationTemplate = async id => {
