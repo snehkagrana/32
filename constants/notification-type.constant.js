@@ -6,7 +6,7 @@ const RANDOMLY_STREAK_NOTIFICATION_TYPE = {
             title: `🚨SAVE YOUR STREAK!!`,
             body: `You will lose your ${
                 streakNumber || ''
-            } streak. Complete a lesson now.`,
+            } day streak. Complete a lesson now.`,
         }
     },
     2: ({ hoursLeft, streakNumber }) => {
@@ -56,7 +56,7 @@ const RANDOMLY_STREAK_NOTIFICATION_TYPE = {
         return {
             typeId: 8,
             title: `Bananas will rot🍌💀!`,
-            body: `Don't let time slip away. Complete your ${lessonName} lesson to save your ${streakNumber} streak🔥.`,
+            body: `Don't let time slip away. Complete your ${lessonName} lesson to save your ${streakNumber} day streak🔥.`,
         }
     },
     9: ({ streakNumber }) => {
@@ -77,7 +77,7 @@ const RANDOMLY_STREAK_NOTIFICATION_TYPE = {
         return {
             typeId: 11,
             title: `Streak you maintain - Snapchat ❌`,
-            body: `Streak you should maintain-Fingo ✅. Go on and save your ${streakNumber} streak.`,
+            body: `Streak you should maintain-Fingo ✅. Go on and save your ${streakNumber} day streak.`,
         }
     },
 }
