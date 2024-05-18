@@ -251,8 +251,85 @@ const RANDOMLY_LESSON_REMINDER_NOTIFICATION_TYPE = {
     },
 }
 
+const LEADERBOARD_NOTIFICATION_TYPE = {
+    // params list { rank }
+    RESULT: ({ rank }) => {
+        return {
+            typeId: 'RESULT',
+            title: `Leaderboard results are in😰.`,
+            body: `You completed #${rank} on last week's leaderboard, continue learning.`,
+        }
+    },
+}
+
+const RANDOMLY_LEADERBOARD_NOTIFICATION_TYPE = {
+    // param list { daysLeft, lessonName }
+    1: ({ daysLeft }) => {
+        return {
+            typeId: 1,
+            title: `Race to the top🏔.`,
+            body: `Leaderboard ends in ${daysLeft} days. Compete with your friends now.`,
+        }
+    },
+    2: () => {
+        return {
+            typeId: 2,
+            title: `Banana Battle alert🍌⚔.`,
+            body: `You are on your way to the top of the leaderboard. Earn more bananas now!`,
+        }
+    },
+    3: ({ lessonName }) => {
+        return {
+            typeId: 3,
+            title: `Target Locked 🏹`,
+            body: `Leaderboard victory awaits you. Continue your ${lessonName} and go for the
+            win!`,
+        }
+    },
+    4: () => {
+        return {
+            typeId: 4,
+            title: `ife is a Race🏇.`,
+            body: `Well, Rancho and we disagree. But this is a fun race - complete your lessons before your friends do🗡.`,
+        }
+    },
+    5: () => {
+        return {
+            typeId: 5,
+            title: `ife is a Race🏇.`,
+            body: `Well, Rancho and we disagree. But this is a fun race - complete your lessons before your friends do🗡.`,
+        }
+    },
+}
+
+const SUNDAY_LEADERBOARD_NOTIFICATION_TYPE = {
+    // param list { hoursLeft }
+    1: ({ hoursLeft }) => {
+        return {
+            typeId: 1,
+            title: `⏳ Time's Ticking! Maintain Your Leaderboard Position!`,
+            body: `You have ${hoursLeft} hours left. Don't let your friends beat you🔪.`,
+        }
+    },
+}
+
+const FRIEND_LEADERBOARD_NOTIFICATION_TYPE = {
+    // param list { friendName }
+    1: ({ friendName }) => {
+        return {
+            typeId: 1,
+            title: `Don't let ${friendName} beat you!`,
+            body: `Keep an eye on your friend's rank👀. Complete a lesson now and earn bananas🍌.`,
+        }
+    },
+}
+
 module.exports = {
     RANDOMLY_STREAK_NOTIFICATION_TYPE,
     STREAK_NOTIFICATION_TYPE,
     RANDOMLY_LESSON_REMINDER_NOTIFICATION_TYPE,
+    LEADERBOARD_NOTIFICATION_TYPE,
+    RANDOMLY_LEADERBOARD_NOTIFICATION_TYPE,
+    SUNDAY_LEADERBOARD_NOTIFICATION_TYPE,
+    FRIEND_LEADERBOARD_NOTIFICATION_TYPE,
 }
