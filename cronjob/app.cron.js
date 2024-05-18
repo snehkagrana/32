@@ -15,11 +15,6 @@ const {
 } = require('../constants/app.constant')
 const NotificationService = require('../services/notification.service')
 const {
-    STREAK_NOTIFICATION_TYPE,
-    RANDOMLY_LESSON_REMINDER_NOTIFICATION_TYPE,
-} = require('../constants/notification-type.constant')
-const { daysDifference, getToday } = require('../utils/common.util')
-const {
     NotificationStreak,
     NotificationReminder,
 } = require('../utils/notification.util')
@@ -39,10 +34,6 @@ cron.schedule('* * * * *', async function () {
     const LOCALE_HOUR = dayjs(LOCALE_DATE_NOW).hour()
     const LOCALE_MINUTE = dayjs(LOCALE_DATE_NOW).minute()
 
-    console.log('->LOCALE_DAY_OF_WEEK ', LOCALE_DAY_OF_WEEK)
-    console.log('->LOCALE_HOUR', LOCALE_HOUR)
-    console.log('->LOCALE_MINUTE', LOCALE_MINUTE)
-
     const usersLessHeart = await UserModel.find({
         heart: { $lt: MAX_HEARTS },
         unlimitedHeart: null,
@@ -56,7 +47,7 @@ cron.schedule('* * * * *', async function () {
 
     if (usersLessHeart.length > 0) {
         usersLessHeart.forEach(async user => {
-            console.log(`->>usersLessHeart -> ${user.email}:${user.heart}`)
+            // console.log(`->>usersLessHeart -> ${user.email}:${user.heart}`)
             // prettier-ignore
             if (user?.lastHeartAccruedAt && dayjs(TODAY).diff(user.lastHeartAccruedAt, 'minute') > HEARTS_REFILL_RATE) {
 
@@ -275,102 +266,95 @@ cron.schedule('*/5 * * * *', async function () {
     const LOCALE_HOUR = dayjs(LOCALE_DATE_NOW).hour()
     const LOCALE_MINUTE = dayjs(LOCALE_DATE_NOW).minute()
 
+    console.log('->LOCALE_DAY_OF_WEEK ', LOCALE_DAY_OF_WEEK)
+    console.log('->LOCALE_HOUR', LOCALE_HOUR)
+    console.log('->LOCALE_MINUTE', LOCALE_MINUTE)
+
     // user with 0 streak
     const usersHasFCMToken = await UserModel.find({
         fcmToken: { $exists: true },
     }).exec()
 
     if (usersHasFCMToken?.length > 0) {
-        console.log('usersHasFCMToken.length', usersHasFCMToken.length)
+        // console.log('usersHasFCMToken.length', usersHasFCMToken.length)
         usersHasFCMToken.forEach(async user => {
-            console.log(`${user.email} - ${user.streak}`)
-
+            // prettier-ignore
             /**
-             * User streak more than 0
+             * NOTES
+             * DIFF_DAY = 0 === User done lesson today
+             * DIFF_DAY = 1 === Last done lesson yesterday
+             * DIFF_DAY = 2 === User missed one day, streak will reset to 0
+             * ...so on
              */
-            if (user.streak > 0) {
-                console.log(
-                    `->> diff ${user.email} - ${dayjs(TODAY).diff(
-                        user.lastCompletedDay,
-                        'day'
-                    )}`
-                )
-                // Check if lesson done, if not - send Streak Reminder at 9:30PM. If Streak is 0, then message according to days not used
-                // prettier-ignore
-                const DIFF_DAY = dayjs(TODAY).diff(user.lastCompletedDay, 'day')
-                // prettier-ignore
-                console.log(`->>STREAK MORE THAN 0 - DIFF_DAY -> ${user.email} - ${DIFF_DAY}`)
+            const DIFF_DAY = dayjs(TODAY).diff(user.lastCompletedDay, 'day') || -1
 
-                /**
-                 * NOTES
-                 * DIFF_DAY = 0 === User done lesson today
-                 * DIFF_DAY = 1 === Last done lesson yesterday
-                 * DIFF_DAY = 2 === User missed one day, streak will reset to 0
-                 * ...so on
-                 */
+            if (DIFF_DAY === 1 || user.streak > 0) {
+                // prettier-ignore
+                console.log(`--->>> user.streak > 0 || DIFF_DAY === 1 -> ${user.email}:${DIFF_DAY}`)
 
-                if (DIFF_DAY === 1) {
-                    const STREAK_REMINDER_DATA = {
-                        user: user,
-                        streakNumber: user.streak || 0,
-                        hoursLeft: 0,
-                        lessonName: user.lastLessonCategoryName,
-                    }
-                    const LESSON_REMINDER_DATA = {
-                        user: user,
-                        lessonName: user.lastLessonCategoryName,
-                    }
-                    // prettier-ignore
-                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                const STREAK_REMINDER_DATA = {
+                    user: user,
+                    streakNumber: user.streak || 0,
+                    hoursLeft: 0,
+                    lessonName: user.lastLessonCategoryName,
+                }
+                const LESSON_REMINDER_DATA = {
+                    user: user,
+                    lessonName: user.lastLessonCategoryName,
+                }
+                // prettier-ignore
+                if (LOCALE_DAY_OF_WEEK === 1) {
+                    if(LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
                         await NotificationStreak.sendRandomReminder(STREAK_REMINDER_DATA)
                     }
-                    // prettier-ignore
-                    else if (LOCALE_DAY_OF_WEEK === 2) {
-                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                            await NotificationStreak.sendRandomReminder(STREAK_REMINDER_DATA)
-                        }
+                }
+                // prettier-ignore
+                else if (LOCALE_DAY_OF_WEEK === 2) {
+                    if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                        await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                    } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                        await NotificationStreak.sendRandomReminder(STREAK_REMINDER_DATA)
                     }
-                    // prettier-ignore
-                    else if (LOCALE_DAY_OF_WEEK === 3) {
-                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                            await NotificationStreak.sendRandomReminder(STREAK_REMINDER_DATA)
-                        }
+                }
+                // prettier-ignore
+                else if (LOCALE_DAY_OF_WEEK === 3) {
+                    if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                        await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                    } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                        await NotificationStreak.sendRandomReminder(STREAK_REMINDER_DATA)
                     }
-                    // prettier-ignore
-                    else if (LOCALE_DAY_OF_WEEK === 4) {
-                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                            await NotificationStreak.sendRandomReminder(STREAK_REMINDER_DATA)
-                        }
+                }
+                // prettier-ignore
+                else if (LOCALE_DAY_OF_WEEK === 4) {
+                    if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                        await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                    } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                        await NotificationStreak.sendRandomReminder(STREAK_REMINDER_DATA)
                     }
-                    // prettier-ignore
-                    else if (LOCALE_DAY_OF_WEEK === 5) {
-                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                            await NotificationStreak.sendRandomReminder(STREAK_REMINDER_DATA)
-                        }
+                }
+                // prettier-ignore
+                else if (LOCALE_DAY_OF_WEEK === 5) {
+                    if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                        await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                    } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                        await NotificationStreak.sendRandomReminder(STREAK_REMINDER_DATA)
                     }
-                    // prettier-ignore
-                    else if (LOCALE_DAY_OF_WEEK === 6) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                            await NotificationStreak.sendRandomReminder(STREAK_REMINDER_DATA)
-                        }
+                }
+                // prettier-ignore
+                else if (LOCALE_DAY_OF_WEEK === 6) {
+                    if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                    } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                        await NotificationStreak.sendRandomReminder(STREAK_REMINDER_DATA)
                     }
-                    // prettier-ignore
-                    else if (LOCALE_DAY_OF_WEEK === 0) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                        }
+                }
+                // prettier-ignore
+                else if (LOCALE_DAY_OF_WEEK === 0) {
+                    if(LOCALE_HOUR === 0 && LOCALE_MINUTE >= 10 && LOCALE_MINUTE < 15) {
+                        await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                     }
-                } else if (DIFF_DAY === 0) {
+                }
+                else if (DIFF_DAY === 0) {
                     const userStreak = user.streak
                     // (When streak reaches a milestone - 5-day, 15-day, 25-day, 30-day, 50-day, 75-day, 100-day)
                     if (
@@ -390,715 +374,702 @@ cron.schedule('*/5 * * * *', async function () {
                         })
                     }
                 }
-            } else if (user.streak === 0) {
+            } else if (user.streak === 0 || DIFF_DAY > 1) {
                 /**
-                 * User streak is 0
+                 * NOTES: User streak only synced when user logged in
+                 * Users may not do lessons but their streak is still more than 0
                  */
-                if (user?.lastCompletedDay) {
+                // prettier-ignore
+                console.log(`<<<--- user.streak === 0 || DIFF_DAY > 1 ${user.email} : ${DIFF_DAY}`)
+                if (DIFF_DAY === 1) {
+                    const STREAK_REMINDER_DATA = {
+                        user: user,
+                        typeId: 'DAY_1',
+                        streakNumber: 0,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    const LESSON_REMINDER_DATA = {
+                        user: user,
+                        lessonName: user.lastLessonCategoryName,
+                    }
                     // prettier-ignore
-                    const DIFF_DAY = dayjs(TODAY).diff(user.lastCompletedDay, 'day')
-                    console.log(
-                        `->>STREAK 0 : DIFF_DAY -> ${user.email} - ${DIFF_DAY}`
-                    )
-
-                    /**
-                     * NOTES
-                     * DIFF_DAY = 0 === User done lesson today
-                     * DIFF_DAY = 1 ===  Last done lesson yesterday
-                     * DIFF_DAY = 2 === User missed one day, streak will reset to 0
-                     * ...so on
-                     */
-
-                    if (DIFF_DAY === 1) {
-                        const STREAK_REMINDER_DATA = {
-                            user: user,
-                            typeId: 'DAY_1',
-                            streakNumber: 0,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        const LESSON_REMINDER_DATA = {
-                            user: user,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        // prettier-ignore
-                        if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 2) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 2) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 3) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 4) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 5) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 6) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 0) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            }
                         }
                     }
-                    // DIFF DAY 2
-                    else if (DIFF_DAY === 2) {
-                        const STREAK_REMINDER_DATA = {
-                            user: user,
-                            typeId: 'DAY_2',
-                            streakNumber: 0,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        const LESSON_REMINDER_DATA = {
-                            user: user,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        // prettier-ignore
-                        if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 3) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 2) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 3) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 4) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 5) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 6) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 0) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            }
                         }
                     }
-                    // DIFF DAY 3
-                    else if (DIFF_DAY === 3) {
-                        const STREAK_REMINDER_DATA = {
-                            user: user,
-                            typeId: 'DAY_3',
-                            streakNumber: 0,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        const LESSON_REMINDER_DATA = {
-                            user: user,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        // prettier-ignore
-                        if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 4) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 2) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 3) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 4) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 5) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 6) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 0) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            }
                         }
                     }
-                    // DIFF DAY 4
-                    else if (DIFF_DAY === 4) {
-                        const STREAK_REMINDER_DATA = {
-                            user: user,
-                            typeId: 'DAY_4',
-                            streakNumber: 0,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        const LESSON_REMINDER_DATA = {
-                            user: user,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        // prettier-ignore
-                        if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 5) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 2) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 3) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 4) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 5) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 6) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 0) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            }
                         }
                     }
-                    // DIFF DAY 5
-                    else if (DIFF_DAY === 5) {
-                        const STREAK_REMINDER_DATA = {
-                            user: user,
-                            typeId: 'DAY_5',
-                            streakNumber: 0,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        const LESSON_REMINDER_DATA = {
-                            user: user,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        // prettier-ignore
-                        if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 6) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 2) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 3) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 4) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 5) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 6) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 0) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            }
                         }
                     }
-                    // DIFF DAY 6
-                    else if (DIFF_DAY === 6) {
-                        const STREAK_REMINDER_DATA = {
-                            user: user,
-                            typeId: 'DAY_6',
-                            streakNumber: 0,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        const LESSON_REMINDER_DATA = {
-                            user: user,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        // prettier-ignore
-                        if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
-                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 2) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 3) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 4) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 5) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 6) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 0) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 0) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         }
                     }
-                    // DIFF DAY 7
-                    else if (DIFF_DAY === 7) {
-                        const STREAK_REMINDER_DATA = {
-                            user: user,
-                            typeId: 'DAY_7',
-                            streakNumber: 0,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        const LESSON_REMINDER_DATA = {
-                            user: user,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        // prettier-ignore
-                        if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                }
+                // DIFF DAY 2
+                else if (DIFF_DAY === 2) {
+                    const STREAK_REMINDER_DATA = {
+                        user: user,
+                        typeId: 'DAY_2',
+                        streakNumber: 0,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    const LESSON_REMINDER_DATA = {
+                        user: user,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    // prettier-ignore
+                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 2) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 2) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 3) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 4) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 5) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 6) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 0) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            }
                         }
                     }
-                    // DIFF DAY 8
-                    else if (DIFF_DAY === 8) {
-                        const STREAK_REMINDER_DATA = {
-                            user: user,
-                            typeId: 'DAY_8',
-                            streakNumber: 0,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        const LESSON_REMINDER_DATA = {
-                            user: user,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        // prettier-ignore
-                        if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 3) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 2) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 3) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 4) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 5) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 6) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 0) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            }
                         }
                     }
-                    // DIFF DAY 9
-                    else if (DIFF_DAY === 9) {
-                        const STREAK_REMINDER_DATA = {
-                            user: user,
-                            typeId: 'DAY_9',
-                            streakNumber: 0,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        const LESSON_REMINDER_DATA = {
-                            user: user,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        // prettier-ignore
-                        if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 4) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 2) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 3) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 4) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 5) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 6) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 0) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            }
                         }
                     }
-                    // DIFF DAY 10
-                    else if (DIFF_DAY === 10) {
-                        const STREAK_REMINDER_DATA = {
-                            user: user,
-                            typeId: 'DAY_10',
-                            streakNumber: 0,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        const LESSON_REMINDER_DATA = {
-                            user: user,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        // prettier-ignore
-                        if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 5) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 2) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 3) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 4) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 5) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 6) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
-                        }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 0) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            }
                         }
                     }
-                    // DIFF DAY 11
-                    else if (DIFF_DAY === 11) {
-                        const STREAK_REMINDER_DATA = {
-                            user: user,
-                            typeId: 'DAY_11',
-                            streakNumber: 0,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        const LESSON_REMINDER_DATA = {
-                            user: user,
-                            lessonName: user.lastLessonCategoryName,
-                        }
-                        // prettier-ignore
-                        if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 6) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
                         }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 2) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 0) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 3) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
+                    }
+                }
+                // DIFF DAY 3
+                else if (DIFF_DAY === 3) {
+                    const STREAK_REMINDER_DATA = {
+                        user: user,
+                        typeId: 'DAY_3',
+                        streakNumber: 0,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    const LESSON_REMINDER_DATA = {
+                        user: user,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    // prettier-ignore
+                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 2) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
                         }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 4) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 3) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
                         }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 5) {
-                            if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 4) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
                         }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 6) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                                await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                            }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 5) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
                         }
-                        // prettier-ignore
-                        else if (LOCALE_DAY_OF_WEEK === 0) {
-                            if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                                await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                            }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 6) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 0) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        }
+                    }
+                }
+                // DIFF DAY 4
+                else if (DIFF_DAY === 4) {
+                    const STREAK_REMINDER_DATA = {
+                        user: user,
+                        typeId: 'DAY_4',
+                        streakNumber: 0,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    const LESSON_REMINDER_DATA = {
+                        user: user,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    // prettier-ignore
+                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 2) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 3) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 4) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 5) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 6) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 0) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        }
+                    }
+                }
+                // DIFF DAY 5
+                else if (DIFF_DAY === 5) {
+                    const STREAK_REMINDER_DATA = {
+                        user: user,
+                        typeId: 'DAY_5',
+                        streakNumber: 0,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    const LESSON_REMINDER_DATA = {
+                        user: user,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    // prettier-ignore
+                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 2) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 3) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 4) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 5) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 6) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 0) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        }
+                    }
+                }
+                // DIFF DAY 6
+                else if (DIFF_DAY === 6) {
+                    const STREAK_REMINDER_DATA = {
+                        user: user,
+                        typeId: 'DAY_6',
+                        streakNumber: 0,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    const LESSON_REMINDER_DATA = {
+                        user: user,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    // prettier-ignore
+                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 2) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 3) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 4) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 5) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 6) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 0) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        }
+                    }
+                }
+                // DIFF DAY 7
+                else if (DIFF_DAY === 7) {
+                    const STREAK_REMINDER_DATA = {
+                        user: user,
+                        typeId: 'DAY_7',
+                        streakNumber: 0,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    const LESSON_REMINDER_DATA = {
+                        user: user,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    // prettier-ignore
+                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 2) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 3) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 4) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 5) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 6) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 0) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        }
+                    }
+                }
+                // DIFF DAY 8
+                else if (DIFF_DAY === 8) {
+                    const STREAK_REMINDER_DATA = {
+                        user: user,
+                        typeId: 'DAY_8',
+                        streakNumber: 0,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    const LESSON_REMINDER_DATA = {
+                        user: user,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    // prettier-ignore
+                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 2) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 3) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 4) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 5) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 6) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 0) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        }
+                    }
+                }
+                // DIFF DAY 9
+                else if (DIFF_DAY === 9) {
+                    const STREAK_REMINDER_DATA = {
+                        user: user,
+                        typeId: 'DAY_9',
+                        streakNumber: 0,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    const LESSON_REMINDER_DATA = {
+                        user: user,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    // prettier-ignore
+                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 2) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 3) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 4) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 5) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 6) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 0) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        }
+                    }
+                }
+                // DIFF DAY 10
+                else if (DIFF_DAY === 10) {
+                    const STREAK_REMINDER_DATA = {
+                        user: user,
+                        typeId: 'DAY_10',
+                        streakNumber: 0,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    const LESSON_REMINDER_DATA = {
+                        user: user,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    // prettier-ignore
+                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 2) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 3) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 4) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 5) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 6) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 0) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        }
+                    }
+                }
+                // DIFF DAY 11
+                else if (DIFF_DAY === 11) {
+                    const STREAK_REMINDER_DATA = {
+                        user: user,
+                        typeId: 'DAY_11',
+                        streakNumber: 0,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    const LESSON_REMINDER_DATA = {
+                        user: user,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    // prettier-ignore
+                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 2) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 3) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 4) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 5) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 6) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 0) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         }
                     }
                 }

@@ -9,6 +9,7 @@ const { sendNotification } = require('../utils/notification.util')
 const {
     NOTIFICATION_TYPE,
     SERVER_TIMEZONE,
+    __DEV__,
 } = require('../constants/app.constant')
 const user = require('../models/user')
 const moment = require('moment-timezone')
@@ -63,45 +64,45 @@ exports.sendAndSaveNotification = async ({
     dataId,
     streakNotificationTypeId,
 }) => {
-    let result = false
     const user = await UserModel.findOne({ _id: userId })
 
     const NOW = Date.now()
     const LOCALE_DATE_NOW = moment.tz(NOW, SERVER_TIMEZONE)
 
-    if (user?.fcmToken) {
-        const notifications = await NotificationModel.create({
-            userId,
-            title: title || '',
-            body: body || '',
-            type: type || 'common',
-            dataId: dataId || null,
-            readAt: null,
-            createdAt: LOCALE_DATE_NOW,
-        })
+    const notification = await NotificationModel.create({
+        userId,
+        title: title || '',
+        body: body || '',
+        type: type || 'common',
+        dataId: dataId || null,
+        createdAt: NOW,
+        readAt: null,
+    })
 
-        await sendNotification({
-            token: user.fcmToken,
-            title,
-            body,
-            data: dataId ? { dataId } : {},
-        })
+    console.log('-->>> NOTIFICATION SEND ->', notification)
 
-        if (streakNotificationTypeId) {
-            // prettier-ignore
-            await UserModel.updateOne(
-                { _id: userId }, 
-                {
-                    $set: { lastDeliveredStreakNotificationType: streakNotificationTypeId },
-                }
-            ).exec()
+    if (!__DEV__) {
+        if (notification && user?.fcmToken) {
+            await sendNotification({
+                token: user.fcmToken,
+                title,
+                body,
+                data: dataId ? { dataId } : {},
+            })
+
+            if (streakNotificationTypeId) {
+                // prettier-ignore
+                await UserModel.updateOne(
+                    { _id: userId },
+                    {
+                        $set: { lastDeliveredStreakNotificationType: streakNotificationTypeId },
+                    }
+                ).exec()
+            }
         }
-
-        result = true
-        return notifications
     }
 
-    return result
+    return notification
 }
 
 exports.admin_getNotifeeUsers = async () => {
