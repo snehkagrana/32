@@ -350,7 +350,7 @@ cron.schedule('*/5 * * * *', async function () {
                 }
                 // prettier-ignore
                 else if (LOCALE_DAY_OF_WEEK === 0) {
-                    if(LOCALE_HOUR === 0 && LOCALE_MINUTE >= 10 && LOCALE_MINUTE < 15) {
+                    if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
                         await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                     }
                 }
