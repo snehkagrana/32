@@ -400,7 +400,7 @@ cron.schedule('*/5 * * * *', async function () {
                         }
                     }
                 }
-                // DIFF DAY 3
+                // DIFF DAY 4
                 else if (DIFF_DAY === 4) {
                     const STREAK_REMINDER_DATA = {
                         user: user,
@@ -463,7 +463,7 @@ cron.schedule('*/5 * * * *', async function () {
                         }
                     }
                 }
-                // DIFF DAY 4
+                // DIFF DAY 5
                 else if (DIFF_DAY === 5) {
                     const STREAK_REMINDER_DATA = {
                         user: user,
@@ -526,7 +526,7 @@ cron.schedule('*/5 * * * *', async function () {
                         }
                     }
                 }
-                // DIFF DAY 5
+                // DIFF DAY 6
                 else if (DIFF_DAY === 6) {
                     const STREAK_REMINDER_DATA = {
                         user: user,
@@ -589,7 +589,7 @@ cron.schedule('*/5 * * * *', async function () {
                         }
                     }
                 }
-                // DIFF DAY 6
+                // DIFF DAY 7
                 else if (DIFF_DAY === 7) {
                     const STREAK_REMINDER_DATA = {
                         user: user,
@@ -652,7 +652,7 @@ cron.schedule('*/5 * * * *', async function () {
                         }
                     }
                 }
-                // DIFF DAY 7
+                // DIFF DAY 8
                 else if (DIFF_DAY === 8) {
                     const STREAK_REMINDER_DATA = {
                         user: user,
@@ -715,7 +715,7 @@ cron.schedule('*/5 * * * *', async function () {
                         }
                     }
                 }
-                // DIFF DAY 8
+                // DIFF DAY 9
                 else if (DIFF_DAY === 9) {
                     const STREAK_REMINDER_DATA = {
                         user: user,
@@ -778,7 +778,7 @@ cron.schedule('*/5 * * * *', async function () {
                         }
                     }
                 }
-                // DIFF DAY 9
+                // DIFF DAY 10
                 else if (DIFF_DAY === 10) {
                     const STREAK_REMINDER_DATA = {
                         user: user,
@@ -841,7 +841,7 @@ cron.schedule('*/5 * * * *', async function () {
                         }
                     }
                 }
-                // DIFF DAY 10
+                // DIFF DAY 11
                 else if (DIFF_DAY === 11) {
                     const STREAK_REMINDER_DATA = {
                         user: user,
@@ -904,7 +904,7 @@ cron.schedule('*/5 * * * *', async function () {
                         }
                     }
                 }
-                // DIFF DAY 11
+                // DIFF DAY 12
                 else if (DIFF_DAY === 12) {
                     const STREAK_REMINDER_DATA = {
                         user: user,
@@ -1081,7 +1081,7 @@ cron.schedule('*/5 * * * *', async function () {
                 }
 
                 // prettier-ignore
-                if (LOCALE_DAY_OF_WEEK === 0) {
+                else if (LOCALE_DAY_OF_WEEK === 0) {
                     if (LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
                         users.forEach(async (x) => {
                             const LEADERBOARD_REMINDER_DATA = {
@@ -1153,12 +1153,6 @@ cron.schedule('*/5 * * * *', async function () {
             // console.log('Do nothing')
         }
     }
-
-    /**
-     * -------------
-     * LESSON REMINDER
-     * -------------
-     */
 })
 
 // const TODAY = new Date()
