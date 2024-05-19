@@ -190,13 +190,13 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 6) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationStreak.sendReminder(STREAK_COMBO_NOTIFICATION_DATA)
                         }
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 0) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationStreak.sendReminder(STREAK_COMBO_NOTIFICATION_DATA)
                         }
                     }
@@ -255,7 +255,7 @@ cron.schedule('*/5 * * * *', async function () {
                 }
                 // prettier-ignore
                 else if (LOCALE_DAY_OF_WEEK === 6) {
-                    if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                    if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                         await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                     } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                         await NotificationStreak.sendRandomReminder(STREAK_REMINDER_DATA)
@@ -263,7 +263,7 @@ cron.schedule('*/5 * * * *', async function () {
                 }
                 // prettier-ignore
                 else if (LOCALE_DAY_OF_WEEK === 0) {
-                    if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                    if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                         await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                     }
                 }
@@ -324,7 +324,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 6) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
@@ -332,7 +332,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 0) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         }
                     }
@@ -387,7 +387,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 6) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
@@ -395,7 +395,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 0) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         }
                     }
@@ -450,7 +450,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 6) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
@@ -458,7 +458,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 0) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         }
                     }
@@ -513,7 +513,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 6) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
@@ -521,7 +521,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 0) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         }
                     }
@@ -576,7 +576,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 6) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
@@ -584,7 +584,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 0) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         }
                     }
@@ -639,7 +639,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 6) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
@@ -647,7 +647,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 0) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         }
                     }
@@ -702,7 +702,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 6) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
@@ -710,7 +710,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 0) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         }
                     }
@@ -765,7 +765,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 6) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
@@ -773,7 +773,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 0) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         }
                     }
@@ -828,7 +828,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 6) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
@@ -836,7 +836,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 0) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         }
                     }
@@ -891,7 +891,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 6) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
@@ -899,7 +899,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 0) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         }
                     }
@@ -954,7 +954,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 6) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
                             await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
@@ -962,7 +962,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 0) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 0 && LOCALE_MINUTE < 5) {
                             await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                         }
                     }
