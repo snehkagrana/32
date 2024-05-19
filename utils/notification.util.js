@@ -117,7 +117,7 @@ const NotificationReminder = {
 }
 
 const LeaderboardReminder = {
-    sendRandomReminder: async ({ lessonName, daysLeft }) => {
+    sendRandomReminder: async ({ user, lessonName, daysLeft }) => {
         const TYPE_ID = getRandomInt(
             Object.keys(RANDOMLY_LEADERBOARD_NOTIFICATION_TYPE).length
         )
