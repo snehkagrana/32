@@ -137,9 +137,73 @@ cron.schedule('*/5 * * * *', async function () {
              */
             const DIFF_DAY = dayjs(TODAY).diff(user.lastCompletedDay, 'day') || -1
 
-            if (DIFF_DAY === 1 || user.streak > 0) {
+            if (DIFF_DAY === 0 && user.streak > 0) {
                 // prettier-ignore
-                console.log(`--->>> user.streak > 0 || DIFF_DAY === 1 -> ${user.email}:${DIFF_DAY}`)
+                console.log(`---^^^ DIFF_DAY === 0 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
+
+                const STREAK_COMBO_NOTIFICATION_DATA = {
+                    user,
+                    typeId: 'STREAK_COMBO',
+                    streakNumber: user.streak,
+                    lessonName: user.lastLessonCategoryName,
+                }
+
+                // (When streak reaches a milestone - 5-day, 15-day, 25-day, 30-day, 50-day, 75-day, 100-day)
+                if (
+                    userStreak === 5 ||
+                    userStreak === 15 ||
+                    userStreak === 25 ||
+                    userStreak === 30 ||
+                    userStreak === 50 ||
+                    userStreak === 75 ||
+                    userStreak === 100
+                ) {
+                    // prettier-ignore
+                    if (LOCALE_DAY_OF_WEEK === 1) {
+                        if(LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                            await NotificationStreak.sendReminder(STREAK_COMBO_NOTIFICATION_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 2) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationStreak.sendReminder(STREAK_COMBO_NOTIFICATION_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 3) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationStreak.sendReminder(STREAK_COMBO_NOTIFICATION_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 4) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationStreak.sendReminder(STREAK_COMBO_NOTIFICATION_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 5) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationStreak.sendReminder(STREAK_COMBO_NOTIFICATION_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 6) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationStreak.sendReminder(STREAK_COMBO_NOTIFICATION_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 0) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationStreak.sendReminder(STREAK_COMBO_NOTIFICATION_DATA)
+                        }
+                    }
+                }
+            } else if (DIFF_DAY === 1 && user.streak > 0) {
+                // prettier-ignore
+                console.log(`--->>> DIFF_DAY === 1 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
 
                 const STREAK_REMINDER_DATA = {
                     user: user,
@@ -203,100 +267,18 @@ cron.schedule('*/5 * * * *', async function () {
                         await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                     }
                 }
-                else if (DIFF_DAY === 0) {
-                    const userStreak = user.streak
-                    // (When streak reaches a milestone - 5-day, 15-day, 25-day, 30-day, 50-day, 75-day, 100-day)
-                    if (
-                        userStreak === 5 ||
-                        userStreak === 15 ||
-                        userStreak === 25 ||
-                        userStreak === 30 ||
-                        userStreak === 50 ||
-                        userStreak === 75 ||
-                        userStreak === 100
-                    ) {
-                        await NotificationStreak.sendReminder({
-                            user,
-                            typeId: 'STREAK_COMBO',
-                            streakNumber: user.streak,
-                            lessonName: user.lastLessonCategoryName,
-                        })
-                    }
-                }
-            } else if (user.streak === 0 || DIFF_DAY > 1) {
+            } else if (user.streak === 0 || DIFF_DAY >= 2) {
                 /**
                  * NOTES: User streak only synced when user logged in
                  * Users may not do lessons but their streak is still more than 0
                  */
                 // prettier-ignore
-                console.log(`<<<--- user.streak === 0 || DIFF_DAY > 1 ${user.email} : ${DIFF_DAY}`)
-                if (DIFF_DAY === 1) {
+                console.log(`<<<--- user.streak === 0 || DIFF_DAY >= 2 ${user.email} : ${DIFF_DAY}`)
+                // DIFF DAY 2
+                if (DIFF_DAY === 2) {
                     const STREAK_REMINDER_DATA = {
                         user: user,
                         typeId: 'DAY_1',
-                        streakNumber: 0,
-                        lessonName: user.lastLessonCategoryName,
-                    }
-                    const LESSON_REMINDER_DATA = {
-                        user: user,
-                        lessonName: user.lastLessonCategoryName,
-                    }
-                    // prettier-ignore
-                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
-                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                    }
-                    // prettier-ignore
-                    else if (LOCALE_DAY_OF_WEEK === 2) {
-                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                        }
-                    }
-                    // prettier-ignore
-                    else if (LOCALE_DAY_OF_WEEK === 3) {
-                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                        }
-                    }
-                    // prettier-ignore
-                    else if (LOCALE_DAY_OF_WEEK === 4) {
-                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                        }
-                    }
-                    // prettier-ignore
-                    else if (LOCALE_DAY_OF_WEEK === 5) {
-                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                        }
-                    }
-                    // prettier-ignore
-                    else if (LOCALE_DAY_OF_WEEK === 6) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
-                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
-                        }
-                    }
-                    // prettier-ignore
-                    else if (LOCALE_DAY_OF_WEEK === 0) {
-                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
-                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
-                        }
-                    }
-                }
-                // DIFF DAY 2
-                else if (DIFF_DAY === 2) {
-                    const STREAK_REMINDER_DATA = {
-                        user: user,
-                        typeId: 'DAY_2',
                         streakNumber: 0,
                         lessonName: user.lastLessonCategoryName,
                     }
@@ -359,6 +341,69 @@ cron.schedule('*/5 * * * *', async function () {
                 else if (DIFF_DAY === 3) {
                     const STREAK_REMINDER_DATA = {
                         user: user,
+                        typeId: 'DAY_2',
+                        streakNumber: 0,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    const LESSON_REMINDER_DATA = {
+                        user: user,
+                        lessonName: user.lastLessonCategoryName,
+                    }
+                    // prettier-ignore
+                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 2) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 3) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 4) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 5) {
+                        if(LOCALE_HOUR === 20 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 6) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        } else if(LOCALE_HOUR === 22 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE < 20) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
+                    }
+                    // prettier-ignore
+                    else if (LOCALE_DAY_OF_WEEK === 0) {
+                        if(LOCALE_HOUR === 15 && LOCALE_MINUTE >= 1 && LOCALE_MINUTE < 5) {
+                            await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
+                        }
+                    }
+                }
+                // DIFF DAY 3
+                else if (DIFF_DAY === 4) {
+                    const STREAK_REMINDER_DATA = {
+                        user: user,
                         typeId: 'DAY_3',
                         streakNumber: 0,
                         lessonName: user.lastLessonCategoryName,
@@ -419,7 +464,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                 }
                 // DIFF DAY 4
-                else if (DIFF_DAY === 4) {
+                else if (DIFF_DAY === 5) {
                     const STREAK_REMINDER_DATA = {
                         user: user,
                         typeId: 'DAY_4',
@@ -482,7 +527,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                 }
                 // DIFF DAY 5
-                else if (DIFF_DAY === 5) {
+                else if (DIFF_DAY === 6) {
                     const STREAK_REMINDER_DATA = {
                         user: user,
                         typeId: 'DAY_5',
@@ -545,7 +590,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                 }
                 // DIFF DAY 6
-                else if (DIFF_DAY === 6) {
+                else if (DIFF_DAY === 7) {
                     const STREAK_REMINDER_DATA = {
                         user: user,
                         typeId: 'DAY_6',
@@ -608,7 +653,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                 }
                 // DIFF DAY 7
-                else if (DIFF_DAY === 7) {
+                else if (DIFF_DAY === 8) {
                     const STREAK_REMINDER_DATA = {
                         user: user,
                         typeId: 'DAY_7',
@@ -671,7 +716,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                 }
                 // DIFF DAY 8
-                else if (DIFF_DAY === 8) {
+                else if (DIFF_DAY === 9) {
                     const STREAK_REMINDER_DATA = {
                         user: user,
                         typeId: 'DAY_8',
@@ -734,7 +779,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                 }
                 // DIFF DAY 9
-                else if (DIFF_DAY === 9) {
+                else if (DIFF_DAY === 10) {
                     const STREAK_REMINDER_DATA = {
                         user: user,
                         typeId: 'DAY_9',
@@ -797,7 +842,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                 }
                 // DIFF DAY 10
-                else if (DIFF_DAY === 10) {
+                else if (DIFF_DAY === 11) {
                     const STREAK_REMINDER_DATA = {
                         user: user,
                         typeId: 'DAY_10',
@@ -860,7 +905,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                 }
                 // DIFF DAY 11
-                else if (DIFF_DAY === 11) {
+                else if (DIFF_DAY === 12) {
                     const STREAK_REMINDER_DATA = {
                         user: user,
                         typeId: 'DAY_11',
