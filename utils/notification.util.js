@@ -46,7 +46,9 @@ const NotificationStreak = {
     sendReminder: async ({ typeId, user, streakNumber, lessonName }) => {
         const params = {
             streakNumber: streakNumber || 0,
-            lessonName: lessonName || '',
+            lessonName: lessonName
+                ? lessonName?.split('_')?.join(' ')
+                : user?.last_played?.sub_category?.split('_')?.join(' ') || '',
             name: user.displayName || '',
         }
         if (!STREAK_NOTIFICATION_TYPE[typeId]) {
@@ -75,7 +77,9 @@ const NotificationStreak = {
             // name: user.displayName || '',
             streakNumber: streakNumber || 0,
             hoursLeft: hoursLeft || 0,
-            lessonName: lessonName || '',
+            lessonName: lessonName
+                ? lessonName?.split('_')?.join(' ')
+                : user?.last_played?.sub_category?.split('_')?.join(' ') || '',
         }
         if (!RANDOMLY_STREAK_NOTIFICATION_TYPE[TYPE_ID]) {
             return false
@@ -98,7 +102,9 @@ const NotificationReminder = {
             Object.keys(RANDOMLY_LESSON_REMINDER_NOTIFICATION_TYPE).length
         )
         const params = {
-            lessonName: lessonName || '',
+            lessonName: lessonName
+                ? lessonName?.split('_')?.join(' ')
+                : user?.last_played?.sub_category?.split('_')?.join(' ') || '',
             name: user.displayName || '',
         }
         if (!RANDOMLY_LESSON_REMINDER_NOTIFICATION_TYPE[TYPE_ID]) {
@@ -122,7 +128,9 @@ const LeaderboardReminder = {
             Object.keys(RANDOMLY_LEADERBOARD_NOTIFICATION_TYPE).length
         )
         const params = {
-            lessonName: lessonName || '',
+            lessonName: lessonName
+                ? lessonName?.split('_')?.join(' ')
+                : user?.last_played?.sub_category?.split('_')?.join(' ') || '',
             daysLeft: daysLeft || 0,
         }
         if (!RANDOMLY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID]) {
