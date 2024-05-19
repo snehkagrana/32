@@ -278,25 +278,24 @@ const RANDOMLY_LEADERBOARD_NOTIFICATION_TYPE = {
             body: `You are on your way to the top of the leaderboard. Earn more bananas now!`,
         }
     },
-    3: ({ lessonName }) => {
+    3: () => {
         return {
             typeId: 3,
-            title: `Target Locked 🏹`,
-            body: `Leaderboard victory awaits you. Continue your ${lessonName} and go for the
-            win!`,
+            title: `Get the top spot! 🥇`,
+            body: `We know you love winning. Complete a lesson now to get on the top of the leaderboard`,
         }
     },
-    4: () => {
+    4: ({ lessonName }) => {
         return {
             typeId: 4,
-            title: `ife is a Race🏇.`,
-            body: `Well, Rancho and we disagree. But this is a fun race - complete your lessons before your friends do🗡.`,
+            title: `Target Locked 🏹`,
+            body: `Leaderboard victory awaits you. Continue your ${lessonName} and go for the win!`,
         }
     },
     5: () => {
         return {
             typeId: 5,
-            title: `ife is a Race🏇.`,
+            title: `Life is a Race🏇.`,
             body: `Well, Rancho and we disagree. But this is a fun race - complete your lessons before your friends do🗡.`,
         }
     },
