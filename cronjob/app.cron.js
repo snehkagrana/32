@@ -1093,13 +1093,21 @@ cron.schedule('*/5 * * * *', async function () {
                 if (LOCALE_DAY_OF_WEEK === 5) {
                     const DAY_LEFT = dayjs(currentActiveLeaderBoard.endDate).diff(LOCALE_DATE_NOW, 'day') || 0
                     if (LOCALE_HOUR === 13 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
-                        users.forEach(async (x) => {
-                            const LEADERBOARD_REMINDER_DATA = {
-                                lessonName: x.lastLessonCategoryName,
-                                daysLeft: DAY_LEFT
-                            }
-                            await LeaderboardReminder.sendRandomReminder(LEADERBOARD_REMINDER_DATA);
-                        })
+                        if(leaderBoardUsers?.length > 0) {
+                            leaderBoardUsers.forEach(async (x, index) => {
+                                await LeaderboardReminder.sendRandomReminder({
+                                    userId: x.userId,
+                                    friendName: leaderBoardUsers?.[index - 1]?.displayName || '',
+                                    myFriendPosition: index,
+                                    positionAboveOfMeId: leaderBoardUsers?.[index - 1]?.userId || null,
+                                    myPosition: index + 1,
+                                    lessonName: x.lastLessonCategoryName,
+                                    daysLeft: DAY_LEFT,
+                                    userId, 
+                                });
+                            })
+                        }
+
                     }
                 }
 

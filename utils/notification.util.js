@@ -127,28 +127,57 @@ const NotificationReminder = {
 }
 
 const LeaderboardReminder = {
-    sendRandomReminder: async ({ user, lessonName, daysLeft }) => {
-        const TYPE_ID = getRandomInt(
-            Object.keys(RANDOMLY_LEADERBOARD_NOTIFICATION_TYPE).length
-        )
-        const params = {
-            lessonName: lessonName
-                ? lessonName?.split('_')?.join(' ')
-                : user?.last_played?.sub_category?.split('_')?.join(' ') || '',
-            daysLeft: daysLeft || 0,
+    sendRandomReminder: async ({
+        userId,
+        friendName,
+        myFriendPosition,
+        positionAboveOfMeId,
+        myPosition,
+        lessonName,
+        daysLeft,
+    }) => {
+        const myProfile = await UserModel.findOne({
+            _id: userId,
+        })
+        if (myProfile) {
+            // prettier-ignore
+            const isFriendExist = myProfile?.following?.find((x) => x.userId == positionAboveOfMeId) || null
+            if (
+                isFriendExist &&
+                myPosition !== 1 &&
+                myFriendPosition !== 0 &&
+                myFriendPosition < myPosition
+            ) {
+                return await LeaderboardReminder.sendFriendReminder({
+                    userId,
+                    friendName: friendName || '',
+                })
+            } else {
+                const TYPE_ID = getRandomInt(
+                    Object.keys(RANDOMLY_LEADERBOARD_NOTIFICATION_TYPE).length
+                )
+                const params = {
+                    lessonName: lessonName
+                        ? lessonName?.split('_')?.join(' ')
+                        : user?.last_played?.sub_category
+                              ?.split('_')
+                              ?.join(' ') || '',
+                    daysLeft: daysLeft || 0,
+                }
+                if (!RANDOMLY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID]) {
+                    return false
+                }
+                // prettier-ignore
+                const DATA = {
+                    userId,
+                    title: RANDOMLY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID](params)?.title || '',
+                    body: RANDOMLY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID](params)?.body || '',
+                    type: NOTIFICATION_TYPE.leaderboard,
+                    dataId: null,
+                }
+                return await NotificationService.sendAndSaveNotification(DATA)
+            }
         }
-        if (!RANDOMLY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID]) {
-            return false
-        }
-        // prettier-ignore
-        const DATA = {
-            title: RANDOMLY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID](params)?.title || '',
-            body: RANDOMLY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID](params)?.body || '',
-            userId: user._id,
-            type: NOTIFICATION_TYPE.leaderboard,
-            dataId: null,
-        }
-        return await NotificationService.sendAndSaveNotification(DATA)
     },
     sendSundayReminder: async ({
         userId,
@@ -162,24 +191,8 @@ const LeaderboardReminder = {
             _id: userId,
         })
         if (myProfile) {
-            // console.log(
-            //     '->>> positionAboveOfMeId',
-            //     myProfile.displayName,
-            //     positionAboveOfMeId
-            // )
-
-            // console.log(
-            //     '->>> myProfile.following',
-            //     myProfile.displayName,
-            //     myProfile.following
-            // )
             // prettier-ignore
             const isFriendExist = myProfile.following?.find((x) => x.userId == positionAboveOfMeId) || null
-            // console.log(
-            //     '**********************isFriendExist',
-            //     isFriendExist,
-            //     myProfile.displayName
-            // )
             if (
                 isFriendExist &&
                 myPosition !== 1 &&
