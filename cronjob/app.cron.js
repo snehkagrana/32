@@ -1104,15 +1104,16 @@ cron.schedule('*/5 * * * *', async function () {
 
                 // prettier-ignore
                 else if (LOCALE_DAY_OF_WEEK === 0) {
+                    const HOUR_LEFT = dayjs(currentActiveLeaderBoard.endDate).diff(LOCALE_DATE_NOW, 'hour') || 0
                     if (LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
                         users.forEach(async (x) => {
                             const LEADERBOARD_REMINDER_DATA = {
-                                lessonName: x.lastLessonCategoryName,
-                                daysLeft: 0
+                                user: x,
+                                hoursLeft: HOUR_LEFT || 0
                             }
-                            await LeaderboardReminder.sendRandomReminder(LEADERBOARD_REMINDER_DATA);
+                            await LeaderboardReminder.sendSundayReminder(LEADERBOARD_REMINDER_DATA);
                         })
-                    } 
+                    }
                 }
             }
         }
@@ -1133,6 +1134,8 @@ cron.schedule('*/5 * * * *', async function () {
                 'xp.weekly': { $gte: MINIMUM_WEEKLY_XP_LEADER_BOARD }
             }).limit(MAX_WEEKLY_USERS_LEADER_BOARD).exec()
 
+            let newLeaderBoardResult = null
+
             if (usersWithWeeklyXp?.length > 0) {
                 // prettier-ignore
                 let leaderBoardUsers = usersWithWeeklyXp.map(x => ({
@@ -1145,7 +1148,7 @@ cron.schedule('*/5 * * * *', async function () {
                 leaderBoardUsers.sort((a, b) => b.xp - a.xp)
 
                 // Create this week leaderboard
-                await LeaderBoardModel.create({
+                newLeaderBoardResult = await LeaderBoardModel.create({
                     isActive: true,
                     startDate: LOCALE_DATE_NOW,
                     endDate,
@@ -1157,7 +1160,7 @@ cron.schedule('*/5 * * * *', async function () {
                 })
             } else {
                 // Create this week leaderboard with empty users
-                await LeaderBoardModel.create({
+                newLeaderBoardResult = await LeaderBoardModel.create({
                     isActive: true,
                     startDate: LOCALE_DATE_NOW,
                     endDate,
@@ -1170,7 +1173,38 @@ cron.schedule('*/5 * * * *', async function () {
              * TODO
              * get previos leaderboard and send notification result
              */
-            // console.log('createNewLeaderboard')
+            if (newLeaderBoardResult && LOCALE_DAY_OF_WEEK === 1) {
+                if (
+                    LOCALE_HOUR === 9 &&
+                    LOCALE_MINUTE >= 0 &&
+                    LOCALE_MINUTE < 5
+                ) {
+                    const prevLeaderBoards = await LeaderBoardModel.find({
+                        isActive: false,
+                        startDate: { $lt: newLeaderBoardResult.startDate },
+                    })
+                    if (prevLeaderBoards?.length > 0) {
+                        // prettier-ignore
+                        const lastWeekLeaderboard = prevLeaderBoards?.[prevLeaderBoards.length - 1];
+                        if (lastWeekLeaderboard?.users?.length > 0) {
+                            for (const u of lastWeekLeaderboard?.users) {
+                                const user = await UserModel.findOne({
+                                    _id: u.userId,
+                                })
+                                if (user) {
+                                    const LEADERBOARD_RESULT_DATA = {
+                                        user,
+                                        rank: u.position,
+                                    }
+                                    await LeaderboardReminder.sendResultNotification(
+                                        LEADERBOARD_RESULT_DATA
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         } else {
             // console.log('Do nothing')
         }
