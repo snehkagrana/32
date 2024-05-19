@@ -46,7 +46,7 @@ exports.register = async (req, res) => {
             redirect: '/register',
             message: 'User Already Exists!',
         })
-    }
+    } 
     const hashedPassword = await bcryptUtil.createHash(req.body.password)
 
     let newUser = {

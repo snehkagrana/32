@@ -7,9 +7,11 @@ const {
     RANDOMLY_LEADERBOARD_NOTIFICATION_TYPE,
     SUNDAY_LEADERBOARD_NOTIFICATION_TYPE,
     LEADERBOARD_NOTIFICATION_TYPE,
+    FRIEND_LEADERBOARD_NOTIFICATION_TYPE,
 } = require('../constants/notification-type.constant')
 const { NOTIFICATION_TYPE } = require('../constants/app.constant')
 const { getRandomInt } = require('./common.util')
+const UserModel = require('../models/user')
 
 const sendNotification = async ({ token, title, body, data }) => {
     try {
@@ -148,22 +150,80 @@ const LeaderboardReminder = {
         }
         return await NotificationService.sendAndSaveNotification(DATA)
     },
-    sendSundayReminder: async ({ user, hoursLeft }) => {
-        // const TYPE_ID = getRandomInt(
-        //     Object.keys(SUNDAY_LEADERBOARD_NOTIFICATION_TYPE).length
-        // )
+    sendSundayReminder: async ({
+        userId,
+        friendName,
+        myFriendPosition,
+        positionAboveOfMeId,
+        myPosition,
+        hoursLeft,
+    }) => {
+        const myProfile = await UserModel.findOne({
+            _id: userId,
+        })
+        if (myProfile) {
+            // console.log(
+            //     '->>> positionAboveOfMeId',
+            //     myProfile.displayName,
+            //     positionAboveOfMeId
+            // )
+
+            // console.log(
+            //     '->>> myProfile.following',
+            //     myProfile.displayName,
+            //     myProfile.following
+            // )
+            // prettier-ignore
+            const isFriendExist = myProfile.following?.find((x) => x.userId == positionAboveOfMeId) || null
+            // console.log(
+            //     '**********************isFriendExist',
+            //     isFriendExist,
+            //     myProfile.displayName
+            // )
+            if (
+                isFriendExist &&
+                myPosition !== 1 &&
+                myFriendPosition !== 0 &&
+                myFriendPosition < myPosition
+            ) {
+                return await LeaderboardReminder.sendFriendReminder({
+                    userId,
+                    friendName: friendName || '',
+                })
+            } else {
+                const TYPE_ID = 1
+                const params = {
+                    hoursLeft: hoursLeft || 0,
+                }
+                if (!SUNDAY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID]) {
+                    return false
+                }
+                // prettier-ignore
+                const DATA = {
+                    userId,
+                    title: SUNDAY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID](params)?.title || '',
+                    body: SUNDAY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID](params)?.body || '',
+                    type: NOTIFICATION_TYPE.leaderboard,
+                    dataId: null,
+                }
+                return await NotificationService.sendAndSaveNotification(DATA)
+            }
+        }
+    },
+
+    sendFriendReminder: async ({ userId, friendName }) => {
         const TYPE_ID = 1
         const params = {
-            hoursLeft: hoursLeft || 0,
+            friendName: friendName || '',
         }
-        if (!SUNDAY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID]) {
+        if (!FRIEND_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID]) {
             return false
         }
         // prettier-ignore
         const DATA = {
-            title: SUNDAY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID](params)?.title || '',
-            body: SUNDAY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID](params)?.body || '',
-            userId: user._id,
+            userId,
+            title: FRIEND_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID](params)?.title || '',
+            body: FRIEND_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID](params)?.body || '',
             type: NOTIFICATION_TYPE.leaderboard,
             dataId: null,
         }
