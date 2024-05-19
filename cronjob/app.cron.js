@@ -287,8 +287,10 @@ cron.schedule('*/5 * * * *', async function () {
                         lessonName: user.lastLessonCategoryName,
                     }
                     // prettier-ignore
-                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
-                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    if (LOCALE_DAY_OF_WEEK === 1) {
+                        if(LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 2) {
@@ -350,8 +352,10 @@ cron.schedule('*/5 * * * *', async function () {
                         lessonName: user.lastLessonCategoryName,
                     }
                     // prettier-ignore
-                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
-                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    if (LOCALE_DAY_OF_WEEK === 1) {
+                        if(LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 2) {
@@ -413,8 +417,10 @@ cron.schedule('*/5 * * * *', async function () {
                         lessonName: user.lastLessonCategoryName,
                     }
                     // prettier-ignore
-                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
-                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    if (LOCALE_DAY_OF_WEEK === 1) {
+                        if(LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 2) {
@@ -476,8 +482,10 @@ cron.schedule('*/5 * * * *', async function () {
                         lessonName: user.lastLessonCategoryName,
                     }
                     // prettier-ignore
-                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
-                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    if (LOCALE_DAY_OF_WEEK === 1) {
+                        if(LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 2) {
@@ -539,8 +547,10 @@ cron.schedule('*/5 * * * *', async function () {
                         lessonName: user.lastLessonCategoryName,
                     }
                     // prettier-ignore
-                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
-                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    if (LOCALE_DAY_OF_WEEK === 1) {
+                        if(LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 2) {
@@ -602,8 +612,10 @@ cron.schedule('*/5 * * * *', async function () {
                         lessonName: user.lastLessonCategoryName,
                     }
                     // prettier-ignore
-                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
-                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    if (LOCALE_DAY_OF_WEEK === 1) {
+                        if(LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 2) {
@@ -665,8 +677,10 @@ cron.schedule('*/5 * * * *', async function () {
                         lessonName: user.lastLessonCategoryName,
                     }
                     // prettier-ignore
-                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
-                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    if (LOCALE_DAY_OF_WEEK === 1) {
+                        if(LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 2) {
@@ -728,8 +742,10 @@ cron.schedule('*/5 * * * *', async function () {
                         lessonName: user.lastLessonCategoryName,
                     }
                     // prettier-ignore
-                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
-                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    if (LOCALE_DAY_OF_WEEK === 1) {
+                        if(LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 2) {
@@ -791,8 +807,10 @@ cron.schedule('*/5 * * * *', async function () {
                         lessonName: user.lastLessonCategoryName,
                     }
                     // prettier-ignore
-                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
-                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    if (LOCALE_DAY_OF_WEEK === 1) {
+                        if(LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 2) {
@@ -854,8 +872,10 @@ cron.schedule('*/5 * * * *', async function () {
                         lessonName: user.lastLessonCategoryName,
                     }
                     // prettier-ignore
-                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
-                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    if (LOCALE_DAY_OF_WEEK === 1) {
+                        if(LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 2) {
@@ -917,8 +937,10 @@ cron.schedule('*/5 * * * *', async function () {
                         lessonName: user.lastLessonCategoryName,
                     }
                     // prettier-ignore
-                    if (LOCALE_DAY_OF_WEEK === 1 && LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
-                        await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                    if (LOCALE_DAY_OF_WEEK === 1) {
+                        if(LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                            await NotificationStreak.sendReminder(STREAK_REMINDER_DATA)
+                        }
                     }
                     // prettier-ignore
                     else if (LOCALE_DAY_OF_WEEK === 2) {
