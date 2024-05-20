@@ -104,7 +104,7 @@ module.exports = function (passport) {
                         following: [],
                         followers: [],
                         fcmToken: '',
-                        lastLessonCategoryName: '',
+                        nextLesson: '',
                     }
                     const newUser = await AuthService.createUser(newUserData)
                     const token = await jwtUtil.createToken({

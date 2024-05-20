@@ -200,7 +200,10 @@ const UserSchema = new mongoose.Schema({
         },
     ],
     fcmToken: String,
+
+    /** @deprecated */
     lastLessonCategoryName: String,
+
     lastDeliveredStreakNotificationType: Number,
     nextLesson: {
         skill: {

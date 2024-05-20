@@ -5,7 +5,10 @@ const jwtConfig = require('../configs/jwt.config')
 const bcryptUtil = require('../utils/bcrypt.util')
 const jwtUtil = require('../utils/jwt.util')
 const { appConfig } = require('../configs/app.config')
-const { generateReferralCode, generateUsername } = require('../utils/common.util')
+const {
+    generateReferralCode,
+    generateUsername,
+} = require('../utils/common.util')
 
 exports.sendRegisterCode = async (req, res) => {
     const isExist = await AuthService.findUserByEmail(req.body.email)
@@ -30,7 +33,10 @@ exports.checkRegisterCode = async (req, res) => {
 }
 
 exports.verifyRegisterCode = async (req, res) => {
-    const result = await AuthService.verifyRegisterCode(req.body.email, req.body.code)
+    const result = await AuthService.verifyRegisterCode(
+        req.body.email,
+        req.body.code
+    )
     if (result) {
         return res.json({ message: 'Verified' })
     }
@@ -46,7 +52,7 @@ exports.register = async (req, res) => {
             redirect: '/register',
             message: 'User Already Exists!',
         })
-    } 
+    }
     const hashedPassword = await bcryptUtil.createHash(req.body.password)
 
     let newUser = {
@@ -92,7 +98,8 @@ exports.register = async (req, res) => {
                 last_played: guestData.last_played,
                 heart: guestData.heart || appConfig.defaultHeart,
                 lastHeartAccruedAt: guestData.lastHeartAccruedAt || new Date(),
-                lastClaimedGemsDailyQuest: guestData.lastClaimedGemsDailyQuest || null,
+                lastClaimedGemsDailyQuest:
+                    guestData.lastClaimedGemsDailyQuest || null,
                 unlimitedHeart: null,
                 following: [],
                 followers: [],
@@ -136,7 +143,10 @@ exports.login = async (req, res) => {
     const user = await AuthService.findUserByEmail(req.body.email)
     await AuthService.syncUser(req.body.email)
     if (user) {
-        const isMatched = await bcryptUtil.compareHash(req.body.password, user.password)
+        const isMatched = await bcryptUtil.compareHash(
+            req.body.password,
+            user.password
+        )
         if (isMatched) {
             const token = await jwtUtil.createToken({
                 _id: user._id,
@@ -162,7 +172,9 @@ exports.login = async (req, res) => {
         }
     }
 
-    return res.status(400).json({ message: 'Incorrect Email or Wrong Password' })
+    return res
+        .status(400)
+        .json({ message: 'Incorrect Email or Wrong Password' })
 }
 
 exports.getUser = async (req, res) => {
@@ -188,11 +200,16 @@ exports.logout = async (req, res) => {
 }
 
 exports.sendLinkForgotPassword = async (req, res) => {
-    const result = await AuthService.sendLinkForgotPassword(req.body.email, req.body.baseUrl)
+    const result = await AuthService.sendLinkForgotPassword(
+        req.body.email,
+        req.body.baseUrl
+    )
     if (result) {
         return res.json({ message: 'Send link successfully.' })
     }
-    return res.status(400).json({ message: 'Failed to send forgot password link.' })
+    return res
+        .status(400)
+        .json({ message: 'Failed to send forgot password link.' })
 }
 
 exports.sendCodeForgotPassword = async (req, res) => {
@@ -207,11 +224,16 @@ exports.sendCodeForgotPassword = async (req, res) => {
     if (result) {
         return res.json({ message: 'Send otp code successfully.' })
     }
-    return res.status(400).json({ message: 'Failed to send otp code forgot password.' })
+    return res
+        .status(400)
+        .json({ message: 'Failed to send otp code forgot password.' })
 }
 
 exports.verifyCodeForgotPassword = async (req, res) => {
-    const result = await AuthService.verifyCodeForgotPassword(req.body.email, req.body.code)
+    const result = await AuthService.verifyCodeForgotPassword(
+        req.body.email,
+        req.body.code
+    )
     if (result) {
         return res.json({ message: 'Verified.' })
     }
@@ -247,9 +269,10 @@ exports.syncRegisterGoogle = async (req, res) => {
                 last_played: guestData.last_played,
                 heart: guestData.heart || appConfig.defaultHeart,
                 lastHeartAccruedAt: guestData.lastHeartAccruedAt || new Date(),
-                lastClaimedGemsDailyQuest: guestData.lastClaimedGemsDailyQuest || null,
+                lastClaimedGemsDailyQuest:
+                    guestData.lastClaimedGemsDailyQuest || null,
                 unlimitedHeart: null,
-                lastLessonCategoryName: guestData.lastLessonCategoryName || '',
+                nextLesson: guestData.nextLesson || null,
             }
             result = await AuthService.syncRegisterGoogle({
                 email: req.user.email,

@@ -50,8 +50,7 @@ cron.schedule('* * * * *', async function () {
         usersLessHeart.forEach(async user => {
             // console.log(`->>usersLessHeart -> ${user.email}:${user.heart}`)
             // prettier-ignore
-            if (user?.lastHeartAccruedAt && dayjs(TODAY).diff(user.lastHeartAccruedAt, 'minute') > HEARTS_REFILL_RATE) {
-
+            if (user?.lastHeartAccruedAt && dayjs(TODAY).diff(user.lastHeartAccruedAt, 'minute') > HEARTS_REFILL_RATE) { 
                 await UserModel.updateOne(
                     { email: user.email },
                     { $set: {
@@ -62,8 +61,8 @@ cron.schedule('* * * * *', async function () {
                 ).exec()
 
                 if(user.heart >= MAX_HEARTS - 1) {
-                    const lessonName = user?.lastLessonCategoryName
-                        ? user?.lastLessonCategoryName?.split('_')?.join(' ')
+                    const lessonName = user?.nextLesson?.subCategory
+                        ? user?.nextLesson?.subCategory?.split('_')?.join(' ')
                         : user?.last_played?.sub_category?.split('_')?.join(' ') || ''
                     
                     const notificationData = {
@@ -145,7 +144,7 @@ cron.schedule('*/5 * * * *', async function () {
                     user,
                     typeId: 'STREAK_COMBO',
                     streakNumber: user.streak,
-                    lessonName: user.lastLessonCategoryName,
+                    lessonName: user?.nextLesson?.subCategory || '',
                 }
 
                 // (When streak reaches a milestone - 5-day, 15-day, 25-day, 30-day, 50-day, 75-day, 100-day)
@@ -209,11 +208,11 @@ cron.schedule('*/5 * * * *', async function () {
                     user: user,
                     streakNumber: user.streak || 0,
                     hoursLeft: 0,
-                    lessonName: user.lastLessonCategoryName,
+                    lessonName: user?.nextLesson?.subCategory || '',
                 }
                 const LESSON_REMINDER_DATA = {
                     user: user,
-                    lessonName: user.lastLessonCategoryName,
+                    lessonName: user?.nextLesson?.subCategory || '',
                 }
                 // prettier-ignore
                 if (LOCALE_DAY_OF_WEEK === 1) {
@@ -280,11 +279,11 @@ cron.schedule('*/5 * * * *', async function () {
                         user: user,
                         typeId: 'DAY_1',
                         streakNumber: 0,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     const LESSON_REMINDER_DATA = {
                         user: user,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     // prettier-ignore
                     if (LOCALE_DAY_OF_WEEK === 1) {
@@ -345,11 +344,11 @@ cron.schedule('*/5 * * * *', async function () {
                         user: user,
                         typeId: 'DAY_2',
                         streakNumber: 0,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     const LESSON_REMINDER_DATA = {
                         user: user,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     // prettier-ignore
                     if (LOCALE_DAY_OF_WEEK === 1) {
@@ -410,11 +409,11 @@ cron.schedule('*/5 * * * *', async function () {
                         user: user,
                         typeId: 'DAY_3',
                         streakNumber: 0,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     const LESSON_REMINDER_DATA = {
                         user: user,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     // prettier-ignore
                     if (LOCALE_DAY_OF_WEEK === 1) {
@@ -475,11 +474,11 @@ cron.schedule('*/5 * * * *', async function () {
                         user: user,
                         typeId: 'DAY_4',
                         streakNumber: 0,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     const LESSON_REMINDER_DATA = {
                         user: user,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     // prettier-ignore
                     if (LOCALE_DAY_OF_WEEK === 1) {
@@ -540,11 +539,11 @@ cron.schedule('*/5 * * * *', async function () {
                         user: user,
                         typeId: 'DAY_5',
                         streakNumber: 0,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     const LESSON_REMINDER_DATA = {
                         user: user,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     // prettier-ignore
                     if (LOCALE_DAY_OF_WEEK === 1) {
@@ -605,11 +604,11 @@ cron.schedule('*/5 * * * *', async function () {
                         user: user,
                         typeId: 'DAY_6',
                         streakNumber: 0,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     const LESSON_REMINDER_DATA = {
                         user: user,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     // prettier-ignore
                     if (LOCALE_DAY_OF_WEEK === 1) {
@@ -670,11 +669,11 @@ cron.schedule('*/5 * * * *', async function () {
                         user: user,
                         typeId: 'DAY_7',
                         streakNumber: 0,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     const LESSON_REMINDER_DATA = {
                         user: user,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     // prettier-ignore
                     if (LOCALE_DAY_OF_WEEK === 1) {
@@ -735,11 +734,11 @@ cron.schedule('*/5 * * * *', async function () {
                         user: user,
                         typeId: 'DAY_8',
                         streakNumber: 0,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     const LESSON_REMINDER_DATA = {
                         user: user,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     // prettier-ignore
                     if (LOCALE_DAY_OF_WEEK === 1) {
@@ -800,11 +799,11 @@ cron.schedule('*/5 * * * *', async function () {
                         user: user,
                         typeId: 'DAY_9',
                         streakNumber: 0,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     const LESSON_REMINDER_DATA = {
                         user: user,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     // prettier-ignore
                     if (LOCALE_DAY_OF_WEEK === 1) {
@@ -865,11 +864,11 @@ cron.schedule('*/5 * * * *', async function () {
                         user: user,
                         typeId: 'DAY_10',
                         streakNumber: 0,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     const LESSON_REMINDER_DATA = {
                         user: user,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     // prettier-ignore
                     if (LOCALE_DAY_OF_WEEK === 1) {
@@ -930,11 +929,11 @@ cron.schedule('*/5 * * * *', async function () {
                         user: user,
                         typeId: 'DAY_11',
                         streakNumber: 0,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     const LESSON_REMINDER_DATA = {
                         user: user,
-                        lessonName: user.lastLessonCategoryName,
+                        lessonName: user?.nextLesson?.subCategory || '',
                     }
                     // prettier-ignore
                     if (LOCALE_DAY_OF_WEEK === 1) {
@@ -1073,7 +1072,8 @@ cron.schedule('*/5 * * * *', async function () {
                     displayName: x._doc.displayName ? x._doc.displayName : x._doc.username || '',
                     xp: x._doc.xp.weekly || MINIMUM_WEEKLY_XP_LEADER_BOARD,
                     email: x._doc.email,
-                    imgPath: x._doc.imgPath || '', 
+                    imgPath: x._doc.imgPath || '',
+                    lastLessonName: x._doc.nextLesson?.subCategory || '',
                 }));
                 leaderBoardUsers.sort((a, b) => b.xp - a.xp)
 
@@ -1101,13 +1101,12 @@ cron.schedule('*/5 * * * *', async function () {
                                     myFriendPosition: index,
                                     positionAboveOfMeId: leaderBoardUsers?.[index - 1]?.userId || null,
                                     myPosition: index + 1,
-                                    lessonName: x.lastLessonCategoryName,
+                                    lessonName: x.lastLessonName,
                                     daysLeft: DAY_LEFT,
                                     userId, 
                                 });
                             })
                         }
-
                     }
                 }
 
@@ -1145,7 +1144,7 @@ cron.schedule('*/5 * * * *', async function () {
                         isActive: false,
                         startDate: { $lt: currentActiveLeaderBoard.startDate },
                     })
-                    console.log('->>>>>prevLeaderBoards', prevLeaderBoards)
+                    // console.log('->>>>>prevLeaderBoards', prevLeaderBoards)
                     if (prevLeaderBoards?.length > 0) {
                         // prettier-ignore
                         const lastWeekLeaderboard = prevLeaderBoards?.[prevLeaderBoards.length - 1];

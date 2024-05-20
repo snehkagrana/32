@@ -63,6 +63,8 @@ const GuestSchema = new mongoose.Schema({
     registerToken: String,
     createdAt: Date,
     lastActiveAt: Date,
+
+    /** @deprecated */
     lastLessonCategoryName: String,
 })
 
