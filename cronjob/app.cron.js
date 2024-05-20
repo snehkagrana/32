@@ -1136,15 +1136,10 @@ cron.schedule('*/5 * * * *', async function () {
              * get previos leaderboard and send notification result
              */
             if (currentActiveLeaderBoard && LOCALE_DAY_OF_WEEK === 1) {
-                // if (
-                //     LOCALE_HOUR === 9 &&
-                //     LOCALE_MINUTE >= 0 &&
-                //     LOCALE_MINUTE < 5
-                // ) {
                 if (
-                    LOCALE_HOUR === 11 &&
-                    LOCALE_MINUTE >= 50 &&
-                    LOCALE_MINUTE < 55
+                    LOCALE_HOUR === 9 &&
+                    LOCALE_MINUTE >= 0 &&
+                    LOCALE_MINUTE < 5
                 ) {
                     const prevLeaderBoards = await LeaderBoardModel.find({
                         isActive: false,
