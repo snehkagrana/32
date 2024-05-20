@@ -409,10 +409,11 @@ exports.saveNextLesson = async ({ email, skill, category, subCategory }) => {
             { email },
             {
                 $set: {
+                    // prettier-ignore
                     nextLesson: {
-                        skill: skill || '',
-                        category: category || '',
-                        subCategory: subCategory || '',
+                        skill: skill ? skill : user?.nextLesson?.skill || '',
+                        category: category ? category : user?.nextLesson?.category || '',
+                        subCategory: subCategory ? subCategory : user?.nextLesson?.subCategory || '',
                     },
                 },
             },
@@ -420,8 +421,10 @@ exports.saveNextLesson = async ({ email, skill, category, subCategory }) => {
         ).exec()
     }
     return {
-        skill,
-        category,
-        subCategory,
+        skill: skill ? skill : user?.nextLesson?.skill || '',
+        category: category ? category : user?.nextLesson?.category || '',
+        subCategory: subCategory
+            ? subCategory
+            : user?.nextLesson?.subCategory || '',
     }
 }
