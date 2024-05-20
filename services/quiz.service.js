@@ -128,11 +128,6 @@ exports.saveScore = async ({ authUser, body }) => {
                         category: body.category,
                         sub_category: body.sub_category,
                     },
-                    nextLesson: {
-                        skill: body?.nextLesson?.skill || '',
-                        category: body?.nextLesson?.category || '',
-                        subCategory: body?.nextLesson?.subCategory || '',
-                    },
                     streak: user.streak,
                     lastCompletedDay: user.lastCompletedDay,
                     completedDays: completedDays,

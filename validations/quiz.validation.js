@@ -9,13 +9,6 @@ module.exports = {
             points: Joi.number().required(),
             score: Joi.array().items(Joi.number()).required(),
             xp: Joi.number().allow(null),
-            nextLesson: Joi.object()
-                .keys({
-                    skill: Joi.string().required(),
-                    category: Joi.string().required(),
-                    subCategory: Joi.string().required(),
-                })
-                .required(),
         })
         .options({ allowUnknown: true }),
 
