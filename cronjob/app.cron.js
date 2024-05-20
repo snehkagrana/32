@@ -1130,73 +1130,27 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                 }
             }
-        }
-    } else {
-        /**
-         * Create new weekly leaderboard
-         */
-        if (LOCALE_DAY_OF_WEEK >= 1) {
-            // if (LOCALE_DAY_OF_WEEK  >= 2) { // DEBUG
-            const endDate = dayjs(LOCALE_DATE_NOW)
-                .add(6, 'day')
-                .hour(23)
-                .minute(50)
-                .toISOString()
-
-            // prettier-ignore
-            const usersWithWeeklyXp = await UserModel.find({
-                'xp.weekly': { $gte: MINIMUM_WEEKLY_XP_LEADER_BOARD }
-            }).limit(MAX_WEEKLY_USERS_LEADER_BOARD).exec()
-
-            let newLeaderBoardResult = null
-
-            if (usersWithWeeklyXp?.length > 0) {
-                // prettier-ignore
-                let leaderBoardUsers = usersWithWeeklyXp.map(x => ({
-                    userId: x._doc._id, 
-                    displayName: x._doc.displayName ? x._doc.displayName : x._doc.username || '',
-                    xp: x._doc.xp.weekly || MINIMUM_WEEKLY_XP_LEADER_BOARD,
-                    email: x._doc.email,
-                    imgPath: x._doc.imgPath || null,
-                }));
-                leaderBoardUsers.sort((a, b) => b.xp - a.xp)
-
-                // Create this week leaderboard
-                newLeaderBoardResult = await LeaderBoardModel.create({
-                    isActive: true,
-                    startDate: LOCALE_DATE_NOW,
-                    endDate,
-                    lastUpdate: TODAY,
-                    users: leaderBoardUsers.map((x, index) => ({
-                        ...x,
-                        position: index + 1,
-                    })),
-                })
-            } else {
-                // Create this week leaderboard with empty users
-                newLeaderBoardResult = await LeaderBoardModel.create({
-                    isActive: true,
-                    startDate: LOCALE_DATE_NOW,
-                    endDate,
-                    lastUpdate: TODAY,
-                    users: [],
-                })
-            }
 
             /**
              * TODO
              * get previos leaderboard and send notification result
              */
-            if (newLeaderBoardResult && LOCALE_DAY_OF_WEEK === 1) {
+            if (currentActiveLeaderBoard && LOCALE_DAY_OF_WEEK === 1) {
+                // if (
+                //     LOCALE_HOUR === 9 &&
+                //     LOCALE_MINUTE >= 0 &&
+                //     LOCALE_MINUTE < 5
+                // ) {
                 if (
-                    LOCALE_HOUR === 9 &&
-                    LOCALE_MINUTE >= 0 &&
-                    LOCALE_MINUTE < 5
+                    LOCALE_HOUR === 11 &&
+                    LOCALE_MINUTE >= 50 &&
+                    LOCALE_MINUTE < 55
                 ) {
                     const prevLeaderBoards = await LeaderBoardModel.find({
                         isActive: false,
-                        startDate: { $lt: newLeaderBoardResult.startDate },
+                        startDate: { $lt: currentActiveLeaderBoard.startDate },
                     })
+                    console.log('->>>>>prevLeaderBoards', prevLeaderBoards)
                     if (prevLeaderBoards?.length > 0) {
                         // prettier-ignore
                         const lastWeekLeaderboard = prevLeaderBoards?.[prevLeaderBoards.length - 1];
@@ -1218,6 +1172,56 @@ cron.schedule('*/5 * * * *', async function () {
                         }
                     }
                 }
+            }
+        }
+    } else {
+        /**
+         * Create new weekly leaderboard
+         */
+        if (LOCALE_DAY_OF_WEEK >= 1) {
+            // if (LOCALE_DAY_OF_WEEK  >= 2) { // DEBUG
+            const endDate = dayjs(LOCALE_DATE_NOW)
+                .add(6, 'day')
+                .hour(23)
+                .minute(50)
+                .toISOString()
+
+            // prettier-ignore
+            const usersWithWeeklyXp = await UserModel.find({
+                'xp.weekly': { $gte: MINIMUM_WEEKLY_XP_LEADER_BOARD }
+            }).limit(MAX_WEEKLY_USERS_LEADER_BOARD).exec()
+
+            if (usersWithWeeklyXp?.length > 0) {
+                // prettier-ignore
+                let leaderBoardUsers = usersWithWeeklyXp.map(x => ({
+                    userId: x._doc._id, 
+                    displayName: x._doc.displayName ? x._doc.displayName : x._doc.username || '',
+                    xp: x._doc.xp.weekly || MINIMUM_WEEKLY_XP_LEADER_BOARD,
+                    email: x._doc.email,
+                    imgPath: x._doc.imgPath || null,
+                }));
+                leaderBoardUsers.sort((a, b) => b.xp - a.xp)
+
+                // Create this week leaderboard
+                await LeaderBoardModel.create({
+                    isActive: true,
+                    startDate: LOCALE_DATE_NOW,
+                    endDate,
+                    lastUpdate: TODAY,
+                    users: leaderBoardUsers.map((x, index) => ({
+                        ...x,
+                        position: index + 1,
+                    })),
+                })
+            } else {
+                // Create this week leaderboard with empty users
+                await LeaderBoardModel.create({
+                    isActive: true,
+                    startDate: LOCALE_DATE_NOW,
+                    endDate,
+                    lastUpdate: TODAY,
+                    users: [],
+                })
             }
         } else {
             // console.log('Do nothing')
