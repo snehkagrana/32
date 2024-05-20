@@ -62,4 +62,12 @@ module.exports = {
             token: Joi.string().required(),
         })
         .options({ allowUnknown: true }),
+
+    saveNextLesson: Joi.object()
+        .keys({
+            skill: Joi.string().required(),
+            category: Joi.string().required(),
+            subCategory: Joi.string().required(),
+        })
+        .options({ allowUnknown: true }),
 }

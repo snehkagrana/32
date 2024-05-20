@@ -401,3 +401,27 @@ exports.removeFCMToken = async ({ email }) => {
     }
     return result
 }
+
+exports.saveNextLesson = async ({ email, skill, category, subCategory }) => {
+    let user = await UserModel.findOne({ email }).exec()
+    if (user) {
+        await UserModel.findOneAndUpdate(
+            { email },
+            {
+                $set: {
+                    nextLesson: {
+                        skill: skill || '',
+                        category: category || '',
+                        subCategory: subCategory || '',
+                    },
+                },
+            },
+            { new: true }
+        ).exec()
+    }
+    return {
+        skill,
+        category,
+        subCategory,
+    }
+}

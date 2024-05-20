@@ -104,4 +104,11 @@ router.delete(
     ErrorHandler(AccountController.removeFCMToken)
 )
 
+router.post(
+    '/account/next-lesson/save',
+    validate(AccountValidations.saveNextLesson),
+    AuthGuard,
+    ErrorHandler(AccountController.saveNextLesson)
+)
+
 module.exports = router
