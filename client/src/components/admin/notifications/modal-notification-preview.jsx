@@ -10,16 +10,16 @@ import React, {
 import { Form, Row, Col, Button } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { useNotifications } from 'src/hooks'
-import {
-    FingoButton,
-    FingoInput,
-    FingoModal,
-    FingoModalSlider,
-} from 'src/components/core'
+import { FingoButton, FingoInput, FingoModal } from 'src/components/core'
 import styled from 'styled-components'
 import NotificationRecipientItem from './notification-recipient-item'
 
-const ModalNotificationUserRecipient = ({ defaultValues, onSubmit }) => {
+const ModalNotificationPreview = ({
+    open,
+    onClose,
+    defaultValues,
+    onSubmit,
+}) => {
     const dispatch = useDispatch()
     const {
         notifications_setOpenModalUserRecipients,
@@ -90,12 +90,13 @@ const ModalNotificationUserRecipient = ({ defaultValues, onSubmit }) => {
     }, [isSelectedAll])
 
     return (
-        <FingoModalSlider
-            open={openModalUserRecipients}
-            onClose={onCloseModal}
-            width={400}
-        >
-            <ModalWrapper>
+        <ModalWrapper>
+            <FingoModal
+                className='modal-notification-recipients'
+                open={open}
+                onClose={onClose}
+                centered
+            >
                 <ModalBox>
                     <div className='mb-4'>Select notification recipients</div>
                     <SearchBox>
@@ -149,21 +150,22 @@ const ModalNotificationUserRecipient = ({ defaultValues, onSubmit }) => {
                         </Col>
                     </Row>
                 </ModalBox>
-            </ModalWrapper>
-        </FingoModalSlider>
+            </FingoModal>
+        </ModalWrapper>
     )
 }
 
 const ModalWrapper = styled.div`
-    overflow-y: scroll;
-    max-height: 100vh;
+    .modal-dialog {
+        width: 620px !important;
+    }
 `
-
 const ModalBox = styled.div`
+    background-color: #fff;
     border-radius: 0.4rem;
     padding: 1rem;
 `
 
 const SearchBox = styled.div``
 
-export default ModalNotificationUserRecipient
+export default ModalNotificationPreview

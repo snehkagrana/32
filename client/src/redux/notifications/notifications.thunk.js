@@ -47,3 +47,19 @@ export const notifications_getList = createAsyncThunk(
         }
     }
 )
+
+export const notifications_getListNotificationTemplate = createAsyncThunk(
+    '@reward/notifications_getListNotificationTemplate',
+    async (params, { rejectWithValue }) => {
+        try {
+            const response =
+                await NotificationsAPI.admin_getListNotificationTemplate(params)
+            return response
+        } catch (err) {
+            if (!err.response) {
+                throw err
+            }
+            return rejectWithValue(err.response.data)
+        }
+    }
+)

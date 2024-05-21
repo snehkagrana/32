@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux'
 import { NotificationsAPI } from 'src/api'
 import NotificationForm from 'src/components/admin/notifications/notification-form'
 import Swal from 'sweetalert2'
+import { FingoButton } from 'src/components/core'
 
 const AdminNotificationPage = () => {
     const dispatch = useDispatch()
@@ -20,7 +21,7 @@ const AdminNotificationPage = () => {
     const navigate = useNavigate()
 
     const handleClick = () => {
-        navigate('/home')
+        navigate(-1)
     }
 
     const _getNotificationRecipients = params => {
@@ -37,20 +38,12 @@ const AdminNotificationPage = () => {
     }, [user, isAuthenticated])
 
     const onSubmit = useCallback(async values => {
-        console.log('----', values)
         try {
-            // prettier-ignore
-            const users = values?.users?.map(x => ({
-                userId: x.userId,
-                displayName: x.displayName,
-                email: x.email,
-            })) || []
-
             const submitValues = {
                 title: values.title,
                 body: values.body,
                 imageUrl: null,
-                users,
+                users: values?.users || [],
             }
 
             // prettier-ignore
@@ -83,6 +76,10 @@ const AdminNotificationPage = () => {
         }
     }, [])
 
+    const onClickTemplate = useCallback(() => {
+        navigate(`/admin/notification/template`)
+    }, [navigate])
+
     return (
         <FingoHomeLayout>
             <Helmet>
@@ -103,8 +100,14 @@ const AdminNotificationPage = () => {
                                         </button>
                                         <div>
                                             <h2 className='mb-3, text-center'>
-                                                Notifications
+                                                Notification
                                             </h2>
+                                            <FingoButton
+                                                color='white'
+                                                onClick={onClickTemplate}
+                                            >
+                                                Template
+                                            </FingoButton>
                                         </div>
                                     </div>
                                     <NotificationForm onSubmit={onSubmit} />

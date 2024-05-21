@@ -12,6 +12,7 @@ module.exports = {
                     userId: Joi.string().required(),
                     email: Joi.string().required(),
                     displayName: Joi.string().required(),
+                    imgPath: Joi.string().allow(null),
                 })
                 .required()
                 .min(1),

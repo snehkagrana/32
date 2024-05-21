@@ -63,11 +63,12 @@ exports.sendAndSaveNotification = async ({
     type,
     dataId,
     streakNotificationTypeId,
+    shouldSaveHistory,
+    isFromDashboard,
 }) => {
     const user = await UserModel.findOne({ _id: userId })
 
     const NOW = Date.now()
-    const LOCALE_DATE_NOW = moment.tz(NOW, SERVER_TIMEZONE)
 
     const notification = await NotificationModel.create({
         userId,
@@ -90,16 +91,38 @@ exports.sendAndSaveNotification = async ({
                 data: dataId ? { dataId } : {},
             })
 
-            if (streakNotificationTypeId) {
-                // prettier-ignore
-                await UserModel.updateOne(
-                    { _id: userId },
-                    {
-                        $set: { lastDeliveredStreakNotificationType: streakNotificationTypeId },
-                    }
-                ).exec()
-            }
+            /**
+             * @deprecated
+             */
+            // if (streakNotificationTypeId) {
+            //     // prettier-ignore
+            //     await UserModel.updateOne(
+            //         { _id: userId },
+            //         {
+            //             $set: { lastDeliveredStreakNotificationType: streakNotificationTypeId },
+            //         }
+            //     ).exec()
+            // }
         }
+    }
+
+    if (shouldSaveHistory) {
+        await DeliveredNotificationHistoryModel.create({
+            sendBy: 'system',
+            title: title || '',
+            body: body || '',
+            imageUrl: imageUrl || '',
+            type: type || NOTIFICATION_TYPE.common,
+            createdAt: new Date(),
+            isFromDashboard: isFromDashboard || false,
+            users: [
+                {
+                    userId,
+                    displayName: user?.displayName || '',
+                    imgPath: user?.imgPath || '',
+                },
+            ],
+        })
     }
 
     return notification
@@ -153,19 +176,28 @@ exports.admin_sendGeneralNotification = async ({
                 imageUrl: imageUrl || '',
                 type: NOTIFICATION_TYPE.common,
                 dataId: null,
+                shouldSaveHistory: false,
             }
 
             await this.sendAndSaveNotification(notificationData)
         })
 
+        console.log('ASasasa', users[0])
+
         await DeliveredNotificationHistoryModel.create({
             sendBy: authUserId,
-            title,
-            body,
+            title: title || '',
+            body: body || '',
             imageUrl: imageUrl || '',
             type: NOTIFICATION_TYPE.common,
             createdAt: new Date(),
-            users,
+            isFromDashboard: true,
+            users:
+                users?.map(x => ({
+                    userId: x?.userId || '',
+                    displayName: x?.displayName || '',
+                    imgPath: x?.imgPath || null,
+                })) || [],
         })
     }
 

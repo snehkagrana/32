@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import {
     notifications_getNotificationRecipients,
     notifications_getList,
+    notifications_getListNotificationTemplate,
 } from './notifications.thunk'
 
 // Initial state
@@ -29,9 +30,9 @@ const initialState = {
     listNotificaitonsIsLoading: false,
     listNotificaitonsIsError: false,
 
-    listMyRewardData: [],
-    listMyRewardIsLoading: false,
-    listMyRewardIsError: false,
+    listNotificationTemplateData: [],
+    listNotificationTemplateIsLoading: false,
+    listNotificationTemplateIsError: false,
 }
 
 // Actual Slice
@@ -84,7 +85,6 @@ export const notificationsSlice = createSlice({
             }
         )
 
-        // Get list reward for user basic
         builder.addCase(notifications_getList.pending, state => {
             state.listNotificaitonsIsLoading = true
             state.listNotificaitonsIsError = false
@@ -98,6 +98,29 @@ export const notificationsSlice = createSlice({
             state.listNotificaitonsIsLoading = false
             state.listNotificaitonsData = action.payload?.data || []
         })
+
+        builder.addCase(
+            notifications_getListNotificationTemplate.pending,
+            state => {
+                state.listNotificationTemplateIsLoading = true
+                state.listNotificationTemplateIsError = false
+            }
+        )
+        builder.addCase(
+            notifications_getListNotificationTemplate.rejected,
+            (state, action) => {
+                state.listNotificationTemplateIsLoading = false
+                state.listNotificationTemplateIsError = true
+            }
+        )
+        builder.addCase(
+            notifications_getListNotificationTemplate.fulfilled,
+            (state, action) => {
+                state.listNotificationTemplateIsError = false
+                state.listNotificationTemplateIsLoading = false
+                state.listNotificationTemplateData = action.payload?.data || []
+            }
+        )
     },
 })
 

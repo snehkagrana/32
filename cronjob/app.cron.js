@@ -73,6 +73,7 @@ cron.schedule('* * * * *', async function () {
                         userId: user._id,
                         type: NOTIFICATION_TYPE.heart_refill, 
                         dataId: null,
+                        shouldSaveHistory: true,
                     }
                     // send notification
                     await NotificationService.sendAndSaveNotification(notificationData) 

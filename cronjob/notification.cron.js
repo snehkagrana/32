@@ -5,8 +5,7 @@ const { NOTIFICATION_TYPE } = require('../constants/app.constant')
 const NotificationService = require('../services/notification.service')
 
 const sendStreakNotification = async ({ title, body, userId }) => {
-
-    const title = "You missed your lesson. You know what happens now🔫"
+    const title = 'You missed your lesson. You know what happens now🔫'
 
     const notificationData = {
         title,
@@ -14,6 +13,7 @@ const sendStreakNotification = async ({ title, body, userId }) => {
         userId,
         type: NOTIFICATION_TYPE.streak,
         dataId: null,
+        shouldSaveHistory: true,
     }
     // send notification
     await NotificationService.sendAndSaveNotification(notificationData)

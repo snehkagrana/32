@@ -55,6 +55,9 @@ const TestDNDPage2 = React.lazy(() => import('./pages/admin/TestDNDPage2'))
 const AdminNotificationPage = React.lazy(
     () => import('./pages/admin/AdminNotificationPage')
 )
+const AdminNotificationTemplatePage = React.lazy(
+    () => import('./pages/admin/AdminNotificationTemplatePage')
+)
 
 const App = () => {
     const dispatch = useDispatch()
@@ -247,6 +250,11 @@ const App = () => {
                         />
 
                         {/* ----- admin routes ----- */}
+                        <Route
+                            exact
+                            path='/admin/notification/template'
+                            element={<AdminNotificationTemplatePage />}
+                        />
                         <Route
                             exact
                             path='/admin/notification'

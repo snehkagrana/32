@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const DeliveredNotificationHistoryModel = new mongoose.Schema({
-    sendBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    sendBy: { type: String, default: 'system' },
     title: { type: String, required: true },
     body: { type: String, required: true },
     imageUrl: { type: String },
@@ -17,6 +17,8 @@ const DeliveredNotificationHistoryModel = new mongoose.Schema({
         ],
         default: 'common',
     },
+    isFromDashboard: Boolean,
+
     // delivered at
     createdAt: {
         type: Date,

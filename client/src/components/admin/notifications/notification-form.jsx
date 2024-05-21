@@ -41,6 +41,7 @@ const schema = Yup.object().shape({
             userId: Yup.string().required('Field required'),
             displayName: Yup.string().required('Field required'),
             email: Yup.string().required('Field required'),
+            imgPath: Yup.string().nullable(true),
         })
     ).min(1),
 })

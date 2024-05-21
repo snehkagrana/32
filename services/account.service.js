@@ -155,6 +155,7 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
             userId: userId,
             type: NOTIFICATION_TYPE.friends_follow,
             dataId: null,
+            shouldSaveHistory: true,
         }
 
         if (action === 'follow') {

@@ -148,7 +148,7 @@ exports.admin_updateNotificationTemplate = async (req, res, next) => {
 
 exports.admin_deleteNotificationTemplate = async (req, res) => {
     const result = await NotificationService.admin_deleteNotificationTemplate(
-        req.body.id
+        req.params.id
     )
     if (result) {
         return res.json({

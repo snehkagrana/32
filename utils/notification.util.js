@@ -64,6 +64,7 @@ const NotificationStreak = {
             userId: user._id,
             type: NOTIFICATION_TYPE.streak,
             dataId: null,
+            shouldSaveHistory: true,
         }
         return await NotificationService.sendAndSaveNotification(DATA)
     },
@@ -95,6 +96,7 @@ const NotificationStreak = {
             userId: user._id,
             type: NOTIFICATION_TYPE.streak,
             dataId: null,
+            shouldSaveHistory: true,
         }
         return await NotificationService.sendAndSaveNotification(DATA)
     },
@@ -121,6 +123,7 @@ const NotificationReminder = {
             userId: user._id,
             type: NOTIFICATION_TYPE.reminder,
             dataId: null,
+            shouldSaveHistory: true,
         }
         return await NotificationService.sendAndSaveNotification(DATA)
     },
@@ -174,6 +177,7 @@ const LeaderboardReminder = {
                     body: RANDOMLY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID](params)?.body || '',
                     type: NOTIFICATION_TYPE.leaderboard,
                     dataId: null,
+                    shouldSaveHistory: true,
                 }
                 return await NotificationService.sendAndSaveNotification(DATA)
             }
@@ -218,6 +222,7 @@ const LeaderboardReminder = {
                     body: SUNDAY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID](params)?.body || '',
                     type: NOTIFICATION_TYPE.leaderboard,
                     dataId: null,
+                    shouldSaveHistory: true,
                 }
                 return await NotificationService.sendAndSaveNotification(DATA)
             }
@@ -239,6 +244,7 @@ const LeaderboardReminder = {
             body: FRIEND_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID](params)?.body || '',
             type: NOTIFICATION_TYPE.leaderboard,
             dataId: null,
+            shouldSaveHistory: true,
         }
         return await NotificationService.sendAndSaveNotification(DATA)
     },
@@ -258,6 +264,7 @@ const LeaderboardReminder = {
             userId: user._id,
             type: NOTIFICATION_TYPE.leaderboard,
             dataId: null,
+            shouldSaveHistory: true,
         }
         return await NotificationService.sendAndSaveNotification(DATA)
     },

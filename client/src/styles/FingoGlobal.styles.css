@@ -351,3 +351,11 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
 .modal-notification-recipients .modal-dialog {
     max-width: 500px;
 }
+
+.FingoBackgroundColor {
+    background-color: #fdfdfd;
+}
+
+[data-theme='dark'] .FingoBackgroundColor {
+    background-color: #262626;
+}
