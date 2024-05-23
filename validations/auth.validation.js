@@ -12,7 +12,7 @@ const validatePassword = value => {
 module.exports = {
     register: Joi.object().keys({
         firstName: Joi.string().required(),
-        lastName: Joi.string().required(),
+        // lastName: Joi.string().required(),
         email: Joi.string().email().required(),
         password: Joi.string().min(6).max(100).required(),
         role: Joi.string().optional(),
