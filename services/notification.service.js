@@ -87,14 +87,15 @@ exports.sendAndSaveNotification = async ({
 
     if (!__DEV__) {
         if (notification && user?.fcmToken) {
+            const NOTIFICATION_PAYLOAD = {
+                dataId: dataId || null,
+                imageUrl: imageUrl || null,
+            }
             await sendNotification({
                 token: user.fcmToken,
                 title,
                 body,
-                data: {
-                    dataId: dataId || null,
-                    imageUrl: imageUrl || null,
-                },
+                data: JSON.stringify(NOTIFICATION_PAYLOAD),
                 // data: dataId ? { dataId } : {},
             })
 
