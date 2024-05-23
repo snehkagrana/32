@@ -91,7 +91,11 @@ exports.sendAndSaveNotification = async ({
                 token: user.fcmToken,
                 title,
                 body,
-                data: dataId ? { dataId } : {},
+                data: {
+                    dataId: dataId || null,
+                    imageUrl: imageUrl || null,
+                },
+                // data: dataId ? { dataId } : {},
             })
 
             /**
