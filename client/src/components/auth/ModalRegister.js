@@ -69,7 +69,8 @@ export default function ModalRegister() {
     const handleRegister = async () => {
         try {
             const response = await AuthAPI.register({
-                displayName: `${registerFirstName} ${registerLastName}`,
+                firstName: registerFirstName,
+                lastName: registerLastName,
                 email: registerEmail,
                 password: registerPassword,
                 role: 'basic',

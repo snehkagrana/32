@@ -128,9 +128,9 @@ const AdminNotificationTemplatePage = () => {
                                         >
                                             <BackIcon />
                                         </button>
-                                        <div>
+                                        <div style={{ textAlign: 'center' }}>
                                             <h2 className='mb-3, text-center'>
-                                                Notification
+                                                Notification Template
                                             </h2>
                                             <FingoButton
                                                 color='white'

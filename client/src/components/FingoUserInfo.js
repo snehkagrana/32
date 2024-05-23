@@ -11,6 +11,7 @@ import 'src/styles/FingoUserInfo.styles.css'
 import { getLevelColor } from 'src/utils'
 import { ArrowContainer, Popover as ReactTinyPopover } from 'react-tiny-popover'
 import { ReactComponent as PencilFillSvg } from 'src/assets/svg/pencil-fill.svg'
+import { userUtils } from 'src/utils/user.util'
 
 const FingoUserInfo = () => {
     const now = new Date()
@@ -193,7 +194,10 @@ const FingoUserInfo = () => {
                 <div className='user-info ml-3'>
                     <p className='greetingText'>{getGreetingText}</p>
                     <h4 className='user-name'>
-                        {newUser ? 'Stranger' : user?.displayName ?? ''}!
+                        {newUser
+                            ? 'Stranger'
+                            : userUtils.getFirstName(user) ?? ''}
+                        ! 
                         <span
                             style={{
                                 display: 'inline-block',
