@@ -87,15 +87,14 @@ exports.sendAndSaveNotification = async ({
 
     if (!__DEV__) {
         if (notification && user?.fcmToken) {
-            const NOTIFICATION_PAYLOAD = {
-                dataId: dataId || null,
-                imageUrl: imageUrl || null,
-            }
             await sendNotification({
                 token: user.fcmToken,
                 title,
                 body,
-                data: JSON.stringify(NOTIFICATION_PAYLOAD),
+                data: {
+                    dataId: String(dataId) || '',
+                    imageUrl: String(imageUrl) || '',
+                },
                 // data: dataId ? { dataId } : {},
             })
 
@@ -189,8 +188,6 @@ exports.admin_sendGeneralNotification = async ({
 
             await this.sendAndSaveNotification(notificationData)
         })
-
-        console.log('ASasasa', users[0])
 
         await DeliveredNotificationHistoryModel.create({
             sendBy: authUserId,
