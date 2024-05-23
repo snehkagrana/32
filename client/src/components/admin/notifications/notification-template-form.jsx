@@ -16,12 +16,9 @@ import {
     FingoModal,
     FingoSelect,
 } from 'src/components/core'
-import { Controller, useFieldArray, useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
-import { DROPDOWN_CURRENCY_CODES, DROPDOWN_REWARD_TYPES } from 'src/libs'
-import { RewardApi } from 'src/api'
-import Swal from 'sweetalert2'
 // import LoadingBox from '../LoadingBox'
 import { ReactComponent as UploadIcon } from 'src/assets/svg/cloud-upload-sharp.svg'
 import { ReactComponent as TrashcanIcon } from 'src/assets/svg/trash-bin-trash-linear.svg'
@@ -30,15 +27,20 @@ import Assets from 'src/assets'
 import LoadingBox from 'src/components/LoadingBox'
 import styled from 'styled-components'
 
+import NotificationItemTypeLabel from './notification-item-type-label'
+import { NOTIFICATION_TYPE_LIST } from 'src/constants/notification.constant'
+
 const schema = Yup.object().shape({
     title: Yup.string().required('Field required'),
     body: Yup.string().required('Field required'),
+    type: Yup.string().required('Field required'),
 })
 
 const initialValues = {
     title: '',
     body: '',
     imageUrl: '',
+    type: '',
     users: [],
 }
 
@@ -49,18 +51,14 @@ const NotificationTemplateForm = ({ onSubmit, defaultValue }) => {
     const [imageFile, setImageFile] = useState(null)
     const [defaultImageFile, setDefaultImageFile] = useState(null)
 
-    const {
-        selectedUserRecipients,
-        openModalUserRecipients,
-        notifications_setOpenModalUserRecipients,
-    } = useNotifications()
+    const { selectedUserRecipients } = useNotifications()
 
     const {
         control,
         reset,
         handleSubmit,
         setValue,
-
+        getValues,
         formState: { errors },
     } = useForm({
         defaultValues: initialValues,
@@ -68,7 +66,8 @@ const NotificationTemplateForm = ({ onSubmit, defaultValue }) => {
     })
 
     const onValidSubmit = async values => {
-        onSubmit({ ...values, imageUrl: null })
+        console.log('values', values)
+        // onSubmit({ ...values, imageUrl: null })
     }
 
     const onInvalidSubmit = _errors => {
@@ -96,6 +95,10 @@ const NotificationTemplateForm = ({ onSubmit, defaultValue }) => {
         }
     }, [selectedUserRecipients])
 
+    const onSelectType = useCallback(type => {
+        setValue('type', type)
+    })
+
     return (
         <Form
             onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
@@ -109,6 +112,15 @@ const NotificationTemplateForm = ({ onSubmit, defaultValue }) => {
                             <strong>[[NAME]], [[EMAIL]]</strong>
                         </p>
                     </BoxHint>
+                </Col>
+                <Col xs={12}>
+                    {NOTIFICATION_TYPE_LIST.map(x => (
+                        <NotificationItemTypeLabel
+                            onClick={onSelectType}
+                            type={x.value}
+                            isSelected={getValues('type') === x.value}
+                        />
+                    ))}
                 </Col>
                 <Col xs={12} className='px-2'>
                     <Controller

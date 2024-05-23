@@ -63,7 +63,7 @@ module.exports = {
     googleSignInMobile: Joi.object()
         .keys({
             firstName: Joi.string().required(),
-            lastName: Joi.string().allow(null),
+            // lastName: Joi.string().allow(null),
             email: Joi.string().email().required(),
             photo: Joi.string().allow(null),
             registerToken: Joi.string().optional().allow(null),

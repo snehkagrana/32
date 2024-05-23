@@ -1,7 +1,9 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import DEFAULT_IMG from 'src/images/pepe.jpg'
 import { NotificationsAPI } from 'src/api'
+import NotificationItemTypeLabel from './notification-item-type-label'
+import { NOTIFICATION_TYPE_LIST } from 'src/constants/notification.constant'
 
 const NotificationTemplateItem = ({ data, fetchData, onEdit }) => {
     const onClickItem = useCallback(() => {}, [])
@@ -26,51 +28,58 @@ const NotificationTemplateItem = ({ data, fetchData, onEdit }) => {
 
     return (
         <CardTemplate onClick={onClickItem}>
-            <TemplateInfo>
-                <UserAvatar src={data?.imgPath || DEFAULT_IMG} />
-                <TitleText>{data.title}</TitleText>
-                <BodyText>{data.body}</BodyText>
-            </TemplateInfo>
-            <ButtonContainer className='ButtonContainer'>
-                <EditButton onClick={onClickEdit} className='edit-btn'>
-                    <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        width='1em'
-                        height='1em'
-                        viewBox='0 0 16 16'
+            <CardContainer>
+                <TypeContainer>
+                    {data.type && (
+                        <NotificationItemTypeLabel type={data.type} />
+                    )}
+                </TypeContainer>
+                <TemplateInfo>
+                    <UserAvatar src={data?.imgPath || DEFAULT_IMG} />
+                    <TitleText>{data.title}</TitleText>
+                    <BodyText>{data.body}</BodyText>
+                </TemplateInfo>
+                <ButtonContainer className='ButtonContainer'>
+                    <EditButton onClick={onClickEdit} className='edit-btn'>
+                        <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            width='1em'
+                            height='1em'
+                            viewBox='0 0 16 16'
+                        >
+                            <path
+                                fill='currentColor'
+                                d='M10.529 1.764a2.621 2.621 0 1 1 3.707 3.707l-.779.779L9.75 2.543zM9.043 3.25L2.657 9.636a2.96 2.96 0 0 0-.772 1.354l-.87 3.386a.5.5 0 0 0 .61.608l3.385-.869a2.95 2.95 0 0 0 1.354-.772l6.386-6.386z'
+                            ></path>
+                        </svg>
+                    </EditButton>
+                    <DeleteButton
+                        onClick={onClickDelete}
+                        className='delete-btn'
                     >
-                        <path
-                            fill='currentColor'
-                            d='M10.529 1.764a2.621 2.621 0 1 1 3.707 3.707l-.779.779L9.75 2.543zM9.043 3.25L2.657 9.636a2.96 2.96 0 0 0-.772 1.354l-.87 3.386a.5.5 0 0 0 .61.608l3.385-.869a2.95 2.95 0 0 0 1.354-.772l6.386-6.386z'
-                        ></path>
-                    </svg>
-                </EditButton>
-                <DeleteButton onClick={onClickDelete} className='delete-btn'>
-                    <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        width='1em'
-                        height='1em'
-                        viewBox='0 0 24 24'
-                    >
-                        <path
-                            fill='none'
-                            stroke='currentColor'
-                            strokeLinecap='round'
-                            strokeLinejoin='round'
-                            strokeWidth={1.5}
-                            d='M14 11v6m-4-6v6M6 7v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7M4 7h16M7 7l2-4h6l2 4'
-                        ></path>
-                    </svg>
-                </DeleteButton>
-            </ButtonContainer>
+                        <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            width='1em'
+                            height='1em'
+                            viewBox='0 0 24 24'
+                        >
+                            <path
+                                fill='none'
+                                stroke='currentColor'
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
+                                strokeWidth={1.5}
+                                d='M14 11v6m-4-6v6M6 7v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7M4 7h16M7 7l2-4h6l2 4'
+                            ></path>
+                        </svg>
+                    </DeleteButton>
+                </ButtonContainer>
+            </CardContainer>
         </CardTemplate>
     )
 }
 
 const CardTemplate = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     width: 100%;
     border: 1px solid rgb(109 109 109 / 10%);
     border-radius: 0.4rem;
@@ -78,7 +87,6 @@ const CardTemplate = styled.div`
     padding: 0.2rem 0.6rem;
     cursor: pointer;
     overflow: hidden;
-
     .ButtonContainer {
         transform: translateX(120px);
     }
@@ -88,6 +96,12 @@ const CardTemplate = styled.div`
             transform: translateX(0px);
         }
     }
+`
+
+const CardContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 `
 
 const TemplateInfo = styled.div`
@@ -151,6 +165,10 @@ const DeleteButton = styled.button`
         font-size: 22px;
         color: #ff0000;
     }
+`
+
+const TypeContainer = styled.div`
+    width: 100px;
 `
 
 export default NotificationTemplateItem
