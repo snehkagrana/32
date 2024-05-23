@@ -8,7 +8,12 @@ const UserSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+
+    /** @deprecated */
     displayName: String,
+
+    firstName: String,
+    lastName: String,
     email: String,
     password: String,
     role: String,

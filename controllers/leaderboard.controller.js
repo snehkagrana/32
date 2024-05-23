@@ -144,7 +144,7 @@ exports.updateAndSyncWeeklyLeaderBoard = async (req, res) => {
                 // console.log("x._doc.xp.weekly + xp",x._doc.xp.weekly + xp)
                 return {
                     userId: x._doc._id,
-                    displayName: x._doc.displayName ? x._doc.displayName : x._doc.username || '',
+                    displayName: x._doc.firstName ? x._doc.firstName : x._doc.displayName || '',
                     // xp: String(x._doc._id) == userId ? x._doc.xp.weekly + xp : x._doc.xp.weekly || MINIMUM_WEEKLY_XP_LEADER_BOARD,
                     xp: x._doc.xp.weekly || MINIMUM_WEEKLY_XP_LEADER_BOARD,
                     email: x._doc.email,

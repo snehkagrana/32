@@ -12,6 +12,7 @@ const {
 const { NOTIFICATION_TYPE } = require('../constants/app.constant')
 const { getRandomInt } = require('./common.util')
 const UserModel = require('../models/user')
+const { getFirstName } = require('./user.util')
 
 const sendNotification = async ({ token, title, body, data }) => {
     try {
@@ -53,7 +54,7 @@ const NotificationStreak = {
             lessonName: lessonName
                 ? lessonName?.split('_')?.join(' ')
                 : user?.last_played?.sub_category?.split('_')?.join(' ') || '',
-            name: user.displayName || '',
+            name: getFirstName(user) || '',
         }
         if (!STREAK_NOTIFICATION_TYPE[typeId]) {
             return false
@@ -79,7 +80,6 @@ const NotificationStreak = {
             Object.keys(RANDOMLY_STREAK_NOTIFICATION_TYPE).length
         )
         const params = {
-            // name: user.displayName || '',
             streakNumber: streakNumber || 0,
             hoursLeft: hoursLeft || 0,
             lessonName: lessonName
@@ -111,7 +111,7 @@ const NotificationReminder = {
             lessonName: lessonName
                 ? lessonName?.split('_')?.join(' ')
                 : user?.last_played?.sub_category?.split('_')?.join(' ') || '',
-            name: user.displayName || '',
+            name: getFirstName(user) || '',
         }
         if (!RANDOMLY_LESSON_REMINDER_NOTIFICATION_TYPE[TYPE_ID]) {
             return false

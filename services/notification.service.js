@@ -13,6 +13,7 @@ const {
 } = require('../constants/app.constant')
 const user = require('../models/user')
 const moment = require('moment-timezone')
+const { getFullName, getFirstName } = require('../utils/user.util')
 
 exports.getNotificationList = async ({ userId }) => {
     const notifications = await NotificationModel.find({ userId }).sort({
@@ -120,7 +121,7 @@ exports.sendAndSaveNotification = async ({
             users: [
                 {
                     userId,
-                    displayName: user?.displayName || '',
+                    displayName: getFullName(user),
                     imgPath: user?.imgPath || '',
                 },
             ],
@@ -135,7 +136,7 @@ exports.admin_getNotifeeUsers = async () => {
     if (users?.length > 0) {
         return users?.map(x => ({
             _id: x._id,
-            displayName: x.displayName || x.username,
+            displayName: getFirstName(x),
             email: x.email,
             imgPath: x.imgPath || null,
         }))
@@ -162,12 +163,12 @@ exports.admin_sendGeneralNotification = async ({
             let replacedBody = ''
 
             // prettier-ignore
-            replacedTitle = title.replace(NAME_PATTERN, user?.displayName || 'User')
+            replacedTitle = title.replace(NAME_PATTERN, getFirstName(user) || 'User')
             // prettier-ignore
             replacedTitle = replacedTitle.replace(EMAIL_PATTERN, user?.email || '')
 
             // prettier-ignore
-            replacedBody = body.replace(NAME_PATTERN, user?.displayName || 'User')
+            replacedBody = body.replace(NAME_PATTERN, getFirstName(user) || 'User')
             // prettier-ignore
             replacedBody = replacedBody.replace(EMAIL_PATTERN, user?.email || '')
 
@@ -197,7 +198,7 @@ exports.admin_sendGeneralNotification = async ({
             users:
                 users?.map(x => ({
                     userId: x?.userId || '',
-                    displayName: x?.displayName || '',
+                    displayName: getFirstName(x),
                     imgPath: x?.imgPath || null,
                 })) || [],
         })

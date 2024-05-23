@@ -4,6 +4,7 @@ const { generateOTP } = require('../utils/otp.util')
 const { validateEmail } = require('../utils/common.util')
 const NotificationService = require('../services/notification.service')
 const { NOTIFICATION_TYPE } = require('../constants/app.constant')
+const { getFirstName, getFullName } = require('../utils/user.util')
 
 var ObjectId = require('mongoose').Types.ObjectId
 
@@ -111,7 +112,8 @@ exports.updateProfile = async (email, body) => {
                 $set: {
                     // email: body.email ?? user.email, // don't update email for now
                     username: body.username ?? user.username,
-                    displayName: body.displayName ?? user.displayName,
+                    firstName: body.firstName ?? user.firstName,
+                    lastName: body.lastName ?? user.lastName,
                     phoneNumber: body.phoneNumber ?? user.phoneNumber ?? null,
                 },
             },
@@ -162,7 +164,9 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
             notificationData = {
                 ...notificationData,
                 title: `Following`,
-                body: `Hey ${user.displayName}!, ${authUser.displayName} added you as a friend.`,
+                body: `Hey ${getFirstName(user)}!, ${getFirstName(
+                    authUser
+                )} added you as a friend.`,
             }
 
             // prettier-ignore
@@ -172,7 +176,7 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
                 {
                     userId: user._id,
                     // prettier-ignore
-                    displayName: user?.displayName ? user.displayName : user.username || '',
+                    displayName: getFirstName(user),
                     totalXp: user?.xp?.total ? user.xp.total : 0,
                     level: user?.xp?.level ? user.xp.level : 1,
                     imgPath: user?.imgPath ? user.imgPath : '',
@@ -198,7 +202,7 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
                 {
                     userId: authUser._id,
                     // prettier-ignore
-                    displayName: authUser?.displayName ? authUser.displayName : authUser.username || '',
+                    displayName: getFullName(authUser),
                     totalXp: authUser?.xp?.total ? authUser.xp.total : 0,
                     level: authUser?.xp?.level ? authUser.xp.level : 1,
                     imgPath: authUser?.imgPath ? authUser.imgPath : '',
@@ -266,7 +270,7 @@ exports.syncFriendship = async ({ userId }) => {
             const _user = await UserModel.findOne({ _id: f.userId })
             newFollowers.push({
                 // prettier-ignore
-                displayName: _user?.displayName ? _user.displayName : _user.username || '',
+                displayName: getFullName(_user),
                 totalXp: _user?.xp?.total ? _user.xp.total : f.totalXp,
                 level: _user?.xp?.level ? _user.xp.level : f.level,
                 imgPath: _user?.imgPath ? _user.imgPath : '',
@@ -293,8 +297,7 @@ exports.syncFriendship = async ({ userId }) => {
         for (const f of following) {
             const _user = await UserModel.findOne({ _id: f.userId })
             newFollowing.push({
-                // prettier-ignore
-                displayName: _user?.displayName ? _user.displayName : _user.username || '',
+                displayName: getFullName(_user),
                 totalXp: _user?.xp?.total ? _user.xp.total : f.totalXp,
                 level: _user?.xp?.level ? _user.xp.level : f.level,
                 imgPath: _user?.imgPath ? _user.imgPath : '',
@@ -325,6 +328,8 @@ exports.searchFriends = async ({ userId, searchTerm }) => {
     if (searchTerm) {
         query.$or = [
             { displayName: { $regex: searchTerm } },
+            { firstName: { $regex: searchTerm } },
+            { lastName: { $regex: searchTerm } },
             { username: { $regex: searchTerm } },
         ]
         const users = await UserModel.find(query)
@@ -337,7 +342,7 @@ exports.searchFriends = async ({ userId, searchTerm }) => {
         result = filteredUsers?.map(x => ({
             avatarId: x._doc?.avatarId,
             _id: x._doc?._id,
-            displayName: x._doc?.displayName,
+            displayName: getFullName(x._doc),
             username: x._doc?.username || '',
             email: x._doc?.email || '',
             xp: x._doc?.xp,

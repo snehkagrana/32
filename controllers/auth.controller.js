@@ -56,8 +56,9 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcryptUtil.createHash(req.body.password)
 
     let newUser = {
-        username: generateUsername(req.body.displayName),
-        displayName: req.body.displayName,
+        username: generateUsername(req.body.firstName),
+        firstName: req.body.firstName,
+        lastName: req.body.lastName || '',
         email: req.body.email,
         password: hashedPassword,
         role: 'basic',
@@ -125,9 +126,11 @@ exports.register = async (req, res) => {
 }
 
 exports.googleSignInMobile = async (req, res) => {
-    const { email, displayName, photo, registerToken, syncId } = req.body
+    const { email, firstName, lastName, photo, registerToken, syncId } =
+        req.body
     const result = await AuthService.googleSignInMobile({
-        displayName,
+        firstName,
+        lastName,
         email,
         photo,
         registerToken,

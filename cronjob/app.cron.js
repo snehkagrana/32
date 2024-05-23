@@ -1070,7 +1070,7 @@ cron.schedule('*/5 * * * *', async function () {
                 // prettier-ignore
                 let leaderBoardUsers = users.map(x => ({
                     userId: x._doc._id, 
-                    displayName: x._doc.displayName ? x._doc.displayName : x._doc.username || '',
+                    displayName: x._doc.firstName ? x._doc.firstName : x._doc.displayName || '',
                     xp: x._doc.xp.weekly || MINIMUM_WEEKLY_XP_LEADER_BOARD,
                     email: x._doc.email,
                     imgPath: x._doc.imgPath || '',
@@ -1190,7 +1190,7 @@ cron.schedule('*/5 * * * *', async function () {
                 // prettier-ignore
                 let leaderBoardUsers = usersWithWeeklyXp.map(x => ({
                     userId: x._doc._id, 
-                    displayName: x._doc.displayName ? x._doc.displayName : x._doc.username || '',
+                    displayName: x._doc.firstName ? x._doc.firstName : x._doc.displayName || '',
                     xp: x._doc.xp.weekly || MINIMUM_WEEKLY_XP_LEADER_BOARD,
                     email: x._doc.email,
                     imgPath: x._doc.imgPath || null,

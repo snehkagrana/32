@@ -9,70 +9,74 @@ const schema = require('../validations/auth.validation')
 const validate = require('../utils/validator.util')
 
 router.post(
-    '/google-signin-mobile',
+    '/auth/google-signin-mobile',
     validate(schema.googleSignInMobile),
     ErrorHandler(AuthController.googleSignInMobile)
 )
 
 router.post(
-    '/register/send-code',
+    '/auth/register/send-code',
     validate(schema.sendRegisterCode),
     ErrorHandler(AuthController.sendRegisterCode)
 )
 router.post(
-    '/register/check-code',
+    '/auth/register/check-code',
     validate(schema.checkRegisterCode),
     ErrorHandler(AuthController.checkRegisterCode)
 )
 router.post(
-    '/register/verify-code',
+    '/auth/register/verify-code',
     validate(schema.verifyRegisterCode),
     ErrorHandler(AuthController.verifyRegisterCode)
 )
 router.post(
-    '/register',
+    '/auth/register',
     validate(schema.register),
     ErrorHandler(AuthController.register)
 )
 router.post(
-    '/login',
+    '/auth/login',
     validate(schema.login),
     ErrorHandler(AuthController.login)
 )
-router.get('/user', AuthGuard, ErrorHandler(AuthController.getUser))
-router.get('/sync', AuthGuard, ErrorHandler(AuthController.syncUser))
-router.get('/logout', AuthGuard, ErrorHandler(AuthController.logout))
+router.get('/auth/user', AuthGuard, ErrorHandler(AuthController.getUser))
+router.get('/auth/sync', AuthGuard, ErrorHandler(AuthController.syncUser))
+router.get('/auth/logout', AuthGuard, ErrorHandler(AuthController.logout))
 router.post(
-    '/forgot-password/send-link',
+    '/auth/forgot-password/send-link',
     validate(schema.sendLinkForgotPassword),
     ErrorHandler(AuthController.sendLinkForgotPassword)
 )
 router.post(
-    '/forgot-password/send-code',
+    '/auth/forgot-password/send-code',
     validate(schema.sendCodeForgotPassword),
     ErrorHandler(AuthController.sendCodeForgotPassword)
 )
 router.post(
-    '/forgot-password/verify-code',
+    '/auth/forgot-password/verify-code',
     validate(schema.verifyCodeForgotPassword),
     ErrorHandler(AuthController.verifyCodeForgotPassword)
 )
 router.post(
-    '/reset-password',
+    '/auth/reset-password',
     validate(schema.resetPassword),
     ErrorHandler(AuthController.resetPassword)
 )
 
-router.get('/guest/init', ErrorHandler(GuestController.init))
+router.get('/auth/guest/init', ErrorHandler(GuestController.init))
 
-router.get('/guest/sync', AuthGuard, ErrorHandler(GuestController.syncGuest))
+router.get(
+    '/auth/guest/sync',
+    AuthGuard,
+    ErrorHandler(GuestController.syncGuest)
+)
 
 router.post(
-    '/guest/register/sync-google',
+    '/auth/guest/register/sync-google',
     AuthGuard,
     ErrorHandler(AuthController.syncRegisterGoogle)
 )
 
-router.get('/guest', AuthGuard, ErrorHandler(GuestController.getGuest))
+router.get('/auth/guest', AuthGuard, ErrorHandler(GuestController.getGuest))
 
 module.exports = router

@@ -55,7 +55,7 @@ module.exports = function (passport) {
                 const email = profile?.emails?.[0]?.value
                     ? profile.emails[0].value
                     : ''
-                const displayName = profile?.displayName
+                const firstName = profile?.displayName
                     ? profile.displayName
                     : ''
                 const profileImageUrl = profile?.photos?.[0]?.value
@@ -79,8 +79,9 @@ module.exports = function (passport) {
                     })
                 } else {
                     const newUserData = {
-                        username: generateUsername(displayName),
-                        displayName: displayName,
+                        username: generateUsername(firstName),
+                        firstName: firstName,
+                        lastName: '',
                         email: email,
                         password: '',
                         role: 'basic',

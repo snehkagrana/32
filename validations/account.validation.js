@@ -30,7 +30,8 @@ module.exports = {
 
     updateProfile: Joi.object()
         .keys({
-            displayName: Joi.string().required(),
+            firstName: Joi.string().required(),
+            lastName: Joi.string().allow(null),
             username: Joi.string().required(),
             // email: Joi.string().email().required(),
             phoneNumber: Joi.string().allow(null),

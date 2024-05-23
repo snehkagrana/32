@@ -11,7 +11,8 @@ const validatePassword = value => {
 
 module.exports = {
     register: Joi.object().keys({
-        displayName: Joi.string().required(),
+        firstName: Joi.string().required(),
+        lastName: Joi.string().required(),
         email: Joi.string().email().required(),
         password: Joi.string().min(6).max(100).required(),
         role: Joi.string().optional(),
@@ -61,7 +62,8 @@ module.exports = {
         .options({ allowUnknown: true }),
     googleSignInMobile: Joi.object()
         .keys({
-            displayName: Joi.string().required(),
+            firstName: Joi.string().required(),
+            lastName: Joi.string().allow(null),
             email: Joi.string().email().required(),
             photo: Joi.string().allow(null),
             registerToken: Joi.string().optional().allow(null),

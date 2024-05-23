@@ -24,6 +24,7 @@ const dayjs = require('dayjs')
 const { generateOTP } = require('../utils/otp.util')
 const jwtUtil = require('../utils/jwt.util')
 const jwtConfig = require('../configs/jwt.config')
+const { getFullName, getFirstName } = require('../utils/user.util')
 
 exports.sendRegisterCode = async email => {
     const code = generateOTP(4)
@@ -149,7 +150,7 @@ exports.syncUser = async email => {
                     // prettier-ignore
                     unlimitedHeart: user?.unlimitedHeart && dayjs(user.unlimitedHeart).isAfter(dayjs(today).toISOString(), 'second') ? user.unlimitedHeart : null,
                     // prettier-ignore
-                    username: !user?.username ? generateUsername(user.displayName) : user.username,
+                    username: !user?.username ? generateUsername(getFirstName(user)) : user.username,
 
                     following: user?.following ? user.following : [],
                     followers: user?.followers ? user.followers : [],
@@ -182,7 +183,7 @@ exports.sendLinkForgotPassword = async (email, baseUrl) => {
             link: recoveryLink,
             from: process.env.MAIL,
             to: user.email,
-            name: user?.displayName ? user.displayName : user?.username ?? '',
+            name: getFirstName(user),
         })
 
         result = true
@@ -205,7 +206,7 @@ exports.sendCodeForgotPassword = async email => {
             code: code,
             from: process.env.MAIL,
             to: user.email,
-            name: user?.displayName ? user.displayName : user?.username ?? '',
+            name: getFirstName(user),
         })
 
         result = true
@@ -295,7 +296,8 @@ exports.syncRegisterGoogle = async ({ email, data }) => {
 }
 
 exports.googleSignInMobile = async ({
-    displayName,
+    firstName,
+    lastName,
     email,
     photo,
     registerToken,
@@ -321,8 +323,9 @@ exports.googleSignInMobile = async ({
         }
     } else {
         let newGoogleUser = {
-            username: generateUsername(displayName),
-            displayName: displayName,
+            username: generateUsername(firstName),
+            firstName: firstName,
+            lastName: lastName || '',
             email: email,
             password: '',
             role: 'basic',

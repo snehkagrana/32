@@ -51,11 +51,6 @@ const AdminMiddleware = require('./middlewares/admin.middleware')
 const firebaseAdmin = require("firebase-admin");
 
 require('./cronjob/app.cron')
-// require('./cronjob/notification.cron')
-// require('./cronjob/leaderboard.cronjob')
-// require('./cronjob/friendship.cronjob')
-
-// dayjs.tz.setDefault("Asia/Kolkata")
 
 var serviceAccount = require("./fingo-8fe5c-firebase-adminsdk-qd52d-1db764cff8.json");
 
@@ -104,7 +99,7 @@ app.use(cors({
 
 /** ######## New Routes ########### */
 app.use('/server/api/admin', adminRoutes);  
-app.use('/server/api/auth', authRoutes);  
+app.use('/server/api', authRoutes);  
 app.use('/server/api', rewardRoutes);  
 app.use('/server/api', accountRoutes);  
 app.use('/server/api', userRoutes);  
@@ -373,7 +368,8 @@ app.post("/server/register", (req, res) => {
                         10
                     );
                     const newUser = new User({
-                        displayName: req.body.displayName,
+                        firstName: req.body.firstName,
+                        lastName: req.body.lastName,
                         email: req.body.email,
                         password: hashedPassword,
                         role: "basic",
