@@ -1104,7 +1104,6 @@ cron.schedule('*/5 * * * *', async function () {
                                     myPosition: index + 1,
                                     lessonName: x.lastLessonName,
                                     daysLeft: DAY_LEFT,
-                                    userId, 
                                 });
                             })
                         }
