@@ -274,7 +274,7 @@ const App = () => {
                     </Routes>
                 </Router>
             </Suspense>
-            <Toaster>
+            <Toaster position='bottom-center' reverseOrder={false}>
                 {t => (
                     <ToastBar
                         toast={t}

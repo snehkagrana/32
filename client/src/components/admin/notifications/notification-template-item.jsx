@@ -4,6 +4,7 @@ import DEFAULT_IMG from 'src/images/pepe.jpg'
 import { NotificationsAPI } from 'src/api'
 import NotificationItemTypeLabel from './notification-item-type-label'
 import { NOTIFICATION_TYPE_LIST } from 'src/constants/notification.constant'
+import toast from 'react-hot-toast'
 
 const NotificationTemplateItem = ({ data, fetchData, onEdit }) => {
     const onClickItem = useCallback(() => {}, [])
@@ -16,6 +17,7 @@ const NotificationTemplateItem = ({ data, fetchData, onEdit }) => {
                 )
             if (response && typeof fetchData === 'function') {
                 fetchData()
+                toast.success('Notification template has been deleted.')
             }
         } catch (e) {}
     }, [data._id, fetchData])

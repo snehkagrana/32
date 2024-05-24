@@ -165,7 +165,7 @@ const AdminNotificationTemplatePage = () => {
             <FingoModalSlider
                 open={openModalForm}
                 onClose={onCloseModalForm}
-                width={520}
+                width={600}
             >
                 <ModalWrapper className='FingoBackground'>
                     <ModalBox>
@@ -188,7 +188,7 @@ const ModalWrapper = styled.div`
 
 const ModalBox = styled.div`
     border-radius: 0.4rem;
-    padding: 1rem;
+    padding: 1.5rem 2rem;
 `
 
 export default AdminNotificationTemplatePage

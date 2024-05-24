@@ -55,7 +55,7 @@ const NotificationItemTypeLabel = ({ type, isSelected, onClick }) => {
                     }),
                 ...(type === 'common' &&
                     isSelected && {
-                        borderColor: '#49a900',
+                        borderColor: '#0b1404',
                     }),
                 ...(type === 'streak' &&
                     isSelected && {
@@ -69,14 +69,24 @@ const NotificationItemTypeLabel = ({ type, isSelected, onClick }) => {
                     isSelected && {
                         borderColor: '#0063d4',
                     }),
+
+                ...(isClickAble &&
+                    !isSelected && {
+                        opacity: 0.4,
+                    }),
             }}
         >
             <LabelText>{getNotificationTypeName}</LabelText>
-            {isClickAble && (
-                <svg width='1em' height='1em' viewBox='0 0 24 24'>
+            {isSelected && (
+                <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    width='1em'
+                    height='1em'
+                    viewBox='0 0 24 24'
+                >
                     <path
                         fill='currentColor'
-                        d='M12 2c5.53 0 10 4.47 10 10s-4.47 10-10 10S2 17.53 2 12S6.47 2 12 2m3.59 5L12 10.59L8.41 7L7 8.41L10.59 12L7 15.59L8.41 17L12 13.41L15.59 17L17 15.59L13.41 12L17 8.41z'
+                        d='m9.55 18l-5.7-5.7l1.425-1.425L9.55 15.15l9.175-9.175L20.15 7.4z'
                     ></path>
                 </svg>
             )}
@@ -89,39 +99,24 @@ const LabelRoot = styled.div`
     align-items: center;
     justify-content: center;
     width: 100%;
-    border-radius: 1rem;
+    border-radius: 0.4rem;
     padding: 0.2rem 0.6rem;
     cursor: pointer;
     position: relative;
-    border-width: 1.4px;
     border-color: transparent;
+    svg {
+        font-size: 22px;
+        color: #ffffff;
+        margin-left: 0.5rem;
+    }
 `
 
 const LabelText = styled.p`
     margin-left: 0.8rem;
-    color: '#fff';
+    color: #fff;
     margin-bottom: 0;
-`
-
-const DeleteButton = styled.button`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: auto;
-    height: 30px;
-    width: 30px;
-    background-color: transparent;
-    border: 1px solid #ff2c2c;
-    border-radius: 30px;
-    padding: 0;
-    margin-left: 0.5rem;
-    position: absolute;
-    top: 0;
-    right: 0;
-    svg {
-        font-size: 22px;
-        color: #ff0000;
-    }
+    font-weight: bold;
+    font-size: 0.9rem;
 `
 
 export default NotificationItemTypeLabel

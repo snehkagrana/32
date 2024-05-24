@@ -17,7 +17,7 @@ export const FingoModalSlider = props => {
                 className={`FingoModalSlider-${open ? 'open' : ''}`}
             >
                 {open && showCloseButton && (
-                    <button className='FingoModalClose' onClick={onClose}>
+                    <button className='FingoModalSlideClose' onClick={onClose}>
                         <svg
                             xmlns='http://www.w3.org/2000/svg'
                             width='1024'
@@ -51,9 +51,29 @@ const RootFingoModalSlider = styled.div`
         right: ${props => (props.$isOpen ? '0px' : '-' + props.$width + 'px')};
     }
 
-    .FingoShapeRadius {
+    /* .FingoShapeRadius {
         border-top-left-radius: 0 !important;
         border-bottom-left-radius: 0 !important;
+    } */
+
+    .FingoModalSlideClose {
+        width: 36px;
+        height: 36px;
+        border-radius: 36px;
+        border: none !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: transparent;
+        position: absolute;
+        top: -20px;
+        right: -20px;
+        background: #ff4141;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;
+        color: #fff;
+        z-index: 1001;
+        margin: 0;
+        padding: 0;
     }
 `
 

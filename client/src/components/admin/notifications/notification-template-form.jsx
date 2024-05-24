@@ -59,6 +59,7 @@ const NotificationTemplateForm = ({ onSubmit, defaultValue }) => {
         handleSubmit,
         setValue,
         getValues,
+        watch,
         formState: { errors },
     } = useForm({
         defaultValues: initialValues,
@@ -95,9 +96,10 @@ const NotificationTemplateForm = ({ onSubmit, defaultValue }) => {
         }
     }, [selectedUserRecipients])
 
-    const onSelectType = useCallback(type => {
+    const onSelectType = type => {
+        console.log('type->', type)
         setValue('type', type)
-    })
+    }
 
     return (
         <Form
@@ -105,6 +107,19 @@ const NotificationTemplateForm = ({ onSubmit, defaultValue }) => {
             className='px-2 FingoShapeRadius'
         >
             <Row className='justify-content-center'>
+                <Col xs={12}>
+                    <NotificationTypeContainer className='FingoShapeRadius FingoBorders'>
+                        {NOTIFICATION_TYPE_LIST.map(x => (
+                            <NotificationItem key={x.value}>
+                                <NotificationItemTypeLabel
+                                    onClick={onSelectType}
+                                    type={x.value}
+                                    isSelected={watch('type') === x.value}
+                                />
+                            </NotificationItem>
+                        ))}
+                    </NotificationTypeContainer>
+                </Col>
                 <Col xs={12} className='px-2'>
                     <BoxHint>
                         <p style={{ marginBottom: 0, color: '#000' }}>
@@ -112,15 +127,6 @@ const NotificationTemplateForm = ({ onSubmit, defaultValue }) => {
                             <strong>[[NAME]], [[EMAIL]]</strong>
                         </p>
                     </BoxHint>
-                </Col>
-                <Col xs={12}>
-                    {NOTIFICATION_TYPE_LIST.map(x => (
-                        <NotificationItemTypeLabel
-                            onClick={onSelectType}
-                            type={x.value}
-                            isSelected={getValues('type') === x.value}
-                        />
-                    ))}
                 </Col>
                 <Col xs={12} className='px-2'>
                     <Controller
@@ -194,19 +200,23 @@ const FooterSection = styled.div`
 `
 
 const BoxHint = styled.div`
-    border: 1px solid #2d9a5c;
-    background-color: #91cdab;
+    border: 1px solid #00aeff;
+    background-color: #c6deff;
     padding: 0.5rem;
     border-radius: 0.4rem;
     margin-bottom: 1rem;
 `
 
-const BoxErrorRecipients = styled.div`
-    border: 1px solid #da0000;
-    background-color: #ff5050;
-    padding: 0.5rem;
-    border-radius: 0.4rem;
+const NotificationTypeContainer = styled.div`
+    padding: 1rem;
     margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+`
+
+const NotificationItem = styled.div`
+    margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
 `
 
 export default NotificationTemplateForm

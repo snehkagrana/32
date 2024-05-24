@@ -414,8 +414,8 @@ const FooterSection = styled.div`
 `
 
 const BoxHint = styled.div`
-    border: 1px solid #2d9a5c;
-    background-color: #91cdab;
+    border: 1px solid #00aeff;
+    background-color: #c6deff;
     padding: 0.5rem;
     border-radius: 0.4rem;
     margin-bottom: 1rem;

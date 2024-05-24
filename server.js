@@ -93,10 +93,6 @@ app.use(flash());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors({
-    origin: ['https://fingodev.kujang.space']
-}));
-
 /** ######## New Routes ########### */
 app.use('/server/api/admin', adminRoutes);  
 app.use('/server/api', authRoutes);  
