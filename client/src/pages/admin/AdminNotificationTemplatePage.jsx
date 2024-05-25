@@ -169,7 +169,7 @@ const AdminNotificationTemplatePage = () => {
             >
                 <ModalWrapper className='FingoBackground'>
                     <ModalBox>
-                        <div className='mb-4'>Notification Template</div>
+                        <ModalTitle>Notification Template</ModalTitle>
                         <NotificationTemplateForm
                             defaultValue={formValues}
                             onSubmit={onSubmitForm}
@@ -183,12 +183,19 @@ const AdminNotificationTemplatePage = () => {
 
 const ModalWrapper = styled.div`
     overflow-y: scroll;
-    min-height: 100vh;
+    max-height: 100vh;
 `
 
 const ModalBox = styled.div`
     border-radius: 0.4rem;
     padding: 1.5rem 2rem;
+`
+
+const ModalTitle = styled.div`
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
 `
 
 export default AdminNotificationTemplatePage

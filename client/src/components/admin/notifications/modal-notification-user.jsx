@@ -97,7 +97,7 @@ const ModalNotificationUserRecipient = ({ defaultValues, onSubmit }) => {
         >
             <ModalWrapper>
                 <ModalBox>
-                    <div className='mb-4'>Select notification recipients</div>
+                    <ModalTitle>Select notification recipients</ModalTitle>
                     <SearchBox>
                         <FingoInput
                             name='searchValue'
@@ -165,5 +165,12 @@ const ModalBox = styled.div`
 `
 
 const SearchBox = styled.div``
+
+const ModalTitle = styled.div`
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
+`
 
 export default ModalNotificationUserRecipient

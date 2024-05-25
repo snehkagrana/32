@@ -30,12 +30,10 @@ const NotificationTemplateItem = ({ data, fetchData, onEdit }) => {
 
     return (
         <CardTemplate onClick={onClickItem}>
+            <TypeContainer>
+                {data.type && <NotificationItemTypeLabel type={data.type} />}
+            </TypeContainer>
             <CardContainer>
-                <TypeContainer>
-                    {data.type && (
-                        <NotificationItemTypeLabel type={data.type} />
-                    )}
-                </TypeContainer>
                 <TemplateInfo>
                     <UserAvatar src={data?.imgPath || DEFAULT_IMG} />
                     <TitleText>{data.title}</TitleText>

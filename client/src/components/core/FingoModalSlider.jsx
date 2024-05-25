@@ -20,14 +20,14 @@ export const FingoModalSlider = props => {
                     <button className='FingoModalSlideClose' onClick={onClose}>
                         <svg
                             xmlns='http://www.w3.org/2000/svg'
-                            width='1024'
-                            height='1024'
-                            viewBox='0 0 1024 1024'
+                            width='1em'
+                            height='1em'
+                            viewBox='0 0 24 24'
                         >
                             <path
                                 fill='currentColor'
-                                d='M195.2 195.2a64 64 0 0 1 90.496 0L512 4 21.504L738.304 195.2a64 64 0 0 1 90.496 90.496L602.496 512L828.8 738.304a64 64 0 0 1-90.496 90.496L512 602.496L285.696 828.8a64 64 0 0 1-90.496-90.496L421.504 512L195.2 285.696a64 64 0 0 1 0-90.496z'
-                            />
+                                d='M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z'
+                            ></path>
                         </svg>
                     </button>
                 )}
@@ -66,14 +66,17 @@ const RootFingoModalSlider = styled.div`
         justify-content: center;
         background-color: transparent;
         position: absolute;
-        top: -20px;
-        right: -20px;
+        top: 20px;
+        left: -18px;
         background: #ff4141;
         box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;
         color: #fff;
         z-index: 1001;
         margin: 0;
         padding: 0;
+        svg {
+            font-size: 22px;
+        }
     }
 `
 

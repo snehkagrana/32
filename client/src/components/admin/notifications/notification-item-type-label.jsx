@@ -107,12 +107,11 @@ const LabelRoot = styled.div`
     svg {
         font-size: 22px;
         color: #ffffff;
-        margin-left: 0.5rem;
+        margin-left: 0.3rem;
     }
 `
 
 const LabelText = styled.p`
-    margin-left: 0.8rem;
     color: #fff;
     margin-bottom: 0;
     font-weight: bold;

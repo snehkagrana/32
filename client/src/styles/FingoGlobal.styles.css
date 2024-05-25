@@ -359,3 +359,8 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
 [data-theme='dark'] .FingoBackgroundColor {
     background-color: #262626;
 }
+
+.invalid-feedback {
+    font-size: 13px;
+    font-weight: bold;
+}

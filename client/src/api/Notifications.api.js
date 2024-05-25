@@ -54,4 +54,12 @@ export const NotificationsAPI = {
         )
         return response?.data
     },
+
+    admin_uploadImage: async body => {
+        const response = await Axios.post(
+            `/server/api/admin/notification/image`,
+            body
+        )
+        return response?.data
+    },
 }
