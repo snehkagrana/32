@@ -87,7 +87,7 @@ const AdminNotificationPage = () => {
             </Helmet>
             <Container fluid>
                 <div className='row justify-center h-auto'>
-                    <div className='col-12 col-md-10 col-lg-8'>
+                    <div className='col-12 col-md-10'>
                         <Row className='justify-content-md-center'>
                             <Col>
                                 <div className='AdminRewardContainer'>

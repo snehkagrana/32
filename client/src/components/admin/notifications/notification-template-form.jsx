@@ -32,8 +32,8 @@ import { NOTIFICATION_TYPE_LIST } from 'src/constants/notification.constant'
 import { NotificationsAPI } from 'src/api'
 
 const schema = Yup.object().shape({
-    title: Yup.string().required('Field required'),
-    body: Yup.string().required('Field required'),
+    title: Yup.string().required('Field required').max(120),
+    body: Yup.string().required('Field required').max(200),
     type: Yup.string().required('Field required'),
     imageUrl: Yup.string().nullable(),
 })

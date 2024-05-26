@@ -15,6 +15,7 @@ import { FingoButton, FingoModalSlider } from 'src/components/core'
 import NotificationTemplateForm from 'src/components/admin/notifications/notification-template-form'
 import styled from 'styled-components'
 import { isElement } from 'react-dom/test-utils'
+import { breakpoints } from 'src/utils/breakpoints.util'
 
 const AdminNotificationTemplatePage = () => {
     const dispatch = useDispatch()
@@ -117,11 +118,11 @@ const AdminNotificationTemplatePage = () => {
             </Helmet>
             <Container fluid>
                 <div className='row justify-center h-auto'>
-                    <div className='col-12 col-md-10 col-lg-8'>
+                    <div className='col-12 col-md-10'>
                         <Row className='justify-content-md-center'>
                             <Col>
                                 <div className='AdminRewardContainer'>
-                                    <div className='AdminRewardHeader mb-4'>
+                                    <Header className=' mb-4'>
                                         <button
                                             className='back-arrow'
                                             onClick={handleClick}
@@ -139,7 +140,7 @@ const AdminNotificationTemplatePage = () => {
                                                 Add Template
                                             </FingoButton>
                                         </div>
-                                    </div>
+                                    </Header>
 
                                     {listNotificationTemplateData?.length > 0 &&
                                         listNotificationTemplateData?.map(
@@ -196,6 +197,26 @@ const ModalTitle = styled.div`
     font-weight: bold;
     text-align: center;
     margin-bottom: 1rem;
+`
+
+const Header = styled.div`
+    background-color: transparent;
+    padding-left: 40px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @media screen and (min-width: ${breakpoints.md}) {
+        padding: 2rem 1rem;
+        background-color: #26a4ff;
+        border-radius: 0.6rem;
+        padding-left: 48px;
+    }
+    h2 {
+        color: #fff;
+        font-size: 22px;
+        font-weight: bold;
+    }
 `
 
 export default AdminNotificationTemplatePage

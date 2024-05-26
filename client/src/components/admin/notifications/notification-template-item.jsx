@@ -5,6 +5,7 @@ import { NotificationsAPI } from 'src/api'
 import NotificationItemTypeLabel from './notification-item-type-label'
 import { NOTIFICATION_TYPE_LIST } from 'src/constants/notification.constant'
 import toast from 'react-hot-toast'
+import Assets from 'src/assets'
 
 const NotificationTemplateItem = ({ data, fetchData, onEdit }) => {
     const onClickItem = useCallback(() => {}, [])
@@ -28,14 +29,29 @@ const NotificationTemplateItem = ({ data, fetchData, onEdit }) => {
         }
     }, [data, onEdit])
 
+    const onClickSend = useCallback(async () => {
+        if (typeof onEdit === 'function') {
+            onEdit(data)
+        }
+    }, [data, onEdit])
+
     return (
         <CardTemplate onClick={onClickItem}>
             <TypeContainer>
-                {data.type && <NotificationItemTypeLabel type={data.type} />}
+                {data.type && (
+                    <TypeAbsolute>
+                        <NotificationItemTypeLabel type={data.type} />
+                    </TypeAbsolute>
+                )}
             </TypeContainer>
             <CardContainer>
+                <UploadImage>
+                    <img
+                        src={data?.imageUrl || Assets.NoImg}
+                        alt='placeholder'
+                    />
+                </UploadImage>
                 <TemplateInfo>
-                    <UserAvatar src={data?.imgPath || DEFAULT_IMG} />
                     <TitleText>{data.title}</TitleText>
                     <BodyText>{data.body}</BodyText>
                 </TemplateInfo>
@@ -73,6 +89,12 @@ const NotificationTemplateItem = ({ data, fetchData, onEdit }) => {
                             ></path>
                         </svg>
                     </DeleteButton>
+                    <SendButton
+                        onClick={onClickSend}
+                        className='delete-btn'
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14L21 3m0 0l-6.5 18a.55.55 0 0 1-1 0L10 14l-7-3.5a.55.55 0 0 1 0-1z"></path></svg>
+                    </SendButton>
                 </ButtonContainer>
             </CardContainer>
         </CardTemplate>
@@ -84,29 +106,28 @@ const CardTemplate = styled.div`
     border: 1px solid rgb(109 109 109 / 10%);
     border-radius: 0.4rem;
     margin-bottom: 0.5rem;
-    padding: 0.2rem 0.6rem;
+    padding: 0.5rem 0.6rem;
+    position: relative;
     cursor: pointer;
     overflow: hidden;
-    .ButtonContainer {
-        transform: translateX(120px);
-    }
-
-    &:hover {
-        .ButtonContainer {
-            transform: translateX(0px);
-        }
-    }
 `
 
 const CardContainer = styled.div`
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    position: relative;
+`
+
+const TypeAbsolute = styled.div`
+    position: absolute;
+    top: 10px;
+    right: 10px;
 `
 
 const TemplateInfo = styled.div`
     margin-left: 0.8rem;
 `
+
 const TitleText = styled.h4`
     font-size: 1rem;
     font-weight: 700;
@@ -119,17 +140,14 @@ const BodyText = styled.p`
     margin-bottom: 0;
 `
 
-const UserAvatar = styled.img`
-    width: 45px;
-    height: 45px;
-    border-radius: 45px;
-`
-
 const ButtonContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
     transition: transform 0.2s;
+    position: absolute;
+    bottom: 10px;
+    right: 7px;
 `
 
 const EditButton = styled.button`
@@ -137,15 +155,21 @@ const EditButton = styled.button`
     align-items: center;
     justify-content: center;
     margin-left: auto;
-    height: 36px;
-    width: 36px;
+    height: 32px;
+    width: 32px;
     background-color: transparent;
     border: 1px solid #03a9f4;
-    border-radius: 36px;
+    border-radius: 6px;
     padding: 0;
     svg {
-        font-size: 22px;
+        font-size: 18px;
         color: #03a9f4;
+    }
+    &:hover {
+        background-color: #03a9f4;
+        svg {
+            color: #fff;
+        }
     }
 `
 
@@ -154,21 +178,65 @@ const DeleteButton = styled.button`
     align-items: center;
     justify-content: center;
     margin-left: auto;
-    height: 36px;
-    width: 36px;
+    height: 32px;
+    width: 32px;
     background-color: transparent;
     border: 1px solid #ff2c2c;
-    border-radius: 36px;
+    border-radius: 6px;
     padding: 0;
     margin-left: 0.5rem;
     svg {
-        font-size: 22px;
+        font-size: 20px;
         color: #ff0000;
+    }
+    &:hover {
+        background-color: #ff0000;
+        svg {
+            color: #fff;
+        }
+    }
+`
+
+const SendButton = styled.button`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    height: 32px;
+    width: 32px;
+    background-color: transparent;
+    border: 1px solid #00e15a;
+    border-radius: 6px;
+    padding: 0;
+    margin-left: 0.5rem;
+    svg {
+        font-size: 20px;
+        color: #00e15a;
+    }
+    &:hover {
+        background-color: #00e15a;
+        svg {
+            color: #fff;
+        }
     }
 `
 
 const TypeContainer = styled.div`
     width: 100px;
+`
+
+const UploadImage = styled.div`
+    border-radius: 0.3rem;
+    overflow: hidden;
+    line-height: 0;
+    border: 1px solid rgb(109 109 109 / 10%);
+    height: 80px;
+    width: 80px;
+    overflow: hidden;
+    img {
+        width: 100%;
+        height: auto;
+    }
 `
 
 export default NotificationTemplateItem
