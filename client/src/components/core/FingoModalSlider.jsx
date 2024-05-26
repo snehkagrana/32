@@ -14,7 +14,7 @@ export const FingoModalSlider = props => {
                 style={{ width: width || '100%' }}
                 $isOpen={open}
                 $width={width}
-                className={`FingoModalSlider-${open ? 'open' : ''}`}
+                className={`FingoBackground FingoModalSlider-${open ? 'open' : ''}`}
             >
                 {open && showCloseButton && (
                     <button className='FingoModalSlideClose' onClick={onClose}>
@@ -42,6 +42,7 @@ export const FingoModalSlider = props => {
 const RootFingoModalSlider = styled.div`
     position: fixed;
     z-index: 1051;
+    min-height: 100vh;
     top: 0;
     transition: all 0.25s;
     opacity: 0;

@@ -62,7 +62,7 @@ router.get(
 
 // Upload notification image
 router.post(
-    '/admin/notification/upload',
+    '/admin/notification/image',
     AuthGuard,
     AdminMiddleware,
     multerUpload.single('image'),

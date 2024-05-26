@@ -10,17 +10,19 @@ const validatePassword = value => {
 }
 
 module.exports = {
-    register: Joi.object().keys({
-        firstName: Joi.string().required(),
-        // lastName: Joi.string().required(),
-        email: Joi.string().email().required(),
-        password: Joi.string().min(6).max(100).required(),
-        role: Joi.string().optional(),
-        referralCode: Joi.string().optional().allow(null),
-        registerToken: Joi.string().optional().allow(null),
-        syncId: Joi.string().optional().allow(null),
-        clientType: Joi.string().optional().allow(null),
-    }),
+    register: Joi.object()
+        .keys({
+            firstName: Joi.string().required(),
+            // lastName: Joi.string().required(),
+            email: Joi.string().email().required(),
+            password: Joi.string().min(6).max(100).required(),
+            role: Joi.string().optional(),
+            referralCode: Joi.string().optional().allow(null),
+            registerToken: Joi.string().optional().allow(null),
+            syncId: Joi.string().optional().allow(null),
+            clientType: Joi.string().optional().allow(null),
+        })
+        .options({ allowUnknown: true }),
     login: Joi.object().keys({
         email: Joi.string().email().required(),
         password: Joi.string().required(),
