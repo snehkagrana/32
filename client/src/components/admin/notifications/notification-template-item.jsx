@@ -5,6 +5,7 @@ import { NotificationsAPI } from 'src/api'
 import NotificationItemTypeLabel from './notification-item-type-label'
 import { NOTIFICATION_TYPE_LIST } from 'src/constants/notification.constant'
 import toast from 'react-hot-toast'
+import Assets from 'src/assets'
 
 const NotificationTemplateItem = ({ data, fetchData, onEdit }) => {
     const onClickItem = useCallback(() => {}, [])
@@ -35,7 +36,9 @@ const NotificationTemplateItem = ({ data, fetchData, onEdit }) => {
             </TypeContainer>
             <CardContainer>
                 <TemplateInfo>
-                    <UserAvatar src={data?.imgPath || DEFAULT_IMG} />
+                    <TemplateImage>
+                        <img alt='img' src={data?.imageUrl || Assets.NoImg} />
+                    </TemplateImage>
                     <TitleText>{data.title}</TitleText>
                     <BodyText>{data.body}</BodyText>
                 </TemplateInfo>
@@ -169,6 +172,16 @@ const DeleteButton = styled.button`
 
 const TypeContainer = styled.div`
     width: 100px;
+`
+
+const TemplateImage = styled.div`
+    height: 100px;
+    width: 100px;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+    }
 `
 
 export default NotificationTemplateItem

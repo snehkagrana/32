@@ -167,7 +167,7 @@ const AdminNotificationTemplatePage = () => {
                 onClose={onCloseModalForm}
                 width={600}
             >
-                <ModalWrapper className='FingoBackground'>
+                <ModalWrapper>
                     <ModalBox>
                         <ModalTitle>Notification Template</ModalTitle>
                         <NotificationTemplateForm
