@@ -94,6 +94,8 @@ app.use('/server/api', informationRoutes);
 app.use('/server/api', batchRoutes);  
 app.use('/server/api', heartRoutes);  
 app.use('/server/api', quizRoutes);  
+app.use('/.well-known/apple-app-site-association', express.static('well-known/apple-app-site-association.json'))
+app.use('/.well-known', express.static('well-known'))
 
 app.use(
     session({
