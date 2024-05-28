@@ -17,7 +17,8 @@ const { getFirstName } = require('./user.util')
 const sendNotification = async ({ token, title, body, data }) => {
     try {
         if (!token || typeof token !== 'string') {
-            throw new Error('Invalid FCM token provided')
+            // throw new Error('Invalid FCM token provided')
+            return
         }
         const message = {
             notification: {
@@ -43,7 +44,8 @@ const sendNotification = async ({ token, title, body, data }) => {
         return response
     } catch (error) {
         console.error('Error sending message:', error.message)
-        throw error
+        return
+        // throw error
     }
 }
 
