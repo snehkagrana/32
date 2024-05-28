@@ -69,7 +69,6 @@ exports.sendAndSaveNotification = async ({
     isFromDashboard,
 }) => {
     const user = await UserModel.findOne({ _id: userId })
-
     const NOW = Date.now()
 
     const notification = await NotificationModel.create({
@@ -82,8 +81,6 @@ exports.sendAndSaveNotification = async ({
         createdAt: NOW,
         readAt: null,
     })
-
-    // console.log('-->>> NOTIFICATION SEND ->', notification)
 
     if (!__DEV__) {
         if (notification && user?.fcmToken) {
@@ -230,4 +227,10 @@ exports.admin_updateNotificationTemplate = async body => {
 
 exports.admin_deleteNotificationTemplate = async id => {
     return await NotificationTemplateModel.deleteOne({ _id: id })
+}
+
+exports.admin_getNotificationHistory = async () => {
+    return await DeliveredNotificationHistoryModel.find({}).sort({
+        createdAt: 'desc',
+    })
 }
