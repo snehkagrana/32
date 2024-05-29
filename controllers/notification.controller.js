@@ -132,9 +132,10 @@ exports.admin_createNotificationTemplate = async (req, res, next) => {
 
 // admin update notification template
 exports.admin_updateNotificationTemplate = async (req, res, next) => {
-    const result = await NotificationService.admin_updateNotificationTemplate(
-        req.body
-    )
+    const result = await NotificationService.admin_updateNotificationTemplate({
+        body: req.body,
+        id: req.params.id,
+    })
     if (result) {
         return res.json({
             message: 'Success',
@@ -156,4 +157,20 @@ exports.admin_deleteNotificationTemplate = async (req, res) => {
             data: result,
         })
     }
+}
+
+// admin update notification template
+exports.admin_getNotificationHistory = async (req, res, next) => {
+    const result = await NotificationService.admin_getNotificationHistory(
+        req.body
+    )
+    if (result) {
+        return res.json({
+            message: 'Success',
+            data: result,
+        })
+    }
+    return res
+        .status(400)
+        .json({ message: 'Failed to get notification history' })
 }

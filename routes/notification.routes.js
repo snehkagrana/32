@@ -9,6 +9,14 @@ const schema = require('../validations/notification.validation')
 const validate = require('../utils/validator.util')
 const { multerUpload } = require('../configs/multer.config')
 
+// Get notification history
+router.get(
+    '/admin/notification/history',
+    AuthGuard,
+    AdminMiddleware,
+    ErrorHandler(NotificationController.admin_getNotificationHistory)
+)
+
 // Delete notification template
 router.delete(
     '/admin/notification/template/:id',
@@ -19,7 +27,7 @@ router.delete(
 
 // Update notification template
 router.put(
-    '/admin/notification/template',
+    '/admin/notification/template/:id',
     validate(schema.create),
     AuthGuard,
     AdminMiddleware,

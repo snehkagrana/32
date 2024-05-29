@@ -10,29 +10,27 @@ import { ReactComponent as BackIcon } from 'src/assets/svg/back.svg'
 import { useDispatch } from 'react-redux'
 import { NotificationsAPI } from 'src/api'
 import Swal from 'sweetalert2'
-import NotificationTemplateItem from 'src/components/admin/notifications/notification-template-item'
 import { FingoButton, FingoModalSlider } from 'src/components/core'
-import NotificationTemplateForm from 'src/components/admin/notifications/notification-template-form'
 import styled from 'styled-components'
 import { breakpoints } from 'src/utils/breakpoints.util'
-import ModalNotificationSendTemplate from 'src/components/admin/notifications/modal-notification-send-template'
+import NotificationHistoryItem from 'src/components/admin/notifications/notification-history-item'
+import LoadingBox from 'src/components/LoadingBox'
+import NotificationHistoryDetail from 'src/components/admin/notifications/notification-history-detail'
 
-const AdminNotificationTemplatePage = () => {
+const AdminNotificationHistoryPage = () => {
     const dispatch = useDispatch()
 
+    const [isLoading, setIsLoading] = useState(false)
     const [openModalForm, setOpenModalForm] = useState(false)
-    const [formValues, setFormValues] = useState(null)
+    const [detailData, setDetailData] = useState(null)
+
+    const [data, setData] = useState([])
 
     const onCloseModalForm = useCallback(() => {
+        setIsLoading(false)
+        setDetailData(null)
         setOpenModalForm(false)
-        setFormValues(null)
     }, [])
-
-    const {
-        notifications_getListNotificationTemplate,
-        notifications_getNotificationRecipients,
-        listNotificationTemplateData,
-    } = useNotifications()
 
     const { user, isAuthenticated } = useAuth()
     const navigate = useNavigate()
@@ -41,13 +39,18 @@ const AdminNotificationTemplatePage = () => {
         navigate(-1)
     }
 
-    const fetchData = params => {
-        dispatch(notifications_getListNotificationTemplate(params))
-        dispatch(notifications_getNotificationRecipients(params))
+    const fetchNotificationHistory = async params => {
+        try {
+            // prettier-ignore
+            const response = await NotificationsAPI.admin_getListNotificationHistory(params)
+            if (response) {
+                setData(response?.data || [])
+            }
+        } catch (e) {}
     }
 
     const onClickAddTemplate = useCallback(() => {
-        setFormValues(null)
+        setDetailData(null)
         setTimeout(() => {
             setOpenModalForm(true)
         }, 250)
@@ -55,20 +58,20 @@ const AdminNotificationTemplatePage = () => {
 
     useEffect(() => {
         if (isAuthenticated && user?.role === 'admin') {
-            fetchData()
+            fetchNotificationHistory()
         } else {
             navigate(`/accessdenied`)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user, isAuthenticated])
 
-    const onSubmitForm = useCallback(async (values, isUpdate) => {
-        const isEdit = Boolean(values?._id) && !isUpdate
+    const onResendNotification = useCallback(async values => {
+        const isEdit = Boolean(values?._id)
         try {
             // prettier-ignore
-            const response = await NotificationsAPI.admin_createOrUpdateNotificationTemplate(values, isUpdate)
+            const response = await NotificationsAPI.admin_createOrUpdateNotificationTemplate(values)
             if (response) {
-                fetchData()
+                fetchNotificationHistory()
                 Swal.fire({
                     title: 'Success',
                     text: `Notification template has been ${
@@ -81,7 +84,7 @@ const AdminNotificationTemplatePage = () => {
                 }).then(result => {
                     if (result.isConfirmed) {
                         setOpenModalForm(false)
-                        setFormValues(null)
+                        setDetailData(null)
                     }
                 })
             }
@@ -102,22 +105,19 @@ const AdminNotificationTemplatePage = () => {
         }
     }, [])
 
-    const onEditTemplate = useCallback(data => {
-        setFormValues({
-            _id: data._id,
-            title: data.title,
-            body: data.body,
-            imageUrl: data.imageUrl,
-        })
+    const onClickDetailItem = useCallback(data => {
+        setIsLoading(true)
+        setOpenModalForm(true)
         setTimeout(() => {
-            setOpenModalForm(true)
-        }, 250)
+            setDetailData(data)
+            setIsLoading(false)
+        }, 750)
     }, [])
 
     return (
         <FingoHomeLayout>
             <Helmet>
-                <title>(Admin) Notification Templates</title>
+                <title>(Admin) Delivered Notification</title>
             </Helmet>
             <Container fluid>
                 <div className='row justify-center h-auto'>
@@ -134,28 +134,21 @@ const AdminNotificationTemplatePage = () => {
                                         </button>
                                         <div style={{ textAlign: 'center' }}>
                                             <h2 className='mb-3, text-center'>
-                                                Notification Template
+                                                Delivered Notification History
                                             </h2>
-                                            <FingoButton
-                                                color='white'
-                                                onClick={onClickAddTemplate}
-                                            >
-                                                Add Template
-                                            </FingoButton>
                                         </div>
                                     </Header>
 
-                                    {listNotificationTemplateData?.length > 0 &&
-                                        listNotificationTemplateData?.map(
-                                            (x, index) => (
-                                                <NotificationTemplateItem
-                                                    fetchData={fetchData}
-                                                    key={String(index)}
-                                                    data={x}
-                                                    onEdit={onEditTemplate}
-                                                />
-                                            )
-                                        )}
+                                    {data?.length > 0 &&
+                                        data?.map((x, index) => (
+                                            <NotificationHistoryItem
+                                                key={String(index)}
+                                                data={x}
+                                                onClickDetail={
+                                                    onClickDetailItem
+                                                }
+                                            />
+                                        ))}
                                     <FingoScrollToTop />
                                 </div>
                             </Col>
@@ -167,19 +160,24 @@ const AdminNotificationTemplatePage = () => {
             <FingoModalSlider
                 open={openModalForm}
                 onClose={onCloseModalForm}
-                width={620}
+                width={600}
             >
                 <ModalWrapper>
-                    <ModalBox>
-                        <ModalTitle>Notification Template</ModalTitle>
-                        <NotificationTemplateForm
-                            defaultValue={formValues}
-                            onSubmit={onSubmitForm}
-                        />
-                    </ModalBox>
+                    {isLoading ? (
+                        <LoadingBox spinnerSize={52} height={500} />
+                    ) : (
+                        <ModalBox>
+                            <ModalTitle>Notification Detail</ModalTitle>
+                            {detailData && (
+                                <NotificationHistoryDetail
+                                    data={detailData}
+                                    onResendNotification={onResendNotification}
+                                />
+                            )}
+                        </ModalBox>
+                    )}
                 </ModalWrapper>
             </FingoModalSlider>
-            <ModalNotificationSendTemplate />
         </FingoHomeLayout>
     )
 }
@@ -222,5 +220,4 @@ const Header = styled.div`
         font-weight: bold;
     }
 `
-
-export default AdminNotificationTemplatePage
+export default AdminNotificationHistoryPage

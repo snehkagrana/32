@@ -291,6 +291,32 @@ const FingoSidebar = ({ open }) => {
                                         <span> Notifications</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a
+                                        href='#'
+                                        className='FingoShapeRadius'
+                                        onClick={e => {
+                                            e.preventDefault()
+                                            navigate(`/admin/notification/template`)
+                                        }}
+                                    >
+                                        <div className='icon'></div>
+                                        <span>Notification Template</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href='#'
+                                        className='FingoShapeRadius'
+                                        onClick={e => {
+                                            e.preventDefault()
+                                            navigate(`/admin/notification/delivered-notification`)
+                                        }}
+                                    >
+                                        <div className='icon'></div>
+                                        <span> Delivered Notification</span>
+                                    </a>
+                                </li>
                             </>
                         )}
                     </ul>

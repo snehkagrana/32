@@ -33,19 +33,20 @@ export const NotificationsAPI = {
         return response?.data
     },
 
-    admin_createOrUpdateNotificationTemplate: async body => {
-        if (body?._id) {
+    admin_createOrUpdateNotificationTemplate: async (body, isUpdate) => {
+        if (body?._id && isUpdate) {
             const response = await Axios.put(
+                `/server/api/admin/notification/template/${body._id}`,
+                body
+            )
+            return response?.data
+        } else {
+            const response = await Axios.post(
                 `/server/api/admin/notification/template`,
                 body
             )
             return response?.data
         }
-        const response = await Axios.post(
-            `/server/api/admin/notification/template`,
-            body
-        )
-        return response?.data
     },
 
     admin_deleteNotificationTemplate: async id => {
@@ -59,6 +60,15 @@ export const NotificationsAPI = {
         const response = await Axios.post(
             `/server/api/admin/notification/image`,
             body
+        )
+        return response?.data
+    },
+
+    // notification history
+    admin_getListNotificationHistory: async params => {
+        const response = await Axios.get(
+            `/server/api/admin/notification/history`,
+            { params }
         )
         return response?.data
     },

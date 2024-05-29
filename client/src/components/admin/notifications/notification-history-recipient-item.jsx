@@ -2,7 +2,12 @@ import { useCallback } from 'react'
 import styled from 'styled-components'
 import DEFAULT_IMG from 'src/images/pepe.jpg'
 
-const NotificationRecipientItem = ({ data, checked, onCheck, canChecked }) => {
+const NotificationHistoryRecipientItem = ({
+    data,
+    checked,
+    onCheck,
+    canChecked,
+}) => {
     const handleCheck = useCallback(() => {
         if (canChecked) {
             onCheck(data)
@@ -89,4 +94,4 @@ const CheckButton = styled.button`
     }
 `
 
-export default NotificationRecipientItem
+export default NotificationHistoryRecipientItem

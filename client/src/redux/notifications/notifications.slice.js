@@ -11,6 +11,10 @@ const initialState = {
     notificationRecipientsIsError: false,
     notificationRecipientsData: [],
     openModalUserRecipients: false,
+    modalSendTemplate: {
+        open: false,
+        template: null,
+    },
     selectedUserRecipients: [],
     openModallistNotificaitons: false,
     openModalListMyReward: false,
@@ -42,6 +46,9 @@ export const notificationsSlice = createSlice({
     reducers: {
         notifications_setOpenModalUserRecipients(state, action) {
             state.openModalUserRecipients = action.payload
+        },
+        notifications_setModalSendTemplate(state, action) {
+            state.modalSendTemplate = action.payload
         },
         notifications_setSelectedUserRecipients(state, action) {
             state.selectedUserRecipients = action.payload

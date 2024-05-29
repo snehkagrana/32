@@ -137,6 +137,7 @@ cron.schedule('*/5 * * * *', async function () {
              */
             const DIFF_DAY = dayjs(TODAY).diff(user.lastCompletedDay, 'day') || -1
 
+            // use done lesson today
             if (DIFF_DAY === 0 && user.streak > 0) {
                 // prettier-ignore
                 console.log(`---^^^ DIFF_DAY === 0 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
@@ -201,7 +202,9 @@ cron.schedule('*/5 * * * *', async function () {
                         }
                     }
                 }
-            } else if (DIFF_DAY === 1 && user.streak > 0) {
+            }
+            // Last done lesson yesterday
+            else if (DIFF_DAY === 1 && user.streak > 0) {
                 // prettier-ignore
                 console.log(`--->>> DIFF_DAY === 1 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
 
@@ -267,7 +270,9 @@ cron.schedule('*/5 * * * *', async function () {
                         await NotificationReminder.sendRandomReminder(LESSON_REMINDER_DATA)
                     }
                 }
-            } else if (user.streak === 0 || DIFF_DAY >= 2) {
+            }
+            // User missed one day, streak will reset to 0
+            else if (user.streak === 0 || DIFF_DAY >= 2) {
                 /**
                  * NOTES: User streak only synced when user logged in
                  * Users may not do lessons but their streak is still more than 0

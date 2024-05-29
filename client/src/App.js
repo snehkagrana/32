@@ -58,6 +58,9 @@ const AdminNotificationPage = React.lazy(
 const AdminNotificationTemplatePage = React.lazy(
     () => import('./pages/admin/AdminNotificationTemplatePage')
 )
+const AdminNotificationHistoryPage = React.lazy(
+    () => import('./pages/admin/AdminNotificationHistoryPage')
+)
 
 const App = () => {
     const dispatch = useDispatch()
@@ -254,6 +257,11 @@ const App = () => {
                             exact
                             path='/admin/notification/template'
                             element={<AdminNotificationTemplatePage />}
+                        />
+                        <Route
+                            exact
+                            path='/admin/notification/delivered-notification'
+                            element={<AdminNotificationHistoryPage />}
                         />
                         <Route
                             exact

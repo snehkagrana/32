@@ -12,6 +12,8 @@ import { NotificationsAPI } from 'src/api'
 import NotificationForm from 'src/components/admin/notifications/notification-form'
 import Swal from 'sweetalert2'
 import { FingoButton } from 'src/components/core'
+import styled from 'styled-components'
+import { breakpoints } from 'src/utils/breakpoints.util'
 
 const AdminNotificationPage = () => {
     const dispatch = useDispatch()
@@ -91,7 +93,7 @@ const AdminNotificationPage = () => {
                         <Row className='justify-content-md-center'>
                             <Col>
                                 <div className='AdminRewardContainer'>
-                                    <div className='AdminRewardHeader mb-4'>
+                                    <Header>
                                         <button
                                             className='back-arrow'
                                             onClick={handleClick}
@@ -109,7 +111,7 @@ const AdminNotificationPage = () => {
                                                 Template
                                             </FingoButton>
                                         </div>
-                                    </div>
+                                    </Header>
                                     <NotificationForm onSubmit={onSubmit} />
                                     <FingoScrollToTop />
                                 </div>
@@ -122,4 +124,25 @@ const AdminNotificationPage = () => {
     )
 }
 
+const Header = styled.div`
+    background-color: transparent;
+    padding-left: 40px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2.25rem;
+    margin-top: 1.25rem;
+    @media screen and (min-width: ${breakpoints.md}) {
+        padding: 2rem 1rem;
+        background-color: #00d02a;
+        border-radius: 0.6rem;
+        padding-left: 48px;
+    }
+    h2 {
+        color: #fff;
+        font-size: 22px;
+        font-weight: bold;
+    }
+`
 export default AdminNotificationPage

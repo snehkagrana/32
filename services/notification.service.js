@@ -216,13 +216,10 @@ exports.admin_createNotificationTemplate = body => {
     return NotificationTemplateModel.create(body)
 }
 
-exports.admin_updateNotificationTemplate = async body => {
-    const { _id, ...rest } = body
-    return await NotificationTemplateModel.findOneAndUpdate(
-        { _id: _id },
-        rest,
-        { new: true }
-    )
+exports.admin_updateNotificationTemplate = async ({ body, id }) => {
+    return await NotificationTemplateModel.findOneAndUpdate({ _id: id }, body, {
+        new: true,
+    })
 }
 
 exports.admin_deleteNotificationTemplate = async id => {

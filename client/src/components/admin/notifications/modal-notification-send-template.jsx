@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {
     Fragment,
+    memo,
     useCallback,
     useEffect,
     useMemo,
@@ -10,32 +11,42 @@ import React, {
 import { Form, Row, Col, Button } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { useNotifications } from 'src/hooks'
-import { FingoButton, FingoInput, FingoModal } from 'src/components/core'
+import {
+    FingoButton,
+    FingoInput,
+    FingoModal,
+    FingoModalSlider,
+} from 'src/components/core'
 import styled from 'styled-components'
 import NotificationRecipientItem from './notification-recipient-item'
+import { NotificationsAPI } from 'src/api'
+import Swal from 'sweetalert2'
+import NotificationTemplateItem from './notification-template-item'
 
-const ModalNotificationPreview = ({ open, onClose, data, onConfirm }) => {
+const ModalNotificationSendTemplate = () => {
     const dispatch = useDispatch()
     const {
         notifications_setOpenModalUserRecipients,
         openModalUserRecipients,
         notificationRecipientsData,
+        notifications_setModalSendTemplate,
+        modalSendTemplate,
     } = useNotifications()
     const [searchValue, setSearchValue] = useState('')
     const [hasDirty, setHasDirty] = useState(false)
-    const [selectedItems, setSelectedItems] = useState([])
+    const [selectedRecipients, setSelectedRecipients] = useState([])
 
     // prettier-ignore
     const onCheckItem = useCallback(item => {
-        let currentSelectedItems = Array.from(selectedItems)
-        const isExist = selectedItems?.find(x => x._id === item?._id)
+        let currentSelectedItems = Array.from(selectedRecipients)
+        const isExist = selectedRecipients?.find(x => x._id === item?._id)
         if (isExist) { 
-            let _currentSelectedItems = Array.from(selectedItems).filter((x) => x._id !== item._id)
-            setSelectedItems(_currentSelectedItems)
+            let _currentSelectedItems = Array.from(selectedRecipients).filter((x) => x._id !== item._id)
+            setSelectedRecipients(_currentSelectedItems)
         } else {
-            setSelectedItems([...currentSelectedItems, item])
+            setSelectedRecipients([...currentSelectedItems, item])
         }
-    }, [selectedItems])
+    }, [selectedRecipients])
 
     // prettier-ignore
     const displayData = useMemo(() => {
@@ -49,51 +60,98 @@ const ModalNotificationPreview = ({ open, onClose, data, onConfirm }) => {
     }, [searchValue, notificationRecipientsData])
 
     const isSelectedAll = useMemo(() => {
-        return selectedItems?.length === notificationRecipientsData.length
-    }, [selectedItems, notificationRecipientsData])
+        return selectedRecipients?.length === notificationRecipientsData.length
+    }, [selectedRecipients, notificationRecipientsData])
 
     const onConfirmClose = () => {
         dispatch(notifications_setOpenModalUserRecipients(true))
     }
 
     const onCloseModal = useCallback(() => {
-        dispatch(notifications_setOpenModalUserRecipients(false))
-        // onSubmit(selectedItems)
-        // dispatch(notifications_setSelectedUserRecipients(selectedItems))
-    }, [selectedItems, hasDirty, openModalUserRecipients])
+        dispatch(
+            notifications_setModalSendTemplate({
+                open: false,
+                template: null,
+            })
+        )
+    }, [selectedRecipients, hasDirty, openModalUserRecipients])
 
     // prettier-ignore
     const onChangeSearchInput = useCallback(e => {
         setSearchValue(e.target.value)
     }, [searchValue])
 
-    const onClickAdd = useCallback(() => {
-        // onSubmit(selectedItems)
-        // dispatch(notifications_setSelectedUserRecipients(selectedItems))
-        onCloseModal()
-    }, [selectedItems, openModalUserRecipients])
+    const onSubmit = useCallback(async () => {
+        try {
+            const submitValues = {
+                title: modalSendTemplate?.template?.title || '',
+                body: modalSendTemplate?.template?.body || '',
+                imageUrl: modalSendTemplate?.template?.imageUrl || null,
+                users: selectedRecipients.map(x => ({
+                    userId: x._id,
+                    displayName: x.displayName || '',
+                    email: x.email,
+                    imageUrl: x.imgPath || null,
+                })),
+            }
+
+            // prettier-ignore
+            const response = await NotificationsAPI.admin_sendGeneralNotifications(submitValues)
+            if (response) {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Notification send successfully!',
+                    icon: 'success',
+                    showCancelButton: false,
+                    confirmButtonColor: '#009c4e',
+                    confirmButtonText: 'Ok',
+                }).then(result => {
+                    if (result.isConfirmed) {
+                    }
+                })
+            }
+        } catch (e) {
+            Swal.fire({
+                title: 'Opss..',
+                text: 'Failed to send notifications!',
+                icon: 'error',
+                showCancelButton: false,
+                confirmButtonColor: '#9c0017',
+                confirmButtonText: 'Ok',
+            }).then(result => {
+                if (result.isConfirmed) {
+                }
+            })
+        }
+    }, [modalSendTemplate, selectedRecipients])
 
     useEffect(() => {
-        if (defaultValues?.length > 0) {
-            setSelectedItems(defaultValues)
+        if (modalSendTemplate?.users?.length > 0) {
+            setSelectedRecipients(modalSendTemplate)
             setHasDirty(false)
         }
-    }, [defaultValues, hasDirty])
+    }, [modalSendTemplate, hasDirty])
 
     const onClickSelectAll = useCallback(() => {
-        setSelectedItems(isSelectedAll ? [] : notificationRecipientsData)
+        setSelectedRecipients(isSelectedAll ? [] : notificationRecipientsData)
     }, [isSelectedAll])
 
     return (
-        <ModalWrapper>
-            <FingoModal
-                className='modal-notification-recipients'
-                open={open}
-                onClose={onClose}
-                centered
-            >
+        <FingoModalSlider
+            open={modalSendTemplate.open}
+            onClose={onCloseModal}
+            width={640}
+        >
+            <ModalWrapper>
                 <ModalBox>
-                    <div className='mb-4'>Select notification recipients</div>
+                    <ModalTitle>Send notification template</ModalTitle>
+                    {modalSendTemplate?.template && (
+                        <TemplateWrapper>
+                            <NotificationTemplateItem
+                                data={modalSendTemplate.template}
+                            />
+                        </TemplateWrapper>
+                    )}
                     <SearchBox>
                         <FingoInput
                             name='searchValue'
@@ -121,7 +179,7 @@ const ModalNotificationPreview = ({ open, onClose, data, onConfirm }) => {
                                         <NotificationRecipientItem
                                             key={String(index)}
                                             data={item}
-                                            checked={selectedItems.find(
+                                            checked={selectedRecipients.find(
                                                 x => x._id === item._id
                                             )}
                                             onCheck={onCheckItem}
@@ -137,30 +195,41 @@ const ModalNotificationPreview = ({ open, onClose, data, onConfirm }) => {
                         </Col>
                         <Col xs={12} className='px-2 py-2 text-center'>
                             <FingoButton
-                                style={{ width: 120 }}
-                                onClick={onClickAdd}
+                                style={{ width: 200 }}
+                                onClick={onSubmit}
                             >
-                                DONE
+                                Send Notification
                             </FingoButton>
                         </Col>
                     </Row>
                 </ModalBox>
-            </FingoModal>
-        </ModalWrapper>
+            </ModalWrapper>
+        </FingoModalSlider>
     )
 }
 
 const ModalWrapper = styled.div`
-    .modal-dialog {
-        width: 620px !important;
-    }
+    overflow-y: scroll;
+    max-height: 100vh;
 `
+
 const ModalBox = styled.div`
-    background-color: #fff;
     border-radius: 0.4rem;
-    padding: 1rem;
+    padding: 1.2rem 2.5rem;
 `
 
 const SearchBox = styled.div``
 
-export default ModalNotificationPreview
+const ModalTitle = styled.div`
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 2rem;
+`
+
+const TemplateWrapper = styled.div`
+    width: 100%;
+    margin-bottom: 0.75rem;
+`
+
+export default memo(ModalNotificationSendTemplate)

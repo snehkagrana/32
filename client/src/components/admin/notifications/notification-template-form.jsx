@@ -39,11 +39,11 @@ const schema = Yup.object().shape({
 })
 
 const initialValues = {
+    _id: null,
     title: '',
     body: '',
     imageUrl: '',
     type: '',
-    users: [],
 }
 
 const NotificationTemplateForm = ({ onSubmit, defaultValue }) => {
@@ -55,13 +55,15 @@ const NotificationTemplateForm = ({ onSubmit, defaultValue }) => {
 
     const { selectedUserRecipients } = useNotifications()
 
+    const isEdit = useMemo(() => Boolean(defaultValue?._id), [defaultValue])
+
     const {
         control,
         reset,
         handleSubmit,
         setValue,
-        getValues,
         watch,
+        getValues,
         formState: { errors },
     } = useForm({
         defaultValues: initialValues,
@@ -69,7 +71,8 @@ const NotificationTemplateForm = ({ onSubmit, defaultValue }) => {
     })
 
     const onValidSubmit = async values => {
-        onSubmit({ ...values })
+        const isUpdate = values?._id
+        onSubmit({ ...values }, isUpdate)
     }
 
     const onInvalidSubmit = _errors => {
@@ -78,9 +81,14 @@ const NotificationTemplateForm = ({ onSubmit, defaultValue }) => {
 
     useEffect(() => {
         if (defaultValue?.title) {
+            setValue('_id', defaultValue?._id || null)
             setValue('title', defaultValue?.title || '')
             setValue('body', defaultValue?.body || '')
             setValue('imageUrl', defaultValue?.imageUrl || '')
+            setValue(
+                'type',
+                defaultValue?.type || NOTIFICATION_TYPE_LIST[0].value
+            )
 
             if (defaultValue.imageUrl) {
                 setImageFile(defaultValue.imageUrl)
@@ -102,7 +110,16 @@ const NotificationTemplateForm = ({ onSubmit, defaultValue }) => {
     }, [selectedUserRecipients])
 
     const onSelectType = type => {
-        setValue('type', type)
+        if (type === getValues('type')) {
+            setValue('type', null)
+        } else {
+            setValue('type', type)
+        }
+    }
+
+    const onRemoveImage = () => {
+        setImageFile(null)
+        setValue('imageUrl', null)
     }
 
     const handleUploadImage = useCallback(
@@ -173,18 +190,14 @@ const NotificationTemplateForm = ({ onSubmit, defaultValue }) => {
                             )}
                         </UploadImage>
                     </UploadContainer>
-                    {!imageFile && (
-                        <UploadHint>
-                            <p>Recommended square image</p>
-                        </UploadHint>
-                    )}
+                    <UploadHint>
+                        <p>Recommended square image 1:1</p>
+                    </UploadHint>
                     <div>
                         {imageFile && (
                             <div className='mt-2 mb-3 text-center'>
                                 <FingoButton
-                                    onClick={() => {
-                                        setImageFile(null)
-                                    }}
+                                    onClick={onRemoveImage}
                                     size='sm'
                                     color='danger'
                                 >
@@ -196,7 +209,14 @@ const NotificationTemplateForm = ({ onSubmit, defaultValue }) => {
                 </Col>
 
                 <Col xs={12}>
-                    <NotificationTypeContainer className='FingoShapeRadius FingoBorders'>
+                    <NotificationTypeContainer
+                        className='FingoShapeRadius FingoBorders'
+                        style={{
+                            borderColor: errors?.type?.message
+                                ? 'red'
+                                : 'transparent',
+                        }}
+                    >
                         {NOTIFICATION_TYPE_LIST.map(x => (
                             <NotificationItem key={x.value}>
                                 <NotificationItemTypeLabel
@@ -274,10 +294,19 @@ const NotificationTemplateForm = ({ onSubmit, defaultValue }) => {
                 <Col xs={12} className='px-2'>
                     <FooterSection>
                         <FingoButton type='submit' onClick={handleSubmit}>
-                            SAVE NOTIFICATION
+                            {isEdit ? 'Update Template' : 'Save Template'}
                         </FingoButton>
                     </FooterSection>
                 </Col>
+                {/* {isEdit && ( 
+                    <Col xs={12} className='px-2'>
+                        <FooterSection>
+                            <FingoButton type='submit' onClick={handleSubmit}>
+                                Save as New Template
+                            </FingoButton>
+                        </FooterSection>
+                    </Col>
+                )} */}
             </Row>
         </Form>
     )
@@ -299,10 +328,10 @@ const BoxHint = styled.div`
 `
 
 const NotificationTypeContainer = styled.div`
-    padding: 1rem;
     margin-bottom: 1rem;
     display: flex;
     flex-wrap: wrap;
+    padding: 0.6rem 0.9rem;
 `
 
 const NotificationItem = styled.div`
@@ -373,7 +402,7 @@ const UploadImageMarker = styled.div`
     cursor: pointer;
 `
 const UploadHint = styled.div`
-    font-size: 13px;
+    font-size: 14px;
     font-weight: bold;
     text-align: center;
     margin-top: 0.5rem;
