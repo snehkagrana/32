@@ -1,11 +1,11 @@
 {
   "files": {
     "main.css": "/static/css/main.4fac0a7a.css",
-    "main.js": "/static/js/main.a8bb53bb.js",
+    "main.js": "/static/js/main.78d33b3d.js",
     "static/js/930.669b064c.chunk.js": "/static/js/930.669b064c.chunk.js",
-    "static/js/371.55471768.chunk.js": "/static/js/371.55471768.chunk.js",
-    "static/js/263.ec6fb904.chunk.js": "/static/js/263.ec6fb904.chunk.js",
-    "static/js/182.fdb3b39f.chunk.js": "/static/js/182.fdb3b39f.chunk.js",
+    "static/js/371.0523293a.chunk.js": "/static/js/371.0523293a.chunk.js",
+    "static/js/263.a71ab602.chunk.js": "/static/js/263.a71ab602.chunk.js",
+    "static/js/182.28253638.chunk.js": "/static/js/182.28253638.chunk.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
     "static/js/709.e71e48c5.chunk.js": "/static/js/709.e71e48c5.chunk.js",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
@@ -55,6 +55,7 @@
     "static/media/crying.png": "/static/media/crying.77741ad49290b30d6a54.png",
     "static/media/1.png": "/static/media/1.5ceda60411368d78de6c.png",
     "static/media/amazon.png": "/static/media/amazon.1ecf87dd5b47c7791fda.png",
+    "static/media/noimg.png": "/static/media/noimg.3a383f21cb2e0a6bec2e.png",
     "static/media/2.png": "/static/media/2.64a35b48f8872484d0f3.png",
     "static/media/giftbox.png": "/static/media/giftbox.d5c164ac356fd9ab7d91.png",
     "static/media/67366-hamburger-fries-cheeseburger-veggie-french-burger-emoji.png": "/static/media/67366-hamburger-fries-cheeseburger-veggie-french-burger-emoji.a0e26891f0e9de50f815.png",
@@ -75,6 +76,7 @@
     "static/media/moneybag.png": "/static/media/moneybag.0c289347979e20774190.png",
     "static/media/logo.jpeg": "/static/media/logo.c36004afa72a10d2e3ba.jpeg",
     "static/media/sad.png": "/static/media/sad.a28bf8973555ef97043d.png",
+    "static/media/intro-logo.png": "/static/media/intro-logo.62338b809f1ea53f4c2d.png",
     "static/media/turtle.png": "/static/media/turtle.82cd73c53ac378ceab4b.png",
     "static/media/netflix-logo.png": "/static/media/netflix-logo.4bc03ff0aac6d4a37aa9.png",
     "static/media/sneh.jpg": "/static/media/sneh.f9ee79a2259e5e5a0ac8.jpg",
@@ -96,8 +98,8 @@
     "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
     "static/media/slick.eot": "/static/media/slick.a4e97f5a2a64f0ab1323.eot",
     "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
-    "index.html": "/index.html",
     "static/media/refill-heart.svg": "/static/media/refill-heart.a0aa8c3578ce9acb8535cb384e9da7e5.svg",
+    "index.html": "/index.html",
     "static/media/arrow.svg": "/static/media/arrow.bf930bbf3ec41fd9c9756230ec293975.svg",
     "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
     "static/media/seal-check-fill.svg": "/static/media/seal-check-fill.3acb1032a7ce5312b2f1bd434188bbaf.svg",
@@ -126,16 +128,16 @@
     "static/media/close.svg": "/static/media/close.cb5270ed2e7c504efec466e131cae9df.svg",
     "static/media/add.svg": "/static/media/add.71211a5e33a0fd675ebb734ab062b9d5.svg",
     "main.4fac0a7a.css.map": "/static/css/main.4fac0a7a.css.map",
-    "main.a8bb53bb.js.map": "/static/js/main.a8bb53bb.js.map",
+    "main.78d33b3d.js.map": "/static/js/main.78d33b3d.js.map",
     "930.669b064c.chunk.js.map": "/static/js/930.669b064c.chunk.js.map",
-    "371.55471768.chunk.js.map": "/static/js/371.55471768.chunk.js.map",
-    "263.ec6fb904.chunk.js.map": "/static/js/263.ec6fb904.chunk.js.map",
-    "182.fdb3b39f.chunk.js.map": "/static/js/182.fdb3b39f.chunk.js.map",
+    "371.0523293a.chunk.js.map": "/static/js/371.0523293a.chunk.js.map",
+    "263.a71ab602.chunk.js.map": "/static/js/263.a71ab602.chunk.js.map",
+    "182.28253638.chunk.js.map": "/static/js/182.28253638.chunk.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map",
     "709.e71e48c5.chunk.js.map": "/static/js/709.e71e48c5.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.4fac0a7a.css",
-    "static/js/main.a8bb53bb.js"
+    "static/js/main.78d33b3d.js"
   ]
 }

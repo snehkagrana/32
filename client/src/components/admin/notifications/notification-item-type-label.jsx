@@ -100,7 +100,7 @@ const LabelRoot = styled.div`
     justify-content: center;
     width: 100%;
     border-radius: 0.4rem;
-    padding: 0.2rem 0.6rem;
+    padding: 0.2rem 0.5rem;
     cursor: pointer;
     position: relative;
     border-color: transparent;
@@ -115,7 +115,7 @@ const LabelText = styled.p`
     color: #fff;
     margin-bottom: 0;
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 `
 
 export default NotificationItemTypeLabel

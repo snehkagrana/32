@@ -72,7 +72,13 @@ const NotificationTemplateForm = ({ onSubmit, defaultValue }) => {
 
     const onValidSubmit = async values => {
         const isUpdate = values?._id
-        onSubmit({ ...values }, isUpdate)
+        onSubmit(
+            {
+                ...values,
+                imageUrl: values.imageUrl || null,
+            },
+            isUpdate
+        )
     }
 
     const onInvalidSubmit = _errors => {

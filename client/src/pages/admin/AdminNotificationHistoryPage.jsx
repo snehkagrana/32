@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react'
+import React, { useEffect, useCallback, useState, Fragment } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import { Helmet } from 'react-helmet'
@@ -16,6 +16,9 @@ import { breakpoints } from 'src/utils/breakpoints.util'
 import NotificationHistoryItem from 'src/components/admin/notifications/notification-history-item'
 import LoadingBox from 'src/components/LoadingBox'
 import NotificationHistoryDetail from 'src/components/admin/notifications/notification-history-detail'
+import dayjs from 'dayjs'
+import { NOTIFICATION_TYPE_LIST } from 'src/constants/notification.constant'
+import NotificationItemTypeLabel from 'src/components/admin/notifications/notification-item-type-label'
 
 const AdminNotificationHistoryPage = () => {
     const dispatch = useDispatch()
@@ -23,8 +26,9 @@ const AdminNotificationHistoryPage = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [openModalForm, setOpenModalForm] = useState(false)
     const [detailData, setDetailData] = useState(null)
+    const [filters, setFilters] = useState({ type: null })
 
-    const [data, setData] = useState([])
+    const [data, setData] = useState()
 
     const onCloseModalForm = useCallback(() => {
         setIsLoading(false)
@@ -44,7 +48,30 @@ const AdminNotificationHistoryPage = () => {
             // prettier-ignore
             const response = await NotificationsAPI.admin_getListNotificationHistory(params)
             if (response) {
-                setData(response?.data || [])
+                if (response?.data?.length > 0) {
+                    // this gives an object with dates as keys
+                    const groups = response.data.reduce(
+                        (groups, notification) => {
+                            const date = notification.createdAt.split('T')[0]
+                            if (!groups[date]) {
+                                groups[date] = []
+                            }
+                            groups[date].push(notification)
+                            return groups
+                        },
+                        {}
+                    )
+
+                    // Edit: to add it in the array format instead
+                    const groupArrays = Object.keys(groups).map(date => {
+                        return {
+                            date,
+                            notifications: groups[date],
+                        }
+                    })
+
+                    setData(groupArrays)
+                }
             }
         } catch (e) {}
     }
@@ -58,12 +85,12 @@ const AdminNotificationHistoryPage = () => {
 
     useEffect(() => {
         if (isAuthenticated && user?.role === 'admin') {
-            fetchNotificationHistory()
+            fetchNotificationHistory(filters)
         } else {
             navigate(`/accessdenied`)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user, isAuthenticated])
+    }, [user, isAuthenticated, filters])
 
     const onResendNotification = useCallback(async values => {
         const isEdit = Boolean(values?._id)
@@ -106,13 +133,25 @@ const AdminNotificationHistoryPage = () => {
     }, [])
 
     const onClickDetailItem = useCallback(data => {
-        setIsLoading(true)
-        setOpenModalForm(true)
-        setTimeout(() => {
-            setDetailData(data)
-            setIsLoading(false)
-        }, 750)
+        // disable for now
+        // setIsLoading(true)
+        // setOpenModalForm(true)
+        // setTimeout(() => {
+        //     setDetailData(data)
+        //     setIsLoading(false)
+        // }, 750)
     }, [])
+
+    const onSelectFilterType = useCallback(
+        value => {
+            if (value === filters.type) {
+                setFilters({ type: null })
+            } else {
+                setFilters({ type: value })
+            }
+        },
+        [filters.type]
+    )
 
     return (
         <FingoHomeLayout>
@@ -139,15 +178,51 @@ const AdminNotificationHistoryPage = () => {
                                         </div>
                                     </Header>
 
+                                    <FilterContainer>
+                                        {NOTIFICATION_TYPE_LIST.map(x => (
+                                            <NotificationFilterType
+                                                key={x.value}
+                                            >
+                                                <NotificationItemTypeLabel
+                                                    onClick={onSelectFilterType}
+                                                    type={x.value}
+                                                    isSelected={
+                                                        filters.type === x.value
+                                                    }
+                                                />
+                                            </NotificationFilterType>
+                                        ))}
+                                    </FilterContainer>
+
                                     {data?.length > 0 &&
-                                        data?.map((x, index) => (
-                                            <NotificationHistoryItem
-                                                key={String(index)}
-                                                data={x}
-                                                onClickDetail={
-                                                    onClickDetailItem
-                                                }
-                                            />
+                                        data?.map((group, groupIndex) => (
+                                            <NotificationItemContainer
+                                                key={String(groupIndex)}
+                                            >
+                                                <NotificationItemGroupDate>
+                                                    <h4>
+                                                        {dayjs(
+                                                            group.date
+                                                        ).format('DD MMM YYYY')}
+                                                    </h4>
+                                                    <p>
+                                                        {group?.notifications
+                                                            ?.length || 0}{' '}
+                                                        notifications
+                                                    </p>
+                                                </NotificationItemGroupDate>
+                                                {/* prettier-ignore */}
+                                                <Fragment>
+                                                {group.notifications?.length > 0 ? group.notifications.map((item, itemIndex) => (
+                                                    <NotificationHistoryItem
+                                                        key={String(itemIndex)}
+                                                        data={item}
+                                                        onClickDetail={onClickDetailItem}
+                                                        isLastItem={group.notifications.length - 1 === itemIndex}
+                                                    />
+                                                )) : null}
+                                                </Fragment>
+                                            </NotificationItemContainer>
                                         ))}
                                     <FingoScrollToTop />
                                 </div>
@@ -220,4 +295,46 @@ const Header = styled.div`
         font-weight: bold;
     }
 `
+
+const NotificationItemContainer = styled.div`
+    margin-bottom: 2rem;
+`
+
+const NotificationItemGroupDate = styled.div`
+    background-color: #3366ff;
+    height: 50px;
+    border-radius: 6px;
+    width: 180px;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    > h4 {
+        font-weight: bold;
+        font-size: 1.1rem;
+        line-height: 1.1;
+        color: #fff;
+        margin-bottom: 0;
+    }
+    p {
+        margin-bottom: 0;
+        font-size: 0.8rem;
+        color: #fff;
+        font-weight: bold;
+    }
+`
+
+const FilterContainer = styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.2rem;
+`
+
+const NotificationFilterType = styled.div`
+    margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
+    transform: scale(1.2);
+    margin: 0.85rem;
+`
+
 export default AdminNotificationHistoryPage

@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import styled from 'styled-components'
 import DEFAULT_IMG from 'src/images/pepe.jpg'
+import Assets from 'src/assets'
 
 const NotificationHistoryRecipientItem = ({
     data,
@@ -16,7 +17,7 @@ const NotificationHistoryRecipientItem = ({
 
     return (
         <UserItem onClick={handleCheck}>
-            <UserAvatar src={data?.imgPath || DEFAULT_IMG} />
+            <UserAvatar src={data?.imgPath || Assets.AvatarDefaultXs} />
             <UserInfo>
                 <UserDisplayName>{data.displayName}</UserDisplayName>
                 <UserEmail>{data.email}</UserEmail>

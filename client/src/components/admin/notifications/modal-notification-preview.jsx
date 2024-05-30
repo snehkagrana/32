@@ -52,8 +52,8 @@ const ModalNotificationPreview = ({ open, onClose, data, onConfirm }) => {
         return selectedItems?.length === notificationRecipientsData.length
     }, [selectedItems, notificationRecipientsData])
 
-    const onConfirmClose = () => {
-        dispatch(notifications_setOpenModalUserRecipients(true))
+    const onClickCancel = () => {
+        onClose()
     }
 
     const onCloseModal = useCallback(() => {
@@ -67,18 +67,9 @@ const ModalNotificationPreview = ({ open, onClose, data, onConfirm }) => {
         setSearchValue(e.target.value)
     }, [searchValue])
 
-    const onClickAdd = useCallback(() => {
-        // onSubmit(selectedItems)
-        // dispatch(notifications_setSelectedUserRecipients(selectedItems))
-        onCloseModal()
+    const onConfirmSendNotification = useCallback(() => {
+        onConfirm()
     }, [selectedItems, openModalUserRecipients])
-
-    useEffect(() => {
-        if (defaultValues?.length > 0) {
-            setSelectedItems(defaultValues)
-            setHasDirty(false)
-        }
-    }, [defaultValues, hasDirty])
 
     const onClickSelectAll = useCallback(() => {
         setSelectedItems(isSelectedAll ? [] : notificationRecipientsData)
@@ -138,9 +129,15 @@ const ModalNotificationPreview = ({ open, onClose, data, onConfirm }) => {
                         <Col xs={12} className='px-2 py-2 text-center'>
                             <FingoButton
                                 style={{ width: 120 }}
-                                onClick={onClickAdd}
+                                onClick={onClickCancel}
                             >
-                                DONE
+                                Cancel
+                            </FingoButton>
+                            <FingoButton
+                                style={{ width: 120 }}
+                                onClick={onConfirmSendNotification}
+                            >
+                                Send Notification
                             </FingoButton>
                         </Col>
                     </Row>
