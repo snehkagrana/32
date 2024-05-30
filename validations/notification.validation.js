@@ -3,16 +3,16 @@ const Joi = require('joi')
 module.exports = {
     sendGeneralNotification: Joi.object()
         .keys({
-            title: Joi.string(),
-            body: Joi.string(),
-            imageUrl: Joi.string().allow(null),
+            title: Joi.string().allow(''),
+            body: Joi.string().allow(''),
+            imageUrl: Joi.string().allow(null).allow(''),
             // userIds: Joi.array(Joi.string()).required(),
             users: Joi.array()
                 .items({
                     userId: Joi.string().required(),
-                    email: Joi.string().required(),
-                    displayName: Joi.string().required(),
-                    imgPath: Joi.string().allow(null),
+                    email: Joi.string().required().allow('').allow(null),
+                    displayName: Joi.string().allow('').allow(null),
+                    imgPath: Joi.string().allow(null).allow(''),
                 })
                 .required()
                 .min(1),
