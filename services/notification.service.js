@@ -226,10 +226,10 @@ exports.admin_deleteNotificationTemplate = async id => {
     return await NotificationTemplateModel.deleteOne({ _id: id })
 }
 
-exports.admin_getNotificationHistory = async filters => {
-    if (filters?.type) {
+exports.admin_getNotificationHistory = async ({ type }) => {
+    if (type) {
         return await DeliveredNotificationHistoryModel.find({
-            type: filters.type,
+            type: type,
         }).sort({
             createdAt: 'desc',
         })
