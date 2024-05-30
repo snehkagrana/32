@@ -7,16 +7,7 @@ import { FingoButton, FingoInput } from 'src/components/core'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
-// import LoadingBox from '../LoadingBox'
-import { ReactComponent as UploadIcon } from 'src/assets/svg/cloud-upload-sharp.svg'
-
-import Assets from 'src/assets'
-import LoadingBox from 'src/components/LoadingBox'
 import styled from 'styled-components'
-
-import NotificationItemTypeLabel from './notification-item-type-label'
-import { NOTIFICATION_TYPE_LIST } from 'src/constants/notification.constant'
-import { NotificationsAPI } from 'src/api'
 import NotificationHistoryRecipientItem from './notification-history-recipient-item'
 
 const schema = Yup.object().shape({
@@ -71,7 +62,7 @@ const NotificationHistoryDetail = ({ data, onResendNotification }) => {
                     'users',
                     data.users.map(x => ({
                         userId: x.userId,
-                        displayName: x.displayName,
+                        displayName: x.displayName || '-',
                         imageUrl: x.imgPath || null,
                     }))
                 )

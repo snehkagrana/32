@@ -181,10 +181,10 @@ const NotificationForm = ({ onSubmit }) => {
     const onSubmitRecipients = useCallback(values => {
         setValue('users', values.map(x => ({
             userId: x._id,
-            displayName: x.displayName,
+            displayName: x.displayName || '-',
             email: x.email,
-            imgPath: x.imgPath || null
-        })))
+            imgPath: x.imgPath || null 
+        }))) 
     }, [openModalUserRecipients])
 
     return (

@@ -1,11 +1,11 @@
 {
   "files": {
     "main.css": "/static/css/main.4fac0a7a.css",
-    "main.js": "/static/js/main.78d33b3d.js",
+    "main.js": "/static/js/main.e855339a.js",
     "static/js/930.669b064c.chunk.js": "/static/js/930.669b064c.chunk.js",
-    "static/js/371.0523293a.chunk.js": "/static/js/371.0523293a.chunk.js",
+    "static/js/371.a502b4f5.chunk.js": "/static/js/371.a502b4f5.chunk.js",
     "static/js/263.a71ab602.chunk.js": "/static/js/263.a71ab602.chunk.js",
-    "static/js/182.28253638.chunk.js": "/static/js/182.28253638.chunk.js",
+    "static/js/182.e905c9df.chunk.js": "/static/js/182.e905c9df.chunk.js",
     "static/js/787.83904489.chunk.js": "/static/js/787.83904489.chunk.js",
     "static/js/709.e71e48c5.chunk.js": "/static/js/709.e71e48c5.chunk.js",
     "static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.png": "/static/media/77525-emojipedia-iphone-world-whatsapp-telefono-day-emoji.ed88cdc9cc68c111ee51.png",
@@ -98,8 +98,8 @@
     "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
     "static/media/slick.eot": "/static/media/slick.a4e97f5a2a64f0ab1323.eot",
     "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
-    "static/media/refill-heart.svg": "/static/media/refill-heart.a0aa8c3578ce9acb8535cb384e9da7e5.svg",
     "index.html": "/index.html",
+    "static/media/refill-heart.svg": "/static/media/refill-heart.a0aa8c3578ce9acb8535cb384e9da7e5.svg",
     "static/media/arrow.svg": "/static/media/arrow.bf930bbf3ec41fd9c9756230ec293975.svg",
     "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
     "static/media/seal-check-fill.svg": "/static/media/seal-check-fill.3acb1032a7ce5312b2f1bd434188bbaf.svg",
@@ -128,16 +128,16 @@
     "static/media/close.svg": "/static/media/close.cb5270ed2e7c504efec466e131cae9df.svg",
     "static/media/add.svg": "/static/media/add.71211a5e33a0fd675ebb734ab062b9d5.svg",
     "main.4fac0a7a.css.map": "/static/css/main.4fac0a7a.css.map",
-    "main.78d33b3d.js.map": "/static/js/main.78d33b3d.js.map",
+    "main.e855339a.js.map": "/static/js/main.e855339a.js.map",
     "930.669b064c.chunk.js.map": "/static/js/930.669b064c.chunk.js.map",
-    "371.0523293a.chunk.js.map": "/static/js/371.0523293a.chunk.js.map",
+    "371.a502b4f5.chunk.js.map": "/static/js/371.a502b4f5.chunk.js.map",
     "263.a71ab602.chunk.js.map": "/static/js/263.a71ab602.chunk.js.map",
-    "182.28253638.chunk.js.map": "/static/js/182.28253638.chunk.js.map",
+    "182.e905c9df.chunk.js.map": "/static/js/182.e905c9df.chunk.js.map",
     "787.83904489.chunk.js.map": "/static/js/787.83904489.chunk.js.map",
     "709.e71e48c5.chunk.js.map": "/static/js/709.e71e48c5.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.4fac0a7a.css",
-    "static/js/main.78d33b3d.js"
+    "static/js/main.e855339a.js"
   ]
 }
