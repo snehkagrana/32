@@ -198,7 +198,7 @@ exports.admin_sendGeneralNotification = async ({
                 users?.map(x => ({
                     userId: x?.userId || '',
                     displayName: getFirstName(x),
-                    imgPath: x?.imgPath || null,
+                    imgPath: x?.imageUrl || null,
                 })) || [],
         })
     }
@@ -226,7 +226,14 @@ exports.admin_deleteNotificationTemplate = async id => {
     return await NotificationTemplateModel.deleteOne({ _id: id })
 }
 
-exports.admin_getNotificationHistory = async () => {
+exports.admin_getNotificationHistory = async filters => {
+    if (filters?.type) {
+        return await DeliveredNotificationHistoryModel.find({
+            type: filters.type,
+        }).sort({
+            createdAt: 'desc',
+        })
+    }
     return await DeliveredNotificationHistoryModel.find({}).sort({
         createdAt: 'desc',
     })

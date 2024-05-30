@@ -162,7 +162,7 @@ exports.admin_deleteNotificationTemplate = async (req, res) => {
 // admin update notification template
 exports.admin_getNotificationHistory = async (req, res, next) => {
     const result = await NotificationService.admin_getNotificationHistory(
-        req.body
+        req.query.filters || {}
     )
     if (result) {
         return res.json({
