@@ -25,6 +25,11 @@ exports.getNotificationList = async ({ userId }) => {
     return notifications
 }
 
+exports.clearNotifications = async ({ userId }) => {
+    const notifications = await NotificationModel.deleteMany({ userId })
+    return notifications
+}
+
 exports.markAllRead = async ({ userId }) => {
     await NotificationModel.updateMany(
         { userId },

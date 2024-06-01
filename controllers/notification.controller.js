@@ -13,6 +13,19 @@ exports.getNotifications = async (req, res, next) => {
     return res.status(400).json({ message: 'Failed to get notification' })
 }
 
+exports.clearNotifications = async (req, res, next) => {
+    const result = await NotificationService.clearNotifications({
+        userId: req.user._id,
+    })
+    if (result) {
+        return res.json({
+            message: 'Success',
+            data: result,
+        })
+    }
+    return res.status(400).json({ message: 'Failed to get notification' })
+}
+
 exports.markAllRead = async (req, res, next) => {
     const result = await NotificationService.markAllRead({
         userId: req.user._id,
