@@ -29,7 +29,7 @@ const EXPERIMENTAL_sendNotification = async ({ token, title, body, data }) => {
             data: {
                 title: title,
                 body: body,
-                data: data || {},
+                data: data ? JSON.stringify(data) : '',
             },
             android: {
                 notification: {
