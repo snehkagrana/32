@@ -14,6 +14,46 @@ const { getRandomInt } = require('./common.util')
 const UserModel = require('../models/user')
 const { getFirstName } = require('./user.util')
 
+const EXPERIMENTAL_sendNotification = async ({ token, title, body, data }) => {
+    try {
+        if (!token || typeof token !== 'string') {
+            // throw new Error('Invalid FCM token provided')
+            return
+        }
+        const message = {
+            // notification: {
+            //     title: title,
+            //     body: body,
+            // },
+            // data: data || {},
+            data: {
+                title: title,
+                body: body,
+                data: data || {},
+            },
+            android: {
+                notification: {
+                    sound: 'Default',
+                },
+            },
+            apns: {
+                payload: {
+                    aps: {
+                        sound: 'Default',
+                    },
+                },
+            },
+            token: token,
+        }
+        const response = await admin.messaging().send(message)
+        return response
+    } catch (error) {
+        console.error('Error sending message:', error.message)
+        return
+        // throw error
+    }
+}
+
 const sendNotification = async ({ token, title, body, data }) => {
     try {
         if (!token || typeof token !== 'string') {
@@ -273,6 +313,7 @@ const LeaderboardReminder = {
 }
 
 module.exports = {
+    EXPERIMENTAL_sendNotification,
     sendNotification,
     NotificationStreak,
     NotificationReminder,

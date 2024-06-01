@@ -51,6 +51,17 @@ router.get(
     ErrorHandler(NotificationController.admin_getNotificationTemplate)
 )
 
+// Send experimental general notification
+router.post(
+    '/admin/notification/general/send/experimental',
+    validate(schema.sendGeneralNotification),
+    AuthGuard,
+    AdminMiddleware,
+    ErrorHandler(
+        NotificationController.EXPERIMENTAL_admin_sendGeneralNotification
+    )
+)
+
 // Send general notification
 router.post(
     '/admin/notification/general/send',

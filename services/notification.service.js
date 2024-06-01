@@ -5,7 +5,10 @@ const DeliveredNotificationHistoryModel = require('../models/deliveredNotificati
 const UserModel = require('../models/user')
 const { generateOTP } = require('../utils/otp.util')
 const { validateEmail } = require('../utils/common.util')
-const { sendNotification } = require('../utils/notification.util')
+const {
+    sendNotification,
+    EXPERIMENTAL_sendNotification,
+} = require('../utils/notification.util')
 const {
     NOTIFICATION_TYPE,
     SERVER_TIMEZONE,
@@ -55,6 +58,80 @@ exports.getUnreadNotification = async ({ userId }) => {
         readAt: null,
     }).exec()
     return notifications.length || 0
+}
+
+exports.EXPERIMENTAL_sendAndSaveNotification = async ({
+    userId,
+    title,
+    body,
+    imageUrl,
+    type,
+    dataId,
+    shouldSaveHistory,
+    isFromDashboard,
+}) => {
+    const user = await UserModel.findOne({ _id: userId })
+    const NOW = Date.now()
+
+    const notification = await NotificationModel.create({
+        userId,
+        title: title || '',
+        body: body || '',
+        imageUrl: imageUrl || '',
+        type: type || 'common',
+        dataId: dataId || null,
+        createdAt: NOW,
+        readAt: null,
+    })
+
+    if (!__DEV__) {
+        if (notification && user?.fcmToken) {
+            await EXPERIMENTAL_sendNotification({
+                token: user.fcmToken,
+                title,
+                body,
+                data: {
+                    dataId: String(dataId) || '',
+                    imageUrl: String(imageUrl) || '',
+                },
+                // data: dataId ? { dataId } : {},
+            })
+
+            /**
+             * @deprecated
+             */
+            // if (streakNotificationTypeId) {
+            //     // prettier-ignore
+            //     await UserModel.updateOne(
+            //         { _id: userId },
+            //         {
+            //             $set: { lastDeliveredStreakNotificationType: streakNotificationTypeId },
+            //         }
+            //     ).exec()
+            // }
+        }
+    }
+
+    if (shouldSaveHistory) {
+        await DeliveredNotificationHistoryModel.create({
+            sendBy: 'system',
+            title: title || '',
+            body: body || '',
+            imageUrl: imageUrl || '',
+            type: type || NOTIFICATION_TYPE.common,
+            createdAt: new Date(),
+            isFromDashboard: isFromDashboard || false,
+            users: [
+                {
+                    userId,
+                    displayName: getFullName(user),
+                    imgPath: user?.imgPath || '',
+                },
+            ],
+        })
+    }
+
+    return notification
 }
 
 exports.sendAndSaveNotification = async ({
@@ -143,6 +220,67 @@ exports.admin_getNotifeeUsers = async () => {
         }))
     }
     return []
+}
+
+exports.EXPERIMENTAL_admin_sendGeneralNotification = async ({
+    users,
+    title,
+    body,
+    imageUrl,
+    authUserId,
+}) => {
+    let result = false
+
+    const NAME_PATTERN = '[[NAME]]'
+    const EMAIL_PATTERN = '[[EMAIL]]'
+
+    if (users?.length > 0) {
+        result = true
+        users.forEach(async user => {
+            let replacedTitle = ''
+            let replacedBody = ''
+
+            // prettier-ignore
+            replacedTitle = title.replace(NAME_PATTERN, getFirstName(user) || 'User')
+            // prettier-ignore
+            replacedTitle = replacedTitle.replace(EMAIL_PATTERN, user?.email || '')
+
+            // prettier-ignore
+            replacedBody = body.replace(NAME_PATTERN, getFirstName(user) || 'User')
+            // prettier-ignore
+            replacedBody = replacedBody.replace(EMAIL_PATTERN, user?.email || '')
+
+            const notificationData = {
+                userId: user.userId,
+                title: replacedTitle,
+                body: replacedBody,
+                imageUrl: imageUrl || '',
+                type: NOTIFICATION_TYPE.common,
+                dataId: null,
+                shouldSaveHistory: false,
+            }
+
+            await this.EXPERIMENTAL_sendAndSaveNotification(notificationData)
+        })
+
+        await DeliveredNotificationHistoryModel.create({
+            sendBy: authUserId,
+            title: title || '',
+            body: body || '',
+            imageUrl: imageUrl || '',
+            type: NOTIFICATION_TYPE.common,
+            createdAt: new Date(),
+            isFromDashboard: true,
+            users:
+                users?.map(x => ({
+                    userId: x?.userId || '',
+                    displayName: getFirstName(x),
+                    imgPath: x?.imageUrl || null,
+                })) || [],
+        })
+    }
+
+    return result
 }
 
 exports.admin_sendGeneralNotification = async ({
