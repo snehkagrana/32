@@ -31,18 +31,18 @@ const EXPERIMENTAL_sendNotification = async ({ token, title, body, data }) => {
                 body: body,
                 data: data ? JSON.stringify(data) : '',
             },
-            android: {
-                notification: {
-                    sound: 'Default',
-                },
-            },
-            apns: {
-                payload: {
-                    aps: {
-                        sound: 'Default',
-                    },
-                },
-            },
+            // android: {
+            //     notification: {
+            //         sound: 'Default',
+            //     },
+            // },
+            // apns: {
+            //     payload: {
+            //         aps: {
+            //             sound: 'Default',
+            //         },
+            //     },
+            // },
             token: token,
         }
         const response = await admin.messaging().send(message)
