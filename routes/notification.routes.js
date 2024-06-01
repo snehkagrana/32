@@ -116,18 +116,17 @@ router.get(
     ErrorHandler(NotificationController.getUnreadNotification)
 )
 
-// [TEST] user press action notification
 router.post(
     '/notification/clear',
     AuthGuard,
-    ErrorHandler(NotificationController.userPressActionNotification)
+    ErrorHandler(NotificationController.clearNotifications)
 )
 
 // [TEST] user press action notification
 router.post(
     '/notification/press-action',
     AuthGuard,
-    ErrorHandler(NotificationController.clearNotifications)
+    ErrorHandler(NotificationController.userPressActionNotification)
 )
 
 module.exports = router
