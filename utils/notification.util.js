@@ -37,13 +37,6 @@ const EXPERIMENTAL_sendNotification = async ({ token, title, body, data }) => {
                 // },
                 priority: 'high',
             },
-            // apns: {
-            //     payload: {
-            //         aps: {
-            //             sound: 'Default',
-            //         },
-            //     },
-            // },
             token: token,
         }
         const response = await admin.messaging().send(message)
