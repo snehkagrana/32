@@ -31,11 +31,12 @@ const EXPERIMENTAL_sendNotification = async ({ token, title, body, data }) => {
                 body: body,
                 data: data ? JSON.stringify(data) : '',
             },
-            // android: {
-            //     notification: {
-            //         sound: 'Default',
-            //     },
-            // },
+            android: {
+                // notification: {
+                //     sound: 'Default',
+                // },
+                priority: 'high',
+            },
             apns: {
                 payload: {
                     aps: {
