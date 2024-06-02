@@ -14,27 +14,19 @@ const { getRandomInt } = require('./common.util')
 const UserModel = require('../models/user')
 const { getFirstName } = require('./user.util')
 
-const EXPERIMENTAL_sendNotification = async ({ token, title, body, data }) => {
+const ANDROID_sendNotification = async ({ token, title, body, data }) => {
     try {
         if (!token || typeof token !== 'string') {
             // throw new Error('Invalid FCM token provided')
             return
         }
         const message = {
-            // notification: {
-            //     title: title,
-            //     body: body,
-            // },
-            // data: data || {},
             data: {
                 title: title,
                 body: body,
                 data: data ? JSON.stringify(data) : '',
             },
             android: {
-                // notification: {
-                //     sound: 'Default',
-                // },
                 priority: 'high',
             },
             token: token,
@@ -307,7 +299,7 @@ const LeaderboardReminder = {
 }
 
 module.exports = {
-    EXPERIMENTAL_sendNotification,
+    ANDROID_sendNotification,
     sendNotification,
     NotificationStreak,
     NotificationReminder,

@@ -7,7 +7,7 @@ const { generateOTP } = require('../utils/otp.util')
 const { validateEmail } = require('../utils/common.util')
 const {
     sendNotification,
-    EXPERIMENTAL_sendNotification,
+    ANDROID_sendNotification,
 } = require('../utils/notification.util')
 const {
     NOTIFICATION_TYPE,
@@ -65,7 +65,7 @@ exports.getUnreadNotification = async ({ userId }) => {
     return notifications.length || 0
 }
 
-exports.EXPERIMENTAL_sendAndSaveNotification = async ({
+exports.ANDROID_sendAndSaveNotification = async ({
     userId,
     title,
     body,
@@ -91,7 +91,7 @@ exports.EXPERIMENTAL_sendAndSaveNotification = async ({
 
     if (!__DEV__) {
         if (notification && user?.fcmToken) {
-            await EXPERIMENTAL_sendNotification({
+            await ANDROID_sendNotification({
                 token: user.fcmToken,
                 title,
                 body,
@@ -99,21 +99,7 @@ exports.EXPERIMENTAL_sendAndSaveNotification = async ({
                     dataId: String(dataId) || '',
                     imageUrl: String(imageUrl) || '',
                 },
-                // data: dataId ? { dataId } : {},
             })
-
-            /**
-             * @deprecated
-             */
-            // if (streakNotificationTypeId) {
-            //     // prettier-ignore
-            //     await UserModel.updateOne(
-            //         { _id: userId },
-            //         {
-            //             $set: { lastDeliveredStreakNotificationType: streakNotificationTypeId },
-            //         }
-            //     ).exec()
-            // }
         }
     }
 
@@ -166,29 +152,31 @@ exports.sendAndSaveNotification = async ({
 
     if (!__DEV__) {
         if (notification && user?.fcmToken) {
-            await sendNotification({
-                token: user.fcmToken,
-                title,
-                body,
-                data: {
-                    dataId: String(dataId) || '',
-                    imageUrl: String(imageUrl) || '',
-                },
-                // data: dataId ? { dataId } : {},
-            })
-
-            /**
-             * @deprecated
-             */
-            // if (streakNotificationTypeId) {
-            //     // prettier-ignore
-            //     await UserModel.updateOne(
-            //         { _id: userId },
-            //         {
-            //             $set: { lastDeliveredStreakNotificationType: streakNotificationTypeId },
-            //         }
-            //     ).exec()
-            // }
+            // send notification to android user
+            if (user?.os === 'android') {
+                await ANDROID_sendNotification({
+                    token: user.fcmToken,
+                    title,
+                    body,
+                    data: {
+                        dataId: String(dataId) || '',
+                        imageUrl: String(imageUrl) || '',
+                    },
+                })
+            }
+            // send notification to ios user
+            else if (user?.os === 'ios') {
+                await sendNotification({
+                    token: user.fcmToken,
+                    title,
+                    body,
+                    data: {
+                        dataId: String(dataId) || '',
+                        imageUrl: String(imageUrl) || '',
+                    },
+                    // data: dataId ? { dataId } : {},
+                })
+            }
         }
     }
 
@@ -227,7 +215,7 @@ exports.admin_getNotifeeUsers = async () => {
     return []
 }
 
-exports.EXPERIMENTAL_admin_sendGeneralNotification = async ({
+exports.ANDROID_admin_sendGeneralNotification = async ({
     users,
     title,
     body,
@@ -265,7 +253,7 @@ exports.EXPERIMENTAL_admin_sendGeneralNotification = async ({
                 shouldSaveHistory: false,
             }
 
-            await this.EXPERIMENTAL_sendAndSaveNotification(notificationData)
+            await this.ANDROID_sendAndSaveNotification(notificationData)
         })
 
         await DeliveredNotificationHistoryModel.create({

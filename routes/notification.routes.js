@@ -53,12 +53,12 @@ router.get(
 
 // Send experimental general notification
 router.post(
-    '/admin/notification/general/send/experimental',
+    '/admin/notification/general/send/android',
     validate(schema.sendGeneralNotification),
     AuthGuard,
     AdminMiddleware,
     ErrorHandler(
-        NotificationController.EXPERIMENTAL_admin_sendGeneralNotification
+        NotificationController.ANDROID_admin_sendGeneralNotification
     )
 )
 

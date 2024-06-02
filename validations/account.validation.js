@@ -61,6 +61,7 @@ module.exports = {
     saveFCMToken: Joi.object()
         .keys({
             token: Joi.string().required(),
+            os: Joi.string().required(),
         })
         .options({ allowUnknown: true }),
 

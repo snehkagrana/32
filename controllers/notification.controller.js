@@ -79,9 +79,9 @@ exports.admin_getNotifeeUsers = async (req, res, next) => {
 }
 
 // admin send general notification
-exports.EXPERIMENTAL_admin_sendGeneralNotification = async (req, res, next) => {
+exports.ANDROID_admin_sendGeneralNotification = async (req, res, next) => {
     const result =
-        await NotificationService.EXPERIMENTAL_admin_sendGeneralNotification({
+        await NotificationService.ANDROID_admin_sendGeneralNotification({
             users: req.body.users || [],
             title: req.body.title || '',
             body: req.body.body || '',

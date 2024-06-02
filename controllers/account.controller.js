@@ -149,6 +149,7 @@ exports.saveFCMToken = async (req, res) => {
     const result = await AccountService.saveFCMToken({
         email: req.user.email,
         token: req.body.token,
+        os: req.body.os,
     })
     if (result) {
         return res.json({

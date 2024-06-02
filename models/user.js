@@ -205,6 +205,7 @@ const UserSchema = new mongoose.Schema({
         },
     ],
     fcmToken: String,
+    os: String,
 
     /** @deprecated */
     lastLessonCategoryName: String,

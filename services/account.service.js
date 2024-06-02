@@ -355,7 +355,7 @@ exports.searchFriends = async ({ userId, searchTerm }) => {
     return result
 }
 
-exports.saveFCMToken = async ({ email, token }) => {
+exports.saveFCMToken = async ({ email, token, os }) => {
     let result = false
     const previousFcmUserToken = await UserModel.findOne({
         fcmToken: token,
@@ -380,6 +380,7 @@ exports.saveFCMToken = async ({ email, token }) => {
             {
                 $set: {
                     fcmToken: token,
+                    os: os,
                 },
             },
             { new: true }
