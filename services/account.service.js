@@ -342,7 +342,7 @@ exports.searchFriends = async ({ userId, searchTerm }) => {
         result = filteredUsers?.map(x => ({
             avatarId: x._doc?.avatarId,
             _id: x._doc?._id,
-            displayName: getFullName(x._doc),
+            displayName: getFirstName(x._doc),
             username: x._doc?.username || '',
             email: x._doc?.email || '',
             xp: x._doc?.xp,
