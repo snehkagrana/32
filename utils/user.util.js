@@ -7,14 +7,12 @@ const getFirstName = user => {
 }
 
 const getFullName = user => {
-    if (!user?.displayName || user.firstName) {
-        return ''
+    if (!user?.displayName) {
+        return `${user?.firstName || ''} ${user.lastName || ''}`
+    } else if (user?.displayName && !user?.firstName) {
+        return user?.displayName || ''
     } else {
-        if (user?.firstName) {
-            return `${user.firstName} ${user.lastName || ''}`
-        } else {
-            return user?.displayName || ''
-        }
+        return user?.displayName || ''
     }
 }
 
