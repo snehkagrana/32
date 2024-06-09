@@ -8,6 +8,7 @@ const {
     DAILY_QUEST_TYPE_ANSWER_10_CORRECTLY,
     DAILY_QUEST_TYPE_COMPLETE_3_LESSON,
     DAILY_QUEST_TYPE_COMPLETE_2_PERFECT_LESSON,
+    DAILY_QUEST_TYPE_SPEND_15_MIN,
 } = require('../constants/app.constant')
 const {
     ACTION_NAME_EARN_BANANAS,
@@ -17,6 +18,7 @@ const {
     DAILY_QUEST_REWARDS,
     ACTION_NAME_COMPLETE_LESSON,
     ACTION_NAME_COMPLETE_PERFECT_LESSON,
+    ACTION_NAME_SPEND_LESSON_TIME,
 } = require('../constants/daily-quest.constant')
 const { getRandomInt } = require('../utils/common.util')
 
@@ -76,6 +78,15 @@ exports.syncDailyQuest = async ({ userId, actionName, value }) => {
                 }
                 // prettier-ignore
                 else if (actionName === ACTION_NAME_COMPLETE_PERFECT_LESSON && x.questId === DAILY_QUEST_TYPE_COMPLETE_2_PERFECT_LESSON) {
+                    return {
+                        ...x?.toObject(),
+                        progress: x.progress + value,
+                        isCompleted: x.progress + value >= x.maxValue ? true : false,
+                        completedDate: x.progress + value >= x.maxValue ? NOW : null,
+                    }
+                }
+                // prettier-ignore
+                else if (actionName === ACTION_NAME_SPEND_LESSON_TIME && x.questId === DAILY_QUEST_TYPE_SPEND_15_MIN) {
                     return {
                         ...x?.toObject(),
                         progress: x.progress + value,

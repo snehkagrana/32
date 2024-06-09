@@ -15,6 +15,7 @@ const ACTION_NAME_EARN_GEMS = 'action_EARN_GEMS'
 const ACTION_NAME_QUIZ_CORRECTLY = 'action_QUIZ_CORRECTLY'
 const ACTION_NAME_COMPLETE_LESSON = 'action_COMPLETE_LESSON'
 const ACTION_NAME_COMPLETE_PERFECT_LESSON = 'action_COMPLETE_PERFECT_LESSON'
+const ACTION_NAME_SPEND_LESSON_TIME = 'action_SPEND_LESSON_TIME'
 
 // primary
 const PRIMARY_DAILY_QUESTS = [
@@ -38,10 +39,10 @@ const RANDOMLY_DAILY_QUESTS = [
         id: DAILY_QUEST_TYPE_COMPLETE_3_LESSON, // done
         name: 'Complete 3 lessons',
     },
-    // {
-    //     id: DAILY_QUEST_TYPE_SPEND_15_MIN,
-    //     name: 'Spend 15 minutes learning',
-    // },
+    {
+        id: DAILY_QUEST_TYPE_SPEND_15_MIN,
+        name: 'Spend 15 minutes learning',
+    },
     {
         id: DAILY_QUEST_TYPE_ANSWER_10_CORRECTLY, // done
         name: 'Answer 10 quizzes correctly',
@@ -89,4 +90,5 @@ module.exports = {
     ACTION_NAME_QUIZ_CORRECTLY,
     ACTION_NAME_COMPLETE_LESSON,
     ACTION_NAME_COMPLETE_PERFECT_LESSON,
+    ACTION_NAME_SPEND_LESSON_TIME,
 }
