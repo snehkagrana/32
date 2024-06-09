@@ -87,6 +87,7 @@ exports.syncDailyQuest = async ({ userId, actionName, value }) => {
                 }
                 // prettier-ignore
                 else if (actionName === ACTION_NAME_SPEND_LESSON_TIME && x.questId === DAILY_QUEST_TYPE_SPEND_15_MIN) {
+                    console.log("OK->", DAILY_QUEST_TYPE_SPEND_15_MIN)
                     return {
                         ...x?.toObject(),
                         progress: x.progress + value,

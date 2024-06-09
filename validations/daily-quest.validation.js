@@ -3,7 +3,7 @@ const Joi = require('joi')
 module.exports = {
     syncDailyQuest: Joi.object()
         .keys({
-            userId: Joi.string().required(),
+            // userId: Joi.string().required(),
             actionName: Joi.string().required(),
             value: Joi.number().required(),
         })
