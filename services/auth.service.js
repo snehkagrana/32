@@ -107,8 +107,6 @@ exports.syncUser = async email => {
     let result = false
     let user = await UserModel.findOne({ email }).exec()
 
-    const currentUserDailyQuests = user.dailyQuest || []
-
     let userDailyQuest = user.dailyQuest || []
 
     const hasDailyQuestToday = checkIsActiveDailyQuestToday(
@@ -116,8 +114,7 @@ exports.syncUser = async email => {
     )
 
     if (!hasDailyQuestToday) {
-        // prettier-ignore
-        userDailyQuest = [...currentUserDailyQuests, ...createRandomDailyQuest(user)]
+        userDailyQuest = createRandomDailyQuest(user)
     }
 
     if (user) {

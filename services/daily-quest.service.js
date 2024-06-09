@@ -28,7 +28,7 @@ exports.syncDailyQuest = async ({ userId, actionName, value }) => {
 
     if (user && allUserDailyQuests?.length > 0) {
         const updatedActiveDailyQuests = allUserDailyQuests.map((x, index) => {
-            if (now.isSame(x.date, 'day') && !x.isCompleted) {
+            if (/* now.isSame(x.date, 'day') && */ !x.isCompleted) {
                 // prettier-ignore
                 if (actionName === ACTION_NAME_EARN_GEMS && x.questId === DAILY_QUEST_TYPE_EARN_5_GEMS) {
                     return {
