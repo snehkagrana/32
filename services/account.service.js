@@ -5,6 +5,10 @@ const { validateEmail } = require('../utils/common.util')
 const NotificationService = require('../services/notification.service')
 const { NOTIFICATION_TYPE } = require('../constants/app.constant')
 const { getFirstName, getFullName } = require('../utils/user.util')
+const DailyQuestService = require('../services/daily-quest.service')
+const {
+    ACTION_NAME_FOLLOW_FRIENDS,
+} = require('../constants/daily-quest.constant')
 
 var ObjectId = require('mongoose').Types.ObjectId
 
@@ -221,6 +225,12 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
             ).exec()
 
             await NotificationService.sendAndSaveNotification(notificationData)
+
+            await DailyQuestService.syncDailyQuest({
+                userId: authUserId,
+                actionName: ACTION_NAME_FOLLOW_FRIENDS,
+                value: 1,
+            })
 
             result = true
         } else if (action === 'unfollow') {

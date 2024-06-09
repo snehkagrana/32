@@ -25,6 +25,10 @@ const { generateOTP } = require('../utils/otp.util')
 const jwtUtil = require('../utils/jwt.util')
 const jwtConfig = require('../configs/jwt.config')
 const { getFullName, getFirstName } = require('../utils/user.util')
+const {
+    checkIsActiveDailyQuestToday,
+    createRandomDailyQuest,
+} = require('../utils/quest.util')
 
 exports.sendRegisterCode = async email => {
     const code = generateOTP(4)
@@ -103,6 +107,19 @@ exports.syncUser = async email => {
     let result = false
     let user = await UserModel.findOne({ email }).exec()
 
+    const currentUserDailyQuests = user.dailyQuest || []
+
+    let userDailyQuest = user.dailyQuest || []
+
+    const hasDailyQuestToday = checkIsActiveDailyQuestToday(
+        user.dailyQuest || []
+    )
+
+    if (!hasDailyQuestToday) {
+        // prettier-ignore
+        userDailyQuest = [...currentUserDailyQuests, ...createRandomDailyQuest(user)]
+    }
+
     if (user) {
         const daysDiff = daysDifference(user.lastCompletedDay)
         if (daysDiff === 1) {
@@ -154,6 +171,8 @@ exports.syncUser = async email => {
 
                     following: user?.following ? user.following : [],
                     followers: user?.followers ? user.followers : [],
+
+                    dailyQuest: userDailyQuest,
                 },
             }
         )

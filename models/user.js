@@ -75,6 +75,26 @@ const UserSchema = new mongoose.Schema({
     // for new user who has claim diamond in first time it's should be true
     diamondInitialized: Boolean,
     lastClaimedGemsDailyQuest: Date,
+    dailyQuest: [
+        {
+            sequence: Number,
+            questId: String,
+            questName: String,
+            isCompleted: Boolean,
+            progress: Number,
+            maxValue: Number,
+            date: Date,
+            completedDate: {
+                type: Date,
+                default: null,
+            },
+            claimedAt: {
+                type: Date,
+                default: null,
+            },
+        },
+    ],
+    numberOfLessonCompleteToday: Number,
     rewards: [
         {
             rewardId: {

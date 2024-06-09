@@ -5,7 +5,17 @@ const { calculateDiamondUser } = require('../utils/reward.util')
 const { getLevelByXpPoints } = require('../utils/xp.utils')
 const ReferralService = require('./referral.service')
 const dayjs = require('dayjs')
-const { MAX_HEARTS } = require('../constants/app.constant')
+const {
+    MAX_HEARTS,
+    DAILY_QUEST_TYPE_EARN_60_BANANAS,
+} = require('../constants/app.constant')
+const DailyQuestService = require('./daily-quest.service')
+const {
+    ACTION_NAME_EARN_BANANAS,
+    ACTION_NAME_COMPLETE_LESSON,
+    ACTION_NAME_EARN_GEMS,
+    ACTION_NAME_COMPLETE_PERFECT_LESSON,
+} = require('../constants/daily-quest.constant')
 
 exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
     let result = null
@@ -89,6 +99,10 @@ exports.saveScore = async ({ authUser, body }) => {
             [dayOfWeek]: today,
         }
 
+        const isAllAnsweredCorrectly = () => {
+            return body.score.every(s => s > 0)
+        }
+
         const getGemsAwarded = () => {
             let newDiamondAwarded = 0
             // sample body.score = [1, 0, 1, 0, 1]
@@ -110,16 +124,16 @@ exports.saveScore = async ({ authUser, body }) => {
                 }
             } else {
                 // return current diamond
-                return user.diamond
+                newDiamondAwarded = 0
             }
-            return user.diamond + newDiamondAwarded
+            return newDiamondAwarded
         }
 
         user = await UserModel.updateOne(
             { email: user.email },
             {
                 $set: {
-                    diamond: getGemsAwarded(),
+                    diamond: user.diamond + getGemsAwarded(),
                     score: allScoresList,
                     lastLessonCategoryName: body.category,
                     lastCompleteLessonDate: new Date(),
@@ -134,6 +148,23 @@ exports.saveScore = async ({ authUser, body }) => {
                 },
             }
         )
+
+        if (getGemsAwarded() > 0) {
+            await DailyQuestService.syncDailyQuest({
+                userId: authUser._id,
+                actionName: ACTION_NAME_EARN_GEMS,
+                value: getGemsAwarded(),
+            })
+        }
+
+        if (isAllAnsweredCorrectly()) {
+            await DailyQuestService.syncDailyQuest({
+                userId: authUser._id,
+                actionName: ACTION_NAME_COMPLETE_PERFECT_LESSON,
+                value: 1,
+            })
+        }
+
         result = true
     } else if (guest && authUser.email === 'GUEST') {
         const today = getToday().toISOString().split('T')[0]
@@ -189,16 +220,16 @@ exports.saveScore = async ({ authUser, body }) => {
                 }
             } else {
                 // return current diamond
-                return guest.diamond
+                newDiamondAwarded = 0
             }
-            return guest.diamond + newDiamondAwarded
+            return newDiamondAwarded
         }
 
         guest = await GuestModel.updateOne(
             { _id: guest._id },
             {
                 $set: {
-                    diamond: getGemsAwarded(),
+                    diamond: guest.diamond + getGemsAwarded(),
                     score: allScoresList,
                     last_played: {
                         skill: body.skill,
@@ -255,9 +286,26 @@ exports.saveXp = async ({ authUser, xp }) => {
                         ),
                         weekly: weeklyXp,
                     },
+                    // prettier-ignore
+                    numberOfLessonCompleteToday: typeof user.numberOfLessonCompleteToday === 'number'
+                        ? user.numberOfLessonCompleteToday + 1
+                        : 1,
                 },
             }
         )
+
+        await DailyQuestService.syncDailyQuest({
+            userId: authUser._id,
+            actionName: ACTION_NAME_EARN_BANANAS,
+            value: xp,
+        })
+
+        await DailyQuestService.syncDailyQuest({
+            userId: authUser._id,
+            actionName: ACTION_NAME_COMPLETE_LESSON,
+            value: 1,
+        })
+
         result = true
     } else if (guest && authUser.email === 'GUEST') {
         // prettier-ignore

@@ -1226,6 +1226,33 @@ cron.schedule('*/5 * * * *', async function () {
             // console.log('Do nothing')
         }
     }
+
+    /**
+     * -------------
+     * Daily quest
+     * -------------
+     */
+    if (LOCALE_HOUR === 0 && LOCALE_MINUTE <= 5) {
+        const usersHasNumberOfCompleteLesson = await UserModel.find({
+            numberOfLessonCompleteToday: { $gt: 0 },
+        }).exec()
+        if (usersHasNumberOfCompleteLesson?.length > 0) {
+            for (const u of usersHasNumberOfCompleteLesson) {
+                const user = await UserModel.findOne({ _id: u.userId })
+                if (user) {
+                    await UserModel.updateOne(
+                        { _id: u.userId },
+                        {
+                            $set: {
+                                numberOfLessonCompleteToday: 0,
+                            },
+                        },
+                        { new: true }
+                    ).exec()
+                }
+            }
+        }
+    }
 })
 
 // const TODAY = new Date()
