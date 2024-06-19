@@ -2,13 +2,16 @@ const { createProxyMiddleware } = require('http-proxy-middleware')
 const os = require('os')
 
 // Port 5001 for macos
-const PORT = os.platform() === 'darwin' ? 5001 : 5000
+const PORT = os.platform() === 'darwin' ? 5001 : 5001
+
+const HOST =
+    os.platform() === 'darwin' ? 'http://localhost' : 'http://192.168.1.101'
 
 module.exports = function (app) {
     app.use(
         '/server',
         createProxyMiddleware({
-            target: `http://localhost:${PORT}`,
+            target: `${HOST}:${PORT}`,
             changeOrigin: true,
         })
     )

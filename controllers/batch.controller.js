@@ -1,4 +1,4 @@
-const { BATCH_EVENT_TIME_SPENT } = require('../constants/app.constant')
+const { BATCH_EVENT_TYPE_TIME_SPENT } = require('../constants/app.constant')
 const QuizService = require('../services/quiz.service')
 
 exports.invoke = async (req, res) => {
@@ -15,7 +15,7 @@ exports.invoke = async (req, res) => {
     let result = false
 
     switch (eventType) {
-        case BATCH_EVENT_TIME_SPENT:
+        case BATCH_EVENT_TYPE_TIME_SPENT:
             await QuizService.answerQuestion({
                 userId,
                 guestId,

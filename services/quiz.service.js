@@ -4,6 +4,18 @@ const { getToday, daysDifference } = require('../utils/common.util')
 const { calculateDiamondUser } = require('../utils/reward.util')
 const { getLevelByXpPoints } = require('../utils/xp.utils')
 const ReferralService = require('./referral.service')
+const dayjs = require('dayjs')
+const {
+    MAX_HEARTS,
+    DAILY_QUEST_TYPE_EARN_60_BANANAS,
+} = require('../constants/app.constant')
+const DailyQuestService = require('./daily-quest.service')
+const {
+    ACTION_NAME_EARN_BANANAS,
+    ACTION_NAME_COMPLETE_LESSON,
+    ACTION_NAME_EARN_GEMS,
+    ACTION_NAME_COMPLETE_PERFECT_LESSON,
+} = require('../constants/daily-quest.constant')
 
 exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
     let result = null
@@ -13,6 +25,7 @@ exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
     if (user) {
         // prettier-ignore
         const MUST_REDUCE_HEART = Boolean(!isCorrect) && Boolean(!user?.unlimitedHeart) && user?.heart > 0
+        const IS_LOST_1ST_HEARTS = user.heart === MAX_HEARTS
 
         user = await UserModel.findOneAndUpdate(
             { email: user.email },
@@ -20,7 +33,7 @@ exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
                 $set: {
                     heart: MUST_REDUCE_HEART ? user.heart - 1 : user.heart,
                     // prettier-ignore
-                    lastHeartAccruedAt: MUST_REDUCE_HEART ? new Date() : user.lastHeartAccruedAt || null,
+                    lastHeartAccruedAt: MUST_REDUCE_HEART && IS_LOST_1ST_HEARTS ? new Date() : user.lastHeartAccruedAt || null,
                 },
             },
             { new: true }
@@ -28,13 +41,15 @@ exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
     } else if (guest) {
         // prettier-ignore
         const MUST_REDUCE_HEART = Boolean(!isCorrect) && guest?.heart > 0
+        const IS_LOST_1ST_HEARTS = guest.heart === MAX_HEARTS
+
         guest = await GuestModel.findOneAndUpdate(
             { _id: guest._id },
             {
                 $set: {
                     heart: MUST_REDUCE_HEART ? guest.heart - 1 : guest.heart,
                     // prettier-ignore
-                    lastHeartAccruedAt: MUST_REDUCE_HEART ? new Date() : guest.lastHeartAccruedAt || null,
+                    lastHeartAccruedAt: MUST_REDUCE_HEART && IS_LOST_1ST_HEARTS ? new Date() : guest.lastHeartAccruedAt || null,
                 },
             },
             { new: true }
@@ -51,7 +66,7 @@ exports.saveScore = async ({ authUser, body }) => {
     let guest = await GuestModel.findById(authUser._id).exec()
 
     if (user) {
-        const today = getToday().toISOString().split('T')[0]
+        const today = dayjs(new Date()).format('YYYY-MM-DD')
         let allScoresList = user.score || []
 
         allScoresList.push({
@@ -59,6 +74,7 @@ exports.saveScore = async ({ authUser, body }) => {
             category: body.category,
             sub_category: body.sub_category,
             points: body.points,
+            xp: body.xp,
         })
 
         const daysDiff = daysDifference(user.lastCompletedDay)
@@ -74,12 +90,17 @@ exports.saveScore = async ({ authUser, body }) => {
         user.lastCompletedDay = today
 
         const dayOfWeek = (getToday().getDay() + 6) % 7
+
         const oldValue = user.completedDays || {}
 
         user.lastCompletedDay = today
         const completedDays = {
             ...oldValue,
             [dayOfWeek]: today,
+        }
+
+        const isAllAnsweredCorrectly = () => {
+            return body.score.every(s => s > 0)
         }
 
         const getGemsAwarded = () => {
@@ -103,17 +124,19 @@ exports.saveScore = async ({ authUser, body }) => {
                 }
             } else {
                 // return current diamond
-                return user.diamond
+                newDiamondAwarded = 0
             }
-            return user.diamond + newDiamondAwarded
+            return newDiamondAwarded
         }
 
         user = await UserModel.updateOne(
             { email: user.email },
             {
                 $set: {
-                    diamond: getGemsAwarded(),
+                    diamond: user.diamond + getGemsAwarded(),
                     score: allScoresList,
+                    lastLessonCategoryName: body.category,
+                    lastCompleteLessonDate: new Date(),
                     last_played: {
                         skill: body.skill,
                         category: body.category,
@@ -125,6 +148,23 @@ exports.saveScore = async ({ authUser, body }) => {
                 },
             }
         )
+
+        if (getGemsAwarded() > 0) {
+            await DailyQuestService.syncDailyQuest({
+                userId: authUser._id,
+                actionName: ACTION_NAME_EARN_GEMS,
+                value: getGemsAwarded(),
+            })
+        }
+
+        if (isAllAnsweredCorrectly()) {
+            await DailyQuestService.syncDailyQuest({
+                userId: authUser._id,
+                actionName: ACTION_NAME_COMPLETE_PERFECT_LESSON,
+                value: 1,
+            })
+        }
+
         result = true
     } else if (guest && authUser.email === 'GUEST') {
         const today = getToday().toISOString().split('T')[0]
@@ -135,6 +175,7 @@ exports.saveScore = async ({ authUser, body }) => {
             category: body.category,
             sub_category: body.sub_category,
             points: body.points,
+            xp: body.xp,
         })
 
         const daysDiff = daysDifference(guest.lastCompletedDay)
@@ -179,16 +220,16 @@ exports.saveScore = async ({ authUser, body }) => {
                 }
             } else {
                 // return current diamond
-                return guest.diamond
+                newDiamondAwarded = 0
             }
-            return guest.diamond + newDiamondAwarded
+            return newDiamondAwarded
         }
 
         guest = await GuestModel.updateOne(
             { _id: guest._id },
             {
                 $set: {
-                    diamond: getGemsAwarded(),
+                    diamond: guest.diamond + getGemsAwarded(),
                     score: allScoresList,
                     last_played: {
                         skill: body.skill,
@@ -213,7 +254,19 @@ exports.saveXp = async ({ authUser, xp }) => {
     let user = await UserModel.findById(authUser._id).exec()
     let guest = await GuestModel.findById(authUser._id).exec()
 
+    /**
+     * NOTES
+     * 0 - Sunday
+     * 1 - Monday
+     */
+    const dayOfWeek = dayjs(new Date()).day()
+    // console.log('dayOfWeek', dayOfWeek)
+
     if (user) {
+        ReferralService.validateReferral({ userId: authUser._id })
+        // prettier-ignore
+        const weeklyXp = typeof user.xp?.weekly === 'number' ? user.xp?.weekly + xp : xp
+
         user = await UserModel.updateOne(
             { email: user.email },
             {
@@ -231,13 +284,32 @@ exports.saveXp = async ({ authUser, xp }) => {
                         level: getLevelByXpPoints(
                             user?.xp?.total ? user.xp.total + xp : 0
                         ),
+                        weekly: weeklyXp,
                     },
+                    // prettier-ignore
+                    numberOfLessonCompleteToday: typeof user.numberOfLessonCompleteToday === 'number'
+                        ? user.numberOfLessonCompleteToday + 1
+                        : 1,
                 },
             }
         )
-        ReferralService.validateReferral({ userId: user._id })
+
+        await DailyQuestService.syncDailyQuest({
+            userId: authUser._id,
+            actionName: ACTION_NAME_EARN_BANANAS,
+            value: xp,
+        })
+
+        await DailyQuestService.syncDailyQuest({
+            userId: authUser._id,
+            actionName: ACTION_NAME_COMPLETE_LESSON,
+            value: 1,
+        })
+
         result = true
     } else if (guest && authUser.email === 'GUEST') {
+        // prettier-ignore
+        const weeklyXp = typeof guest.xp?.weekly === 'number' ? guest.xp?.weekly + xp : xp
         guest = await GuestModel.updateOne(
             { _id: guest._id },
             {
@@ -253,6 +325,7 @@ exports.saveXp = async ({ authUser, xp }) => {
                         daily: guest.xp.daily ? guest.xp.daily + xp : xp,
                         total: guest.xp.total ? guest.xp.total + xp : xp,
                         level: 1, // keep level 1 for guest
+                        weekly: weeklyXp,
                     },
                 },
             }

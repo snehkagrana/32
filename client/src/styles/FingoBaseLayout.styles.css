@@ -1,0 +1,18 @@
+.FingoBaseLayout {
+    background-color: #ffffff;
+    min-height: 100vh;
+}
+
+[data-theme='dark'] .FingoBaseLayout {
+    background-color: #313131;
+}
+
+.FingoBaseLayoutWrapper {
+    padding-left: 0;
+    min-height: 100vh;
+}
+
+.FingoBaseLayoutContainer {
+    padding: 0 0.6rem;
+    position: relative;
+}

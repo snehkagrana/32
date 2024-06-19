@@ -8,6 +8,7 @@ module.exports = {
             sub_category: Joi.string().required(),
             points: Joi.number().required(),
             score: Joi.array().items(Joi.number()).required(),
+            xp: Joi.number().allow(null),
         })
         .options({ allowUnknown: true }),
 

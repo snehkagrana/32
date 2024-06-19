@@ -37,14 +37,28 @@ const informationRoutes = require('./routes/information.routes')
 const batchRoutes = require('./routes/batch.routes')
 const heartRoutes = require('./routes/heart.routes')
 const quizRoutes = require('./routes/quiz.routes')
+const draggableQuizRoutes = require('./routes/draggableQuiz.routes')
+const commonRoutes = require('./routes/common.routes')
+const feedbackRoutes = require('./routes/feedback.routes')
+const leaderBoardRoutes = require('./routes/leaderboard.routes')
+const notificationRoutes = require('./routes/notification.routes')
+const dailyQuestRoutes = require('./routes/daily-quest.routes')
 const AuthGuard = require('./middlewares/auth.middleware');
 const { initializeDiamondUser, calculateDiamondUser } = require("./utils/reward.util");
 const { mailTransporter } = require("./utils/mail.util");
-const ReferralService = require('./services/referral.service');
+const ReferralService = require('./services/referral.service')
+// const dayjs = require("dayjs");
 const AdminMiddleware = require('./middlewares/admin.middleware')
+const firebaseAdmin = require("firebase-admin");
 
-require('./cronjob/hearts.cronjob')
+require('./cronjob/app.cron')
 
+var serviceAccount = require("./fingo-8fe5c-firebase-adminsdk-qd52d-1db764cff8.json");
+
+firebaseAdmin.initializeApp({
+    credential: firebaseAdmin.credential.cert(serviceAccount)
+});
+ 
 aws.config.update({
     secretAccessKey: process.env.ACCESS_SECRET_KEY,
     accessKeyId: process.env.ACCESS_KEY,
@@ -80,13 +94,9 @@ app.use(flash());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors({
-    origin: ['https://fingodev.kujang.space']
-}));
-
 /** ######## New Routes ########### */
 app.use('/server/api/admin', adminRoutes);  
-app.use('/server/api/auth', authRoutes);  
+app.use('/server/api', authRoutes);  
 app.use('/server/api', rewardRoutes);  
 app.use('/server/api', accountRoutes);  
 app.use('/server/api', userRoutes);  
@@ -94,8 +104,15 @@ app.use('/server/api', informationRoutes);
 app.use('/server/api', batchRoutes);  
 app.use('/server/api', heartRoutes);  
 app.use('/server/api', quizRoutes);  
+app.use('/server/api', draggableQuizRoutes);  
+app.use('/server/api', commonRoutes);  
+app.use('/server/api', feedbackRoutes);  
+app.use('/server/api', leaderBoardRoutes);  
+app.use('/server/api', notificationRoutes);
+app.use('/server/api', dailyQuestRoutes);
 app.use('/.well-known/apple-app-site-association', express.static('well-known/apple-app-site-association.json'))
 app.use('/.well-known', express.static('well-known'))
+app.use('/static-files', express.static('static-files'))
 
 app.use(
     session({
@@ -349,7 +366,8 @@ app.post("/server/register", (req, res) => {
                         10
                     );
                     const newUser = new User({
-                        displayName: req.body.displayName,
+                        firstName: req.body.firstName,
+                        lastName: req.body.lastName,
                         email: req.body.email,
                         password: hashedPassword,
                         role: "basic",
@@ -383,12 +401,12 @@ app.post("/server/updateProfilePhoto",
                 if (req.file && req.file.location) {
                     const res = await User.updateOne(
                         { email: req.user.email },
-                        { $set: { imgPath: req.file.location } }
+                        { $set: { imgPath: req.file.location, avatarId: null } }
                     );
                 } else {
                     return res.json({
                         imageUrl: doc.imageUrl
-                    });
+                    }); 
                 }
             }
             res.json({

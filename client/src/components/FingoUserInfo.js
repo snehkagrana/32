@@ -11,6 +11,7 @@ import 'src/styles/FingoUserInfo.styles.css'
 import { getLevelColor } from 'src/utils'
 import { ArrowContainer, Popover as ReactTinyPopover } from 'react-tiny-popover'
 import { ReactComponent as PencilFillSvg } from 'src/assets/svg/pencil-fill.svg'
+import { userUtils } from 'src/utils/user.util'
 
 const FingoUserInfo = () => {
     const now = new Date()
@@ -23,15 +24,14 @@ const FingoUserInfo = () => {
     const { isAuthenticated } = useAuth()
 
     const getGreetingText = useMemo(() => {
-        if (time >=3 && time < 5){
+        if (time >= 3 && time < 5) {
             return 'Good morning (or night?),'
-        }
-        else if (time >= 5 && time < 12) {
-            return 'Good morning,';
+        } else if (time >= 5 && time < 12) {
+            return 'Good morning,'
         } else if (time >= 12 && time < 16) {
-            return 'Good afternoon,';
+            return 'Good afternoon,'
         } else {
-            return 'Good evening,';
+            return 'Good evening,'
         }
     }, [time])
 
@@ -192,7 +192,10 @@ const FingoUserInfo = () => {
                 <div className='user-info ml-3'>
                     <p className='greetingText'>{getGreetingText}</p>
                     <h4 className='user-name'>
-                        {newUser ? 'Stranger' : user?.displayName ?? ''}!
+                        {newUser
+                            ? 'Stranger'
+                            : userUtils.getFirstName(user) ?? ''}
+                        !
                         <span
                             style={{
                                 display: 'inline-block',

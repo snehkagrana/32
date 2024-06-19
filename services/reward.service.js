@@ -8,6 +8,7 @@ const {
     sendEmailGiftCardRunOut,
 } = require('../email/send-email')
 const { MAX_REDEEM_GIFT_CARD_PER_MONTH } = require('../constants/app.constant')
+const { getFirstName } = require('../utils/user.util')
 
 var ObjectId = require('mongoose').Types.ObjectId
 
@@ -51,7 +52,7 @@ exports.giftReward = async (adminEmail, body) => {
                 ...reward._doc,
                 givenBy: {
                     userId: userAdmin._id,
-                    displayName: userAdmin.displayName,
+                    displayName: getFirstName(user),
                     email: userAdmin.email,
                 },
                 rewardId: body.itemId,
@@ -81,7 +82,7 @@ exports.giftReward = async (adminEmail, body) => {
                         isAvailable: false,
                         redeemedBy: {
                             userId: user?._id,
-                            displayName: user.displayName ?? '',
+                            displayName: getFirstName(user) ?? '',
                             email: user.email,
                         },
                     }
@@ -203,9 +204,7 @@ exports.redeem = async (email, body) => {
                         isAvailable: false,
                         redeemedBy: {
                             userId: user?._id,
-                            displayName: user?.displayName
-                                ? user.displayName
-                                : user.username ?? '',
+                            displayName: getFirstName(user),
                             email: user.email,
                         },
                     }
@@ -239,7 +238,7 @@ exports.redeem = async (email, body) => {
         await sendEmailUserRedeemGiftCard({
             to: [process.env.CONTACT_EMAIL_1, process.env.CONTACT_EMAIL_2],
             from: process.env.MAIL,
-            name: user.displayName || user.email,
+            name: getFirstName(user) || user.email,
             giftCardName: reward.name,
             code: rewardVariantStillExists.claimCode,
             pin: rewardVariantStillExists.pin,

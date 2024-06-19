@@ -1,31 +1,17 @@
 const { default: ShortUniqueId } = require('short-unique-id')
-const shortUniqueId = require('short-unique-id')
 
 const getToday = () => {
-    const now = new Date()
-    const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
-
-    const year = today.getUTCFullYear()
-    const month = today.getUTCMonth()
-    const day = today.getUTCDate()
-
-    return new Date(Date.UTC(year, month, day))
+    return new Date()
 }
 
 const daysDifference = lastDate => {
-    const todayUTC = getToday()
+    const today = new Date()
 
     const day = lastDate ? lastDate.toISOString().split('T')[0] : 0
-    const lastCompletedDay = new Date(day)
-    const lastCompletedDayUTC = new Date(
-        Date.UTC(
-            lastCompletedDay.getUTCFullYear(),
-            lastCompletedDay.getUTCMonth(),
-            lastCompletedDay.getUTCDate()
-        )
-    )
 
-    return Math.floor((todayUTC - lastCompletedDayUTC) / (1000 * 60 * 60 * 24))
+    const lastCompletedDay = new Date(day)
+
+    return Math.floor((today - lastCompletedDay) / (1000 * 60 * 60 * 24))
 }
 
 const generateReferralCode = () => {
@@ -34,8 +20,48 @@ const generateReferralCode = () => {
     return uid.rnd()
 }
 
+const generateUsername = fullName => {
+    var digits = '0123456789'
+    const userName = fullName
+        .toLowerCase()
+        .replace(/ /g, '')
+        .replace(/[^\w-]+/g, '')
+    let _number = ''
+    for (let i = 0; i < 5; i++) {
+        _number += digits[Math.floor(Math.random() * 10)]
+    }
+    return userName + _number
+}
+
+function convertUTCDateToLocalDate(date) {
+    var newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000)
+
+    var offset = date.getTimezoneOffset() / 60
+    var hours = date.getHours()
+
+    newDate.setHours(hours - offset)
+
+    return newDate
+}
+
+function validateEmail(email) {
+    return String(email)
+        .toLowerCase()
+        .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )
+}
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max)
+}
+
 module.exports = {
     getToday,
     daysDifference,
     generateReferralCode,
+    generateUsername,
+    convertUTCDateToLocalDate,
+    validateEmail,
+    getRandomInt,
 }

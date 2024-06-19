@@ -12,6 +12,9 @@ import CelebrateBadge from 'src/assets/images/celebrate-badge.png'
 import CelebrateBadge2 from 'src/assets/images/celebrate-badge-2.png'
 
 import PlaceholderImg from 'src/assets/images/placeholder.png'
+import NoImg from 'src/assets/images/noimg.png'
+import AvatarDefaultXs from 'src/assets/images/avatar-default-xs.png'
+import IntroLogo from 'src/assets/images/intro-logo.png'
 
 import GiftCardDefaultAmazon from 'src/assets/images/giftcard/amazon.png'
 import GiftCardDefaultPaytm from 'src/assets/images/giftcard/paytm.png'
@@ -39,6 +42,7 @@ const Assets = {
     CelebrateBadge2,
 
     PlaceholderImg,
+    NoImg,
     GiftCardDefaultAmazon,
     GiftCardDefaultPaytm,
     GiftCardDefaultFlipkart,
@@ -49,6 +53,8 @@ const Assets = {
     PaytmLogo,
     FlipkartLogo,
     GiftBoxIcon,
+    AvatarDefaultXs,
+    IntroLogo
 }
 
 export default Assets

@@ -25,6 +25,7 @@ const GuestSchema = new mongoose.Schema({
         daily: Number,
         total: Number,
         level: Number,
+        weekly: Number,
     },
     last_played: {
         skill: {
@@ -62,6 +63,9 @@ const GuestSchema = new mongoose.Schema({
     registerToken: String,
     createdAt: Date,
     lastActiveAt: Date,
+
+    /** @deprecated */
+    lastLessonCategoryName: String,
 })
 
 module.exports = mongoose.model('Guest', GuestSchema)
