@@ -18,8 +18,7 @@ import IcFingoEnvelope from 'src/assets/images/fingo-envelope.png'
 import Swal from 'sweetalert2'
 import FingoUserInfo from './FingoUserInfo'
 import { authUtils } from 'src/utils'
-import { FingoToggleAudio } from './FingoToggleAudio'
-// import { FingoSwitch } from './core'
+import { FingoSwitch } from './core'
 
 const FingoSidebar = ({ open }) => {
     const dispatch = useDispatch()
@@ -30,6 +29,7 @@ const FingoSidebar = ({ open }) => {
         user,
         isAuthenticated,
         auth_logout,
+        isAdmin,
     } = useAuth()
 
     const {
@@ -206,7 +206,7 @@ const FingoSidebar = ({ open }) => {
                                 </li>
                             </>
                         )}
-                        {isAuthenticated && user?.role === 'admin' && (
+                        {isAdmin && (
                             <>
                                 <li>
                                     <a
@@ -265,12 +265,65 @@ const FingoSidebar = ({ open }) => {
                                         <span>Rewards</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a
+                                        href='#'
+                                        className='FingoShapeRadius'
+                                        onClick={e => {
+                                            e.preventDefault()
+                                            navigate(`/admin/test-dnd`)
+                                        }}
+                                    >
+                                        <div className='icon'></div>
+                                        <span> Test DND</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href='#'
+                                        className='FingoShapeRadius'
+                                        onClick={e => {
+                                            e.preventDefault()
+                                            navigate(`/admin/notification`)
+                                        }}
+                                    >
+                                        <div className='icon'></div>
+                                        <span> Notifications</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href='#'
+                                        className='FingoShapeRadius'
+                                        onClick={e => {
+                                            e.preventDefault()
+                                            navigate(`/admin/notification/template`)
+                                        }}
+                                    >
+                                        <div className='icon'></div>
+                                        <span>Notification Template</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href='#'
+                                        className='FingoShapeRadius'
+                                        onClick={e => {
+                                            e.preventDefault()
+                                            navigate(`/admin/notification/delivered-notification`)
+                                        }}
+                                    >
+                                        <div className='icon'></div>
+                                        <span> Delivered Notification</span>
+                                    </a>
+                                </li>
                             </>
                         )}
                     </ul>
                     <div className='FingoSidebarSwitchContainer'>
-                        <FingoToggleAudio
-                            active={settings.soundsEffect}
+                        <FingoSwitch
+                            label='Sound Effects'
+                            checked={settings.soundsEffect}
                             onChange={onChangeSound}
                             className='mb-4'
                         />

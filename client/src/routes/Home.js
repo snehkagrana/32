@@ -418,8 +418,8 @@ const Home = (props) => {
         dispatch(auth_setNewUser(false))
         dispatch(auth_setUser(response.data.user))
         setUserName(
-          response.data.user.displayName
-            ? response.data.user.displayName?.split(" ")[0]
+          response.data.user.firstName
+            ? response.data.user.firstName?.split(" ")[0]
             : response.data.user.email
         );
 

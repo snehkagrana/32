@@ -85,6 +85,10 @@ export const useAuth = () => {
         }
     }
 
+    const isAdmin = useMemo(() => {
+        return isAuthenticated && Boolean(statePersisted.user?.role === 'admin')
+    }, [isAuthenticated, statePersisted.user])
+
     return {
         ...state,
         ...statePersisted,
@@ -93,5 +97,6 @@ export const useAuth = () => {
         ...auth_thunkActions,
         isAuthenticated,
         auth_syncAndGetUser,
+        isAdmin,
     }
 }

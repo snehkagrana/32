@@ -46,7 +46,8 @@ const Register = (props) => {
         Axios({
             method: "POST",
             data: {
-                displayName: `${registerFirstName} ${registerLastName}`,
+                firstName: registerFirstName,
+                lastName: registerLastName,
                 email: registerEmail,
                 password: registerPassword,
                 role: "basic",

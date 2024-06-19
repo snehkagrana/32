@@ -19,7 +19,7 @@ import { FingoHomeLayout } from 'src/components/layouts'
 import { useApp, useAuth, usePersistedGuest } from 'src/hooks'
 import { useDispatch } from 'react-redux'
 import {
-    BATCH_EVENT_TIME_SPENT,
+    BATCH_EVENT_TYPE_TIME_SPENT,
     NUMBER_OF_LIMIT_LESSON_FOR_GUEST,
 } from 'src/constants/app.constant'
 import { QuizPageHeader } from 'src/components/quiz'
@@ -134,7 +134,7 @@ const Quiz = () => {
                     correctAudio.play()
                 }
                 appBatch({
-                    eventType: BATCH_EVENT_TIME_SPENT,
+                    eventType: BATCH_EVENT_TYPE_TIME_SPENT,
                     eventTimestamp: new Date().getTime(),
                     isCorrect: true,
                     itemId,
@@ -149,7 +149,7 @@ const Quiz = () => {
                 }
                 setCurrentIsCorrect(false)
                 appBatch({
-                    eventType: BATCH_EVENT_TIME_SPENT,
+                    eventType: BATCH_EVENT_TYPE_TIME_SPENT,
                     eventTimestamp: new Date().getTime(),
                     isCorrect: false,
                     itemId,
@@ -172,7 +172,7 @@ const Quiz = () => {
                     correctAudio.play()
                 }
                 appBatch({
-                    eventType: BATCH_EVENT_TIME_SPENT,
+                    eventType: BATCH_EVENT_TYPE_TIME_SPENT,
                     eventTimestamp: new Date().getTime(),
                     isCorrect: true,
                     itemId,
@@ -190,7 +190,7 @@ const Quiz = () => {
                 setCurrentIsWrongIndex(currentSelectedIndex ?? null)
                 setCurrentIsCorrectIndex(correctAnswers?.current?.[0] ?? null)
                 appBatch({
-                    eventType: BATCH_EVENT_TIME_SPENT,
+                    eventType: BATCH_EVENT_TYPE_TIME_SPENT,
                     eventTimestamp: new Date().getTime(),
                     isCorrect: false,
                     itemId,

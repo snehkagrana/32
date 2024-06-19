@@ -5,7 +5,43 @@ const jwtConfig = require('../configs/jwt.config')
 const bcryptUtil = require('../utils/bcrypt.util')
 const jwtUtil = require('../utils/jwt.util')
 const { appConfig } = require('../configs/app.config')
-const { generateReferralCode } = require('../utils/common.util')
+const {
+    generateReferralCode,
+    generateUsername,
+} = require('../utils/common.util')
+
+exports.sendRegisterCode = async (req, res) => {
+    const isExist = await AuthService.findUserByEmail(req.body.email)
+    if (isExist) {
+        return res.status(400).json({
+            message: 'This email has been taken',
+        })
+    }
+    const result = await AuthService.sendRegisterCode(req.body.email)
+    if (result) {
+        return res.json({ message: 'OK' })
+    }
+    return res.status(400).json({ message: 'Failed to send register code' })
+}
+
+exports.checkRegisterCode = async (req, res) => {
+    const result = await AuthService.checkRegisterCode(req.body.email)
+    if (result) {
+        return res.json({ message: 'OK' })
+    }
+    return res.status(400).json({ message: 'Register code not found' })
+}
+
+exports.verifyRegisterCode = async (req, res) => {
+    const result = await AuthService.verifyRegisterCode(
+        req.body.email,
+        req.body.code
+    )
+    if (result) {
+        return res.json({ message: 'Verified' })
+    }
+    return res.status(400).json({ message: 'Incorrect otp code' })
+}
 
 exports.register = async (req, res) => {
     const refCode = generateReferralCode()
@@ -20,7 +56,9 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcryptUtil.createHash(req.body.password)
 
     let newUser = {
-        displayName: req.body.displayName,
+        username: generateUsername(req.body.firstName),
+        firstName: req.body.firstName,
+        lastName: req.body.lastName || '',
         email: req.body.email,
         password: hashedPassword,
         role: 'basic',
@@ -32,12 +70,18 @@ exports.register = async (req, res) => {
             daily: 0,
             total: 0,
             level: 1,
+            weekly: 0,
         },
         heart: appConfig.defaultHeart || 5,
         lastHeartAccruedAt: new Date(),
         unlimitedHeart: null,
         referralCode: refCode,
         registeredAt: new Date(),
+        emailVerifiedAt: req.body.clientType === 'mobile' ? new Date() : null,
+        following: [],
+        followers: [],
+        fcmToken: '',
+        lastLessonCategoryName: '',
     }
 
     // sync guest data
@@ -58,6 +102,8 @@ exports.register = async (req, res) => {
                 lastClaimedGemsDailyQuest:
                     guestData.lastClaimedGemsDailyQuest || null,
                 unlimitedHeart: null,
+                following: [],
+                followers: [],
             }
         }
         GuestService.deleteGuest(req.body?.syncId)
@@ -77,6 +123,23 @@ exports.register = async (req, res) => {
         redirect: '/login',
         message: 'User Created' /* user: user*/,
     })
+}
+
+exports.googleSignInMobile = async (req, res) => {
+    const { email, firstName, lastName, photo, registerToken, syncId } =
+        req.body
+    const result = await AuthService.googleSignInMobile({
+        firstName,
+        lastName,
+        email,
+        photo,
+        registerToken,
+        syncId,
+    })
+    if (result) {
+        return res.json(result)
+    }
+    return res.status(400).json({ message: 'Failed to signin with google' })
 }
 
 exports.login = async (req, res) => {
@@ -152,12 +215,41 @@ exports.sendLinkForgotPassword = async (req, res) => {
         .json({ message: 'Failed to send forgot password link.' })
 }
 
-exports.resetPassword = async (req, res) => {
-    const result = await AuthService.resetPassword(
+exports.sendCodeForgotPassword = async (req, res) => {
+    const isExist = await AuthService.findUserByEmail(req.body.email)
+    if (!isExist) {
+        return res.status(400).json({
+            message: 'Email not found',
+        })
+    }
+
+    const result = await AuthService.sendCodeForgotPassword(req.body.email)
+    if (result) {
+        return res.json({ message: 'Send otp code successfully.' })
+    }
+    return res
+        .status(400)
+        .json({ message: 'Failed to send otp code forgot password.' })
+}
+
+exports.verifyCodeForgotPassword = async (req, res) => {
+    const result = await AuthService.verifyCodeForgotPassword(
         req.body.email,
-        req.body.password,
-        req.body.token
+        req.body.code
     )
+    if (result) {
+        return res.json({ message: 'Verified.' })
+    }
+    return res.status(400).json({ message: 'Incorrect otp code' })
+}
+
+exports.resetPassword = async (req, res) => {
+    const result = await AuthService.resetPassword({
+        email: req.body.email,
+        password: req.body.password,
+        token: req.body.token,
+        code: req.body.code,
+    })
     if (result) {
         return res.json({ message: 'Reset Password successfully.' })
     }
@@ -183,6 +275,7 @@ exports.syncRegisterGoogle = async (req, res) => {
                 lastClaimedGemsDailyQuest:
                     guestData.lastClaimedGemsDailyQuest || null,
                 unlimitedHeart: null,
+                nextLesson: guestData.nextLesson || null,
             }
             result = await AuthService.syncRegisterGoogle({
                 email: req.user.email,

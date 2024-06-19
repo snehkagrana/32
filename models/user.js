@@ -3,7 +3,17 @@
 const mongoose = require('mongoose')
 
 const UserSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+
+    /** @deprecated */
     displayName: String,
+
+    firstName: String,
+    lastName: String,
     email: String,
     password: String,
     role: String,
@@ -24,6 +34,9 @@ const UserSchema = new mongoose.Schema({
             points: {
                 type: Number,
             },
+            xp: {
+                type: Number,
+            },
         },
     ],
     xp: {
@@ -31,6 +44,7 @@ const UserSchema = new mongoose.Schema({
         daily: Number,
         total: Number,
         level: Number,
+        weekly: Number,
     },
     last_played: {
         skill: {
@@ -55,11 +69,32 @@ const UserSchema = new mongoose.Schema({
         6: Date,
     },
     password_reset_token: String,
+    passwordResetCode: String,
     diamond: Number,
 
     // for new user who has claim diamond in first time it's should be true
     diamondInitialized: Boolean,
     lastClaimedGemsDailyQuest: Date,
+    dailyQuest: [
+        {
+            sequence: Number,
+            questId: String,
+            questName: String,
+            isCompleted: Boolean,
+            progress: Number,
+            maxValue: Number,
+            date: Date,
+            completedDate: {
+                type: Date,
+                default: null,
+            },
+            claimedAt: {
+                type: Date,
+                default: null,
+            },
+        },
+    ],
+    numberOfLessonCompleteToday: Number,
     rewards: [
         {
             rewardId: {
@@ -138,6 +173,75 @@ const UserSchema = new mongoose.Schema({
     referralCode: String,
     registeredAt: Date,
     numberOfSuccessReferrals: Number,
+    emailVerifiedAt: Date,
+    verifyEmailCode: String,
+    phoneNumber: String,
+    avatarId: {
+        type: Number,
+        default: null,
+    },
+    following: [
+        {
+            userId: String,
+            displayName: String,
+            totalXp: Number,
+            level: Number,
+            imgPath: {
+                type: String,
+                default: null,
+            },
+            createdAt: Date,
+            updatedAt: {
+                type: Date,
+                default: null,
+            },
+        },
+    ],
+    followers: [
+        {
+            userId: String,
+            displayName: String,
+            totalXp: Number,
+            level: Number,
+            imgPath: {
+                type: String,
+                default: null,
+            },
+            createdAt: Date,
+            updatedAt: {
+                type: Date,
+                default: null,
+            },
+        },
+    ],
+    leaderBoards: [
+        {
+            leaderBoardId: String,
+            startDate: Date,
+            endDate: Date,
+            hasSeen: Boolean,
+            position: Number,
+            xp: Number,
+        },
+    ],
+    fcmToken: String,
+    os: String,
+
+    /** @deprecated */
+    lastLessonCategoryName: String,
+
+    lastDeliveredStreakNotificationType: Number,
+    nextLesson: {
+        skill: {
+            type: String,
+        },
+        category: {
+            type: String,
+        },
+        subCategory: {
+            type: String,
+        },
+    },
 })
 
 UserSchema.set('toJSON', {
