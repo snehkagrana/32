@@ -130,8 +130,6 @@ exports.markSeen = async (req, res) => {
             position: 0,
             xp: 0,
         }
-
-        console.log("userLeaderboardNoRank",userLeaderboardNoRank)
         await UserModel.updateOne(
             { _id: authUserId },
             {
