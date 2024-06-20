@@ -97,6 +97,10 @@ exports.markSeen = async (req, res) => {
     const leaderBoardId = req.params.leaderBoardId
     const user = await UserModel.findOne({ _id: authUserId }).exec()
 
+    const leaderboard = await LeaderBoardModel.findOne({
+        _id: leaderBoardId,
+    })
+
     // prettier-ignore
     if (user && user.leaderBoards?.find(x => x.leaderBoardId == leaderBoardId)) {
         const newUserLeaderBoards = user.leaderBoards.map((x)=> ({
@@ -113,6 +117,30 @@ exports.markSeen = async (req, res) => {
             { new: true }
         ).exec()
 
+        return res.json({
+            message: 'Success.',
+        })
+    } else {
+        // create leaderboard result with no rank
+        const userLeaderboardNoRank = {
+            leaderBoardId: leaderBoardId,
+            startDate: leaderboard.startDate,
+            endDate: leaderboard.endDate,
+            hasSeen: true,
+            position: 0,
+            xp: 0,
+        }
+
+        console.log("userLeaderboardNoRank",userLeaderboardNoRank)
+        await UserModel.updateOne(
+            { _id: authUserId },
+            {
+                $set: {
+                    leaderBoards: [...user.leaderBoards, userLeaderboardNoRank],
+                },
+            }, 
+            { new: true }
+        ).exec()
         return res.json({
             message: 'Success.',
         })
