@@ -111,7 +111,7 @@ exports.saveScore = async ({ authUser, body }) => {
          */
         const prevDayStreak = user?.dayStreak || []
         const dayStreak = [...prevDayStreak]
-        if (checkHasStreakToday(user.dayStreak || [])) {
+        if (!checkHasStreakToday(user.dayStreak || [])) {
             dayStreak.push(dayjs(now).toISOString())
         }
 
@@ -223,7 +223,7 @@ exports.saveScore = async ({ authUser, body }) => {
          */
         const prevDayStreak = guest?.dayStreak || []
         const dayStreak = [...prevDayStreak]
-        if (checkHasStreakToday(user.dayStreak || [])) {
+        if (!checkHasStreakToday(user.dayStreak || [])) {
             dayStreak.push(dayjs(now).toISOString())
         }
 
