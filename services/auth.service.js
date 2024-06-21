@@ -118,7 +118,9 @@ exports.syncUser = async email => {
     }
 
     if (user) {
-        const daysDiff = daysDifference(user.lastCompletedDay)
+        // const daysDiff = daysDifference(user.lastCompletedDay)
+        const daysDiff = dayjs(today).diff(user.lastCompletedDay, 'day')
+
         if (daysDiff === 1) {
             // Do nothing, the streak is already up-to-date
         } else if (daysDiff === 2) {
@@ -292,6 +294,7 @@ exports.syncRegisterGoogle = async ({ email, data }) => {
                     xp: data.xp,
                     score: data.score,
                     completedDays: data.completedDays,
+                    dayStreak: data?.dayStreak || [],
                     last_played: data.last_played,
                     heart: data.heart || appConfig.defaultHeart,
                     lastHeartAccruedAt: data.lastHeartAccruedAt || new Date(),
@@ -380,6 +383,7 @@ exports.googleSignInMobile = async ({
                     xp: guestData.xp,
                     score: guestData.score,
                     completedDays: guestData.completedDays,
+                    dayStreak: guestData?.dayStreak || [],
                     last_played: guestData.last_played,
                     heart: guestData.heart || appConfig.defaultHeart,
                     lastHeartAccruedAt:

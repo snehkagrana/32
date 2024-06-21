@@ -16,6 +16,7 @@ const {
     ACTION_NAME_EARN_GEMS,
     ACTION_NAME_COMPLETE_PERFECT_LESSON,
 } = require('../constants/daily-quest.constant')
+const { checkHasStreakToday } = require('../utils/streak.util')
 
 exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
     let result = null
@@ -68,7 +69,7 @@ exports.saveScore = async ({ authUser, body }) => {
     const now = new Date()
 
     if (user) {
-        const today = dayjs(new Date()).format('YYYY-MM-DD')
+        const today = dayjs(new Date())
         let allScoresList = user.score || []
 
         allScoresList.push({
@@ -95,8 +96,6 @@ exports.saveScore = async ({ authUser, body }) => {
 
         const oldValue = user.completedDays || {}
 
-        user.lastCompletedDay = today
-
         /**
          * @deprecated
          */
@@ -111,7 +110,10 @@ exports.saveScore = async ({ authUser, body }) => {
          * ------------------------
          */
         const prevDayStreak = user?.dayStreak || []
-        const dayStreak = [...prevDayStreak, dayjs(now).toISOString()]
+        const dayStreak = [...prevDayStreak]
+        if (checkHasStreakToday(user.dayStreak || [])) {
+            dayStreak.push(dayjs(now).toISOString())
+        }
 
         const isAllAnsweredCorrectly = () => {
             return body.score.every(s => s > 0)
@@ -220,7 +222,10 @@ exports.saveScore = async ({ authUser, body }) => {
          * ------------------------
          */
         const prevDayStreak = guest?.dayStreak || []
-        const dayStreak = [...prevDayStreak, dayjs(now).toISOString()]
+        const dayStreak = [...prevDayStreak]
+        if (checkHasStreakToday(user.dayStreak || [])) {
+            dayStreak.push(dayjs(now).toISOString())
+        }
 
         const getGemsAwarded = () => {
             let newDiamondAwarded = 0
