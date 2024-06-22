@@ -149,34 +149,31 @@ exports.sendAndSaveNotification = async ({
         createdAt: NOW,
         readAt: null,
     })
-
-    if (!__DEV__) {
-        if (notification && user?.fcmToken) {
-            // send notification to android user
-            if (user?.os === 'android') {
-                await ANDROID_sendNotification({
-                    token: user.fcmToken,
-                    title,
-                    body,
-                    data: {
-                        dataId: String(dataId) || '',
-                        imageUrl: String(imageUrl) || '',
-                    },
-                })
-            }
-            // send notification to ios user
-            else if (user?.os === 'ios') {
-                await sendNotification({
-                    token: user.fcmToken,
-                    title,
-                    body,
-                    data: {
-                        dataId: String(dataId) || '',
-                        imageUrl: String(imageUrl) || '',
-                    },
-                    // data: dataId ? { dataId } : {},
-                })
-            }
+    if (notification && user?.fcmToken) {
+        // send notification to android user
+        if (user?.os === 'android') {
+            await ANDROID_sendNotification({
+                token: user.fcmToken,
+                title,
+                body,
+                data: {
+                    dataId: String(dataId) || '',
+                    imageUrl: String(imageUrl) || '',
+                },
+            })
+        }
+        // send notification to ios user
+        else if (user?.os === 'ios') {
+            await sendNotification({
+                token: user.fcmToken,
+                title,
+                body,
+                data: {
+                    dataId: String(dataId) || '',
+                    imageUrl: String(imageUrl) || '',
+                },
+                // data: dataId ? { dataId } : {},
+            })
         }
     }
 

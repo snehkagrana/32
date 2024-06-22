@@ -58,6 +58,11 @@ const UserSchema = new mongoose.Schema({
         },
     },
     streak: Number,
+    dayStreak: [
+        {
+            type: Date,
+        },
+    ],
     lastCompletedDay: Date,
     completedDays: {
         0: Date,

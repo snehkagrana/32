@@ -54,7 +54,6 @@ const firebaseAdmin = require("firebase-admin");
 require('./cronjob/app.cron')
 
 var serviceAccount = require("./fingo-8fe5c-firebase-adminsdk-qd52d-1db764cff8.json");
-
 firebaseAdmin.initializeApp({
     credential: firebaseAdmin.credential.cert(serviceAccount)
 });
@@ -110,9 +109,16 @@ app.use('/server/api', feedbackRoutes);
 app.use('/server/api', leaderBoardRoutes);  
 app.use('/server/api', notificationRoutes);
 app.use('/server/api', dailyQuestRoutes);
+
+
+/**
+ * Static files
+ */
 app.use('/.well-known/apple-app-site-association', express.static('well-known/apple-app-site-association.json'))
 app.use('/.well-known', express.static('well-known'))
 app.use('/static-files', express.static('static-files'))
+app.use(express.static(path.join(__dirname, './static-files')));
+app.use('/static-files', express.static('./static-files'))
 
 app.use(
     session({
