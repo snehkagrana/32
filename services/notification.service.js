@@ -152,37 +152,35 @@ exports.sendAndSaveNotification = async ({
 
     console.log('RESULT->>>>>>>>>', user?.fcmToken, notification)
 
-    if (!__DEV__) {
-        console.log(
-            'notification && user?.fcmToken->>>',
-            notification && user?.fcmToken
-        )
-        if (notification && user?.fcmToken) {
-            // send notification to android user
-            if (user?.os === 'android') {
-                await ANDROID_sendNotification({
-                    token: user.fcmToken,
-                    title,
-                    body,
-                    data: {
-                        dataId: String(dataId) || '',
-                        imageUrl: String(imageUrl) || '',
-                    },
-                })
-            }
-            // send notification to ios user
-            else if (user?.os === 'ios') {
-                await sendNotification({
-                    token: user.fcmToken,
-                    title,
-                    body,
-                    data: {
-                        dataId: String(dataId) || '',
-                        imageUrl: String(imageUrl) || '',
-                    },
-                    // data: dataId ? { dataId } : {},
-                })
-            }
+    console.log(
+        'notification && user?.fcmToken->>>',
+        notification && user?.fcmToken
+    )
+    if (notification && user?.fcmToken) {
+        // send notification to android user
+        if (user?.os === 'android') {
+            await ANDROID_sendNotification({
+                token: user.fcmToken,
+                title,
+                body,
+                data: {
+                    dataId: String(dataId) || '',
+                    imageUrl: String(imageUrl) || '',
+                },
+            })
+        }
+        // send notification to ios user
+        else if (user?.os === 'ios') {
+            await sendNotification({
+                token: user.fcmToken,
+                title,
+                body,
+                data: {
+                    dataId: String(dataId) || '',
+                    imageUrl: String(imageUrl) || '',
+                },
+                // data: dataId ? { dataId } : {},
+            })
         }
     }
 
