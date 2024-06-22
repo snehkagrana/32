@@ -114,6 +114,9 @@ app.use('/.well-known/apple-app-site-association', express.static('well-known/ap
 app.use('/.well-known', express.static('well-known'))
 app.use('/static-files', express.static('static-files'))
 
+app.use(express.static(path.join(__dirname, './static-files')));
+app.use('/static-files', express.static('./static-files'))
+
 app.use(
     session({
         secret: "secretcode",
