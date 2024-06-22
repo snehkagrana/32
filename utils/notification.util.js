@@ -67,7 +67,6 @@ const sendNotification = async ({ token, title, body, data }) => {
             token: token,
         }
         const response = await admin.messaging().send(message)
-        console.log('sendNotification response ->>>', response)
         return response
     } catch (error) {
         console.error('Error sending message:', error.message)

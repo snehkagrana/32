@@ -149,13 +149,6 @@ exports.sendAndSaveNotification = async ({
         createdAt: NOW,
         readAt: null,
     })
-
-    console.log('RESULT->>>>>>>>>', user?.fcmToken, notification)
-
-    console.log(
-        'notification && user?.fcmToken->>>',
-        notification && user?.fcmToken
-    )
     if (notification && user?.fcmToken) {
         // send notification to android user
         if (user?.os === 'android') {
