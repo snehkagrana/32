@@ -150,7 +150,7 @@ exports.sendAndSaveNotification = async ({
         readAt: null,
     })
 
-    console.log('RESULT->>>>>>>>>', 'notification')
+    console.log('RESULT->>>>>>>>>', user?.fcmToken, notification)
 
     if (!__DEV__) {
         console.log(
