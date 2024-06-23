@@ -115,9 +115,9 @@ cron.schedule('*/5 * * * *', async function () {
     const LOCALE_HOUR = dayjs(LOCALE_DATE_NOW).hour()
     const LOCALE_MINUTE = dayjs(LOCALE_DATE_NOW).minute()
 
-    // console.log('->LOCALE_DAY_OF_WEEK ', LOCALE_DAY_OF_WEEK)
-    // console.log('->LOCALE_HOUR', LOCALE_HOUR)
-    // console.log('->LOCALE_MINUTE', LOCALE_MINUTE)
+    console.log('->LOCALE_DAY_OF_WEEK ', LOCALE_DAY_OF_WEEK)
+    console.log('->LOCALE_HOUR', LOCALE_HOUR)
+    console.log('->LOCALE_MINUTE', LOCALE_MINUTE)
 
     // user with 0 streak
     const usersHasFCMToken = await UserModel.find({
@@ -1233,9 +1233,14 @@ cron.schedule('*/5 * * * *', async function () {
      * -------------
      */
     if (LOCALE_HOUR === 0 && LOCALE_MINUTE <= 5) {
+        console.log('DAILY QUEST RUN->>>>', LOCALE_HOUR, LOCALE_MINUTE)
         const usersHasNumberOfCompleteLesson = await UserModel.find({
             numberOfLessonCompleteToday: { $gt: 0 },
         }).exec()
+        console.log(
+            'usersHasNumberOfCompleteLesson->>>>',
+            usersHasNumberOfCompleteLesson
+        )
         if (usersHasNumberOfCompleteLesson?.length > 0) {
             for (const u of usersHasNumberOfCompleteLesson) {
                 const user = await UserModel.findOne({ _id: u.userId })

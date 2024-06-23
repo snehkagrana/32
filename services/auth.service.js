@@ -123,7 +123,7 @@ exports.syncUser = async email => {
 
         const daysDiff = daysDifference(user.lastCompletedDay)
         // const daysDiff = dayjs(today).diff(user.lastCompletedDay, 'day')
-        console.log('daysDiff ->>>>>>_>>>>>', daysDiff)
+        console.log('daysDiff ->>>>>>>>>>>', daysDiff)
 
         if (daysDiff === 1) {
             // Do nothing, the streak is already up-to-date
@@ -138,8 +138,6 @@ exports.syncUser = async email => {
             user.streak = 0
             newStreak = 0
         }
-
-        console.log('->>>> newStreak', newStreak)
 
         if (daysDiff !== 0) {
             user.xp.current = 0
