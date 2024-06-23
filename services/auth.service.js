@@ -29,6 +29,7 @@ const {
     checkIsActiveDailyQuestToday,
     createRandomDailyQuest,
 } = require('../utils/quest.util')
+const { checkHasStreakToday } = require('../utils/streak.util')
 
 exports.sendRegisterCode = async email => {
     const code = generateOTP(4)
@@ -118,24 +119,44 @@ exports.syncUser = async email => {
     }
 
     if (user) {
+        let newStreak = user.streak
+
         // const daysDiff = daysDifference(user.lastCompletedDay)
         const daysDiff = dayjs(today).diff(user.lastCompletedDay, 'day')
+
+        console.log('daysDiff ->>>>>>', daysDiff)
 
         if (daysDiff === 1) {
             // Do nothing, the streak is already up-to-date
         } else if (daysDiff === 2) {
             // User missed one day, reset streak to 0
             user.streak = 0
+            newStreak = 0
         } else if (daysDiff === 0) {
             //keep streak the same
         } else {
             // User missed more than one day, keep streak at 0
             user.streak = 0
+            newStreak = 0
         }
+
+        console.log('->>>> newStreak', newStreak)
 
         if (daysDiff !== 0) {
             user.xp.current = 0
             user.xp.daily = 0
+        }
+
+        /**
+         * ----- DAY STREAK -------
+         * New logic to save day streak
+         * ------------------------
+         */
+        const prevDayStreak = user?.dayStreak || []
+        const dayStreak = [...prevDayStreak]
+
+        if (!checkHasStreakToday(user.dayStreak || [])) {
+            dayStreak.push(dayjs(now).toISOString())
         }
 
         const updateUserResult = await UserModel.findOneAndUpdate(
@@ -172,6 +193,7 @@ exports.syncUser = async email => {
                     followers: user?.followers ? user.followers : [],
 
                     dailyQuest: userDailyQuest,
+                    dayStreak,
                 },
             }
         )
