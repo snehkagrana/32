@@ -121,10 +121,9 @@ exports.syncUser = async email => {
     if (user) {
         let newStreak = user.streak
 
-        // const daysDiff = daysDifference(user.lastCompletedDay)
-        const daysDiff = dayjs(today).diff(user.lastCompletedDay, 'day')
-
-        console.log('daysDiff ->>>>>>', daysDiff)
+        const daysDiff = daysDifference(user.lastCompletedDay)
+        // const daysDiff = dayjs(today).diff(user.lastCompletedDay, 'day')
+        console.log('daysDiff ->>>>>>_>>>>>', daysDiff)
 
         if (daysDiff === 1) {
             // Do nothing, the streak is already up-to-date
@@ -145,18 +144,6 @@ exports.syncUser = async email => {
         if (daysDiff !== 0) {
             user.xp.current = 0
             user.xp.daily = 0
-        }
-
-        /**
-         * ----- DAY STREAK -------
-         * New logic to save day streak
-         * ------------------------
-         */
-        const prevDayStreak = user?.dayStreak || []
-        const dayStreak = [...prevDayStreak]
-
-        if (!checkHasStreakToday(user.dayStreak || [])) {
-            dayStreak.push(dayjs(today).toISOString())
         }
 
         const updateUserResult = await UserModel.findOneAndUpdate(
@@ -193,7 +180,6 @@ exports.syncUser = async email => {
                     followers: user?.followers ? user.followers : [],
 
                     dailyQuest: userDailyQuest,
-                    dayStreak,
                 },
             }
         )
