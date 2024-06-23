@@ -69,7 +69,7 @@ exports.saveScore = async ({ authUser, body }) => {
     const now = new Date()
 
     if (user) {
-        const today = dayjs(new Date())
+        const today = new Date()
         let allScoresList = user.score || []
 
         allScoresList.push({
