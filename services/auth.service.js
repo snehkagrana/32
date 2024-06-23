@@ -156,7 +156,7 @@ exports.syncUser = async email => {
         const dayStreak = [...prevDayStreak]
 
         if (!checkHasStreakToday(user.dayStreak || [])) {
-            dayStreak.push(dayjs(now).toISOString())
+            dayStreak.push(dayjs(today).toISOString())
         }
 
         const updateUserResult = await UserModel.findOneAndUpdate(
