@@ -126,13 +126,13 @@ exports.syncUser = async email => {
         console.log('daysDiff ->>>>>>>>>>>', user.email, daysDiff)
         console.log('dayjsDayDiff ->>>>>>>>>>>', user.email, dayjsDayDiff)
 
-        if (daysDiff === 1) {
+        if (dayjsDayDiff === 1) {
             // Do nothing, the streak is already up-to-date
-        } else if (daysDiff === 2) {
+        } else if (dayjsDayDiff === 2) {
             // User missed one day, reset streak to 0
             user.streak = 0
             newStreak = 0
-        } else if (daysDiff === 0) {
+        } else if (dayjsDayDiff === 0) {
             //keep streak the same
         } else {
             // User missed more than one day, keep streak at 0
@@ -140,7 +140,7 @@ exports.syncUser = async email => {
             newStreak = 0
         }
 
-        if (daysDiff !== 0) {
+        if (dayjsDayDiff !== 0) {
             user.xp.current = 0
             user.xp.daily = 0
         }

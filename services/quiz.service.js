@@ -81,9 +81,10 @@ exports.saveScore = async ({ authUser, body }) => {
         })
 
         const daysDiff = daysDifference(user.lastCompletedDay)
+        const dayjsDayDiff = dayjs(today).diff(user.lastCompletedDay, 'day')
 
-        if (daysDiff === 0) {
-        } else if (daysDiff === 1) {
+        if (dayjsDayDiff === 0) {
+        } else if (dayjsDayDiff === 1) {
             user.streak++
         } else {
             // If more than one day is missed, reset streak to 1 since user played today
