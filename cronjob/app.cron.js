@@ -1096,6 +1096,26 @@ cron.schedule('*/5 * * * *', async function () {
                 )
 
                 // prettier-ignore
+                if (LOCALE_DAY_OF_WEEK === 3) {
+                    const DAY_LEFT = dayjs(currentActiveLeaderBoard.endDate).diff(LOCALE_DATE_NOW, 'day') || 0
+                    if (LOCALE_HOUR === 13 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                        if(leaderBoardUsers?.length > 0) {
+                            leaderBoardUsers.forEach(async (x, index) => {
+                                await LeaderboardReminder.sendRandomReminder({
+                                    userId: x.userId,
+                                    friendName: leaderBoardUsers?.[index - 1]?.displayName || '',
+                                    myFriendPosition: index,
+                                    positionAboveOfMeId: leaderBoardUsers?.[index - 1]?.userId || null,
+                                    myPosition: index + 1,
+                                    lessonName: x.lastLessonName,
+                                    daysLeft: DAY_LEFT,
+                                });
+                            })
+                        }
+                    }
+                }
+
+                // prettier-ignore
                 if (LOCALE_DAY_OF_WEEK === 5) {
                     const DAY_LEFT = dayjs(currentActiveLeaderBoard.endDate).diff(LOCALE_DATE_NOW, 'day') || 0
                     if (LOCALE_HOUR === 13 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
@@ -1114,6 +1134,26 @@ cron.schedule('*/5 * * * *', async function () {
                         }
                     }
                 }
+
+                // prettier-ignore
+                if (LOCALE_DAY_OF_WEEK === 6) {
+                    const DAY_LEFT = dayjs(currentActiveLeaderBoard.endDate).diff(LOCALE_DATE_NOW, 'day') || 0
+                    if (LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                        if(leaderBoardUsers?.length > 0) {
+                            leaderBoardUsers.forEach(async (x, index) => {
+                                await LeaderboardReminder.sendRandomReminder({
+                                    userId: x.userId,
+                                    friendName: leaderBoardUsers?.[index - 1]?.displayName || '',
+                                    myFriendPosition: index,
+                                    positionAboveOfMeId: leaderBoardUsers?.[index - 1]?.userId || null,
+                                    myPosition: index + 1,
+                                    lessonName: x.lastLessonName,
+                                    daysLeft: DAY_LEFT,
+                                });
+                            })
+                        }
+                    }
+                } 
 
                 // prettier-ignore
                 else if (LOCALE_DAY_OF_WEEK === 0) {
