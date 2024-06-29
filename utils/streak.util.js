@@ -14,29 +14,15 @@ const checkHasStreakToday = userDayStreak => {
     return false
 }
 
-const userHasMissesLesson = lastCompletedDay => {
+const getStreakDiffDays = lastCompletedDay => {
     const formattedToday = dayjs(new Date()).format('YYYY-MM-DD')
-
     // prettier-ignore
     const formattedLastCompleteDay = dayjs(lastCompletedDay).format('YYYY-MM-DD')
 
-    console.log('formattedToday', formattedToday)
-    console.log('formattedLastCompleteDay', formattedLastCompleteDay)
-
-    const dayDiff = dayjs(formattedToday).diff(formattedLastCompleteDay, 'day')
-
-    console.log('<<<----- userHasMissesLesson -> dayDiff', dayDiff)
-
-    // if (dayDiff === 1) {
-    //     const hourDiff = dayjs(today).diff(lastCompletedDay, 'hour')
-    //     console.log('<<<----- hourDiff', hourDiff)
-    //     return true
-    // } else {
-    //     return false
-    // }
+    return dayjs(formattedToday).diff(formattedLastCompleteDay, 'day')
 }
 
 module.exports = {
     checkHasStreakToday,
-    userHasMissesLesson,
+    getStreakDiffDays,
 }

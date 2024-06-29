@@ -16,7 +16,10 @@ const {
     ACTION_NAME_EARN_GEMS,
     ACTION_NAME_COMPLETE_PERFECT_LESSON,
 } = require('../constants/daily-quest.constant')
-const { checkHasStreakToday } = require('../utils/streak.util')
+const {
+    checkHasStreakToday,
+    getStreakDiffDays,
+} = require('../utils/streak.util')
 
 exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
     let result = null
@@ -81,10 +84,10 @@ exports.saveScore = async ({ authUser, body }) => {
         })
 
         const daysDiff = daysDifference(user.lastCompletedDay)
-        const dayjsDayDiff = dayjs(today).diff(user.lastCompletedDay, 'day')
+        const streakDiffDays = getStreakDiffDays(user.lastCompletedDay)
 
-        if (dayjsDayDiff === 0) {
-        } else if (dayjsDayDiff === 1) {
+        if (streakDiffDays === 0) {
+        } else if (streakDiffDays === 1) {
             user.streak++
         } else {
             // If more than one day is missed, reset streak to 1 since user played today

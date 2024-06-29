@@ -31,7 +31,7 @@ const {
 } = require('../utils/quest.util')
 const {
     checkHasStreakToday,
-    userHasMissesLesson,
+    getStreakDiffDays,
 } = require('../utils/streak.util')
 
 exports.sendRegisterCode = async email => {
@@ -124,23 +124,17 @@ exports.syncUser = async email => {
     if (user) {
         let newStreak = user.streak
 
-        const daysDiff = daysDifference(user.lastCompletedDay)
-        const dayjsDayDiff = dayjs(today).diff(user.lastCompletedDay, 'day')
-        console.log('daysDiff ->>>>>>>>>>>', user.email, daysDiff)
-        console.log('dayjsDayDiff ->>>>>>>>>>>', user.email, dayjsDayDiff)
+        // const daysDiff = daysDifference(user.lastCompletedDay)
+        const streakDiffDays = getStreakDiffDays(user.lastCompletedDay)
+        console.log('streakDiffDays ->>>>>>>>>>>', user.email, streakDiffDays)
 
-        console.log(
-            'userHasMissesLesson->>>>',
-            userHasMissesLesson(user.lastCompletedDay)
-        )
-
-        if (dayjsDayDiff === 1) {
+        if (streakDiffDays === 1) {
             // Do nothing, the streak is already up-to-date
-        } else if (dayjsDayDiff === 2) {
+        } else if (streakDiffDays === 2) {
             // User missed one day, reset streak to 0
             user.streak = 0
             newStreak = 0
-        } else if (dayjsDayDiff === 0) {
+        } else if (streakDiffDays === 0) {
             //keep streak the same
         } else {
             // User missed more than one day, keep streak at 0
@@ -148,7 +142,7 @@ exports.syncUser = async email => {
             newStreak = 0
         }
 
-        if (dayjsDayDiff !== 0) {
+        if (streakDiffDays !== 0) {
             user.xp.current = 0
             user.xp.daily = 0
         }
