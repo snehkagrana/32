@@ -14,6 +14,18 @@ const checkHasStreakToday = userDayStreak => {
     return false
 }
 
+const userHasMissesLesson = lastCompletedDay => {
+    const today = new Date()
+    const dayDiff = dayjs(today).diff(lastCompletedDay, 'day')
+    if (dayDiff === 1) {
+        const hourDiff = dayjs(today).diff(lastCompletedDay, 'hour')
+        console.log('<<<----- hourDiff', hourDiff)
+    }
+
+    return false
+}
+
 module.exports = {
     checkHasStreakToday,
+    userHasMissesLesson,
 }

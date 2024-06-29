@@ -29,7 +29,10 @@ const {
     checkIsActiveDailyQuestToday,
     createRandomDailyQuest,
 } = require('../utils/quest.util')
-const { checkHasStreakToday } = require('../utils/streak.util')
+const {
+    checkHasStreakToday,
+    userHasMissesLesson,
+} = require('../utils/streak.util')
 
 exports.sendRegisterCode = async email => {
     const code = generateOTP(4)
@@ -125,6 +128,11 @@ exports.syncUser = async email => {
         const dayjsDayDiff = dayjs(today).diff(user.lastCompletedDay, 'day')
         console.log('daysDiff ->>>>>>>>>>>', user.email, daysDiff)
         console.log('dayjsDayDiff ->>>>>>>>>>>', user.email, dayjsDayDiff)
+
+        console.log(
+            'userHasMissesLesson->>>>',
+            userHasMissesLesson(user.lastCompletedDay)
+        )
 
         if (dayjsDayDiff === 1) {
             // Do nothing, the streak is already up-to-date
