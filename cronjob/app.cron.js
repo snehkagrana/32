@@ -1010,9 +1010,9 @@ cron.schedule('*/5 * * * *', async function () {
     if (currentActiveLeaderBoard) {
         // Reset leaderboard
         if (
-            LOCALE_DAY_OF_WEEK === 0 &&
+            LOCALE_DAY_OF_WEEK === 6 &&
             LOCALE_HOUR === 23 &&
-            LOCALE_MINUTE >= 50
+            LOCALE_MINUTE >= 55
         ) {
             // if (LOCALE_DAY_OF_WEEK  === 2 && LOCALE_HOUR === 14 && minute === 35) { // DEBUG
             await LeaderBoardModel.updateOne(
@@ -1176,7 +1176,6 @@ cron.schedule('*/5 * * * *', async function () {
             }
 
             /**
-             * TODO
              * get previos leaderboard and send notification result
              */
             if (currentActiveLeaderBoard && LOCALE_DAY_OF_WEEK === 1) {
@@ -1217,12 +1216,12 @@ cron.schedule('*/5 * * * *', async function () {
         /**
          * Create new weekly leaderboard
          */
-        if (LOCALE_DAY_OF_WEEK >= 1) {
+        if (LOCALE_DAY_OF_WEEK >= 0) {
             // if (LOCALE_DAY_OF_WEEK  >= 2) { // DEBUG
             const endDate = dayjs(LOCALE_DATE_NOW)
                 .add(6, 'day')
                 .hour(23)
-                .minute(50)
+                .minute(55)
                 .toISOString()
 
             // prettier-ignore
@@ -1272,7 +1271,7 @@ cron.schedule('*/5 * * * *', async function () {
      * Daily quest
      * -------------
      */
-    if (LOCALE_HOUR === 0 && LOCALE_MINUTE <= 5) {
+    if (LOCALE_HOUR === 23 && LOCALE_MINUTE >= 55) {
         console.log('DAILY QUEST RUN->>>>', LOCALE_HOUR, LOCALE_MINUTE)
         const usersHasNumberOfCompleteLesson = await UserModel.find({
             numberOfLessonCompleteToday: { $gt: 0 },
