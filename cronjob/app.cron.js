@@ -136,6 +136,9 @@ cron.schedule('*/5 * * * *', async function () {
              * ...so on
              */
             const DIFF_DAY = dayjs(TODAY).diff(user.lastCompletedDay, 'day') || -1
+            console.log(
+                `>>>>>>>>>>>>****<<<<<<<<<<<< DIFF_DAY-> ${user.email}:${DIFF_DAY}`
+            )
 
             // use done lesson today
             if (DIFF_DAY === 0 && user.streak > 0) {
