@@ -138,14 +138,14 @@ cron.schedule('*/5 * * * *', async function () {
              */
             // const DIFF_DAY = dayjs(TODAY).diff(user.lastCompletedDay, 'day') || -1
             const DIFF_DAY = getStreakDiffDays(user.lastCompletedDay) || -1
-            console.log(
-                `>>>>>>>>>>>>****<<<<<<<<<<<< DIFF_DAY-> ${user.email}:${DIFF_DAY}`
-            )
+            // console.log(
+            //     `>>>>>>>>>>>>****<<<<<<<<<<<< DIFF_DAY-> ${user.email}:${DIFF_DAY}`
+            // )
 
             // use done lesson today
             if (DIFF_DAY === 0 && user.streak > 0) {
                 // prettier-ignore
-                // console.log(`---^^^ DIFF_DAY === 0 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
+                console.log(`---^^^ DIFF_DAY === 0 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
 
                 const STREAK_COMBO_NOTIFICATION_DATA = {
                     user,
@@ -211,7 +211,7 @@ cron.schedule('*/5 * * * *', async function () {
             // Last done lesson yesterday
             else if (DIFF_DAY === 1 && user.streak > 0) {
                 // prettier-ignore
-                // console.log(`--->>> DIFF_DAY === 1 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
+                console.log(`--->>> DIFF_DAY === 1 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
 
                 const STREAK_REMINDER_DATA = {
                     user: user,
@@ -276,6 +276,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                 }
             }
+
             // User missed one day, streak will reset to 0
             else if (user.streak === 0 || DIFF_DAY >= 2) {
                 /**
@@ -283,7 +284,7 @@ cron.schedule('*/5 * * * *', async function () {
                  * Users may not do lessons but their streak is still more than 0
                  */
                 // prettier-ignore
-                // console.log(`<<<--- user.streak === 0 || DIFF_DAY >= 2 ${user.email} : ${DIFF_DAY}`)
+                console.log(`<<<--- user.streak === 0 || DIFF_DAY >= 2 ${user.email} : ${DIFF_DAY}`)
                 // DIFF DAY 2
                 if (DIFF_DAY === 2) {
                     const STREAK_REMINDER_DATA = {
