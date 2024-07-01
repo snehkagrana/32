@@ -1184,11 +1184,11 @@ cron.schedule('*/5 * * * *', async function () {
             /**
              * get previos leaderboard and send notification result
              */
-            if (currentActiveLeaderBoard && LOCALE_DAY_OF_WEEK === 1) {
+            if (currentActiveLeaderBoard && LOCALE_DAY_OF_WEEK === 0) {
                 if (
                     LOCALE_HOUR === 9 &&
-                    LOCALE_MINUTE >= 0 &&
-                    LOCALE_MINUTE < 5
+                    LOCALE_MINUTE >= 30 &&
+                    LOCALE_MINUTE < 35
                 ) {
                     const prevLeaderBoards = await LeaderBoardModel.find({
                         isActive: false,
