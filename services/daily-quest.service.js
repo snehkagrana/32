@@ -34,17 +34,17 @@ exports.syncDailyQuest = async ({ userId, actionName, value }) => {
                 // prettier-ignore
                 if (actionName === ACTION_NAME_EARN_GEMS && x.questId === DAILY_QUEST_TYPE_EARN_5_GEMS) {
                     return {
-                        ...x?.toObject(),
-                        progress: x.progress + value,
+                        ...x?.toObject(), 
+                        progress: x.progress + value >= x.maxValue ? x.maxValue : x.progress + value,
                         isCompleted: x.progress + value >= x.maxValue ? true : false,
                         completedDate: x.progress + value >= x.maxValue ? NOW : null,
                     }
-                }
+                } 
                 // prettier-ignore
                 else if (actionName === ACTION_NAME_EARN_BANANAS && (x.questId === DAILY_QUEST_TYPE_EARN_60_BANANAS || x.questId === DAILY_QUEST_TYPE_EARN_80_BANANAS)) {
                     return {
                         ...x?.toObject(),
-                        progress: x.progress + value,
+                        progress: x.progress + value >= x.maxValue ? x.maxValue : x.progress + value,
                         isCompleted: x.progress + value >= x.maxValue ? true : false,
                         completedDate: x.progress + value >= x.maxValue ? NOW : null,
                     }
@@ -53,7 +53,7 @@ exports.syncDailyQuest = async ({ userId, actionName, value }) => {
                 else if (actionName === ACTION_NAME_FOLLOW_FRIENDS && x.questId === DAILY_QUEST_TYPE_ADD_2_FRIENDS) {
                     return {
                         ...x?.toObject(),
-                        progress: x.progress + value,
+                        progress: x.progress + value >= x.maxValue ? x.maxValue : x.progress + value,
                         isCompleted: x.progress + value >= x.maxValue ? true : false,
                         completedDate: x.progress + value >= x.maxValue ? NOW : null,
                     }
@@ -62,7 +62,7 @@ exports.syncDailyQuest = async ({ userId, actionName, value }) => {
                 else if (actionName === ACTION_NAME_QUIZ_CORRECTLY && x.questId === DAILY_QUEST_TYPE_ANSWER_10_CORRECTLY) {
                     return {
                         ...x?.toObject(),
-                        progress: x.progress + value,
+                        progress: x.progress + value >= x.maxValue ? x.maxValue : x.progress + value,
                         isCompleted: x.progress + value >= x.maxValue ? true : false,
                         completedDate: x.progress + value >= x.maxValue ? NOW : null,
                     }
@@ -71,7 +71,7 @@ exports.syncDailyQuest = async ({ userId, actionName, value }) => {
                 else if (actionName === ACTION_NAME_COMPLETE_LESSON && x.questId === DAILY_QUEST_TYPE_COMPLETE_3_LESSON) {
                     return {
                         ...x?.toObject(),
-                        progress: x.progress + value,
+                        progress: x.progress + value >= x.maxValue ? x.maxValue : x.progress + value,
                         isCompleted: x.progress + value >= x.maxValue ? true : false,
                         completedDate: x.progress + value >= x.maxValue ? NOW : null,
                     }
@@ -80,7 +80,7 @@ exports.syncDailyQuest = async ({ userId, actionName, value }) => {
                 else if (actionName === ACTION_NAME_COMPLETE_PERFECT_LESSON && x.questId === DAILY_QUEST_TYPE_COMPLETE_2_PERFECT_LESSON) {
                     return {
                         ...x?.toObject(),
-                        progress: x.progress + value,
+                        progress: x.progress + value >= x.maxValue ? x.maxValue : x.progress + value,
                         isCompleted: x.progress + value >= x.maxValue ? true : false,
                         completedDate: x.progress + value >= x.maxValue ? NOW : null,
                     }
@@ -90,7 +90,7 @@ exports.syncDailyQuest = async ({ userId, actionName, value }) => {
                     console.log("OK->", DAILY_QUEST_TYPE_SPEND_15_MIN)
                     return {
                         ...x?.toObject(),
-                        progress: x.progress + value,
+                        progress: x.progress + value >= x.maxValue ? x.maxValue : x.progress + value,
                         isCompleted: x.progress + value >= x.maxValue ? true : false,
                         completedDate: x.progress + value >= x.maxValue ? NOW : null,
                     }
