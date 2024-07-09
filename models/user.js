@@ -247,6 +247,10 @@ const UserSchema = new mongoose.Schema({
             type: String,
         },
     },
+    userTimezone: {
+        type: String,
+        default: null,
+    },
 })
 
 UserSchema.set('toJSON', {

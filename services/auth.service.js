@@ -33,6 +33,10 @@ const {
     checkHasStreakToday,
     getStreakDiffDays,
 } = require('../utils/streak.util')
+const {
+    SERVER_TIMEZONE,
+    DEFAULT_TIMEZONE,
+} = require('../constants/app.constant')
 
 exports.sendRegisterCode = async email => {
     const code = generateOTP(4)
@@ -105,7 +109,7 @@ exports.logoutUser = (token, exp) => {
     return cacheUtil.set(token, token, milliseconds)
 }
 
-exports.syncUser = async email => {
+exports.syncUser = async (email, userTimezone) => {
     const today = new Date()
     const refCode = generateReferralCode()
     let result = false
@@ -181,6 +185,7 @@ exports.syncUser = async email => {
                     followers: user?.followers ? user.followers : [],
 
                     dailyQuest: userDailyQuest,
+                    userTimezone,
                 },
             }
         )
@@ -330,6 +335,7 @@ exports.googleSignInMobile = async ({
     photo,
     registerToken,
     syncId,
+    userTimezone,
 }) => {
     const refCode = generateReferralCode()
 
@@ -378,6 +384,7 @@ exports.googleSignInMobile = async ({
             followers: [],
             fcmToken: '',
             lastLessonCategoryName: '',
+            userTimezone: userTimezone || DEFAULT_TIMEZONE,
         }
 
         // sync guest data

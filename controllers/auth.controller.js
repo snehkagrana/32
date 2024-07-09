@@ -9,6 +9,7 @@ const {
     generateReferralCode,
     generateUsername,
 } = require('../utils/common.util')
+const { DEFAULT_TIMEZONE } = require('../constants/app.constant')
 
 exports.sendRegisterCode = async (req, res) => {
     const isExist = await AuthService.findUserByEmail(req.body.email)
@@ -82,6 +83,7 @@ exports.register = async (req, res) => {
         followers: [],
         fcmToken: '',
         lastLessonCategoryName: '',
+        userTimezone: req?.body?.userTimezone || DEFAULT_TIMEZONE,
     }
 
     // sync guest data
@@ -126,8 +128,15 @@ exports.register = async (req, res) => {
 }
 
 exports.googleSignInMobile = async (req, res) => {
-    const { email, firstName, lastName, photo, registerToken, syncId } =
-        req.body
+    const {
+        email,
+        firstName,
+        lastName,
+        photo,
+        registerToken,
+        syncId,
+        userTimezone,
+    } = req.body
     const result = await AuthService.googleSignInMobile({
         firstName,
         lastName,
@@ -135,6 +144,7 @@ exports.googleSignInMobile = async (req, res) => {
         photo,
         registerToken,
         syncId,
+        userTimezone,
     })
     if (result) {
         return res.json(result)
@@ -143,8 +153,10 @@ exports.googleSignInMobile = async (req, res) => {
 }
 
 exports.login = async (req, res) => {
+    const userTimezone = req.body?.userTimezone || DEFAULT_TIMEZONE
     const user = await AuthService.findUserByEmail(req.body.email)
-    await AuthService.syncUser(req.body.email)
+    await AuthService.syncUser(req.body.email, userTimezone)
+
     if (user) {
         const isMatched = await bcryptUtil.compareHash(
             req.body.password,
@@ -276,6 +288,7 @@ exports.syncRegisterGoogle = async (req, res) => {
                     guestData.lastClaimedGemsDailyQuest || null,
                 unlimitedHeart: null,
                 nextLesson: guestData.nextLesson || null,
+                userTimezone: guestData?.userTimezone || DEFAULT_TIMEZONE,
             }
             result = await AuthService.syncRegisterGoogle({
                 email: req.user.email,

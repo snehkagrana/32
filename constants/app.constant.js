@@ -26,6 +26,7 @@ const MAX_WEEKLY_USERS_LEADER_BOARD = 1000
 const __DEV__ = process.env.NODE_ENV === 'development'
 
 const SERVER_TIMEZONE = __DEV__ ? 'Asia/Jakarta' : 'Asia/Kolkata'
+const DEFAULT_TIMEZONE = 'Asia/Kolkata'
 
 // Daily Quest constants
 const DAILY_QUEST_TYPE_EARN_60_BANANAS = 'EARN_60_BANANAS'
@@ -61,6 +62,7 @@ module.exports = {
     MAX_WEEKLY_USERS_LEADER_BOARD,
     NOTIFICATION_TYPE,
     SERVER_TIMEZONE,
+    DEFAULT_TIMEZONE,
     __DEV__,
     DAILY_QUEST_TYPE_EARN_60_BANANAS,
     DAILY_QUEST_TYPE_EARN_80_BANANAS,
