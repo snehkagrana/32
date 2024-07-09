@@ -109,7 +109,8 @@ exports.logoutUser = (token, exp) => {
     return cacheUtil.set(token, token, milliseconds)
 }
 
-exports.syncUser = async (email, userTimezone) => {
+exports.syncUser = async (email, paramUserTimezone) => {
+    const userTimezone = paramUserTimezone || DEFAULT_TIMEZONE
     const today = new Date()
     const refCode = generateReferralCode()
     let result = false
