@@ -125,7 +125,9 @@ exports.syncUser = async (email, paramUserTimezone) => {
     console.log('user?.dayStreak?.length', user?.dayStreak?.length)
 
     let userDailyQuest = user.dailyQuest || []
-    let userCalendarStreak = []
+
+    // prettier-ignore
+    let userCalendarStreak = user?.calendarStreak?.length > 0 ? [...user?.calendarStreak] : []
 
     // Migrate to calendar streak
     if (user?.calendarStreak?.length === 0 && user?.dayStreak?.length > 0) {
