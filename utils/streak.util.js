@@ -20,18 +20,32 @@ const checkHasStreakToday = (calendarStreak = [], userTimezone) => {
 }
 
 const getStreakDiffDays = (lastCompletedDay, userTimezone) => {
+    const date = new Date()
+
     const timeZone = userTimezone || DEFAULT_TIMEZONE
     const DATE_USER_TIMEZONE = new Date().toLocaleString('en-US', {
         timeZone,
     })
-    const formattedToday = dayjs(DATE_USER_TIMEZONE).format('YYYY-MM-DD')
+    const userDateToday = dayjs(DATE_USER_TIMEZONE).toISOString()
+    const serverDateToday = dayjs(date).toISOString()
+
     // prettier-ignore
-    const formattedLastCompleteDay = dayjs(lastCompletedDay).format('YYYY-MM-DD')
+    const userLastCompleteDay = dayjs(lastCompletedDay).toISOString()
 
-    console.log('formattedToday', formattedToday)
-    console.log('formattedLastCompleteDay', formattedLastCompleteDay)
+    console.log('timeZone->', timeZone)
+    console.log('userDateToday->', userDateToday)
+    console.log('userLastCompleteDay->', userLastCompleteDay)
 
-    return dayjs(formattedToday).diff(formattedLastCompleteDay, 'day')
+    console.log(
+        'USER DIFF HOUR->',
+        dayjs(userDateToday).diff(userLastCompleteDay, 'hour')
+    )
+    console.log(
+        'SERVER DIFF HOUR->',
+        dayjs(serverDateToday).diff(userLastCompleteDay, 'hour')
+    )
+
+    return dayjs(userDateToday).diff(userLastCompleteDay, 'day')
 }
 
 const validateAndConvertToNewObjectCalendarStreak = (userDayStreak = []) => {
