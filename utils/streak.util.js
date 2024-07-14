@@ -38,6 +38,7 @@ const getStreakDiffDays = (lastCompletedDay, userTimezone) => {
 const validateAndConvertToNewObjectDayStreak = (userStreak = []) => {
     const _userDayStreak = [...userStreak]
     if (_userDayStreak?.length > 0 && typeof _userDayStreak?.[0] === 'string') {
+        console.log('_userDayStreak', _userDayStreak)
         return _userDayStreak.map(item => ({
             date: item,
             isFreeze: false,
