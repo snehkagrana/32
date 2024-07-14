@@ -2,15 +2,15 @@ const dayjs = require('dayjs')
 const { DEFAULT_TIMEZONE } = require('../constants/app.constant')
 
 const checkHasStreakToday = (
-    userDayStreak,
+    calendarStreak = [],
     userTimezone = DEFAULT_TIMEZONE
 ) => {
     const DATE_USER_TIMEZONE = new Date().toLocaleString('en-US', {
         timeZone: userTimezone,
     })
-    if (userDayStreak?.length > 0) {
-        const streakExist = userDayStreak?.find(x => {
-            if (dayjs(DATE_USER_TIMEZONE).isSame(x, 'day')) {
+    if (calendarStreak?.length > 0) {
+        const streakExist = calendarStreak?.find(x => {
+            if (dayjs(DATE_USER_TIMEZONE).isSame(x?.date, 'day')) {
                 return true
             } else {
                 return false
@@ -35,20 +35,23 @@ const getStreakDiffDays = (lastCompletedDay, userTimezone) => {
     return dayjs(formattedToday).diff(formattedLastCompleteDay, 'day')
 }
 
-const validateAndConvertToNewObjectDayStreak = (userStreak = []) => {
-    const _userDayStreak = [...userStreak]
-    if (_userDayStreak?.length > 0 && typeof _userDayStreak?.[0] === 'string') {
-        console.log('_userDayStreak', _userDayStreak)
-        return _userDayStreak.map(item => ({
+const validateAndConvertToNewObjectCalendarStreak = (calendarStreak = []) => {
+    const _calendarStreak = [...calendarStreak]
+    if (
+        _calendarStreak?.length > 0 &&
+        typeof _calendarStreak?.[0] === 'string'
+    ) {
+        console.log('_calendarStreak', _calendarStreak)
+        return _calendarStreak.map(item => ({
             date: item,
             isFreeze: false,
         }))
     }
-    return userStreak
+    return calendarStreak
 }
 
 module.exports = {
     checkHasStreakToday,
     getStreakDiffDays,
-    validateAndConvertToNewObjectDayStreak,
+    validateAndConvertToNewObjectCalendarStreak,
 }

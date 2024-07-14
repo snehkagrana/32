@@ -32,7 +32,7 @@ const {
 const {
     checkHasStreakToday,
     getStreakDiffDays,
-    validateAndConvertToNewObjectDayStreak,
+    validateAndConvertToNewObjectCalendarStreak,
 } = require('../utils/streak.util')
 const {
     SERVER_TIMEZONE,
@@ -118,9 +118,14 @@ exports.syncUser = async (email, paramUserTimezone) => {
     let user = await UserModel.findOne({ email }).exec()
 
     let userDailyQuest = user.dailyQuest || []
-    let userDayStreak = validateAndConvertToNewObjectDayStreak(
-        user.dayStreak || []
-    )
+    let userCalendarStreak = []
+
+    // Migrate to calendar streak
+    if (user?.calendarStreak?.length === 0 && user?.dayStreak?.length > 0) {
+        userCalendarStreak = validateAndConvertToNewObjectCalendarStreak(
+            user.dayStreak || []
+        )
+    }
 
     const hasDailyQuestToday = checkIsActiveDailyQuestToday(
         user.dailyQuest || []
@@ -194,7 +199,7 @@ exports.syncUser = async (email, paramUserTimezone) => {
 
                     dailyQuest: userDailyQuest,
                     userTimezone,
-                    dayStreak: userDayStreak,
+                    calendarStreak: userCalendarStreak,
                 },
             }
         )
@@ -317,7 +322,7 @@ exports.syncRegisterGoogle = async ({ email, data }) => {
                     xp: data.xp,
                     score: data.score,
                     completedDays: data.completedDays,
-                    dayStreak: data?.dayStreak || [],
+                    calendarStreak: data?.calendarStreak || [],
                     last_played: data.last_played,
                     heart: data.heart || appConfig.defaultHeart,
                     lastHeartAccruedAt: data.lastHeartAccruedAt || new Date(),
@@ -408,7 +413,7 @@ exports.googleSignInMobile = async ({
                     xp: guestData.xp,
                     score: guestData.score,
                     completedDays: guestData.completedDays,
-                    dayStreak: guestData?.dayStreak || [],
+                    calendarStreak: guestData?.calendarStreak || [],
                     last_played: guestData.last_played,
                     heart: guestData.heart || appConfig.defaultHeart,
                     lastHeartAccruedAt:

@@ -39,7 +39,17 @@ const GuestSchema = new mongoose.Schema({
         },
     },
     streak: Number,
-    dayStreak: [
+
+    /**
+     * @deprecated
+     */
+    // dayStreak: [
+    //     {
+    //         type: Date,
+    //     },
+    // ],
+
+    calendarStreak: [
         {
             date: {
                 type: Date,
@@ -51,6 +61,7 @@ const GuestSchema = new mongoose.Schema({
             },
         },
     ],
+
     lastCompletedDay: Date,
     completedDays: {
         0: Date,
@@ -64,6 +75,26 @@ const GuestSchema = new mongoose.Schema({
     diamond: Number,
     diamondInitialized: Boolean,
     lastClaimedGemsDailyQuest: Date,
+    dailyQuest: [
+        {
+            sequence: Number,
+            questId: String,
+            questName: String,
+            isCompleted: Boolean,
+            progress: Number,
+            maxValue: Number,
+            date: Date,
+            completedDate: {
+                type: Date,
+                default: null,
+            },
+            claimedAt: {
+                type: Date,
+                default: null,
+            },
+        },
+    ],
+
     heart: {
         type: Number,
         required: true,
@@ -78,6 +109,23 @@ const GuestSchema = new mongoose.Schema({
 
     /** @deprecated */
     lastLessonCategoryName: String,
+
+    nextLesson: {
+        skill: {
+            type: String,
+        },
+        category: {
+            type: String,
+        },
+        subCategory: {
+            type: String,
+        },
+    },
+
+    userTimezone: {
+        type: String,
+        default: null,
+    },
 })
 
 module.exports = mongoose.model('Guest', GuestSchema)

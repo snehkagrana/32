@@ -58,7 +58,17 @@ const UserSchema = new mongoose.Schema({
         },
     },
     streak: Number,
-    dayStreak: [
+
+    /**
+     * @deprecated
+     */
+    // dayStreak: [
+    //     {
+    //         type: Date,
+    //     },
+    // ],
+
+    calendarStreak: [
         {
             date: {
                 type: Date,
@@ -70,6 +80,7 @@ const UserSchema = new mongoose.Schema({
             },
         },
     ],
+
     lastCompletedDay: Date,
     completedDays: {
         0: Date,

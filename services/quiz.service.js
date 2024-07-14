@@ -118,13 +118,15 @@ exports.saveScore = async ({ authUser, body }) => {
 
         /**
          * ----- DAY STREAK -------
-         * New logic to save day streak
+         * New logic to save calendar streak
          * ------------------------
          */
-        const prevDayStreak = user?.dayStreak || []
-        const dayStreak = [...prevDayStreak]
-        if (!checkHasStreakToday(user.dayStreak || [], user.userTimezone)) {
-            dayStreak.push({
+        const prevCalendarStreak = user?.calendarStreak || []
+        const userCalendarStreak = [...prevCalendarStreak]
+        if (
+            !checkHasStreakToday(user.calendarStreak || [], user.userTimezone)
+        ) {
+            userCalendarStreak.push({
                 date: dayjs(DATE_USER_TIMEZONE).toISOString(),
                 isFreeze: false,
             })
@@ -176,7 +178,7 @@ exports.saveScore = async ({ authUser, body }) => {
                     streak: user.streak,
                     lastCompletedDay: user.lastCompletedDay,
                     completedDays: completedDays,
-                    dayStreak,
+                    calendarStreak: userCalendarStreak,
                 },
             }
         )
@@ -236,10 +238,12 @@ exports.saveScore = async ({ authUser, body }) => {
          * New logic to save day streak
          * ------------------------
          */
-        const prevDayStreak = guest?.dayStreak || []
-        const dayStreak = [...prevDayStreak]
-        if (!checkHasStreakToday(user.dayStreak || [], user.userTimezone)) {
-            dayStreak.push({
+        const prevCalendarStreak = guest?.calendarStreak || []
+        const guestCalendarStreak = [...prevCalendarStreak]
+        if (
+            !checkHasStreakToday(user.calendarStreak || [], user.userTimezone)
+        ) {
+            guestCalendarStreak.push({
                 date: dayjs(DATE_USER_TIMEZONE).toISOString(),
                 isFreeze: false,
             })
@@ -285,7 +289,7 @@ exports.saveScore = async ({ authUser, body }) => {
                     streak: guest.streak,
                     lastCompletedDay: guest.lastCompletedDay,
                     completedDays: completedDays,
-                    dayStreak,
+                    calendarStreak: guestCalendarStreak,
                 },
             }
         )
