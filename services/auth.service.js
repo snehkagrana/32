@@ -121,6 +121,9 @@ exports.syncUser = async (email, paramUserTimezone) => {
     console.log('syncUser -> user?.dayStreak', user?.dayStreak)
     console.log('syncUser -> user?.calendarStreak', user?.calendarStreak)
 
+    console.log('user?.calendarStreak?.length', user?.calendarStreak?.length)
+    console.log('user?.dayStreak?.length', user?.dayStreak?.length)
+
     let userDailyQuest = user.dailyQuest || []
     let userCalendarStreak = []
 
