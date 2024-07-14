@@ -21,7 +21,10 @@ const checkHasStreakToday = (
     return false
 }
 
-const getStreakDiffDays = (lastCompletedDay, userTimezone) => {
+const getStreakDiffDays = (
+    lastCompletedDay,
+    userTimezone = DEFAULT_TIMEZONE
+) => {
     const DATE_USER_TIMEZONE = new Date().toLocaleString('en-US', {
         timeZone: userTimezone,
     })
