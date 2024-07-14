@@ -129,7 +129,7 @@ exports.syncUser = async (email, paramUserTimezone) => {
 
     // Migrate to calendar streak
     if (user?.calendarStreak?.length === 0 && user?.dayStreak?.length > 0) {
-        consol.log('OK CALLED')
+        console.log('OK CALLED')
         userCalendarStreak = validateAndConvertToNewObjectCalendarStreak(
             user.dayStreak || []
         )
