@@ -67,6 +67,7 @@ exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
 // New save score
 exports.saveScore = async ({ authUser, body }) => {
     let result = null
+
     let user = await UserModel.findById(authUser._id).exec()
     let guest = await GuestModel.findById(authUser._id).exec()
 
@@ -102,7 +103,7 @@ exports.saveScore = async ({ authUser, body }) => {
             user.streak = 1
         }
 
-        user.lastCompletedDay = today
+        user.lastCompletedDay = DATE_USER_TIMEZONE
 
         const dayOfWeek = (getToday().getDay() + 6) % 7
 
