@@ -202,7 +202,8 @@ exports.getUser = async (req, res) => {
 }
 
 exports.syncUser = async (req, res) => {
-    const result = await AuthService.syncUser(req.user.email)
+    const userTimezone = req?.params?.userTimezone || DEFAULT_TIMEZONE
+    const result = await AuthService.syncUser(req.user.email, userTimezone)
     if (result) {
         return res.json({ message: 'Sync successfully.' })
     }
