@@ -1,12 +1,10 @@
 const dayjs = require('dayjs')
 const { DEFAULT_TIMEZONE } = require('../constants/app.constant')
 
-const checkHasStreakToday = (
-    calendarStreak = [],
-    userTimezone = DEFAULT_TIMEZONE
-) => {
+const checkHasStreakToday = (calendarStreak = [], userTimezone) => {
+    const timeZone = userTimezone || DEFAULT_TIMEZONE
     const DATE_USER_TIMEZONE = new Date().toLocaleString('en-US', {
-        timeZone: userTimezone,
+        timeZone,
     })
     if (calendarStreak?.length > 0) {
         const streakExist = calendarStreak?.find(x => {
@@ -21,12 +19,10 @@ const checkHasStreakToday = (
     return false
 }
 
-const getStreakDiffDays = (
-    lastCompletedDay,
-    userTimezone = DEFAULT_TIMEZONE
-) => {
+const getStreakDiffDays = (lastCompletedDay, userTimezone) => {
+    const timeZone = userTimezone || DEFAULT_TIMEZONE
     const DATE_USER_TIMEZONE = new Date().toLocaleString('en-US', {
-        timeZone: userTimezone,
+        timeZone,
     })
     const formattedToday = dayjs(DATE_USER_TIMEZONE).format('YYYY-MM-DD')
     // prettier-ignore
