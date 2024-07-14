@@ -202,6 +202,7 @@ exports.getUser = async (req, res) => {
 }
 
 exports.syncUser = async (req, res) => {
+    console.log('req?.query?.userTimezone', req?.query?.userTimezone)
     const userTimezone = req?.query?.userTimezone || DEFAULT_TIMEZONE
     const result = await AuthService.syncUser(req.user.email, userTimezone)
     if (result) {
