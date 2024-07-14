@@ -38,19 +38,17 @@ const getStreakDiffDays = (
     return dayjs(formattedToday).diff(formattedLastCompleteDay, 'day')
 }
 
-const validateAndConvertToNewObjectCalendarStreak = (calendarStreak = []) => {
-    const _calendarStreak = [...calendarStreak]
-    if (
-        _calendarStreak?.length > 0 &&
-        typeof _calendarStreak?.[0] === 'string'
-    ) {
-        console.log('_calendarStreak', _calendarStreak)
-        return _calendarStreak.map(item => ({
+const validateAndConvertToNewObjectCalendarStreak = (userDayStreak = []) => {
+    console.log('validateAndConvertToNewObjectCalendarStreak', userDayStreak)
+    const _userDayStreak = [...userDayStreak]
+    if (_userDayStreak?.length > 0 && typeof _userDayStreak?.[0] === 'string') {
+        console.log('_userDayStreak', _userDayStreak)
+        return _userDayStreak.map(item => ({
             date: item,
             isFreeze: false,
         }))
     }
-    return calendarStreak
+    return userDayStreak
 }
 
 module.exports = {

@@ -117,11 +117,17 @@ exports.syncUser = async (email, paramUserTimezone) => {
     let result = false
     let user = await UserModel.findOne({ email }).exec()
 
+    console.log('new Date()', new Date())
+
     let userDailyQuest = user.dailyQuest || []
     let userCalendarStreak = []
 
     // Migrate to calendar streak
-    if (user?.calendarStreak?.length === 0 && user?.dayStreak?.length > 0) {
+    if (
+        (!user?.calendarStreak || user?.calendarStreak?.length === 0) &&
+        user?.dayStreak?.length > 0
+    ) {
+        consol.log('OK CALLED')
         userCalendarStreak = validateAndConvertToNewObjectCalendarStreak(
             user.dayStreak || []
         )
