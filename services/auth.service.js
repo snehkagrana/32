@@ -118,6 +118,8 @@ exports.syncUser = async (email, paramUserTimezone) => {
     let user = await UserModel.findOne({ email }).exec()
 
     console.log('new Date()', new Date())
+    console.log('syncUser -> user?.dayStreak', user?.dayStreak)
+    console.log('syncUser -> user?.calendarStreak', user?.calendarStreak)
 
     let userDailyQuest = user.dailyQuest || []
     let userCalendarStreak = []
