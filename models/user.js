@@ -62,11 +62,11 @@ const UserSchema = new mongoose.Schema({
     /**
      * @deprecated
      */
-    // dayStreak: [
-    //     {
-    //         type: Date,
-    //     },
-    // ],
+    dayStreak: [
+        {
+            type: Date,
+        },
+    ],
 
     calendarStreak: [
         {
