@@ -32,6 +32,7 @@ const {
 const {
     checkHasStreakToday,
     getStreakDiffDays,
+    validateAndConvertToNewObjectDayStreak,
 } = require('../utils/streak.util')
 const {
     SERVER_TIMEZONE,
@@ -117,6 +118,9 @@ exports.syncUser = async (email, paramUserTimezone) => {
     let user = await UserModel.findOne({ email }).exec()
 
     let userDailyQuest = user.dailyQuest || []
+    let userDayStreak = validateAndConvertToNewObjectDayStreak(
+        user.dayStreak || []
+    )
 
     const hasDailyQuestToday = checkIsActiveDailyQuestToday(
         user.dailyQuest || []
@@ -130,7 +134,10 @@ exports.syncUser = async (email, paramUserTimezone) => {
         let newStreak = user.streak
 
         // const daysDiff = daysDifference(user.lastCompletedDay)
-        const streakDiffDays = getStreakDiffDays(user.lastCompletedDay)
+        const streakDiffDays = getStreakDiffDays(
+            user.lastCompletedDay,
+            user.userTimezone
+        )
         console.log('streakDiffDays ->>>>>>>>>>>', user.email, streakDiffDays)
 
         if (streakDiffDays === 1) {
@@ -187,6 +194,7 @@ exports.syncUser = async (email, paramUserTimezone) => {
 
                     dailyQuest: userDailyQuest,
                     userTimezone,
+                    dayStreak: userDayStreak,
                 },
             }
         )

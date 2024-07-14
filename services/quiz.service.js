@@ -8,6 +8,7 @@ const dayjs = require('dayjs')
 const {
     MAX_HEARTS,
     DAILY_QUEST_TYPE_EARN_60_BANANAS,
+    DEFAULT_TIMEZONE,
 } = require('../constants/app.constant')
 const DailyQuestService = require('./daily-quest.service')
 const {
@@ -69,6 +70,10 @@ exports.saveScore = async ({ authUser, body }) => {
     let user = await UserModel.findById(authUser._id).exec()
     let guest = await GuestModel.findById(authUser._id).exec()
 
+    const DATE_USER_TIMEZONE = new Date().toLocaleString('en-US', {
+        timeZone: user.userTimezone || DEFAULT_TIMEZONE,
+    })
+
     const now = new Date()
 
     if (user) {
@@ -84,7 +89,10 @@ exports.saveScore = async ({ authUser, body }) => {
         })
 
         const daysDiff = daysDifference(user.lastCompletedDay)
-        const streakDiffDays = getStreakDiffDays(user.lastCompletedDay)
+        const streakDiffDays = getStreakDiffDays(
+            user.lastCompletedDay,
+            user.userTimezone
+        )
 
         if (streakDiffDays === 0) {
         } else if (streakDiffDays === 1) {
@@ -115,8 +123,11 @@ exports.saveScore = async ({ authUser, body }) => {
          */
         const prevDayStreak = user?.dayStreak || []
         const dayStreak = [...prevDayStreak]
-        if (!checkHasStreakToday(user.dayStreak || [])) {
-            dayStreak.push(dayjs(now).toISOString())
+        if (!checkHasStreakToday(user.dayStreak || [], user.userTimezone)) {
+            dayStreak.push({
+                date: dayjs(DATE_USER_TIMEZONE).toISOString(),
+                isFreeze: false,
+            })
         }
 
         const isAllAnsweredCorrectly = () => {
@@ -227,8 +238,11 @@ exports.saveScore = async ({ authUser, body }) => {
          */
         const prevDayStreak = guest?.dayStreak || []
         const dayStreak = [...prevDayStreak]
-        if (!checkHasStreakToday(user.dayStreak || [])) {
-            dayStreak.push(dayjs(now).toISOString())
+        if (!checkHasStreakToday(user.dayStreak || [], user.userTimezone)) {
+            dayStreak.push({
+                date: dayjs(DATE_USER_TIMEZONE).toISOString(),
+                isFreeze: false,
+            })
         }
 
         const getGemsAwarded = () => {

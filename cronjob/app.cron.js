@@ -137,7 +137,7 @@ cron.schedule('*/5 * * * *', async function () {
              * ...so on
              */
             // const DIFF_DAY = dayjs(TODAY).diff(user.lastCompletedDay, 'day') || -1
-            const DIFF_DAY = getStreakDiffDays(user.lastCompletedDay) || -1
+            const DIFF_DAY = getStreakDiffDays(user.lastCompletedDay, user.userTimezone) || -1
             // console.log(
             //     `>>>>>>>>>>>>****<<<<<<<<<<<< DIFF_DAY-> ${user.email}:${DIFF_DAY}`
             // )

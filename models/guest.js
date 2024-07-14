@@ -41,7 +41,14 @@ const GuestSchema = new mongoose.Schema({
     streak: Number,
     dayStreak: [
         {
-            type: Date,
+            date: {
+                type: Date,
+                default: null,
+            },
+            isFreeze: {
+                type: Boolean,
+                default: false,
+            },
         },
     ],
     lastCompletedDay: Date,
