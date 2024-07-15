@@ -111,11 +111,14 @@ exports.logoutUser = (token, exp) => {
 }
 
 exports.syncUser = async (email, paramUserTimezone) => {
-    const userTimezone = paramUserTimezone || DEFAULT_TIMEZONE
     const today = new Date()
     const refCode = generateReferralCode()
     let result = false
     let user = await UserModel.findOne({ email }).exec()
+
+    const userTimezone = paramUserTimezone
+        ? user?.userTimezone || DEFAULT_TIMEZONE
+        : DEFAULT_TIMEZONE
 
     let userDailyQuest = user.dailyQuest || []
 
