@@ -20,32 +20,36 @@ const checkHasStreakToday = (calendarStreak = [], userTimezone) => {
 }
 
 const getStreakDiffDays = (lastCompletedDay, userTimezone) => {
-    const date = new Date()
+    if (!lastCompletedDay || !userTimezone) {
+        return null
+    } else {
+        const date = new Date()
 
-    const timeZone = userTimezone || DEFAULT_TIMEZONE
-    const DATE_USER_TIMEZONE = new Date().toLocaleString('en-US', {
-        timeZone,
-    })
-    const userDateToday = dayjs(DATE_USER_TIMEZONE).toISOString()
-    const serverDateToday = dayjs(date).toISOString()
+        const timeZone = userTimezone || DEFAULT_TIMEZONE
+        const DATE_USER_TIMEZONE = new Date().toLocaleString('en-US', {
+            timeZone,
+        })
+        const userDateToday = dayjs(DATE_USER_TIMEZONE).toISOString()
+        const serverDateToday = dayjs(date).toISOString()
 
-    // prettier-ignore
-    const userLastCompleteDay = dayjs(lastCompletedDay).toISOString()
+        // prettier-ignore
+        const userLastCompleteDay = dayjs(lastCompletedDay).toISOString()
 
-    console.log('timeZone->', timeZone)
-    console.log('userDateToday->', userDateToday)
-    console.log('userLastCompleteDay->', userLastCompleteDay)
+        console.log('timeZone->', timeZone)
+        console.log('userDateToday->', userDateToday)
+        console.log('userLastCompleteDay->', userLastCompleteDay)
 
-    console.log(
-        'USER DIFF HOUR->',
-        dayjs(userDateToday).diff(userLastCompleteDay, 'hour')
-    )
-    console.log(
-        'SERVER DIFF HOUR->',
-        dayjs(serverDateToday).diff(userLastCompleteDay, 'hour')
-    )
+        console.log(
+            'USER DIFF HOUR->',
+            dayjs(userDateToday).diff(userLastCompleteDay, 'hour')
+        )
+        console.log(
+            'SERVER DIFF HOUR->',
+            dayjs(serverDateToday).diff(userLastCompleteDay, 'hour')
+        )
 
-    return dayjs(userDateToday).diff(userLastCompleteDay, 'day')
+        return dayjs(userDateToday).diff(userLastCompleteDay, 'day')
+    }
 }
 
 const validateAndConvertToNewObjectCalendarStreak = (userDayStreak = []) => {
