@@ -117,8 +117,8 @@ exports.syncUser = async (email, paramUserTimezone) => {
     let user = await UserModel.findOne({ email }).exec()
 
     const userTimezone = paramUserTimezone
-        ? user?.userTimezone || DEFAULT_TIMEZONE
-        : DEFAULT_TIMEZONE
+        ? paramUserTimezone
+        : user?.userTimezone || DEFAULT_TIMEZONE
 
     let userDailyQuest = user.dailyQuest || []
 
