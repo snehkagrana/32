@@ -32,11 +32,11 @@ const getStreakDiffDays = (lastCompletedDay, userTimezone) => {
 
         console.log(
             'FORMATTED-> dayjs(DATE_USER_TIMEZONE)',
-            dayjs(DATE_USER_TIMEZONE)
+            dayjs(DATE_USER_TIMEZONE).format()
         )
         console.log(
             'FORMATTED-> dayjs(lastCompletedDay)',
-            dayjs(lastCompletedDay)
+            dayjs(lastCompletedDay).format()
         )
 
         const userDateToday = dayjs(DATE_USER_TIMEZONE).toISOString()
