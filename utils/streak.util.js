@@ -23,49 +23,63 @@ const getStreakDiffDays = (lastCompletedDay, userTimezone) => {
     if (!lastCompletedDay || !userTimezone) {
         return null
     } else {
-        const date = new Date()
+        const DATE_TODAY = new Date()
 
         const timeZone = userTimezone || DEFAULT_TIMEZONE
         const DATE_USER_TIMEZONE = new Date().toLocaleString('en-US', {
             timeZone,
         })
 
-        console.log(
-            'FORMATTED-> dayjs(DATE_USER_TIMEZONE)',
-            dayjs(DATE_USER_TIMEZONE).format()
-        )
-        console.log(
-            'FORMATTED-> dayjs(lastCompletedDay)',
-            dayjs(lastCompletedDay).format()
-        )
+        const dateUserTimezoneToday = dayjs(DATE_USER_TIMEZONE)
+            .toISOString()
+            ?.slice(0, 10)
+        const dateServerTimezoneToday = dayjs(DATE_TODAY)
+            .toISOString()
+            ?.slice(0, 10)
+        const dateUserLastCompleteLesson = lastCompletedDay?.slice(0, 10)
 
-        const userDateToday = dayjs(DATE_USER_TIMEZONE).toISOString()
-        const serverDateToday = dayjs(date).toISOString()
+        // console.log(
+        //     'FORMATTED-> dayjs(DATE_USER_TIMEZONE)',
+        //     dayjs(DATE_USER_TIMEZONE).format()
+        // )
+        // console.log(
+        //     'FORMATTED-> dayjs(lastCompletedDay)',
+        //     dayjs(lastCompletedDay).format()
+        // )
 
-        // prettier-ignore
-        const userLastCompleteDay = dayjs(lastCompletedDay).toISOString()
+        // const userDateToday = dayjs(DATE_USER_TIMEZONE).toISOString()
+        // const serverDateToday = dayjs(date).toISOString()
 
-        console.log('timeZone->', timeZone)
-        console.log('userDateToday->', userDateToday)
-        console.log('userLastCompleteDay->', userLastCompleteDay)
+        // // prettier-ignore
+        // const userLastCompleteDay = dayjs(lastCompletedDay).toISOString()
 
+        // console.log('timeZone->', timeZone)
+        // console.log('userDateToday->', userDateToday)
+        // console.log('userLastCompleteDay->', userLastCompleteDay)
 
-
-        console.log("GET DAY ->>> userLastCompleteDay", dayjs(userLastCompleteDay).day())
-        console.log("GET DAY ->>> serverDateToday", dayjs(serverDateToday).day())
-        console.log("GET DAY ->>> serverDateToday", dayjs(serverDateToday).day())
-
+        // console.log("GET DAY ->>> userLastCompleteDay", dayjs(userLastCompleteDay).day())
+        // console.log("GET DAY ->>> serverDateToday", dayjs(serverDateToday).day())
+        // console.log("GET DAY ->>> serverDateToday", dayjs(serverDateToday).day())
 
         console.log(
             'USER DIFF HOUR->',
-            dayjs(userDateToday).diff(userLastCompleteDay, 'hour')
+            dayjs(dateUserTimezoneToday).diff(
+                dateUserLastCompleteLesson,
+                'hour'
+            )
         )
         console.log(
             'SERVER DIFF HOUR->',
-            dayjs(serverDateToday).diff(userLastCompleteDay, 'hour')
+            dayjs(dateServerTimezoneToday).diff(
+                dateUserLastCompleteLesson,
+                'hour'
+            )
         )
 
-        return dayjs(userDateToday).diff(userLastCompleteDay, 'day')
+        return dayjs(dateUserTimezoneToday).diff(
+            dateUserLastCompleteLesson,
+            'day'
+        )
     }
 }
 
