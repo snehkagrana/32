@@ -49,6 +49,13 @@ const getStreakDiffDays = (lastCompletedDay, userTimezone) => {
         console.log('userDateToday->', userDateToday)
         console.log('userLastCompleteDay->', userLastCompleteDay)
 
+
+
+        console.log("GET DAY ->>> userLastCompleteDay", dayjs(userLastCompleteDay).day())
+        console.log("GET DAY ->>> serverDateToday", dayjs(serverDateToday).day())
+        console.log("GET DAY ->>> serverDateToday", dayjs(serverDateToday).day())
+
+
         console.log(
             'USER DIFF HOUR->',
             dayjs(userDateToday).diff(userLastCompleteDay, 'hour')
