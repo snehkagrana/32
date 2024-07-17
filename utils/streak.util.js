@@ -20,6 +20,7 @@ const checkHasStreakToday = (calendarStreak = [], userTimezone) => {
 }
 
 const getStreakDiffDays = (lastCompletedDay, userTimezone) => {
+    console.log('--->', typeof lastCompletedDay)
     if (!lastCompletedDay || !userTimezone) {
         return null
     } else {
@@ -36,30 +37,9 @@ const getStreakDiffDays = (lastCompletedDay, userTimezone) => {
         const dateServerTimezoneToday = dayjs(DATE_TODAY)
             .toISOString()
             ?.slice(0, 10)
-        const dateUserLastCompleteLesson = lastCompletedDay?.slice(0, 10)
-
-        // console.log(
-        //     'FORMATTED-> dayjs(DATE_USER_TIMEZONE)',
-        //     dayjs(DATE_USER_TIMEZONE).format()
-        // )
-        // console.log(
-        //     'FORMATTED-> dayjs(lastCompletedDay)',
-        //     dayjs(lastCompletedDay).format()
-        // )
-
-        // const userDateToday = dayjs(DATE_USER_TIMEZONE).toISOString()
-        // const serverDateToday = dayjs(date).toISOString()
-
-        // // prettier-ignore
-        // const userLastCompleteDay = dayjs(lastCompletedDay).toISOString()
-
-        // console.log('timeZone->', timeZone)
-        // console.log('userDateToday->', userDateToday)
-        // console.log('userLastCompleteDay->', userLastCompleteDay)
-
-        // console.log("GET DAY ->>> userLastCompleteDay", dayjs(userLastCompleteDay).day())
-        // console.log("GET DAY ->>> serverDateToday", dayjs(serverDateToday).day())
-        // console.log("GET DAY ->>> serverDateToday", dayjs(serverDateToday).day())
+        const dateUserLastCompleteLesson = dayjs(lastCompletedDay)
+            .toISOString()
+            ?.slice(0, 10)
 
         console.log(
             'USER DIFF HOUR->',
