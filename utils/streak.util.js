@@ -29,6 +29,16 @@ const getStreakDiffDays = (lastCompletedDay, userTimezone) => {
         const DATE_USER_TIMEZONE = new Date().toLocaleString('en-US', {
             timeZone,
         })
+
+        console.log(
+            'FORMATTED-> dayjs(DATE_USER_TIMEZONE)',
+            dayjs(DATE_USER_TIMEZONE)
+        )
+        console.log(
+            'FORMATTED-> dayjs(lastCompletedDay)',
+            dayjs(lastCompletedDay)
+        )
+
         const userDateToday = dayjs(DATE_USER_TIMEZONE).toISOString()
         const serverDateToday = dayjs(date).toISOString()
 
