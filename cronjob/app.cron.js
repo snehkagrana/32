@@ -1277,7 +1277,7 @@ cron.schedule('*/5 * * * *', async function () {
      * Daily quest
      * -------------
      */
-    if (LOCALE_HOUR === 23 && LOCALE_MINUTE >= 55) {
+    if (LOCALE_HOUR === 23 && LOCALE_MINUTE >= 50 && LOCALE_MINUTE <= 55) {
         console.log('DAILY QUEST RUN->>>>', LOCALE_HOUR, LOCALE_MINUTE)
         const usersHasNumberOfCompleteLesson = await UserModel.find({
             numberOfLessonCompleteToday: { $gt: 0 },
