@@ -205,6 +205,7 @@ exports.syncUser = async (email, paramUserTimezone) => {
                     dailyQuest: userDailyQuest,
                     userTimezone,
                     calendarStreak: userCalendarStreak,
+                    availableStreakFreeze: user?.availableStreakFreeze || 0,
                 },
             }
         )
