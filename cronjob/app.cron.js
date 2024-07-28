@@ -105,7 +105,8 @@ cron.schedule('* * * * *', async function () {
      * Used for clean up history or reset something.
      * -------------
      */
-    if (LOCALE_HOUR === 23 && LOCALE_MINUTE >= 58 && LOCALE_MINUTE <= 59) {
+    // if (LOCALE_HOUR === 23 && LOCALE_MINUTE >= 58 && LOCALE_MINUTE <= 59) {
+    if (LOCALE_HOUR === 24 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE <= 16) {
         /**
          * Daily quest
          */
@@ -120,10 +121,9 @@ cron.schedule('* * * * *', async function () {
 
         if (usersHasNumberOfCompleteLesson?.length > 0) {
             for (const u of usersHasNumberOfCompleteLesson) {
-                const user = await UserModel.findOne({ _id: u.userId })
                 if (user) {
                     await UserModel.updateOne(
-                        { _id: u.userId },
+                        { _id: u._id },
                         {
                             $set: {
                                 numberOfLessonCompleteToday: 0,
