@@ -58,11 +58,29 @@ const UserSchema = new mongoose.Schema({
         },
     },
     streak: Number,
+
+    /**
+     * @deprecated
+     */
     dayStreak: [
         {
             type: Date,
         },
     ],
+
+    calendarStreak: [
+        {
+            date: {
+                type: Date,
+                default: null,
+            },
+            isFreeze: {
+                type: Boolean,
+                default: false,
+            },
+        },
+    ],
+
     lastCompletedDay: Date,
     completedDays: {
         0: Date,
@@ -246,6 +264,10 @@ const UserSchema = new mongoose.Schema({
         subCategory: {
             type: String,
         },
+    },
+    userTimezone: {
+        type: String,
+        default: null,
     },
 })
 

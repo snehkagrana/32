@@ -19,6 +19,7 @@ const {
     NotificationReminder,
     LeaderboardReminder,
 } = require('../utils/notification.util')
+const { getStreakDiffDays } = require('../utils/streak.util')
 
 cron.schedule('* * * * *', async function () {
     const LOCALE_DATE_NOW = new Date().toLocaleString('en-US', {
@@ -115,9 +116,9 @@ cron.schedule('*/5 * * * *', async function () {
     const LOCALE_HOUR = dayjs(LOCALE_DATE_NOW).hour()
     const LOCALE_MINUTE = dayjs(LOCALE_DATE_NOW).minute()
 
-    // console.log('->LOCALE_DAY_OF_WEEK ', LOCALE_DAY_OF_WEEK)
-    // console.log('->LOCALE_HOUR', LOCALE_HOUR)
-    // console.log('->LOCALE_MINUTE', LOCALE_MINUTE)
+    console.log('->LOCALE_DAY_OF_WEEK ', LOCALE_DAY_OF_WEEK)
+    console.log('->LOCALE_HOUR', LOCALE_HOUR)
+    console.log('->LOCALE_MINUTE', LOCALE_MINUTE)
 
     // user with 0 streak
     const usersHasFCMToken = await UserModel.find({
@@ -135,12 +136,16 @@ cron.schedule('*/5 * * * *', async function () {
              * DIFF_DAY = 2 === User missed one day, streak will reset to 0
              * ...so on
              */
-            const DIFF_DAY = dayjs(TODAY).diff(user.lastCompletedDay, 'day') || -1
+            // const DIFF_DAY = dayjs(TODAY).diff(user.lastCompletedDay, 'day') || -1
+            const DIFF_DAY = getStreakDiffDays(user.lastCompletedDay, user.userTimezone) || -1
+            // console.log(
+            //     `>>>>>>>>>>>>****<<<<<<<<<<<< DIFF_DAY-> ${user.email}:${DIFF_DAY}`
+            // )
 
             // use done lesson today
             if (DIFF_DAY === 0 && user.streak > 0) {
                 // prettier-ignore
-                // console.log(`---^^^ DIFF_DAY === 0 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
+                console.log(`---^^^ DIFF_DAY === 0 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
 
                 const STREAK_COMBO_NOTIFICATION_DATA = {
                     user,
@@ -206,7 +211,7 @@ cron.schedule('*/5 * * * *', async function () {
             // Last done lesson yesterday
             else if (DIFF_DAY === 1 && user.streak > 0) {
                 // prettier-ignore
-                // console.log(`--->>> DIFF_DAY === 1 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
+                console.log(`--->>> DIFF_DAY === 1 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
 
                 const STREAK_REMINDER_DATA = {
                     user: user,
@@ -271,6 +276,7 @@ cron.schedule('*/5 * * * *', async function () {
                     }
                 }
             }
+
             // User missed one day, streak will reset to 0
             else if (user.streak === 0 || DIFF_DAY >= 2) {
                 /**
@@ -278,7 +284,7 @@ cron.schedule('*/5 * * * *', async function () {
                  * Users may not do lessons but their streak is still more than 0
                  */
                 // prettier-ignore
-                // console.log(`<<<--- user.streak === 0 || DIFF_DAY >= 2 ${user.email} : ${DIFF_DAY}`)
+                console.log(`<<<--- user.streak === 0 || DIFF_DAY >= 2 ${user.email} : ${DIFF_DAY}`)
                 // DIFF DAY 2
                 if (DIFF_DAY === 2) {
                     const STREAK_REMINDER_DATA = {
@@ -1010,9 +1016,9 @@ cron.schedule('*/5 * * * *', async function () {
     if (currentActiveLeaderBoard) {
         // Reset leaderboard
         if (
-            LOCALE_DAY_OF_WEEK === 0 &&
+            LOCALE_DAY_OF_WEEK === 6 &&
             LOCALE_HOUR === 23 &&
-            LOCALE_MINUTE >= 50
+            LOCALE_MINUTE >= 55
         ) {
             // if (LOCALE_DAY_OF_WEEK  === 2 && LOCALE_HOUR === 14 && minute === 35) { // DEBUG
             await LeaderBoardModel.updateOne(
@@ -1096,6 +1102,26 @@ cron.schedule('*/5 * * * *', async function () {
                 )
 
                 // prettier-ignore
+                if (LOCALE_DAY_OF_WEEK === 3) {
+                    const DAY_LEFT = dayjs(currentActiveLeaderBoard.endDate).diff(LOCALE_DATE_NOW, 'day') || 0
+                    if (LOCALE_HOUR === 13 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
+                        if(leaderBoardUsers?.length > 0) {
+                            leaderBoardUsers.forEach(async (x, index) => {
+                                await LeaderboardReminder.sendRandomReminder({
+                                    userId: x.userId,
+                                    friendName: leaderBoardUsers?.[index - 1]?.displayName || '',
+                                    myFriendPosition: index,
+                                    positionAboveOfMeId: leaderBoardUsers?.[index - 1]?.userId || null,
+                                    myPosition: index + 1,
+                                    lessonName: x.lastLessonName,
+                                    daysLeft: DAY_LEFT,
+                                });
+                            })
+                        }
+                    }
+                }
+
+                // prettier-ignore
                 if (LOCALE_DAY_OF_WEEK === 5) {
                     const DAY_LEFT = dayjs(currentActiveLeaderBoard.endDate).diff(LOCALE_DATE_NOW, 'day') || 0
                     if (LOCALE_HOUR === 13 && LOCALE_MINUTE >= 45 && LOCALE_MINUTE < 50) {
@@ -1114,6 +1140,26 @@ cron.schedule('*/5 * * * *', async function () {
                         }
                     }
                 }
+
+                // prettier-ignore
+                if (LOCALE_DAY_OF_WEEK === 6) {
+                    const DAY_LEFT = dayjs(currentActiveLeaderBoard.endDate).diff(LOCALE_DATE_NOW, 'day') || 0
+                    if (LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
+                        if(leaderBoardUsers?.length > 0) {
+                            leaderBoardUsers.forEach(async (x, index) => {
+                                await LeaderboardReminder.sendRandomReminder({
+                                    userId: x.userId,
+                                    friendName: leaderBoardUsers?.[index - 1]?.displayName || '',
+                                    myFriendPosition: index,
+                                    positionAboveOfMeId: leaderBoardUsers?.[index - 1]?.userId || null,
+                                    myPosition: index + 1,
+                                    lessonName: x.lastLessonName,
+                                    daysLeft: DAY_LEFT,
+                                });
+                            })
+                        }
+                    }
+                } 
 
                 // prettier-ignore
                 else if (LOCALE_DAY_OF_WEEK === 0) {
@@ -1136,14 +1182,13 @@ cron.schedule('*/5 * * * *', async function () {
             }
 
             /**
-             * TODO
              * get previos leaderboard and send notification result
              */
-            if (currentActiveLeaderBoard && LOCALE_DAY_OF_WEEK === 1) {
+            if (currentActiveLeaderBoard && LOCALE_DAY_OF_WEEK === 0) {
                 if (
                     LOCALE_HOUR === 9 &&
-                    LOCALE_MINUTE >= 0 &&
-                    LOCALE_MINUTE < 5
+                    LOCALE_MINUTE >= 30 &&
+                    LOCALE_MINUTE < 35
                 ) {
                     const prevLeaderBoards = await LeaderBoardModel.find({
                         isActive: false,
@@ -1177,12 +1222,12 @@ cron.schedule('*/5 * * * *', async function () {
         /**
          * Create new weekly leaderboard
          */
-        if (LOCALE_DAY_OF_WEEK >= 1) {
+        if (LOCALE_DAY_OF_WEEK >= 0) {
             // if (LOCALE_DAY_OF_WEEK  >= 2) { // DEBUG
             const endDate = dayjs(LOCALE_DATE_NOW)
                 .add(6, 'day')
                 .hour(23)
-                .minute(50)
+                .minute(55)
                 .toISOString()
 
             // prettier-ignore
@@ -1232,10 +1277,15 @@ cron.schedule('*/5 * * * *', async function () {
      * Daily quest
      * -------------
      */
-    if (LOCALE_HOUR === 0 && LOCALE_MINUTE <= 5) {
+    if (LOCALE_HOUR === 23 && LOCALE_MINUTE >= 50 && LOCALE_MINUTE <= 55) {
+        console.log('DAILY QUEST RUN->>>>', LOCALE_HOUR, LOCALE_MINUTE)
         const usersHasNumberOfCompleteLesson = await UserModel.find({
             numberOfLessonCompleteToday: { $gt: 0 },
         }).exec()
+        console.log(
+            'usersHasNumberOfCompleteLesson->>>>',
+            usersHasNumberOfCompleteLesson
+        )
         if (usersHasNumberOfCompleteLesson?.length > 0) {
             for (const u of usersHasNumberOfCompleteLesson) {
                 const user = await UserModel.findOne({ _id: u.userId })

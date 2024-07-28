@@ -4,6 +4,14 @@ const { daysDifference } = require('../utils/common.util')
 const { initializeDiamondUser } = require('../utils/reward.util')
 const { getLevelByXpPoints } = require('../utils/xp.utils')
 const { appConfig } = require('../configs/app.config')
+const {
+    createRandomDailyQuest,
+    checkIsActiveDailyQuestToday,
+} = require('../utils/quest.util')
+const {
+    validateAndConvertToNewObjectCalendarStreak,
+} = require('../utils/streak.util')
+const { DEFAULT_TIMEZONE } = require('../constants/app.constant')
 
 exports.createGuest = async data => {
     return await GuestModel.create(data)
@@ -21,9 +29,29 @@ exports.logoutUser = (token, exp) => {
     return cacheUtil.set(token, token, milliseconds)
 }
 
-exports.syncGuest = async guestId => {
+exports.syncGuest = async (guestId, paramUserTimezone) => {
+    const userTimezone = paramUserTimezone || DEFAULT_TIMEZONE
+
     let result = false
     let guest = await GuestModel.findById(guestId).exec()
+
+    let guestDailyQuest = guest.dailyQuest || []
+    let guestCalendarStreak = []
+
+    // Migrate to calendar streak
+    if (guest?.calendarStreak?.length === 0 && guest?.dayStreak?.length > 0) {
+        guestCalendarStreak = validateAndConvertToNewObjectCalendarStreak(
+            guest.dayStreak || []
+        )
+    }
+
+    const hasDailyQuestToday = checkIsActiveDailyQuestToday(
+        guest.dailyQuest || []
+    )
+
+    if (!hasDailyQuestToday) {
+        guestDailyQuest = createRandomDailyQuest(guest)
+    }
 
     if (guest) {
         const daysDiff = daysDifference(guest.lastCompletedDay)
@@ -66,6 +94,10 @@ exports.syncGuest = async guestId => {
                     heart: typeof guest?.heart === 'number' ? guest.heart : appConfig.defaultHeart,
 
                     lastActiveAt: new Date(),
+
+                    dailyQuest: guestDailyQuest,
+                    userTimezone,
+                    calendarStreak: guestCalendarStreak,
                 },
             }
         )

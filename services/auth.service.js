@@ -29,6 +29,15 @@ const {
     checkIsActiveDailyQuestToday,
     createRandomDailyQuest,
 } = require('../utils/quest.util')
+const {
+    checkHasStreakToday,
+    getStreakDiffDays,
+    validateAndConvertToNewObjectCalendarStreak,
+} = require('../utils/streak.util')
+const {
+    SERVER_TIMEZONE,
+    DEFAULT_TIMEZONE,
+} = require('../constants/app.constant')
 
 exports.sendRegisterCode = async email => {
     const code = generateOTP(4)
@@ -101,13 +110,27 @@ exports.logoutUser = (token, exp) => {
     return cacheUtil.set(token, token, milliseconds)
 }
 
-exports.syncUser = async email => {
+exports.syncUser = async (email, paramUserTimezone) => {
     const today = new Date()
     const refCode = generateReferralCode()
     let result = false
     let user = await UserModel.findOne({ email }).exec()
 
+    const userTimezone = paramUserTimezone
+        ? paramUserTimezone
+        : user?.userTimezone || DEFAULT_TIMEZONE
+
     let userDailyQuest = user.dailyQuest || []
+
+    // prettier-ignore
+    let userCalendarStreak = user?.calendarStreak?.length > 0 ? [...user?.calendarStreak] : []
+
+    // Migrate to calendar streak
+    if (user?.calendarStreak?.length === 0 && user?.dayStreak?.length > 0) {
+        userCalendarStreak = validateAndConvertToNewObjectCalendarStreak(
+            user.dayStreak || []
+        )
+    }
 
     const hasDailyQuestToday = checkIsActiveDailyQuestToday(
         user.dailyQuest || []
@@ -118,22 +141,30 @@ exports.syncUser = async email => {
     }
 
     if (user) {
-        // const daysDiff = daysDifference(user.lastCompletedDay)
-        const daysDiff = dayjs(today).diff(user.lastCompletedDay, 'day')
+        let newStreak = user.streak
 
-        if (daysDiff === 1) {
+        // const daysDiff = daysDifference(user.lastCompletedDay)
+        const streakDiffDays = getStreakDiffDays(
+            user.lastCompletedDay,
+            user.userTimezone
+        )
+        console.log('streakDiffDays ->>>>>>>>>>>', user.email, streakDiffDays)
+
+        if (streakDiffDays === 1) {
             // Do nothing, the streak is already up-to-date
-        } else if (daysDiff === 2) {
+        } else if (streakDiffDays === 2) {
             // User missed one day, reset streak to 0
             user.streak = 0
-        } else if (daysDiff === 0) {
+            newStreak = 0
+        } else if (streakDiffDays === 0) {
             //keep streak the same
         } else {
             // User missed more than one day, keep streak at 0
             user.streak = 0
+            newStreak = 0
         }
 
-        if (daysDiff !== 0) {
+        if (streakDiffDays !== 0) {
             user.xp.current = 0
             user.xp.daily = 0
         }
@@ -172,6 +203,8 @@ exports.syncUser = async email => {
                     followers: user?.followers ? user.followers : [],
 
                     dailyQuest: userDailyQuest,
+                    userTimezone,
+                    calendarStreak: userCalendarStreak,
                 },
             }
         )
@@ -294,7 +327,7 @@ exports.syncRegisterGoogle = async ({ email, data }) => {
                     xp: data.xp,
                     score: data.score,
                     completedDays: data.completedDays,
-                    dayStreak: data?.dayStreak || [],
+                    calendarStreak: data?.calendarStreak || [],
                     last_played: data.last_played,
                     heart: data.heart || appConfig.defaultHeart,
                     lastHeartAccruedAt: data.lastHeartAccruedAt || new Date(),
@@ -321,6 +354,7 @@ exports.googleSignInMobile = async ({
     photo,
     registerToken,
     syncId,
+    userTimezone,
 }) => {
     const refCode = generateReferralCode()
 
@@ -369,6 +403,7 @@ exports.googleSignInMobile = async ({
             followers: [],
             fcmToken: '',
             lastLessonCategoryName: '',
+            userTimezone: userTimezone || DEFAULT_TIMEZONE,
         }
 
         // sync guest data
@@ -383,7 +418,7 @@ exports.googleSignInMobile = async ({
                     xp: guestData.xp,
                     score: guestData.score,
                     completedDays: guestData.completedDays,
-                    dayStreak: guestData?.dayStreak || [],
+                    calendarStreak: guestData?.calendarStreak || [],
                     last_played: guestData.last_played,
                     heart: guestData.heart || appConfig.defaultHeart,
                     lastHeartAccruedAt:

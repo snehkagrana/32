@@ -8,6 +8,7 @@ const dayjs = require('dayjs')
 const {
     MAX_HEARTS,
     DAILY_QUEST_TYPE_EARN_60_BANANAS,
+    DEFAULT_TIMEZONE,
 } = require('../constants/app.constant')
 const DailyQuestService = require('./daily-quest.service')
 const {
@@ -16,7 +17,10 @@ const {
     ACTION_NAME_EARN_GEMS,
     ACTION_NAME_COMPLETE_PERFECT_LESSON,
 } = require('../constants/daily-quest.constant')
-const { checkHasStreakToday } = require('../utils/streak.util')
+const {
+    checkHasStreakToday,
+    getStreakDiffDays,
+} = require('../utils/streak.util')
 
 exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
     let result = null
@@ -63,13 +67,18 @@ exports.answerQuestion = async ({ userId, guestId, itemId, isCorrect }) => {
 // New save score
 exports.saveScore = async ({ authUser, body }) => {
     let result = null
+
     let user = await UserModel.findById(authUser._id).exec()
     let guest = await GuestModel.findById(authUser._id).exec()
+
+    const DATE_USER_TIMEZONE = new Date().toLocaleString('en-US', {
+        timeZone: user.userTimezone || DEFAULT_TIMEZONE,
+    })
 
     const now = new Date()
 
     if (user) {
-        const today = dayjs(new Date())
+        const today = new Date()
         let allScoresList = user.score || []
 
         allScoresList.push({
@@ -81,16 +90,20 @@ exports.saveScore = async ({ authUser, body }) => {
         })
 
         const daysDiff = daysDifference(user.lastCompletedDay)
+        const streakDiffDays = getStreakDiffDays(
+            user.lastCompletedDay,
+            user.userTimezone
+        )
 
-        if (daysDiff === 0) {
-        } else if (daysDiff === 1) {
+        if (streakDiffDays === 0) {
+        } else if (streakDiffDays === 1) {
             user.streak++
         } else {
             // If more than one day is missed, reset streak to 1 since user played today
             user.streak = 1
         }
 
-        user.lastCompletedDay = today
+        user.lastCompletedDay = DATE_USER_TIMEZONE
 
         const dayOfWeek = (getToday().getDay() + 6) % 7
 
@@ -106,13 +119,18 @@ exports.saveScore = async ({ authUser, body }) => {
 
         /**
          * ----- DAY STREAK -------
-         * New logic to save day streak
+         * New logic to save calendar streak
          * ------------------------
          */
-        const prevDayStreak = user?.dayStreak || []
-        const dayStreak = [...prevDayStreak]
-        if (!checkHasStreakToday(user.dayStreak || [])) {
-            dayStreak.push(dayjs(now).toISOString())
+        const prevCalendarStreak = user?.calendarStreak || []
+        const userCalendarStreak = [...prevCalendarStreak]
+        if (
+            !checkHasStreakToday(user.calendarStreak || [], user.userTimezone)
+        ) {
+            userCalendarStreak.push({
+                date: dayjs(DATE_USER_TIMEZONE).toISOString(),
+                isFreeze: false,
+            })
         }
 
         const isAllAnsweredCorrectly = () => {
@@ -161,7 +179,7 @@ exports.saveScore = async ({ authUser, body }) => {
                     streak: user.streak,
                     lastCompletedDay: user.lastCompletedDay,
                     completedDays: completedDays,
-                    dayStreak,
+                    calendarStreak: userCalendarStreak,
                 },
             }
         )
@@ -221,10 +239,15 @@ exports.saveScore = async ({ authUser, body }) => {
          * New logic to save day streak
          * ------------------------
          */
-        const prevDayStreak = guest?.dayStreak || []
-        const dayStreak = [...prevDayStreak]
-        if (!checkHasStreakToday(user.dayStreak || [])) {
-            dayStreak.push(dayjs(now).toISOString())
+        const prevCalendarStreak = guest?.calendarStreak || []
+        const guestCalendarStreak = [...prevCalendarStreak]
+        if (
+            !checkHasStreakToday(user.calendarStreak || [], user.userTimezone)
+        ) {
+            guestCalendarStreak.push({
+                date: dayjs(DATE_USER_TIMEZONE).toISOString(),
+                isFreeze: false,
+            })
         }
 
         const getGemsAwarded = () => {
@@ -267,7 +290,7 @@ exports.saveScore = async ({ authUser, body }) => {
                     streak: guest.streak,
                     lastCompletedDay: guest.lastCompletedDay,
                     completedDays: completedDays,
-                    dayStreak,
+                    calendarStreak: guestCalendarStreak,
                 },
             }
         )

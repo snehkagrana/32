@@ -21,11 +21,13 @@ module.exports = {
             registerToken: Joi.string().optional().allow(null),
             syncId: Joi.string().optional().allow(null),
             clientType: Joi.string().optional().allow(null),
+            userTimezone: Joi.string().optional().allow(null),
         })
         .options({ allowUnknown: true }),
     login: Joi.object().keys({
         email: Joi.string().email().required(),
         password: Joi.string().required(),
+        userTimezone: Joi.string().optional().allow(null),
     }),
     sendLinkForgotPassword: Joi.object().keys({
         email: Joi.string().email().required(),
@@ -70,6 +72,7 @@ module.exports = {
             photo: Joi.string().allow(null),
             registerToken: Joi.string().optional().allow(null),
             syncId: Joi.string().optional().allow(null),
+            userTimezone: Joi.string().optional().allow(null),
         })
         .options({ allowUnknown: true }),
 }
