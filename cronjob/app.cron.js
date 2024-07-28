@@ -106,7 +106,7 @@ cron.schedule('* * * * *', async function () {
      * -------------
      */
     // if (LOCALE_HOUR === 23 && LOCALE_MINUTE >= 58 && LOCALE_MINUTE <= 59) {
-    if (LOCALE_HOUR === 22 && LOCALE_MINUTE >= 10 && LOCALE_MINUTE <= 11) {
+    if (LOCALE_HOUR === 22 && LOCALE_MINUTE >= 25 && LOCALE_MINUTE <= 26) {
         /**
          * Daily quest
          */
