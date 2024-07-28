@@ -98,6 +98,73 @@ cron.schedule('* * * * *', async function () {
             }
         })
     }
+
+    /**
+     * -------------
+     * CRONJOB EVERY END OF DAY
+     * Used for clean up history or reset something.
+     * -------------
+     */
+    if (LOCALE_HOUR === 23 && LOCALE_MINUTE >= 58 && LOCALE_MINUTE <= 59) {
+        /**
+         * Daily quest
+         */
+        console.log('DAILY QUEST RUN->>>>', LOCALE_HOUR, LOCALE_MINUTE)
+        const usersHasNumberOfCompleteLesson = await UserModel.find({
+            numberOfLessonCompleteToday: { $gt: 0 },
+        }).exec()
+        console.log(
+            'usersHasNumberOfCompleteLesson->>>>',
+            usersHasNumberOfCompleteLesson
+        )
+
+        /**
+         * 
+         
+        if (usersHasNumberOfCompleteLesson?.length > 0) {
+            for (const u of usersHasNumberOfCompleteLesson) {
+                const user = await UserModel.findOne({ _id: u.userId })
+                if (user) {
+                    await UserModel.updateOne(
+                        { _id: u.userId },
+                        {
+                            $set: {
+                                numberOfLessonCompleteToday: 0,
+                            },
+                        },
+                        { new: true }
+                    ).exec()
+                }
+            }
+        }
+        */
+
+        /**
+         * Apply freeze streak
+         */
+        const userHasAvailableFreezeStreak = await UserModel.find({
+            availableStreakFreeze: { $gt: 0 },
+        }).exec()
+
+        if (userHasAvailableFreezeStreak?.length > 0) {
+            for (const u of usersHasNumberOfCompleteLesson) {
+                const user = await UserModel.findOne({ _id: u.userId })
+                console.log('userHasAvailableFreezeStreak', u)
+
+                if (user) {
+                    await UserModel.updateOne(
+                        { _id: u.userId },
+                        {
+                            $set: {
+                                numberOfLessonCompleteToday: 0,
+                            },
+                        },
+                        { new: true }
+                    ).exec()
+                }
+            }
+        }
+    }
 })
 
 // Cronjob At every 5th minute.
@@ -1269,38 +1336,6 @@ cron.schedule('*/5 * * * *', async function () {
             }
         } else {
             // console.log('Do nothing')
-        }
-    }
-
-    /**
-     * -------------
-     * Daily quest
-     * -------------
-     */
-    if (LOCALE_HOUR === 23 && LOCALE_MINUTE >= 50 && LOCALE_MINUTE <= 55) {
-        console.log('DAILY QUEST RUN->>>>', LOCALE_HOUR, LOCALE_MINUTE)
-        const usersHasNumberOfCompleteLesson = await UserModel.find({
-            numberOfLessonCompleteToday: { $gt: 0 },
-        }).exec()
-        console.log(
-            'usersHasNumberOfCompleteLesson->>>>',
-            usersHasNumberOfCompleteLesson
-        )
-        if (usersHasNumberOfCompleteLesson?.length > 0) {
-            for (const u of usersHasNumberOfCompleteLesson) {
-                const user = await UserModel.findOne({ _id: u.userId })
-                if (user) {
-                    await UserModel.updateOne(
-                        { _id: u.userId },
-                        {
-                            $set: {
-                                numberOfLessonCompleteToday: 0,
-                            },
-                        },
-                        { new: true }
-                    ).exec()
-                }
-            }
         }
     }
 })
