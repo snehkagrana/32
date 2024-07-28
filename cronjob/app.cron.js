@@ -105,7 +105,8 @@ cron.schedule('* * * * *', async function () {
      * Used for clean up history or reset something.
      * -------------
      */
-    if (LOCALE_HOUR === 23 && LOCALE_MINUTE >= 58 && LOCALE_MINUTE <= 59) {
+    // if (LOCALE_HOUR === 23 && LOCALE_MINUTE >= 58 && LOCALE_MINUTE <= 59) {
+    if (LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE <= 31) {
         /**
          * Daily quest
          */
