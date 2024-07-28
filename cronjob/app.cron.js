@@ -105,23 +105,19 @@ cron.schedule('* * * * *', async function () {
      * Used for clean up history or reset something.
      * -------------
      */
-    // if (LOCALE_HOUR === 23 && LOCALE_MINUTE >= 58 && LOCALE_MINUTE <= 59) {
-    if (LOCALE_HOUR === 23 && LOCALE_MINUTE >= 15 && LOCALE_MINUTE <= 16) {
+    if (LOCALE_HOUR === 23 && LOCALE_MINUTE >= 58 && LOCALE_MINUTE <= 59) {
         /**
          * Daily quest
          */
-        console.log('DAILY QUEST RUN->>>>', LOCALE_HOUR, LOCALE_MINUTE)
+        // console.log('DAILY QUEST RUN->>>>', LOCALE_HOUR, LOCALE_MINUTE)
         const usersHasNumberOfCompleteLesson = await UserModel.find({
             numberOfLessonCompleteToday: { $gt: 0 },
         }).exec()
-        console.log(
-            'usersHasNumberOfCompleteLesson->>>>',
-            usersHasNumberOfCompleteLesson
-        )
+        // console.log(
+        //     'usersHasNumberOfCompleteLesson->>>>',
+        //     usersHasNumberOfCompleteLesson
+        // )
 
-        /**
-         * 
-         
         if (usersHasNumberOfCompleteLesson?.length > 0) {
             for (const u of usersHasNumberOfCompleteLesson) {
                 const user = await UserModel.findOne({ _id: u.userId })
@@ -138,7 +134,6 @@ cron.schedule('* * * * *', async function () {
                 }
             }
         }
-        */
 
         /**
          * Apply freeze streak
@@ -149,20 +144,8 @@ cron.schedule('* * * * *', async function () {
 
         if (userHasAvailableFreezeStreak?.length > 0) {
             for (const u of usersHasNumberOfCompleteLesson) {
-                const user = await UserModel.findOne({ _id: u.userId })
+                // const user = await UserModel.findOne({ _id: u.userId })
                 console.log('userHasAvailableFreezeStreak', u)
-
-                if (user) {
-                    await UserModel.updateOne(
-                        { _id: u.userId },
-                        {
-                            $set: {
-                                numberOfLessonCompleteToday: 0,
-                            },
-                        },
-                        { new: true }
-                    ).exec()
-                }
             }
         }
     }
