@@ -1240,7 +1240,7 @@ cron.schedule('*/5 * * * *', async function () {
                 let leaderBoardUsers = usersWithWeeklyXp.map(x => ({
                     userId: x._doc._id, 
                     displayName: x._doc.firstName ? x._doc.firstName : x._doc.displayName || '',
-                    xp: x._doc.xp.weekly || MINIMUM_WEEKLY_XP_LEADER_BOARD,
+                    xp: x._doc.xp.weekly || MINIMUM_WEEKLY_XP_LEAgitDER_BOARD,
                     email: x._doc.email,
                     imgPath: x._doc.imgPath || null,
                 }));
@@ -1343,15 +1343,15 @@ cron.schedule('*/5 * * * *', async function () {
                     USER_TIMEZONE_DATE_NOW
                 ).minute()
 
-                const userLastCompleteLesson = dayjs(u.lastCompletedDay)
-                    ?.toISOString()
-                    ?.slice(0, 10)
                 const todayUserTimezone = dayjs(USER_TIMEZONE_DATE_NOW)
                     ?.toISOString()
                     ?.slice(0, 10)
+                const userLastCompleteLesson = dayjs(u.lastCompletedDay)
+                    ?.toISOString()
+                    ?.slice(0, 10)
 
-                const DIFF_DAY = dayjs(userLastCompleteLesson).diff(
-                    dayjs(todayUserTimezone),
+                const DIFF_DAY = dayjs(todayUserTimezone).diff(
+                    dayjs(userLastCompleteLesson),
                     'day'
                 )
 
