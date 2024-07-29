@@ -1343,15 +1343,19 @@ cron.schedule('*/5 * * * *', async function () {
                     USER_TIMEZONE_DATE_NOW
                 ).minute()
 
-                console.log(
-                    'userHasAvailableFreezeStreak',
-                    u.email,
-                    u.availableStreakFreeze,
-                    dayjs(u.lastCompletedDay)?.toISOString()?.slice(0, 10),
-                    dayjs(USER_TIMEZONE_DATE_NOW)?.toISOString()?.slice(0, 10)
+                const userLastCompleteLesson = dayjs(u.lastCompletedDay)
+                    ?.toISOString()
+                    ?.slice(0, 10)
+                const todayUserTimezone = dayjs(USER_TIMEZONE_DATE_NOW)
+                    ?.toISOString()
+                    ?.slice(0, 10)
+
+                const DIFF_DAY = dayjs(userLastCompleteLesson).diff(
+                    dayjs(todayUserTimezone),
+                    'day'
                 )
-                console.log('USER_TIMEZONE_HOUR', USER_TIMEZONE_HOUR)
-                console.log('USER_TIMEZONE_MINUTE', USER_TIMEZONE_MINUTE)
+
+                console.log('DIFF_DAY', u.email, DIFF_DAY)
 
                 // if (
                 //     USER_TIMEZONE_HOUR === 23 &&
