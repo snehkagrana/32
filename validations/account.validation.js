@@ -72,4 +72,10 @@ module.exports = {
             subCategory: Joi.string().required(),
         })
         .options({ allowUnknown: true }),
+
+    refillFreezeStreak: Joi.object()
+        .keys({
+            amount: Joi.number().required(),
+        })
+        .options({ allowUnknown: true }),
 }

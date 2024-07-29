@@ -111,4 +111,11 @@ router.post(
     ErrorHandler(AccountController.saveNextLesson)
 )
 
+router.post(
+    '/account/streak/freeze/refill',
+    validate(AccountValidations.refillFreezeStreak),
+    AuthGuard,
+    ErrorHandler(AccountController.refillFreezeStreak)
+)
+
 module.exports = router

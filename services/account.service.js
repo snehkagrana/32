@@ -3,7 +3,11 @@ const UserModel = require('../models/user')
 const { generateOTP } = require('../utils/otp.util')
 const { validateEmail } = require('../utils/common.util')
 const NotificationService = require('../services/notification.service')
-const { NOTIFICATION_TYPE } = require('../constants/app.constant')
+const {
+    NOTIFICATION_TYPE,
+    MAX_FREEZE_STREAK,
+    GEMS_STREAK_FREEZE_AMOUNT,
+} = require('../constants/app.constant')
 const { getFirstName, getFullName } = require('../utils/user.util')
 const DailyQuestService = require('../services/daily-quest.service')
 const {
@@ -444,4 +448,36 @@ exports.saveNextLesson = async ({ email, skill, category, subCategory }) => {
             ? subCategory
             : user?.nextLesson?.subCategory || '',
     }
+}
+
+exports.refillFreezeStreak = async ({ email, amount }) => {
+    let result = false
+
+    let user = await UserModel.findOne({ email }).exec()
+
+    const prevUserFreeze = user?.availableStreakFreeze || 0
+    const totalPurchasedGems = GEMS_STREAK_FREEZE_AMOUNT * amount
+
+    const FREEZE_AMOUNT =
+        amount + prevUserFreeze <= MAX_FREEZE_STREAK
+            ? amount + prevUserFreeze
+            : MAX_FREEZE_STREAK
+    if (
+        user &&
+        user?.availableStreakFreeze < MAX_FREEZE_STREAK &&
+        user?.diamond >= totalPurchasedGems
+    ) {
+        await UserModel.findOneAndUpdate(
+            { email },
+            {
+                $set: {
+                    availableStreakFreeze: FREEZE_AMOUNT,
+                    diamond: user.diamond - totalPurchasedGems,
+                },
+            },
+            { new: true }
+        ).exec()
+        result = true
+    }
+    return result
 }

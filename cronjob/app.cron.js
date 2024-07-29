@@ -98,57 +98,6 @@ cron.schedule('* * * * *', async function () {
             }
         })
     }
-
-    /**
-     * -------------
-     * CRONJOB EVERY END OF DAY
-     * Used for clean up history or reset something.
-     * -------------
-     */
-    if (LOCALE_HOUR === 23 && LOCALE_MINUTE >= 57 && LOCALE_MINUTE <= 59) {
-        // if (LOCALE_HOUR === 0 && LOCALE_MINUTE >= 35 && LOCALE_MINUTE <= 36) {
-        /**
-         * Daily quest
-         */
-        // console.log('DAILY QUEST RUN->>>>', LOCALE_HOUR, LOCALE_MINUTE)
-        const usersHasNumberOfCompleteLesson = await UserModel.find({
-            numberOfLessonCompleteToday: { $gt: 0 },
-        }).exec()
-        // console.log(
-        //     'usersHasNumberOfCompleteLesson->>>>',
-        //     usersHasNumberOfCompleteLesson
-        // )
-
-        if (usersHasNumberOfCompleteLesson?.length > 0) {
-            for (const u of usersHasNumberOfCompleteLesson) {
-                if (user) {
-                    await UserModel.updateOne(
-                        { _id: u._id },
-                        {
-                            $set: {
-                                numberOfLessonCompleteToday: 0,
-                            },
-                        },
-                        { new: true }
-                    ).exec()
-                }
-            }
-        }
-
-        /**
-         * Apply freeze streak
-         */
-        const userHasAvailableFreezeStreak = await UserModel.find({
-            availableStreakFreeze: { $gt: 0 },
-        }).exec()
-
-        if (userHasAvailableFreezeStreak?.length > 0) {
-            for (const u of usersHasNumberOfCompleteLesson) {
-                // const user = await UserModel.findOne({ _id: u.userId })
-                console.log('userHasAvailableFreezeStreak', u)
-            }
-        }
-    }
 })
 
 // Cronjob At every 5th minute.
@@ -196,7 +145,7 @@ cron.schedule('*/5 * * * *', async function () {
             // use done lesson today
             if (DIFF_DAY === 0 && user.streak > 0) {
                 // prettier-ignore
-                console.log(`---^^^ DIFF_DAY === 0 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
+                // console.log(`---^^^ DIFF_DAY === 0 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
 
                 const STREAK_COMBO_NOTIFICATION_DATA = {
                     user,
@@ -262,7 +211,7 @@ cron.schedule('*/5 * * * *', async function () {
             // Last done lesson yesterday
             else if (DIFF_DAY === 1 && user.streak > 0) {
                 // prettier-ignore
-                console.log(`--->>> DIFF_DAY === 1 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
+                // console.log(`--->>> DIFF_DAY === 1 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
 
                 const STREAK_REMINDER_DATA = {
                     user: user,
@@ -335,7 +284,7 @@ cron.schedule('*/5 * * * *', async function () {
                  * Users may not do lessons but their streak is still more than 0
                  */
                 // prettier-ignore
-                console.log(`<<<--- user.streak === 0 || DIFF_DAY >= 2 ${user.email} : ${DIFF_DAY}`)
+                // console.log(`<<<--- user.streak === 0 || DIFF_DAY >= 2 ${user.email} : ${DIFF_DAY}`)
                 // DIFF DAY 2
                 if (DIFF_DAY === 2) {
                     const STREAK_REMINDER_DATA = {
@@ -1320,6 +1269,106 @@ cron.schedule('*/5 * * * *', async function () {
             }
         } else {
             // console.log('Do nothing')
+        }
+    }
+
+    /**
+     * -------------
+     * CRONJOB EVERY END OF DAY
+     * Used for clean up history or reset something.
+     * -------------
+     */
+
+    /**
+     * Daily quest
+     */
+    const usersHasNumberOfCompleteLesson = await UserModel.find({
+        numberOfLessonCompleteToday: { $gt: 0 },
+    }).exec()
+
+    if (usersHasNumberOfCompleteLesson?.length > 0) {
+        for (const u of usersHasNumberOfCompleteLesson) {
+            if (u?._id) {
+                const USER_TIMEZONE_DATE_NOW = new Date().toLocaleString(
+                    'en-US',
+                    { timeZone: u?.userTimezone || SERVER_TIMEZONE }
+                )
+
+                const USER_TIMEZONE_DAY_OF_WEEK = dayjs(
+                    USER_TIMEZONE_DATE_NOW
+                ).day()
+                const USER_TIMEZONE_HOUR = dayjs(USER_TIMEZONE_DATE_NOW).hour()
+                const USER_TIMEZONE_MINUTE = dayjs(
+                    USER_TIMEZONE_DATE_NOW
+                ).minute()
+
+                if (
+                    USER_TIMEZONE_HOUR === 23 &&
+                    USER_TIMEZONE_MINUTE >= 55 &&
+                    USER_TIMEZONE_MINUTE < 59
+                ) {
+                    await UserModel.updateOne(
+                        { _id: u._id },
+                        {
+                            $set: {
+                                numberOfLessonCompleteToday: 0,
+                            },
+                        },
+                        { new: true }
+                    ).exec()
+                }
+            }
+        }
+    }
+
+    /**
+     * Auto apply freeze streak
+     */
+    const userHasAvailableFreezeStreak = await UserModel.find({
+        availableStreakFreeze: { $gt: 0 },
+    }).exec()
+
+    if (userHasAvailableFreezeStreak?.length > 0) {
+        for (const u of userHasAvailableFreezeStreak) {
+            if (u?._id) {
+                const USER_TIMEZONE_DATE_NOW = new Date().toLocaleString(
+                    'en-US',
+                    { timeZone: u?.userTimezone || SERVER_TIMEZONE }
+                )
+                const USER_TIMEZONE_DAY_OF_WEEK = dayjs(
+                    USER_TIMEZONE_DATE_NOW
+                ).day()
+                const USER_TIMEZONE_HOUR = dayjs(USER_TIMEZONE_DATE_NOW).hour()
+                const USER_TIMEZONE_MINUTE = dayjs(
+                    USER_TIMEZONE_DATE_NOW
+                ).minute()
+
+                console.log(
+                    'userHasAvailableFreezeStreak',
+                    u.email,
+                    u.availableStreakFreeze,
+                    dayjs(u.lastCompletedDay)?.toISOString()?.slice(0, 10),
+                    dayjs(USER_TIMEZONE_DATE_NOW)?.toISOString()?.slice(0, 10)
+                )
+                console.log('USER_TIMEZONE_HOUR', USER_TIMEZONE_HOUR)
+                console.log('USER_TIMEZONE_MINUTE', USER_TIMEZONE_MINUTE)
+
+                // if (
+                //     USER_TIMEZONE_HOUR === 23 &&
+                //     USER_TIMEZONE_MINUTE >= 55 &&
+                //     USER_TIMEZONE_MINUTE < 59
+                // ) {
+                //     await UserModel.updateOne(
+                //         { _id: u._id },
+                //         {
+                //             $set: {
+                //                 numberOfLessonCompleteToday: 0,
+                //             },
+                //         },
+                //         { new: true }
+                //     ).exec()
+                // }
+            }
         }
     }
 })
