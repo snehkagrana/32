@@ -1350,28 +1350,32 @@ cron.schedule('*/5 * * * *', async function () {
                     ?.toISOString()
                     ?.slice(0, 10)
 
-                const DIFF_DAY = dayjs(todayUserTimezone).diff(
-                    dayjs(userLastCompleteLesson),
-                    'day'
-                )
+                if (DIFF_DAY === 1) {
+                    if (
+                        USER_TIMEZONE_HOUR === 23 &&
+                        USER_TIMEZONE_MINUTE >= 55 &&
+                        USER_TIMEZONE_MINUTE < 59
+                    ) {
+                        const prevCalendarStreak = u?.calendarStreak || []
+                        const userCalendarStreak = [...prevCalendarStreak]
+                        userCalendarStreak.push({
+                            date: dayjs(USER_TIMEZONE_DATE_NOW).toISOString(),
+                            isFreeze: true,
+                        })
 
-                console.log('DIFF_DAY', u.email, DIFF_DAY)
-
-                // if (
-                //     USER_TIMEZONE_HOUR === 23 &&
-                //     USER_TIMEZONE_MINUTE >= 55 &&
-                //     USER_TIMEZONE_MINUTE < 59
-                // ) {
-                //     await UserModel.updateOne(
-                //         { _id: u._id },
-                //         {
-                //             $set: {
-                //                 numberOfLessonCompleteToday: 0,
-                //             },
-                //         },
-                //         { new: true }
-                //     ).exec()
-                // }
+                        await UserModel.updateOne(
+                            { _id: u._id },
+                            {
+                                $set: {
+                                    calendarStreak: userCalendarStreak,
+                                    availableStreakFreeze:
+                                        u?.availableStreakFreeze - 1,
+                                },
+                            },
+                            { new: true }
+                        ).exec()
+                    }
+                }
             }
         }
     }
