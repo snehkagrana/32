@@ -116,9 +116,9 @@ cron.schedule('*/5 * * * *', async function () {
     const LOCALE_HOUR = dayjs(LOCALE_DATE_NOW).hour()
     const LOCALE_MINUTE = dayjs(LOCALE_DATE_NOW).minute()
 
-    console.log('->LOCALE_DAY_OF_WEEK ', LOCALE_DAY_OF_WEEK)
-    console.log('->LOCALE_HOUR', LOCALE_HOUR)
-    console.log('->LOCALE_MINUTE', LOCALE_MINUTE)
+    // console.log('->LOCALE_DAY_OF_WEEK ', LOCALE_DAY_OF_WEEK)
+    // console.log('->LOCALE_HOUR', LOCALE_HOUR)
+    // console.log('->LOCALE_MINUTE', LOCALE_MINUTE)
 
     // user with 0 streak
     const usersHasFCMToken = await UserModel.find({
@@ -1280,56 +1280,20 @@ cron.schedule('*/5 * * * *', async function () {
      */
 
     /**
-     * Daily quest
+     * Daily quest & Auto apply freeze streak
      */
+    // const usersHasNumberOfCompleteLesson = await UserModel.find({
+    //     numberOfLessonCompleteToday: { $gt: 0 },
+    // }).exec()
     const usersHasNumberOfCompleteLesson = await UserModel.find({
-        numberOfLessonCompleteToday: { $gt: 0 },
+        $or: [
+            { numberOfLessonCompleteToday: { $gt: 0 } },
+            { availableStreakFreeze: { $gt: 0 } },
+        ],
     }).exec()
 
     if (usersHasNumberOfCompleteLesson?.length > 0) {
         for (const u of usersHasNumberOfCompleteLesson) {
-            if (u?._id) {
-                const USER_TIMEZONE_DATE_NOW = new Date().toLocaleString(
-                    'en-US',
-                    { timeZone: u?.userTimezone || SERVER_TIMEZONE }
-                )
-
-                const USER_TIMEZONE_DAY_OF_WEEK = dayjs(
-                    USER_TIMEZONE_DATE_NOW
-                ).day()
-                const USER_TIMEZONE_HOUR = dayjs(USER_TIMEZONE_DATE_NOW).hour()
-                const USER_TIMEZONE_MINUTE = dayjs(
-                    USER_TIMEZONE_DATE_NOW
-                ).minute()
-
-                if (
-                    USER_TIMEZONE_HOUR === 23 &&
-                    USER_TIMEZONE_MINUTE >= 55 &&
-                    USER_TIMEZONE_MINUTE < 59
-                ) {
-                    await UserModel.updateOne(
-                        { _id: u._id },
-                        {
-                            $set: {
-                                numberOfLessonCompleteToday: 0,
-                            },
-                        },
-                        { new: true }
-                    ).exec()
-                }
-            }
-        }
-    }
-
-    /**
-     * Auto apply freeze streak
-     */
-    const userHasAvailableFreezeStreak = await UserModel.find({
-        availableStreakFreeze: { $gt: 0 },
-    }).exec()
-
-    if (userHasAvailableFreezeStreak?.length > 0) {
-        for (const u of userHasAvailableFreezeStreak) {
             if (u?._id) {
                 const USER_TIMEZONE_DATE_NOW = new Date().toLocaleString(
                     'en-US',
@@ -1350,19 +1314,48 @@ cron.schedule('*/5 * * * *', async function () {
                     ?.toISOString()
                     ?.slice(0, 10)
 
-                if (DIFF_DAY === 1) {
-                    if (
-                        USER_TIMEZONE_HOUR === 23 &&
-                        USER_TIMEZONE_MINUTE >= 55 &&
-                        USER_TIMEZONE_MINUTE < 59
-                    ) {
+                const LAST_COMPLETE_LESSON_DIFF_DAY = dayjs(
+                    todayUserTimezone
+                ).diff(dayjs(userLastCompleteLesson), 'day')
+
+                // console.log(
+                //     'LAST_COMPLETE_LESSON_DIFF_DAY',
+                //     LAST_COMPLETE_LESSON_DIFF_DAY,
+                //     u.email,
+                //     u.lastCompletedDay
+                // )
+
+                /**
+                 * Every end of day
+                 */
+                if (
+                    USER_TIMEZONE_HOUR === 23 &&
+                    USER_TIMEZONE_MINUTE >= 55 &&
+                    USER_TIMEZONE_MINUTE < 59
+                ) {
+                    /**
+                     * reset number of lesson complete today
+                     */
+                    await UserModel.updateOne(
+                        { _id: u._id },
+                        {
+                            $set: {
+                                numberOfLessonCompleteToday: 0,
+                            },
+                        },
+                        { new: true }
+                    ).exec()
+
+                    /**
+                     * Auto apply freeze streak
+                     */
+                    if (LAST_COMPLETE_LESSON_DIFF_DAY == 1) {
                         const prevCalendarStreak = u?.calendarStreak || []
                         const userCalendarStreak = [...prevCalendarStreak]
                         userCalendarStreak.push({
                             date: dayjs(USER_TIMEZONE_DATE_NOW).toISOString(),
                             isFreeze: true,
                         })
-
                         await UserModel.updateOne(
                             { _id: u._id },
                             {
