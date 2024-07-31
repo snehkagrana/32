@@ -1336,15 +1336,17 @@ cron.schedule('*/5 * * * *', async function () {
                     /**
                      * reset number of lesson complete today
                      */
-                    await UserModel.updateOne(
-                        { _id: u._id },
-                        {
-                            $set: {
-                                numberOfLessonCompleteToday: 0,
+                    if (u?.numberOfLessonCompleteToday > 0) {
+                        await UserModel.updateOne(
+                            { _id: u._id },
+                            {
+                                $set: {
+                                    numberOfLessonCompleteToday: 0,
+                                },
                             },
-                        },
-                        { new: true }
-                    ).exec()
+                            { new: true }
+                        ).exec()
+                    }
 
                     /**
                      * Auto apply freeze streak
@@ -1363,6 +1365,9 @@ cron.schedule('*/5 * * * *', async function () {
                                     calendarStreak: userCalendarStreak,
                                     availableStreakFreeze:
                                         u?.availableStreakFreeze - 1,
+                                    lastCompletedDay: dayjs(
+                                        USER_TIMEZONE_DATE_NOW
+                                    ).toISOString(),
                                 },
                             },
                             { new: true }
