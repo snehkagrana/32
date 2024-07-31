@@ -1282,18 +1282,18 @@ cron.schedule('*/5 * * * *', async function () {
     /**
      * Daily quest & Auto apply freeze streak
      */
-    // const usersHasNumberOfCompleteLesson = await UserModel.find({
+    // const matchCriteriaUsers = await UserModel.find({
     //     numberOfLessonCompleteToday: { $gt: 0 },
     // }).exec()
-    const usersHasNumberOfCompleteLesson = await UserModel.find({
+    const matchCriteriaUsers = await UserModel.find({
         $or: [
             { numberOfLessonCompleteToday: { $gt: 0 } },
             { availableStreakFreeze: { $gt: 0 } },
         ],
     }).exec()
 
-    if (usersHasNumberOfCompleteLesson?.length > 0) {
-        for (const u of usersHasNumberOfCompleteLesson) {
+    if (matchCriteriaUsers?.length > 0) {
+        for (const u of matchCriteriaUsers) {
             if (u?._id) {
                 const USER_TIMEZONE_DATE_NOW = new Date().toLocaleString(
                     'en-US',
