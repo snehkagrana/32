@@ -20,7 +20,6 @@ const checkHasStreakToday = (calendarStreak = [], userTimezone) => {
 }
 
 const getStreakDiffDays = (lastCompletedDay, userTimezone) => {
-    console.log('--->', typeof lastCompletedDay)
     if (!lastCompletedDay || !userTimezone) {
         return null
     } else {
@@ -41,20 +40,20 @@ const getStreakDiffDays = (lastCompletedDay, userTimezone) => {
             .toISOString()
             ?.slice(0, 10)
 
-        console.log(
-            'USER DIFF HOUR->',
-            dayjs(dateUserTimezoneToday).diff(
-                dateUserLastCompleteLesson,
-                'hour'
-            )
-        )
-        console.log(
-            'SERVER DIFF HOUR->',
-            dayjs(dateServerTimezoneToday).diff(
-                dateUserLastCompleteLesson,
-                'hour'
-            )
-        )
+        // console.log(
+        //     'USER DIFF HOUR->',
+        //     dayjs(dateUserTimezoneToday).diff(
+        //         dateUserLastCompleteLesson,
+        //         'hour'
+        //     )
+        // )
+        // console.log(
+        //     'SERVER DIFF HOUR->',
+        //     dayjs(dateServerTimezoneToday).diff(
+        //         dateUserLastCompleteLesson,
+        //         'hour'
+        //     )
+        // )
 
         return dayjs(dateUserTimezoneToday).diff(
             dateUserLastCompleteLesson,

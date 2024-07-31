@@ -80,6 +80,10 @@ const UserSchema = new mongoose.Schema({
             },
         },
     ],
+    availableStreakFreeze: {
+        type: Number,
+        default: 0,
+    },
 
     lastCompletedDay: Date,
     completedDays: {

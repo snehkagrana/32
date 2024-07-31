@@ -155,9 +155,9 @@ exports.googleSignInMobile = async (req, res) => {
 exports.login = async (req, res) => {
     const userTimezone = req.body?.userTimezone || DEFAULT_TIMEZONE
     const user = await AuthService.findUserByEmail(req.body.email)
-    await AuthService.syncUser(req.body.email, userTimezone)
 
     if (user) {
+        await AuthService.syncUser(req.body.email, userTimezone)
         const isMatched = await bcryptUtil.compareHash(
             req.body.password,
             user.password

@@ -116,9 +116,9 @@ cron.schedule('*/5 * * * *', async function () {
     const LOCALE_HOUR = dayjs(LOCALE_DATE_NOW).hour()
     const LOCALE_MINUTE = dayjs(LOCALE_DATE_NOW).minute()
 
-    console.log('->LOCALE_DAY_OF_WEEK ', LOCALE_DAY_OF_WEEK)
-    console.log('->LOCALE_HOUR', LOCALE_HOUR)
-    console.log('->LOCALE_MINUTE', LOCALE_MINUTE)
+    // console.log('->LOCALE_DAY_OF_WEEK ', LOCALE_DAY_OF_WEEK)
+    // console.log('->LOCALE_HOUR', LOCALE_HOUR)
+    // console.log('->LOCALE_MINUTE', LOCALE_MINUTE)
 
     // user with 0 streak
     const usersHasFCMToken = await UserModel.find({
@@ -145,7 +145,7 @@ cron.schedule('*/5 * * * *', async function () {
             // use done lesson today
             if (DIFF_DAY === 0 && user.streak > 0) {
                 // prettier-ignore
-                console.log(`---^^^ DIFF_DAY === 0 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
+                // console.log(`---^^^ DIFF_DAY === 0 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
 
                 const STREAK_COMBO_NOTIFICATION_DATA = {
                     user,
@@ -211,7 +211,7 @@ cron.schedule('*/5 * * * *', async function () {
             // Last done lesson yesterday
             else if (DIFF_DAY === 1 && user.streak > 0) {
                 // prettier-ignore
-                console.log(`--->>> DIFF_DAY === 1 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
+                // console.log(`--->>> DIFF_DAY === 1 && user.streak > 0 -> ${user.email}:${DIFF_DAY}`)
 
                 const STREAK_REMINDER_DATA = {
                     user: user,
@@ -284,7 +284,7 @@ cron.schedule('*/5 * * * *', async function () {
                  * Users may not do lessons but their streak is still more than 0
                  */
                 // prettier-ignore
-                console.log(`<<<--- user.streak === 0 || DIFF_DAY >= 2 ${user.email} : ${DIFF_DAY}`)
+                // console.log(`<<<--- user.streak === 0 || DIFF_DAY >= 2 ${user.email} : ${DIFF_DAY}`)
                 // DIFF DAY 2
                 if (DIFF_DAY === 2) {
                     const STREAK_REMINDER_DATA = {
@@ -1240,7 +1240,7 @@ cron.schedule('*/5 * * * *', async function () {
                 let leaderBoardUsers = usersWithWeeklyXp.map(x => ({
                     userId: x._doc._id, 
                     displayName: x._doc.firstName ? x._doc.firstName : x._doc.displayName || '',
-                    xp: x._doc.xp.weekly || MINIMUM_WEEKLY_XP_LEADER_BOARD,
+                    xp: x._doc.xp.weekly || MINIMUM_WEEKLY_XP_LEAgitDER_BOARD,
                     email: x._doc.email,
                     imgPath: x._doc.imgPath || null,
                 }));
@@ -1274,31 +1274,105 @@ cron.schedule('*/5 * * * *', async function () {
 
     /**
      * -------------
-     * Daily quest
+     * CRONJOB EVERY END OF DAY
+     * Used for clean up history or reset something.
      * -------------
      */
-    if (LOCALE_HOUR === 23 && LOCALE_MINUTE >= 50 && LOCALE_MINUTE <= 55) {
-        console.log('DAILY QUEST RUN->>>>', LOCALE_HOUR, LOCALE_MINUTE)
-        const usersHasNumberOfCompleteLesson = await UserModel.find({
-            numberOfLessonCompleteToday: { $gt: 0 },
-        }).exec()
-        console.log(
-            'usersHasNumberOfCompleteLesson->>>>',
-            usersHasNumberOfCompleteLesson
-        )
-        if (usersHasNumberOfCompleteLesson?.length > 0) {
-            for (const u of usersHasNumberOfCompleteLesson) {
-                const user = await UserModel.findOne({ _id: u.userId })
-                if (user) {
-                    await UserModel.updateOne(
-                        { _id: u.userId },
-                        {
-                            $set: {
-                                numberOfLessonCompleteToday: 0,
+
+    /**
+     * Daily quest & Auto apply freeze streak
+     */
+    // const matchCriteriaUsers = await UserModel.find({
+    //     numberOfLessonCompleteToday: { $gt: 0 },
+    // }).exec()
+    const matchCriteriaUsers = await UserModel.find({
+        $or: [
+            { numberOfLessonCompleteToday: { $gt: 0 } },
+            { availableStreakFreeze: { $gt: 0 } },
+        ],
+    }).exec()
+
+    if (matchCriteriaUsers?.length > 0) {
+        for (const u of matchCriteriaUsers) {
+            if (u?._id) {
+                const USER_TIMEZONE_DATE_NOW = new Date().toLocaleString(
+                    'en-US',
+                    { timeZone: u?.userTimezone || SERVER_TIMEZONE }
+                )
+                const USER_TIMEZONE_DAY_OF_WEEK = dayjs(
+                    USER_TIMEZONE_DATE_NOW
+                ).day()
+                const USER_TIMEZONE_HOUR = dayjs(USER_TIMEZONE_DATE_NOW).hour()
+                const USER_TIMEZONE_MINUTE = dayjs(
+                    USER_TIMEZONE_DATE_NOW
+                ).minute()
+
+                const todayUserTimezone = dayjs(USER_TIMEZONE_DATE_NOW)
+                    ?.toISOString()
+                    ?.slice(0, 10)
+                const userLastCompleteLesson = dayjs(u.lastCompletedDay)
+                    ?.toISOString()
+                    ?.slice(0, 10)
+
+                const LAST_COMPLETE_LESSON_DIFF_DAY = dayjs(
+                    todayUserTimezone
+                ).diff(dayjs(userLastCompleteLesson), 'day')
+
+                // console.log(
+                //     'LAST_COMPLETE_LESSON_DIFF_DAY',
+                //     LAST_COMPLETE_LESSON_DIFF_DAY,
+                //     u.email,
+                //     u.lastCompletedDay
+                // )
+
+                /**
+                 * Every end of day
+                 */
+                if (
+                    USER_TIMEZONE_HOUR === 23 &&
+                    USER_TIMEZONE_MINUTE >= 55 &&
+                    USER_TIMEZONE_MINUTE < 59
+                ) {
+                    /**
+                     * reset number of lesson complete today
+                     */
+                    if (u?.numberOfLessonCompleteToday > 0) {
+                        await UserModel.updateOne(
+                            { _id: u._id },
+                            {
+                                $set: {
+                                    numberOfLessonCompleteToday: 0,
+                                },
                             },
-                        },
-                        { new: true }
-                    ).exec()
+                            { new: true }
+                        ).exec()
+                    }
+
+                    /**
+                     * Auto apply freeze streak
+                     */
+                    if (LAST_COMPLETE_LESSON_DIFF_DAY == 1) {
+                        const prevCalendarStreak = u?.calendarStreak || []
+                        const userCalendarStreak = [...prevCalendarStreak]
+                        userCalendarStreak.push({
+                            date: dayjs(USER_TIMEZONE_DATE_NOW).toISOString(),
+                            isFreeze: true,
+                        })
+                        await UserModel.updateOne(
+                            { _id: u._id },
+                            {
+                                $set: {
+                                    calendarStreak: userCalendarStreak,
+                                    availableStreakFreeze:
+                                        u?.availableStreakFreeze - 1,
+                                    lastCompletedDay: dayjs(
+                                        USER_TIMEZONE_DATE_NOW
+                                    ).toISOString(),
+                                },
+                            },
+                            { new: true }
+                        ).exec()
+                    }
                 }
             }
         }

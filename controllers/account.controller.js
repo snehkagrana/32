@@ -188,3 +188,18 @@ exports.saveNextLesson = async (req, res) => {
     }
     return res.status(400).json({ message: 'Failed!' })
 }
+
+exports.refillFreezeStreak = async (req, res) => {
+    const result = await AccountService.refillFreezeStreak({
+        email: req.user.email,
+        amount: req.body.amount,
+    })
+    if (result) {
+        return res.json({
+            message: 'Success',
+        })
+    }
+    return res
+        .status(400)
+        .json({ message: 'Failed to refill your streak freeze!' })
+}
