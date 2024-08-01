@@ -125,6 +125,9 @@ exports.syncUser = async (email, paramUserTimezone) => {
     // prettier-ignore
     let userCalendarStreak = user?.calendarStreak?.length > 0 ? [...user?.calendarStreak] : []
 
+    // prettier-ignore
+    let userStreakChallenge = user?.streakChallenge || {}
+
     // Migrate to calendar streak
     if (user?.calendarStreak?.length === 0 && user?.dayStreak?.length > 0) {
         userCalendarStreak = validateAndConvertToNewObjectCalendarStreak(
@@ -148,19 +151,26 @@ exports.syncUser = async (email, paramUserTimezone) => {
             user.lastCompletedDay,
             user.userTimezone
         )
-        console.log('streakDiffDays ->>>>>>>>>>>', user.email, streakDiffDays)
+        console.log('SYNC : streakDiffDays->', user.email, streakDiffDays)
 
         if (streakDiffDays === 1) {
             // Do nothing, the streak is already up-to-date
         } else if (streakDiffDays === 2) {
             // User missed one day, reset streak to 0
-            user.streak = 0
+            // user.streak = 0
             newStreak = 0
+            if (user?.streakChallenge?.isActive) {
+                userStreakChallenge = {
+                    ...userStreakChallenge,
+                    isActive: false,
+                    isFailed: true,
+                }
+            }
         } else if (streakDiffDays === 0) {
             //keep streak the same
         } else {
             // User missed more than one day, keep streak at 0
-            user.streak = 0
+            // user.streak = 0
             newStreak = 0
         }
 
@@ -179,7 +189,7 @@ exports.syncUser = async (email, paramUserTimezone) => {
                         user.diamondInitialized
                     ),
                     diamondInitialized: true,
-                    streak: user.streak,
+                    streak: newStreak,
                     xp: {
                         current: user?.xp?.current ? user.xp.current : 0,
                         daily: user?.xp?.daily ? user.xp.daily : 0,
@@ -206,6 +216,7 @@ exports.syncUser = async (email, paramUserTimezone) => {
                     userTimezone,
                     calendarStreak: userCalendarStreak,
                     availableStreakFreeze: user?.availableStreakFreeze || 0,
+                    streakChallenge: userStreakChallenge,
                 },
             }
         )

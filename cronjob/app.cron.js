@@ -1352,12 +1352,23 @@ cron.schedule('*/5 * * * *', async function () {
                      * Auto apply freeze streak
                      */
                     if (LAST_COMPLETE_LESSON_DIFF_DAY == 1) {
+                        let prevStreakChallenge = u?.streakChallenge || {}
                         const prevCalendarStreak = u?.calendarStreak || []
+
                         const userCalendarStreak = [...prevCalendarStreak]
                         userCalendarStreak.push({
                             date: dayjs(USER_TIMEZONE_DATE_NOW).toISOString(),
                             isFreeze: true,
                         })
+
+                        if (u?.streakChallenge?.isActive) {
+                            prevStreakChallenge = {
+                                ...prevStreakChallenge,
+                                isActive: false,
+                                isFailed: true,
+                            }
+                        }
+
                         await UserModel.updateOne(
                             { _id: u._id },
                             {
@@ -1368,6 +1379,7 @@ cron.schedule('*/5 * * * *', async function () {
                                     lastCompletedDay: dayjs(
                                         USER_TIMEZONE_DATE_NOW
                                     ).toISOString(),
+                                    streakChallenge: prevStreakChallenge,
                                 },
                             },
                             { new: true }

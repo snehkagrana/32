@@ -118,4 +118,18 @@ router.post(
     ErrorHandler(AccountController.refillFreezeStreak)
 )
 
+router.post(
+    '/account/streak/challenge/extend',
+    validate(AccountValidations.extendStreakChallenge),
+    AuthGuard,
+    ErrorHandler(AccountController.extendStreakChallenge)
+)
+
+router.post(
+    '/account/streak/challenge',
+    validate(AccountValidations.joinStreakChallenge),
+    AuthGuard,
+    ErrorHandler(AccountController.joinStreakChallenge)
+)
+
 module.exports = router

@@ -84,6 +84,36 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
+    streakChallenge: {
+        isActive: {
+            type: Boolean,
+            default: false,
+        },
+        numberOfDay: {
+            type: Number,
+            default: 0,
+        },
+        progress: {
+            type: Number,
+            default: 0,
+        },
+        startDateUTC: {
+            type: Date,
+            default: null,
+        },
+        endDateUTC: {
+            type: Date,
+            default: null,
+        },
+        isExtend: {
+            type: Boolean,
+            default: false,
+        },
+        isFailed: {
+            type: Boolean,
+            default: false,
+        },
+    },
 
     lastCompletedDay: Date,
     completedDays: {

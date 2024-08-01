@@ -7,12 +7,15 @@ const {
     NOTIFICATION_TYPE,
     MAX_FREEZE_STREAK,
     GEMS_STREAK_FREEZE_AMOUNT,
+    GEMS_STREAK_CHALLENGE_AMOUNT,
+    SERVER_TIMEZONE,
 } = require('../constants/app.constant')
 const { getFirstName, getFullName } = require('../utils/user.util')
 const DailyQuestService = require('../services/daily-quest.service')
 const {
     ACTION_NAME_FOLLOW_FRIENDS,
 } = require('../constants/daily-quest.constant')
+const dayjs = require('dayjs')
 
 var ObjectId = require('mongoose').Types.ObjectId
 
@@ -473,6 +476,84 @@ exports.refillFreezeStreak = async ({ email, amount }) => {
                 $set: {
                     availableStreakFreeze: FREEZE_AMOUNT,
                     diamond: user.diamond - totalPurchasedGems,
+                },
+            },
+            { new: true }
+        ).exec()
+        result = true
+    }
+    return result
+}
+
+exports.joinStreakChallenge = async ({ email, numberOfDay }) => {
+    let result = false
+    let user = await UserModel.findOne({ email }).exec()
+    const isActiveStreakChallenge = user?.streakChallenge?.isActive
+        ? true
+        : false
+
+    const NOW = new Date()
+    const startDateUTC = dayjs(NOW).toISOString()
+    const endDateUTC = dayjs(NOW).add(numberOfDay, 'day').toISOString()
+
+    if (
+        user &&
+        !isActiveStreakChallenge &&
+        user?.diamond >= GEMS_STREAK_CHALLENGE_AMOUNT
+    ) {
+        await UserModel.findOneAndUpdate(
+            { email },
+            {
+                $set: {
+                    streakChallenge: {
+                        isActive: true,
+                        numberOfDay: numberOfDay,
+                        progress: 0,
+                        startDateUTC,
+                        endDateUTC,
+                        isExtend: false,
+                        isFailed: false,
+                    },
+                    diamond: user.diamond - GEMS_STREAK_CHALLENGE_AMOUNT,
+                },
+            },
+            { new: true }
+        ).exec()
+        result = true
+    }
+    return result
+}
+
+exports.extendStreakChallenge = async ({ email, numberOfDay }) => {
+    let result = false
+    let user = await UserModel.findOne({ email }).exec()
+
+    const isActiveStreakChallenge = user?.streakChallenge?.isActive
+
+    // const NOW = new Date()
+    const prevStreakChallenge = user.streakChallenge || {}
+
+    // prettier-ignore
+    const startDateUTC = dayjs(user?.streakChallenge?.startDateUTC).toISOString()
+    const endDateUTC = dayjs(startDateUTC).add(numberOfDay, 'day').toISOString()
+
+    const newStreakChallenge = {
+        ...prevStreakChallenge,
+        isActive: true,
+        numberOfDay: numberOfDay,
+        startDateUTC,
+        endDateUTC,
+        isExtend: true,
+        isFailed: false,
+    }
+
+    if (user && isActiveStreakChallenge) {
+        await UserModel.findOneAndUpdate(
+            { email },
+            {
+                $set: {
+                    streakChallenge: newStreakChallenge,
+                    // diamond: user.diamond - GEMS_STREAK_CHALLENGE_AMOUNT,
                 },
             },
             { new: true }
