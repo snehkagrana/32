@@ -124,6 +124,7 @@ exports.saveScore = async ({ authUser, body }) => {
          */
         const prevCalendarStreak = user?.calendarStreak || []
         const userCalendarStreak = [...prevCalendarStreak]
+        let userStreakChallenge = user.streakChallenge || {}
         if (
             !checkHasStreakToday(user.calendarStreak || [], user.userTimezone)
         ) {
@@ -131,6 +132,10 @@ exports.saveScore = async ({ authUser, body }) => {
                 date: dayjs(DATE_USER_TIMEZONE).toISOString(),
                 isFreeze: false,
             })
+            userStreakChallenge = {
+                ...userStreakChallenge,
+                progress: userStreakChallenge + 1,
+            }
         }
 
         const isAllAnsweredCorrectly = () => {
@@ -180,6 +185,7 @@ exports.saveScore = async ({ authUser, body }) => {
                     lastCompletedDay: user.lastCompletedDay,
                     completedDays: completedDays,
                     calendarStreak: userCalendarStreak,
+                    streakChallenge: userStreakChallenge,
                 },
             }
         )
