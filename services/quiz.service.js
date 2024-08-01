@@ -134,7 +134,7 @@ exports.saveScore = async ({ authUser, body }) => {
             })
             userStreakChallenge = {
                 ...userStreakChallenge,
-                progress: userStreakChallenge + 1,
+                progress: userStreakChallenge?.progress + 1,
             }
         }
 
