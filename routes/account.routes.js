@@ -132,4 +132,10 @@ router.post(
     ErrorHandler(AccountController.joinStreakChallenge)
 )
 
+router.post(
+    '/account/streak/challenge/claim',
+    AuthGuard,
+    ErrorHandler(AccountController.claimRewardStreakChallenge)
+)
+
 module.exports = router

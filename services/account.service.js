@@ -9,6 +9,7 @@ const {
     GEMS_STREAK_FREEZE_AMOUNT,
     GEMS_STREAK_CHALLENGE_AMOUNT,
     SERVER_TIMEZONE,
+    STREAK_CHALLENGE_REWARD_BY_DAY,
 } = require('../constants/app.constant')
 const { getFirstName, getFullName } = require('../utils/user.util')
 const DailyQuestService = require('../services/daily-quest.service')
@@ -560,6 +561,48 @@ exports.extendStreakChallenge = async ({ email, numberOfDay }) => {
             { new: true }
         ).exec()
         result = true
+    }
+    return result
+}
+
+exports.claimRewardStreakChallenge = async ({ email }) => {
+    let result = 0
+    let user = await UserModel.findOne({ email }).exec()
+
+    const isActiveStreakChallenge = user?.streakChallenge?.isActive
+
+    // prettier-ignore
+    const isCompleteChallenge = user?.streakChallenge?.progress === user?.streakChallenge?.numberOfDay
+
+    // const NOW = new Date()
+    const prevStreakChallenge = user.streakChallenge || {}
+
+    if (user && isActiveStreakChallenge && isCompleteChallenge) {
+        const getDiamondReward = () => {
+            return (
+                STREAK_CHALLENGE_REWARD_BY_DAY?.[
+                    prevStreakChallenge.numberOfDay
+                ] || 0
+            )
+        }
+
+        const newStreakChallenge = {
+            ...prevStreakChallenge,
+            isActive: false,
+        }
+
+        result = getDiamondReward()
+
+        await UserModel.findOneAndUpdate(
+            { email },
+            {
+                $set: {
+                    streakChallenge: newStreakChallenge,
+                    diamond: user.diamond + getDiamondReward(),
+                },
+            },
+            { new: true }
+        ).exec()
     }
     return result
 }
