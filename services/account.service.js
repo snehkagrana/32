@@ -488,17 +488,18 @@ exports.refillFreezeStreak = async ({ email, amount }) => {
 exports.joinStreakChallenge = async ({ email, numberOfDay }) => {
     let result = false
     let user = await UserModel.findOne({ email }).exec()
-    const isActiveStreakChallenge = user?.streakChallenge?.isActive
-        ? true
-        : false
 
     const NOW = new Date()
     const startDateUTC = dayjs(NOW).toISOString()
     const endDateUTC = dayjs(NOW).add(numberOfDay, 'day').toISOString()
 
+    const isAbleToJoinChallenge = user?.streakChallenge?.isActive
+        ? user?.streakChallenge?.progress === user?.streakChallenge?.numberOfDay
+        : true
+
     if (
         user &&
-        !isActiveStreakChallenge &&
+        isAbleToJoinChallenge &&
         user?.diamond >= GEMS_STREAK_CHALLENGE_AMOUNT
     ) {
         await UserModel.findOneAndUpdate(
