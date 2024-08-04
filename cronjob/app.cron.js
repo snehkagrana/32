@@ -1162,12 +1162,12 @@ cron.schedule('*/5 * * * *', async function () {
                 } 
 
                 // prettier-ignore
-                else if (LOCALE_DAY_OF_WEEK === 0) {
+                else if (LOCALE_DAY_OF_WEEK === 6) {
                     const HOUR_LEFT = dayjs(currentActiveLeaderBoard.endDate).diff(LOCALE_DATE_NOW, 'hour') || 0
                     if (LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
                         if(leaderBoardUsers?.length > 0) {
                             leaderBoardUsers.forEach(async (x, index) => {
-                                await LeaderboardReminder.sendSundayReminder({
+                                await LeaderboardReminder.sendSaturdayReminder({
                                     userId: x.userId,
                                     friendName: leaderBoardUsers?.[index - 1]?.displayName || '',
                                     myFriendPosition: index,

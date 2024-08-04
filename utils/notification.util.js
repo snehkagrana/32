@@ -5,7 +5,7 @@ const {
     RANDOMLY_LESSON_REMINDER_NOTIFICATION_TYPE,
     RANDOMLY_STREAK_NOTIFICATION_TYPE,
     RANDOMLY_LEADERBOARD_NOTIFICATION_TYPE,
-    SUNDAY_LEADERBOARD_NOTIFICATION_TYPE,
+    SATURDAY_LEADERBOARD_NOTIFICATION_TYPE,
     LEADERBOARD_NOTIFICATION_TYPE,
     FRIEND_LEADERBOARD_NOTIFICATION_TYPE,
 } = require('../constants/notification-type.constant')
@@ -211,7 +211,7 @@ const LeaderboardReminder = {
             }
         }
     },
-    sendSundayReminder: async ({
+    sendSaturdayReminder: async ({
         userId,
         friendName,
         myFriendPosition,
@@ -240,14 +240,14 @@ const LeaderboardReminder = {
                 const params = {
                     hoursLeft: hoursLeft || 0,
                 }
-                if (!SUNDAY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID]) {
+                if (!SATURDAY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID]) {
                     return false
                 }
                 // prettier-ignore
                 const DATA = {
                     userId,
-                    title: SUNDAY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID](params)?.title || '',
-                    body: SUNDAY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID](params)?.body || '',
+                    title: SATURDAY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID](params)?.title || '',
+                    body: SATURDAY_LEADERBOARD_NOTIFICATION_TYPE[TYPE_ID](params)?.body || '',
                     type: NOTIFICATION_TYPE.leaderboard,
                     dataId: null,
                     shouldSaveHistory: true,
