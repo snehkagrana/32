@@ -95,11 +95,6 @@ const checkIsActiveDailyQuestToday = (arrUserQuest, userTimezone) => {
         timeZone,
     })
 
-    console.log(
-        'checkIsActiveDailyQuestToday:DATE_USER_TIMEZONE->',
-        DATE_USER_TIMEZONE
-    )
-
     // const now = dayjs(new Date())
     if (arrUserQuest?.length > 0) {
         const todayUserDailyQuest = arrUserQuest.filter(item => {
@@ -107,8 +102,6 @@ const checkIsActiveDailyQuestToday = (arrUserQuest, userTimezone) => {
             const dateToday = dayjs(DATE_USER_TIMEZONE)
                 ?.toISOString()
                 ?.slice(0, 10)
-            console.log('checkIsActiveDailyQuestToday:dateQuest->', dateQuest)
-            console.log('checkIsActiveDailyQuestToday:dateToday->', dateToday)
 
             return dateQuest === dateToday
             // dayjs(DATE_USER_TIMEZONE).isSame(x.date, 'day')
