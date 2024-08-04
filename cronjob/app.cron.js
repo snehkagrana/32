@@ -1162,12 +1162,12 @@ cron.schedule('*/5 * * * *', async function () {
                 } 
 
                 // prettier-ignore
-                else if (LOCALE_DAY_OF_WEEK === 0) {
+                else if (LOCALE_DAY_OF_WEEK === 6) {
                     const HOUR_LEFT = dayjs(currentActiveLeaderBoard.endDate).diff(LOCALE_DATE_NOW, 'hour') || 0
                     if (LOCALE_HOUR === 21 && LOCALE_MINUTE >= 30 && LOCALE_MINUTE < 35) {
                         if(leaderBoardUsers?.length > 0) {
                             leaderBoardUsers.forEach(async (x, index) => {
-                                await LeaderboardReminder.sendSundayReminder({
+                                await LeaderboardReminder.sendSaturdayReminder({
                                     userId: x.userId,
                                     friendName: leaderBoardUsers?.[index - 1]?.displayName || '',
                                     myFriendPosition: index,
@@ -1352,12 +1352,23 @@ cron.schedule('*/5 * * * *', async function () {
                      * Auto apply freeze streak
                      */
                     if (LAST_COMPLETE_LESSON_DIFF_DAY == 1) {
+                        let prevStreakChallenge = u?.streakChallenge || {}
                         const prevCalendarStreak = u?.calendarStreak || []
+
                         const userCalendarStreak = [...prevCalendarStreak]
                         userCalendarStreak.push({
                             date: dayjs(USER_TIMEZONE_DATE_NOW).toISOString(),
                             isFreeze: true,
                         })
+
+                        if (u?.streakChallenge?.isActive) {
+                            prevStreakChallenge = {
+                                ...prevStreakChallenge,
+                                isActive: false,
+                                isFailed: true,
+                            }
+                        }
+
                         await UserModel.updateOne(
                             { _id: u._id },
                             {
@@ -1368,6 +1379,7 @@ cron.schedule('*/5 * * * *', async function () {
                                     lastCompletedDay: dayjs(
                                         USER_TIMEZONE_DATE_NOW
                                     ).toISOString(),
+                                    streakChallenge: prevStreakChallenge,
                                 },
                             },
                             { new: true }

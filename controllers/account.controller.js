@@ -203,3 +203,46 @@ exports.refillFreezeStreak = async (req, res) => {
         .status(400)
         .json({ message: 'Failed to refill your streak freeze!' })
 }
+
+exports.joinStreakChallenge = async (req, res) => {
+    const result = await AccountService.joinStreakChallenge({
+        email: req.user.email,
+        numberOfDay: req.body.numberOfDay,
+    })
+    if (result) {
+        return res.json({
+            message: 'Success',
+        })
+    }
+    return res
+        .status(400)
+        .json({ message: 'Failed to join to streak challenge!' })
+}
+
+exports.extendStreakChallenge = async (req, res) => {
+    const result = await AccountService.extendStreakChallenge({
+        email: req.user.email,
+        numberOfDay: req.body.numberOfDay,
+    })
+    if (result) {
+        return res.json({
+            message: 'Success',
+        })
+    }
+    return res
+        .status(400)
+        .json({ message: 'Failed to extend your streak challenge!' })
+}
+
+exports.claimRewardStreakChallenge = async (req, res) => {
+    const result = await AccountService.claimRewardStreakChallenge({
+        email: req.user.email,
+    })
+    if (result) {
+        return res.json({
+            message: 'Success',
+            data: result,
+        })
+    }
+    return res.status(400).json({ message: 'Failed to claim reward!' })
+}

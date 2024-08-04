@@ -57,9 +57,7 @@ router.post(
     validate(schema.sendGeneralNotification),
     AuthGuard,
     AdminMiddleware,
-    ErrorHandler(
-        NotificationController.ANDROID_admin_sendGeneralNotification
-    )
+    ErrorHandler(NotificationController.ANDROID_admin_sendGeneralNotification)
 )
 
 // Send general notification

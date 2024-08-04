@@ -13,6 +13,7 @@ const {
     DAILY_QUEST_TYPE_ANSWER_10_CORRECTLY,
     DAILY_QUEST_TYPE_EARN_5_GEMS,
     DAILY_QUEST_TYPE_ADD_2_FRIENDS,
+    DEFAULT_TIMEZONE,
 } = require('../constants/app.constant')
 
 const { getRandomInt } = require('./common.util')
@@ -85,13 +86,26 @@ const createRandomDailyQuest = user => {
     ]
 }
 
-const checkIsActiveDailyQuestToday = arrUserQuest => {
+const checkIsActiveDailyQuestToday = (arrUserQuest, userTimezone) => {
     let result = false
-    const now = dayjs(new Date())
+
+    const timeZone = userTimezone || DEFAULT_TIMEZONE
+
+    const DATE_USER_TIMEZONE = new Date().toLocaleString('en-US', {
+        timeZone,
+    })
+
+    // const now = dayjs(new Date())
     if (arrUserQuest?.length > 0) {
-        const todayUserDailyQuest = arrUserQuest.filter(x =>
-            now.isSame(x.date, 'day')
-        )
+        const todayUserDailyQuest = arrUserQuest.filter(item => {
+            const dateQuest = dayjs(item.date)?.toISOString()?.slice(0, 10)
+            const dateToday = dayjs(DATE_USER_TIMEZONE)
+                ?.toISOString()
+                ?.slice(0, 10)
+
+            return dateQuest === dateToday
+            // dayjs(DATE_USER_TIMEZONE).isSame(x.date, 'day')
+        })
 
         // prettier-ignore
         const sequenceQuest1 = todayUserDailyQuest.find(x => x.sequence === 1) || null

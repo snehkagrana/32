@@ -78,4 +78,16 @@ module.exports = {
             amount: Joi.number().required(),
         })
         .options({ allowUnknown: true }),
+
+    joinStreakChallenge: Joi.object()
+        .keys({
+            numberOfDay: Joi.number().required(),
+        })
+        .options({ allowUnknown: true }),
+
+    extendStreakChallenge: Joi.object()
+        .keys({
+            numberOfDay: Joi.number().required(),
+        })
+        .options({ allowUnknown: true }),
 }
