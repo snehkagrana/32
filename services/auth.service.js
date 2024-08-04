@@ -136,7 +136,8 @@ exports.syncUser = async (email, paramUserTimezone) => {
     }
 
     const hasDailyQuestToday = checkIsActiveDailyQuestToday(
-        user.dailyQuest || []
+        user.dailyQuest || [],
+        user.userTimezone
     )
 
     if (!hasDailyQuestToday) {
