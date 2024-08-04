@@ -17,6 +17,7 @@ const {
     ACTION_NAME_FOLLOW_FRIENDS,
 } = require('../constants/daily-quest.constant')
 const dayjs = require('dayjs')
+const { getStreakDiffDays } = require('../utils/streak.util')
 
 var ObjectId = require('mongoose').Types.ObjectId
 
@@ -489,6 +490,17 @@ exports.refillFreezeStreak = async ({ email, amount }) => {
 exports.joinStreakChallenge = async ({ email, numberOfDay }) => {
     let result = false
     let user = await UserModel.findOne({ email }).exec()
+    let progress = 0
+
+    const streakDiffDays = getStreakDiffDays(
+        user.lastCompletedDay,
+        user.userTimezone
+    )
+
+    // prettier-ignore
+    if (streakDiffDays === 0 && user?.streakChallenge?.progress !== user?.streakChallenge?.numberOfDay) {
+        progress = 0
+    }
 
     const NOW = new Date()
     const startDateUTC = dayjs(NOW).toISOString()
@@ -510,7 +522,7 @@ exports.joinStreakChallenge = async ({ email, numberOfDay }) => {
                     streakChallenge: {
                         isActive: true,
                         numberOfDay: numberOfDay,
-                        progress: 0,
+                        progress,
                         startDateUTC,
                         endDateUTC,
                         isExtend: false,
