@@ -95,7 +95,7 @@ const checkIsActiveDailyQuestToday = (arrUserQuest, userTimezone) => {
         timeZone,
     })
 
-    consol.log(
+    console.log(
         'checkIsActiveDailyQuestToday:DATE_USER_TIMEZONE->',
         DATE_USER_TIMEZONE
     )
