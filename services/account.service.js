@@ -497,8 +497,10 @@ exports.joinStreakChallenge = async ({ email, numberOfDay }) => {
         user.userTimezone
     )
 
-    // prettier-ignore
-    if (streakDiffDays === 0 && user?.streakChallenge?.progress !== user?.streakChallenge?.numberOfDay) {
+    if (
+        streakDiffDays === 0 ||
+        user?.streakChallenge?.progress !== user?.streakChallenge?.numberOfDay
+    ) {
         progress = 0
     }
 
