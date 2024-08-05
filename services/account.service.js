@@ -498,9 +498,11 @@ exports.joinStreakChallenge = async ({ email, numberOfDay }) => {
     )
 
     if (
-        streakDiffDays === 0 ||
+        user?.streakChallenge?.isActive &&
         user?.streakChallenge?.progress !== user?.streakChallenge?.numberOfDay
     ) {
+        progress = 1
+    } else if (streakDiffDays === 0) {
         progress = 1
     }
 
