@@ -501,7 +501,7 @@ exports.joinStreakChallenge = async ({ email, numberOfDay }) => {
         streakDiffDays === 0 ||
         user?.streakChallenge?.progress !== user?.streakChallenge?.numberOfDay
     ) {
-        progress = 0
+        progress = 1
     }
 
     const NOW = new Date()
