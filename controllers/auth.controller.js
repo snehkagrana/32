@@ -304,3 +304,13 @@ exports.syncRegisterGoogle = async (req, res) => {
         return res.status(400).json({ message: 'Failed to sync.' })
     }
 }
+
+exports.deleteAccount = async (req, res) => {
+    const result = await AuthService.deleteAccount({
+        email: req.user.email,
+    })
+    if (result) {
+        return res.json({ message: 'Delete account successfully.' })
+    }
+    return res.status(400).json({ message: 'Failed to delete account.' })
+}

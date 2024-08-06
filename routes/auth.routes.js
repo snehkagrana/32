@@ -79,4 +79,10 @@ router.post(
 
 router.get('/auth/guest', AuthGuard, ErrorHandler(GuestController.getGuest))
 
+router.post(
+    '/auth/account/delete',
+    AuthGuard,
+    ErrorHandler(AuthController.deleteAccount)
+)
+
 module.exports = router

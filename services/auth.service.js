@@ -458,3 +458,13 @@ exports.googleSignInMobile = async ({
         }
     }
 }
+
+exports.deleteAccount = async ({ email }) => {
+    let result = false
+    let user = await UserModel.findOne({ email }).exec()
+    if (user) {
+        await UserModel.deleteOne({ email: user.email })
+        result = true
+    }
+    return result
+}
