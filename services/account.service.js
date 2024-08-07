@@ -18,8 +18,7 @@ const {
 } = require('../constants/daily-quest.constant')
 const dayjs = require('dayjs')
 const { getStreakDiffDays } = require('../utils/streak.util')
-
-var ObjectId = require('mongoose').Types.ObjectId
+const FriendshipModel = require('../models/friendship')
 
 exports.getMyRewards = async email => {
     const user = await UserModel.findOne({ email })
@@ -182,56 +181,12 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
                 )} added you as a friend.`,
             }
 
-            // prettier-ignore
-            let currentFollowing = authUser?.following?.filter(x => x.userId !== userId) || []
-            let newFollowing = [
-                ...currentFollowing,
-                {
-                    userId: user._id,
-                    // prettier-ignore
-                    displayName: getFirstName(user),
-                    totalXp: user?.xp?.total ? user.xp.total : 0,
-                    level: user?.xp?.level ? user.xp.level : 1,
-                    imgPath: user?.imgPath ? user.imgPath : '',
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                },
-            ]
-            // update user
-            authUser = await UserModel.findOneAndUpdate(
-                { _id: authUserId },
-                {
-                    $set: {
-                        following: newFollowing,
-                    },
-                },
-                { new: true }
-            ).exec()
-
-            // prettier-ignore
-            let currentFollowers = user?.followers?.filter(x => x.userId !== authUserId) || []
-            let newFollowers = [
-                ...currentFollowers,
-                {
-                    userId: authUser._id,
-                    // prettier-ignore
-                    displayName: getFullName(authUser),
-                    totalXp: authUser?.xp?.total ? authUser.xp.total : 0,
-                    level: authUser?.xp?.level ? authUser.xp.level : 1,
-                    imgPath: authUser?.imgPath ? authUser.imgPath : '',
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                },
-            ]
-            user = await UserModel.findOneAndUpdate(
-                { _id: userId },
-                {
-                    $set: {
-                        followers: newFollowers,
-                    },
-                },
-                { new: true }
-            ).exec()
+            result = await FriendshipModel.create({
+                from: authUserId,
+                to: userId,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            })
 
             await NotificationService.sendAndSaveNotification(notificationData)
 
@@ -240,104 +195,17 @@ exports.toggleFollow = async ({ authUserId, action, userId }) => {
                 actionName: ACTION_NAME_FOLLOW_FRIENDS,
                 value: 1,
             })
-
             result = true
         } else if (action === 'unfollow') {
-            // prettier-ignore
-            let currentFollowing = authUser?.following?.filter(x => x.userId !== userId) || []
-            // update user
-            authUser = await UserModel.findOneAndUpdate(
-                { _id: authUserId },
-                {
-                    $set: {
-                        following: currentFollowing,
-                    },
-                },
-                { new: true }
-            ).exec()
-
-            // prettier-ignore
-            let currentFollowers = user?.followers?.filter(x => x.userId !== authUserId) || []
-            user = await UserModel.findOneAndUpdate(
-                { _id: userId },
-                {
-                    $set: {
-                        followers: currentFollowers,
-                    },
-                },
-                { new: true }
-            ).exec()
-
+            result = await FriendshipModel.deleteMany({
+                from: authUserId,
+                to: userId,
+            })
             result = true
         }
     } else {
         result = false
     }
-    return result
-}
-
-exports.syncFriendship = async ({ userId }) => {
-    let result = false
-    let authUser = await UserModel.findOne({ _id: userId }).exec()
-
-    const followers = authUser?.followers || []
-    const following = authUser?.following || []
-
-    if (followers.length > 0) {
-        let newFollowers = []
-        for (const f of followers) {
-            const _user = await UserModel.findOne({ _id: f.userId })
-            newFollowers.push({
-                // prettier-ignore
-                displayName: getFullName(_user),
-                totalXp: _user?.xp?.total ? _user.xp.total : f.totalXp,
-                level: _user?.xp?.level ? _user.xp.level : f.level,
-                imgPath: _user?.imgPath ? _user.imgPath : '',
-                updatedAt: new Date(),
-                createdAt: f.createdAt,
-                userId: f.userId,
-            })
-        }
-        // update user
-        authUser = await UserModel.findOneAndUpdate(
-            { _id: userId },
-            {
-                $set: {
-                    followers: newFollowers,
-                },
-            },
-            { new: true }
-        ).exec()
-        result = true
-    }
-
-    if (following.length > 0) {
-        let newFollowing = []
-        for (const f of following) {
-            const _user = await UserModel.findOne({ _id: f.userId })
-            newFollowing.push({
-                displayName: getFullName(_user),
-                totalXp: _user?.xp?.total ? _user.xp.total : f.totalXp,
-                level: _user?.xp?.level ? _user.xp.level : f.level,
-                imgPath: _user?.imgPath ? _user.imgPath : '',
-                updatedAt: new Date(),
-                createdAt: f.createdAt,
-                userId: f.userId,
-            })
-        }
-        // update user
-        authUser = await UserModel.findOneAndUpdate(
-            { _id: userId },
-            {
-                $set: {
-                    following: newFollowing,
-                },
-            },
-            { new: true }
-        ).exec()
-        result = true
-    }
-
     return result
 }
 

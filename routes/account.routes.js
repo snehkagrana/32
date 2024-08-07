@@ -79,12 +79,6 @@ router.post(
 )
 
 router.get(
-    '/account/friendship/sync',
-    AuthGuard,
-    ErrorHandler(AccountController.syncFriendship)
-)
-
-router.get(
     '/account/friendship/search',
     validate(AccountValidations.searchFriends),
     AuthGuard,

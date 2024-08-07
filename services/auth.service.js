@@ -38,6 +38,7 @@ const {
     SERVER_TIMEZONE,
     DEFAULT_TIMEZONE,
 } = require('../constants/app.constant')
+const FriendshipModel = require('../models/friendship')
 
 exports.sendRegisterCode = async email => {
     const code = generateOTP(4)
@@ -209,9 +210,6 @@ exports.syncUser = async (email, paramUserTimezone) => {
                     unlimitedHeart: user?.unlimitedHeart && dayjs(user.unlimitedHeart).isAfter(dayjs(today).toISOString(), 'second') ? user.unlimitedHeart : null,
                     // prettier-ignore
                     username: !user?.username ? generateUsername(getFirstName(user)) : user.username,
-
-                    following: user?.following ? user.following : [],
-                    followers: user?.followers ? user.followers : [],
 
                     dailyQuest: userDailyQuest,
                     userTimezone,
@@ -412,8 +410,6 @@ exports.googleSignInMobile = async ({
             referralCode: refCode,
             registeredAt: new Date(),
             emailVerifiedAt: new Date(),
-            following: [],
-            followers: [],
             fcmToken: '',
             lastLessonCategoryName: '',
             userTimezone: userTimezone || DEFAULT_TIMEZONE,
@@ -462,8 +458,15 @@ exports.googleSignInMobile = async ({
 exports.deleteAccount = async ({ email }) => {
     let result = false
     let user = await UserModel.findOne({ email }).exec()
+
     if (user) {
+        // remove friendship
+        await FriendshipModel.deleteMany({ from: user?._id })
+        await FriendshipModel.deleteMany({ to: user?._id })
+
+        // delete user
         await UserModel.deleteOne({ email: user.email })
+
         result = true
     }
     return result

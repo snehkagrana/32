@@ -43,6 +43,7 @@ const feedbackRoutes = require('./routes/feedback.routes')
 const leaderBoardRoutes = require('./routes/leaderboard.routes')
 const notificationRoutes = require('./routes/notification.routes')
 const dailyQuestRoutes = require('./routes/daily-quest.routes')
+const friendshipRoutes = require('./routes/friendship.routes')
 const AuthGuard = require('./middlewares/auth.middleware');
 const { initializeDiamondUser, calculateDiamondUser } = require("./utils/reward.util");
 const { mailTransporter } = require("./utils/mail.util");
@@ -105,10 +106,11 @@ app.use('/server/api', heartRoutes);
 app.use('/server/api', quizRoutes);  
 app.use('/server/api', draggableQuizRoutes);  
 app.use('/server/api', commonRoutes);  
-app.use('/server/api', feedbackRoutes);  
+app.use('/server/api', feedbackRoutes);
 app.use('/server/api', leaderBoardRoutes);  
 app.use('/server/api', notificationRoutes);
 app.use('/server/api', dailyQuestRoutes);
+app.use('/server/api', friendshipRoutes);
 
 
 /**
