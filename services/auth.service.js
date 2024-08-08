@@ -142,6 +142,8 @@ exports.syncUser = async (email, paramUserTimezone) => {
         user.userTimezone
     )
 
+    console.log('hasDailyQuestToday', hasDailyQuestToday)
+
     if (!hasDailyQuestToday) {
         userDailyQuest = createRandomDailyQuest(user)
     }
