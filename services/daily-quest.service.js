@@ -23,11 +23,9 @@ const {
 const { getRandomInt } = require('../utils/common.util')
 
 exports.syncDailyQuest = async ({ userId, actionName, value }) => {
-    console.log('{ userId, actionName, value }', { userId, actionName, value })
-
     const now = dayjs(new Date())
     const NOW = new Date()
-    // let user = await UserModel.findOne({ _id: userId })
+    let user = await UserModel.findOne({ _id: userId })
     const allUserDailyQuests = user.dailyQuest || []
 
     if (userId && allUserDailyQuests?.length > 0) {
