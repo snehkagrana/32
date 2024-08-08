@@ -39,6 +39,7 @@ const {
     DEFAULT_TIMEZONE,
 } = require('../constants/app.constant')
 const FriendshipModel = require('../models/friendship')
+const JWKSUtils = require('../utils/jwks.util')
 
 exports.sendRegisterCode = async email => {
     const code = generateOTP(4)
@@ -412,6 +413,9 @@ exports.googleSignInMobile = async ({
             emailVerifiedAt: new Date(),
             fcmToken: '',
             lastLessonCategoryName: '',
+            numberOfLessonCompleteToday: 0,
+            availableStreakFreeze: 0,
+            calendarStreak: [],
             userTimezone: userTimezone || DEFAULT_TIMEZONE,
         }
 
@@ -455,6 +459,104 @@ exports.googleSignInMobile = async ({
     }
 }
 
+exports.appleSignIn = async ({
+    firstName,
+    lastName,
+    email,
+    photo,
+    registerToken,
+    syncId,
+    userTimezone,
+}) => {
+    const refCode = generateReferralCode()
+
+    /**
+     * checking if another user with same email already exists
+     **/
+    let user = await UserModel.findOne({ email }).exec()
+
+    if (user) {
+        const token = await jwtUtil.createToken({
+            _id: user._id,
+            email: user.email,
+        })
+        return {
+            access_token: token,
+            token_type: 'Bearer',
+            expires_in: jwtConfig.ttl,
+            message: 'Success.',
+        }
+    } else {
+        let newAppleUser = {
+            username: generateUsername(firstName),
+            firstName: firstName,
+            lastName: lastName || '',
+            email: email,
+            password: '',
+            role: 'basic',
+            streak: 0,
+            lastCompletedDay: null,
+            imgPath: photo || null,
+            diamond: 0,
+            xp: {
+                current: 0,
+                daily: 0,
+                total: 0,
+                level: 1,
+                weekly: 0,
+            },
+            heart: appConfig.defaultHeart || 5,
+            lastHeartAccruedAt: new Date(),
+            unlimitedHeart: null,
+            referralCode: refCode,
+            registeredAt: new Date(),
+            emailVerifiedAt: new Date(),
+            fcmToken: '',
+            lastLessonCategoryName: '',
+            numberOfLessonCompleteToday: 0,
+            availableStreakFreeze: 0,
+            calendarStreak: [],
+            userTimezone: userTimezone || DEFAULT_TIMEZONE,
+        }
+
+        // sync guest data
+        if (registerToken && syncId) {
+            const guestData = await GuestModel.findById(syncId)
+            if (guestData) {
+                newAppleUser = {
+                    ...newAppleUser,
+                    streak: guestData.streak,
+                    lastCompletedDay: guestData.lastCompletedDay,
+                    diamond: guestData.diamond,
+                    xp: guestData.xp,
+                    score: guestData.score,
+                    completedDays: guestData.completedDays,
+                    calendarStreak: guestData?.calendarStreak || [],
+                    last_played: guestData.last_played,
+                    heart: guestData.heart || appConfig.defaultHeart,
+                    lastHeartAccruedAt:
+                        guestData.lastHeartAccruedAt || new Date(),
+                    lastClaimedGemsDailyQuest:
+                        guestData.lastClaimedGemsDailyQuest || null,
+                    unlimitedHeart: null,
+                }
+                GuestModel.deleteOne({ _id: syncId })
+            }
+        }
+        const newUser = await UserModel.create(newGoogleUser)
+        const token = await jwtUtil.createToken({
+            _id: newUser._id,
+            email: newUser.email,
+        })
+        return {
+            access_token: token,
+            token_type: 'Bearer',
+            expires_in: jwtConfig.ttl,
+            message: 'Success.',
+        }
+    }
+}
+
 exports.deleteAccount = async ({ email }) => {
     let result = false
     let user = await UserModel.findOne({ email }).exec()
@@ -470,4 +572,8 @@ exports.deleteAccount = async ({ email }) => {
         result = true
     }
     return result
+}
+
+exports.validateAppleToken = async ({ identityToken }) => {
+    return await JWKSUtils.validateToken(identityToken)
 }

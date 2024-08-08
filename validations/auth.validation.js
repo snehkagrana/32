@@ -75,4 +75,19 @@ module.exports = {
             userTimezone: Joi.string().optional().allow(null),
         })
         .options({ allowUnknown: true }),
+    validateAppleToken: Joi.object()
+        .keys({
+            identityToken: Joi.string().required(),
+        })
+        .options({ allowUnknown: true }),
+    appleSignIn: Joi.object()
+        .keys({
+            firstName: Joi.string().required(),
+            lastName: Joi.string().allow(null),
+            email: Joi.string().email().required(),
+            registerToken: Joi.string().optional().allow(null),
+            syncId: Joi.string().optional().allow(null),
+            userTimezone: Joi.string().optional().allow(null),
+        })
+        .options({ allowUnknown: true }),
 }
