@@ -19,6 +19,12 @@ const {
 const { getRandomInt } = require('./common.util')
 
 const createRandomDailyQuest = user => {
+    const timeZone = user?.userTimezone || DEFAULT_TIMEZONE
+
+    const DATE_USER_TIMEZONE = new Date().toLocaleString('en-US', {
+        timeZone,
+    })
+
     // prettier-ignore
     const QUEST_1 = PRIMARY_DAILY_QUESTS[getRandomInt(PRIMARY_DAILY_QUESTS.length)]
 
@@ -68,7 +74,7 @@ const createRandomDailyQuest = user => {
             isCompleted: false,
             progress: 0,
             maxValue: getMaxValue(QUEST_1.id),
-            date: new Date(),
+            date: DATE_USER_TIMEZONE,
             completedDate: null,
             claimedAt: null,
         },
@@ -79,7 +85,7 @@ const createRandomDailyQuest = user => {
             isCompleted: false,
             progress: 0,
             maxValue: getMaxValue(QUEST_2.id),
-            date: new Date(),
+            date: DATE_USER_TIMEZONE,
             completedDate: null,
             claimedAt: null,
         },
