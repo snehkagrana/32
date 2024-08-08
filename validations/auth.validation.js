@@ -82,8 +82,8 @@ module.exports = {
         .options({ allowUnknown: true }),
     appleSignIn: Joi.object()
         .keys({
-            firstName: Joi.string().optional().allow(null),
-            lastName: Joi.string().optional().allow(null),
+            // firstName: Joi.string().optional().allow(null),
+            // lastName: Joi.string().optional().allow(null),
             email: Joi.string().email().required(),
             registerToken: Joi.string().optional().allow(null),
             syncId: Joi.string().optional().allow(null),
