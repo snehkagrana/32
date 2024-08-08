@@ -460,9 +460,9 @@ exports.googleSignInMobile = async ({
 }
 
 exports.appleSignIn = async ({
+    email,
     firstName,
     lastName,
-    email,
     photo,
     registerToken,
     syncId,
