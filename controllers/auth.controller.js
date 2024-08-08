@@ -153,15 +153,8 @@ exports.googleSignInMobile = async (req, res) => {
 }
 
 exports.appleSignIn = async (req, res) => {
-    const {
-        email,
-        firstName,
-        lastName,
-        photo,
-        registerToken,
-        syncId,
-        userTimezone,
-    } = req.body
+    const { email, firstName, photo, registerToken, syncId, userTimezone } =
+        req.body
     const result = await AuthService.appleSignIn({
         firstName,
         lastName,

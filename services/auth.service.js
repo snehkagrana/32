@@ -543,7 +543,7 @@ exports.appleSignIn = async ({
                 GuestModel.deleteOne({ _id: syncId })
             }
         }
-        const newUser = await UserModel.create(newGoogleUser)
+        const newUser = await UserModel.create(newAppleUser)
         const token = await jwtUtil.createToken({
             _id: newUser._id,
             email: newUser.email,
