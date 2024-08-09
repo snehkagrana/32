@@ -237,6 +237,8 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         default: null,
     },
+
+    // @deprecated
     following: [
         {
             userId: String,
@@ -254,6 +256,8 @@ const UserSchema = new mongoose.Schema({
             },
         },
     ],
+
+    // @deprecated
     followers: [
         {
             userId: String,

@@ -28,12 +28,12 @@ exports.syncDailyQuest = async ({ userId, actionName, value }) => {
     let user = await UserModel.findOne({ _id: userId })
     const allUserDailyQuests = user.dailyQuest || []
 
-    if (user && allUserDailyQuests?.length > 0) {
+    if (userId && allUserDailyQuests?.length > 0) {
         const updatedActiveDailyQuests = allUserDailyQuests.map((x, index) => {
             if (/* now.isSame(x.date, 'day') && */ !x.isCompleted) {
                 // prettier-ignore
                 if (actionName === ACTION_NAME_EARN_GEMS && x.questId === DAILY_QUEST_TYPE_EARN_5_GEMS) {
-                    return {
+                    return { 
                         ...x?.toObject(), 
                         progress: x.progress + value >= x.maxValue ? x.maxValue : x.progress + value,
                         isCompleted: x.progress + value >= x.maxValue ? true : false,

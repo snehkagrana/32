@@ -15,6 +15,18 @@ router.post(
 )
 
 router.post(
+    '/auth/apple/validate-token',
+    validate(schema.validateAppleToken),
+    ErrorHandler(AuthController.validateAppleToken)
+)
+
+router.post(
+    '/auth/apple/signin',
+    validate(schema.appleSignIn),
+    ErrorHandler(AuthController.appleSignIn)
+)
+
+router.post(
     '/auth/register/send-code',
     validate(schema.sendRegisterCode),
     ErrorHandler(AuthController.sendRegisterCode)
@@ -78,5 +90,11 @@ router.post(
 )
 
 router.get('/auth/guest', AuthGuard, ErrorHandler(GuestController.getGuest))
+
+router.post(
+    '/auth/account/delete',
+    AuthGuard,
+    ErrorHandler(AuthController.deleteAccount)
+)
 
 module.exports = router

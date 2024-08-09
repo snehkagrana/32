@@ -152,6 +152,32 @@ exports.googleSignInMobile = async (req, res) => {
     return res.status(400).json({ message: 'Failed to signin with google' })
 }
 
+exports.appleSignIn = async (req, res) => {
+    const {
+        email,
+        firstName,
+        lastName,
+        photo,
+        registerToken,
+        syncId,
+        userTimezone,
+    } = req.body
+
+    const result = await AuthService.appleSignIn({
+        email,
+        firstName,
+        lastName,
+        photo,
+        registerToken,
+        syncId,
+        userTimezone,
+    })
+    if (result) {
+        return res.json(result)
+    }
+    return res.status(400).json({ message: 'Failed to signin' })
+}
+
 exports.login = async (req, res) => {
     const userTimezone = req.body?.userTimezone || DEFAULT_TIMEZONE
     const user = await AuthService.findUserByEmail(req.body.email)
@@ -303,4 +329,24 @@ exports.syncRegisterGoogle = async (req, res) => {
     } else {
         return res.status(400).json({ message: 'Failed to sync.' })
     }
+}
+
+exports.deleteAccount = async (req, res) => {
+    const result = await AuthService.deleteAccount({
+        email: req.user.email,
+    })
+    if (result) {
+        return res.json({ message: 'Delete account successfully.' })
+    }
+    return res.status(400).json({ message: 'Failed to delete account.' })
+}
+
+exports.validateAppleToken = async (req, res) => {
+    const result = await AuthService.validateAppleToken({
+        identityToken: req.body.identityToken,
+    })
+    if (result) {
+        return res.json({ message: 'OK.', data: result })
+    }
+    return res.status(400).json({ message: 'Failed!' })
 }

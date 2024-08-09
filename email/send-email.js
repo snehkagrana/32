@@ -49,7 +49,7 @@ exports.sendOtpEmailForgotPassword = async payload => {
     const options = {
         to: payload.to,
         from: payload.from || process.env.MAIL,
-        subject: 'Forgot Password Link',
+        subject: 'Forgot Password OTP',
         html: mustache.render(template, { ...payload }),
     }
 
